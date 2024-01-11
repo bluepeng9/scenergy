@@ -28,18 +28,18 @@ ___
  #### 커뮤니케이션 
  <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"> 
  --- 
-
  ### 기능정의서 및 ERD
   <img> 
-
   --- 
+  ### 페르소나
+   <img> 
+   --- 
+   ### 코드 컨벤션 
+   --- 
+   ### 팀원 소개 
+   ### Contributors
 
-### 페르소나
-<img> 
---- 
-### 코드 컨벤션
---- 
-### 팀원 소개 
-### Contributors 
 
-| ![](/uploads/8c282182d74295e5f9974e98d513db55/김준표.jpg) 김준표 | ![](/uploads/4f94ffce787f8c59b26d0bdb40aafd1a/김혜지.jpg) 김혜지 | ![](/uploads/fc76178fc2ab76750f3ef76435a9fdc6/이민형.jpg) 이민형 | ![](/uploads/5547ddc370012032652eba43b8ccf115/이태경.jpg) 이태경 | ![](/uploads/51330ab2900e11d5a46f07d1e163fe42/김은지.jpg) 김은지 | ![](/uploads/277b2260b05e29e580d0d1af4dda106f/강대은.jpg) 강대은 | | --- | --- | --- | --- | --- | --- | | 🍪Back-end ✈Team Leader/Back-end Leader | 💟Back-end | 🧗‍♀️Back-end | 🍖Back-end | 🌹Front-end Leader | 🍞Front-end |
+|<img src="/uploads/8c282182d74295e5f9974e98d513db55/김준표.jpg" width="110"><br>**김준표**|<img src="/uploads/4f94ffce787f8c59b26d0bdb40aafd1a/김혜지.jpg" width="110"><br>**김혜지**|<img src="/uploads/fc76178fc2ab76750f3ef76435a9fdc6/이민형.jpg" width="110"><br>**이민형**|<img src="/uploads/5547ddc370012032652eba43b8ccf115/이태경.jpg" width="110"><br>**이태경**|<img src="/uploads/51330ab2900e11d5a46f07d1e163fe42/김은지.jpg" width="110"><br>**김은지**|<img src="/uploads/277b2260b05e29e580d0d1af4dda106f/강대은.jpg" width="110"><br>**강대은**|
+|--|--|--|--|--|--|
+|**🍪Back-end**<br>**✈Team Leader/Back-end Leader**|**💟Back-end**|**🧗‍♀️Back-end**|**🍖Back-end**|**🌹Front-end Leader**|**🍞Front-end**|
