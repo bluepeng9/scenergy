@@ -33,19 +33,27 @@ ___
 #### 기능정의서
 <a href="https://docs.google.com/spreadsheets/d/1eb2wqtTxqo4EBiJq_kRAA-wO56QQbC8ycn4FkqmRq-s/edit?pli=1#gid=2139742202"><h5>scenergy 기능 정의서</h5></a>
 #### ERD
-<img src="/uploads/a130be76fd8f0d6470d962bc5adc4928/B308.png"> 
+<img src="/uploads/a130be76fd8f0d6470d962bc5adc4928/B308.png">
 ---
+
 ### 페르소나
 #### 1️⃣ 드러머 구하는 김민석
+
 <img src="/uploads/84c0d3d84f06a25b32a03cc59e890732/image__7_.png" width="600">
+
 #### 2️⃣ 팀을 꾸리고 싶은 강혜은
 <img src="/uploads/a131b4107aecb5d8fa770fdd79c29c46/image__8_.png" width="600"> 
---- 
-### 코드 컨벤션
-#### BE 코드 컨벤션
-#### FE 코드 컨벤션
+
 ---
-### 팀원 소개 
+### 코드 컨벤션
+
+#### BE 코드 컨벤션
+
+#### FE 코드 컨벤션
+
+---
+
+### 팀원 소개
 ### Contributors
 
 |<img src="/uploads/8c282182d74295e5f9974e98d513db55/김준표.jpg" width="110"><br>**김준표**|<img src="/uploads/4f94ffce787f8c59b26d0bdb40aafd1a/김혜지.jpg" width="110"><br>**김혜지**|<img src="/uploads/fc76178fc2ab76750f3ef76435a9fdc6/이민형.jpg" width="110"><br>**이민형**|<img src="/uploads/5547ddc370012032652eba43b8ccf115/이태경.jpg" width="110"><br>**이태경**|<img src="/uploads/51330ab2900e11d5a46f07d1e163fe42/김은지.jpg" width="110"><br>**김은지**|<img src="/uploads/277b2260b05e29e580d0d1af4dda106f/강대은.jpg" width="110"><br>**강대은**|
