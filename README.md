@@ -43,7 +43,7 @@ ___
 
 <img src="/uploads/84c0d3d84f06a25b32a03cc59e890732/image__7_.png" width="600">
 
-#### 2️⃣ 버스킹 멤버를 구하는 김미솔
+#### 2️⃣ 버스킹 팀을 구하는 김미솔
 <img src="/uploads/058e9ffb8f3168f5136f0307891e5bc9/image__9_.png" width="600"> 
 
 ---
