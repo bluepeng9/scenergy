@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.user;
+package com.wbm.scenergyspring.domain.user;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

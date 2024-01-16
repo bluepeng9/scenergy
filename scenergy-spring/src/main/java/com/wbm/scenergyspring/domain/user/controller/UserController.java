@@ -1,7 +1,7 @@
-package com.wbm.scenergyspring.user.controller;
+package com.wbm.scenergyspring.domain.user.controller;
 
-import com.wbm.scenergyspring.user.controller.request.CreateUserRequest;
-import com.wbm.scenergyspring.user.service.UserService;
+import com.wbm.scenergyspring.domain.user.controller.request.CreateUserRequest;
+import com.wbm.scenergyspring.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

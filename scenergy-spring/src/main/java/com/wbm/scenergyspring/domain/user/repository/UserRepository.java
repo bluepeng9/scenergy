@@ -1,6 +1,6 @@
-package com.wbm.scenergyspring.user.repository;
+package com.wbm.scenergyspring.domain.user.repository;
 
-import com.wbm.scenergyspring.user.User;
+import com.wbm.scenergyspring.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

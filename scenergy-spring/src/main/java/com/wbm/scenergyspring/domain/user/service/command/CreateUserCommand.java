@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.user.service.command;
+package com.wbm.scenergyspring.domain.user.service.command;
 
 import lombok.Data;
 

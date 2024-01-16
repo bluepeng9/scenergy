@@ -1,6 +1,6 @@
-package com.wbm.scenergyspring.user.controller.request;
+package com.wbm.scenergyspring.domain.user.controller.request;
 
-import com.wbm.scenergyspring.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import lombok.Data;
 
 @Data
