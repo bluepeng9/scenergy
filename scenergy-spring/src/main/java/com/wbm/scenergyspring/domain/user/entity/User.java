@@ -1,5 +1,7 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
+import com.wbm.scenergyspring.global.entity.BaseEntity;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,21 +14,21 @@ import lombok.NoArgsConstructor;
 //user 는 예약어이므로 테이블 이름을 변경해야 함
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User {
+public class User extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String email;
-    String password;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	Long id;
+	String email;
+	String password;
 
-    public static User createNewUser(
-            String email,
-            String password
-    ) {
-        User user = new User();
-        user.email = email;
-        user.password = password;
-        return user;
-    }
+	public static User createNewUser(
+		String email,
+		String password
+	) {
+		User user = new User();
+		user.email = email;
+		user.password = password;
+		return user;
+	}
 }
