@@ -1,11 +1,13 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import com.wbm.scenergyspring.domain.user.User;
-import com.wbm.scenergyspring.domain.user.repository.UserRepository;
-import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.wbm.scenergyspring.domain.user.entity.User;
+import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
