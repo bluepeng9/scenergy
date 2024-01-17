@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@ToString
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Portfolio {
     @Id
@@ -22,14 +24,13 @@ public class Portfolio {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Education> educations = new ArrayList<>();
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Experience> experiences = new ArrayList<>();
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Honor> honors = new ArrayList<>();
-    @OneToMany(mappedBy = "portfolio")
+    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<PortfolioEtc> etcs = new ArrayList<>();
 
     public static Portfolio createNewPortfolio(
@@ -43,10 +44,23 @@ public class Portfolio {
         Portfolio portfolio = new Portfolio();
         portfolio.userId = userId;
         portfolio.description = description;
-        portfolio.educations = educations;
-        portfolio.experiences = experiences;
-        portfolio.honors = honors;
-        portfolio.etcs = etcs;
+        for (Education edu:educations){
+            portfolio.educations.add(edu);
+//            edu.setPortfolio(portfolio);
+        }
+        for (Experience exp:experiences){
+            portfolio.experiences.add(exp);
+        }
+        for (Honor honor:honors){
+            portfolio.honors.add(honor);
+        }
+        for (PortfolioEtc etc:etcs){
+            portfolio.etcs.add(etc);
+        }
+//        portfolio.educations = educations;
+//        portfolio.experiences = experiences;
+//        portfolio.honors = honors;
+//        portfolio.etcs = etcs;
         return portfolio;
     }
 }

@@ -12,6 +12,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@ToString
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PortfolioEtc {
     @Id
@@ -23,10 +25,19 @@ public class PortfolioEtc {
     private Portfolio portfolio;
     private String etcTitle;
     private String etcDescription;
-    private Date etcStartDate;
-    private Date etcEndDate;
+    private LocalDateTime etcStartDate;
+    private LocalDateTime etcEndDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    public static PortfolioEtc createNewPortfolioEtc(
+            String etcTitle,
+            String etcDescription
+    ){
+        PortfolioEtc etc = new PortfolioEtc();
+        etc.etcTitle = etcTitle;
+        etc.etcDescription = etcDescription;
+        return etc;
+    }
 }

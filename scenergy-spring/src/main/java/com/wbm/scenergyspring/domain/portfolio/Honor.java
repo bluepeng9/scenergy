@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@ToString
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 
 public class Honor {
@@ -25,10 +27,18 @@ public class Honor {
     private Portfolio portfolio;
     private String honorTitle;
     private String organization;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date receicedDate;
+    private LocalDateTime receicedDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    public static Honor createNewHonor(
+            String honorTitle,
+            String organization
+    ){
+        Honor honor = new Honor();
+        honor.honorTitle = honorTitle;
+        honor.organization = organization;
+        return honor;
+    }
 }

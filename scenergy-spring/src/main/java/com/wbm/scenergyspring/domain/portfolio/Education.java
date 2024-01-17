@@ -1,10 +1,7 @@
 package com.wbm.scenergyspring.domain.portfolio;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,6 +10,9 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+//@ToString
+@Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Education {
     @Id
@@ -26,11 +26,21 @@ public class Education {
     private String institution;
     private String degree;
     private String major;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date graduationDate;
+    private LocalDateTime graduationDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+    public static Education createNewEducation(
+            String institution,
+            String degree,
+            String major
+    ){
+        Education education = new Education();
+        education.degree = degree;
+        education.major = major;
+        education.institution = institution;
+        return education;
+    }
 
 }

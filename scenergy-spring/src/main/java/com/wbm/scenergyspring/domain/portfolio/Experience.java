@@ -13,6 +13,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
+@ToString
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Experience {
     @Id
@@ -24,12 +26,20 @@ public class Experience {
     private Portfolio portfolio;
     private String company;
     private String position;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date expStartDate;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date expEndDate;
+    private LocalDateTime expStartDate;
+    private LocalDateTime expEndDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public static Experience createNewExperience(
+            String company,
+            String position
+    ){
+        Experience experience = new Experience();
+        experience.company = company;
+        experience.position = position;
+        return experience;
+    }
 }
