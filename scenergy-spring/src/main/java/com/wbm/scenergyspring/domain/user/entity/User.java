@@ -8,12 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 //user 는 예약어이므로 테이블 이름을 변경해야 함
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class User extends BaseEntity {
 
 	@Id
