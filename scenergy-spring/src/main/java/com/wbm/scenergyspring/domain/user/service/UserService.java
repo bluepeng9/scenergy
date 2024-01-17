@@ -14,14 +14,14 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class UserService {
 
-    final UserRepository userRepository;
+	final UserRepository userRepository;
 
-    @Transactional(readOnly = false)
-    public void createUser(CreateUserCommand command) {
-        User newUser = User.createNewUser(
-                command.getEmail(),
-                command.getPassword()
-        );
-        userRepository.save(newUser);
-    }
+	@Transactional(readOnly = false)
+	public Long createUser(CreateUserCommand command) {
+		User newUser = User.createNewUser(
+			command.getEmail(),
+			command.getPassword()
+		);
+		return userRepository.save(newUser).getId();
+	}
 }
