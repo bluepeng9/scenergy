@@ -15,6 +15,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class PortfolioServiceTest {
 
     @Autowired
@@ -22,7 +23,6 @@ class PortfolioServiceTest {
     @Autowired
     PortfolioRepository portfolioRepository;
     @Test
-    @Transactional
     void createPortfolio(){
         //given
         CreatePortfolioCommand command = CreatePortfolioCommand.builder()
@@ -34,7 +34,6 @@ class PortfolioServiceTest {
         assertTrue(portfolioRepository.findById(1L).isPresent());
     }
     @Test
-    @Transactional
     void updatePortfolio(){
         //given
         CreatePortfolioCommand createCommand = CreatePortfolioCommand.builder()
@@ -64,7 +63,13 @@ class PortfolioServiceTest {
 
         //when
         Portfolio beforePortfolio = portfolioRepository.findById(portfolioId).get();
-        beforePortfolio.updatePortfolio(beforePortfolio, updateCommand);
+        beforePortfolio.updatePortfolio(
+                updateCommand.getDescription(),
+                updateCommand.getExperiences(),
+                updateCommand.getHonors(),
+                updateCommand.getEtcs(),
+                updateCommand.getEducations()
+        );
 
         //then
         Portfolio afterPortfolio = portfolioRepository.findById(portfolioId).get();

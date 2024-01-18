@@ -42,29 +42,34 @@ public class Portfolio extends BaseEntity {
         return portfolio;
     }
 
-    public Portfolio updatePortfolio(Portfolio portfolio, UpdatePortfolioCommand command){
-        portfolio.description = command.getDescription();
+    public void updatePortfolio(
+            String description,
+            List<Experience> experiences,
+            List<Honor> honors,
+            List<PortfolioEtc> etcs,
+            List<Education> educations
+    ){
+        this.description = description;
 
-        portfolio.educations.clear();
-        for (Education edu: command.getEducations()){
-            portfolio.educations.add(edu);
-            edu.setPortfolio(portfolio);
+        this.educations.clear();
+        for (Education edu: educations){
+            this.educations.add(edu);
+            edu.setPortfolio(this);
         }
-        portfolio.experiences.clear();
-        for (Experience exp:command.getExperiences()){
-            portfolio.experiences.add(exp);
-            exp.setPortfolio(portfolio);
+        this.experiences.clear();
+        for (Experience exp:experiences){
+            this.experiences.add(exp);
+            exp.setPortfolio(this);
         }
-        portfolio.honors.clear();
-        for (Honor honor: command.getHonors()){
-            portfolio.honors.add(honor);
-            honor.setPortfolio(portfolio);
+        this.honors.clear();
+        for (Honor honor: honors){
+            this.honors.add(honor);
+            honor.setPortfolio(this);
         }
-        portfolio.etcs.clear();
-        for (PortfolioEtc etc: command.getEtcs()){
-            portfolio.etcs.add(etc);
-            etc.setPortfolio(portfolio);
+        this.etcs.clear();
+        for (PortfolioEtc etc: etcs){
+            this.etcs.add(etc);
+            etc.setPortfolio(this);
         }
-        return portfolio;
     }
 }
