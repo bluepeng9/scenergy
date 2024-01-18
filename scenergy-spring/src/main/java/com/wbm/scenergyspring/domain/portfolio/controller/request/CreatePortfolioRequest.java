@@ -15,20 +15,9 @@ import java.util.List;
 @Builder
 public class CreatePortfolioRequest {
     int userId;
-    String description;
-    List<Education> educations;
-    List<PortfolioEtc> etcs;
-    List<Experience> experiences;
-    List<Honor> honors;
-
     public CreatePortfolioCommand toCreatePortfolioCommand() {
         CreatePortfolioCommand command = CreatePortfolioCommand.builder()
                 .userId(userId)
-                .description(description)
-                .etcs(etcs)
-                .honors(honors)
-                .experiences(experiences)
-                .educations(educations)
                 .build();
         return command;
     }

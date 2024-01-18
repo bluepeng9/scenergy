@@ -15,9 +15,4 @@ import java.util.List;
 @Builder
 public class CreatePortfolioCommand {
     int userId;
-    String description;
-    List<Education> educations;
-    List<PortfolioEtc> etcs;
-    List<Experience> experiences;
-    List<Honor> honors;
 }
