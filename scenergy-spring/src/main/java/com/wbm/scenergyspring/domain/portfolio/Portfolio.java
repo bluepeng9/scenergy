@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.portfolio;
 
+import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -33,34 +34,40 @@ public class Portfolio {
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<PortfolioEtc> etcs = new ArrayList<>();
 
+    /**
+     * create시 호출되는 생성자
+     */
     public static Portfolio createNewPortfolio(
-            int userId,
-            String description,
-            List<Education> educations,
-            List<Experience> experiences,
-            List<Honor> honors,
-            List<PortfolioEtc> etcs
+            int userId
     ){
         Portfolio portfolio = new Portfolio();
         portfolio.userId = userId;
-        portfolio.description = description;
-        for (Education edu:educations){
+        return portfolio;
+    }
+
+    public Portfolio updatePortfolio(Portfolio portfolio, UpdatePortfolioCommand command){
+        portfolio.description = command.getDescription();
+
+        portfolio.educations.clear();
+        for (Education edu: command.getEducations()){
             portfolio.educations.add(edu);
             edu.setPortfolio(portfolio);
         }
-        for (Experience exp:experiences){
+        portfolio.experiences.clear();
+        for (Experience exp:command.getExperiences()){
             portfolio.experiences.add(exp);
+            exp.setPortfolio(portfolio);
         }
-        for (Honor honor:honors){
+        portfolio.honors.clear();
+        for (Honor honor: command.getHonors()){
             portfolio.honors.add(honor);
+            honor.setPortfolio(portfolio);
         }
-        for (PortfolioEtc etc:etcs){
+        portfolio.etcs.clear();
+        for (PortfolioEtc etc: command.getEtcs()){
             portfolio.etcs.add(etc);
+            etc.setPortfolio(portfolio);
         }
-//        portfolio.educations = educations;
-//        portfolio.experiences = experiences;
-//        portfolio.honors = honors;
-//        portfolio.etcs = etcs;
         return portfolio;
     }
 }
