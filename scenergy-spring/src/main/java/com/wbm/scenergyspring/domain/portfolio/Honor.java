@@ -32,6 +32,11 @@ public class Honor {
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
+
     public static Honor createNewHonor(
             String honorTitle,
             String organization

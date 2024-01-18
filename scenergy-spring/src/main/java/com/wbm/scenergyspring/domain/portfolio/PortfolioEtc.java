@@ -40,4 +40,7 @@ public class PortfolioEtc {
         etc.etcDescription = etcDescription;
         return etc;
     }
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 }

@@ -42,4 +42,8 @@ public class Experience {
         experience.position = position;
         return experience;
     }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 }
