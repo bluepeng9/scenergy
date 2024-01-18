@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.domain.portfolio;
+package com.wbm.scenergyspring.domain.portfolio.entity;
 
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import jakarta.persistence.*;

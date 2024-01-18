@@ -1,10 +1,9 @@
 package com.wbm.scenergyspring.domain.portfolio.service;
 
-import com.wbm.scenergyspring.domain.portfolio.*;
+import com.wbm.scenergyspring.domain.portfolio.entity.*;
 import com.wbm.scenergyspring.domain.portfolio.repository.PortfolioRepository;
 import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
-import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

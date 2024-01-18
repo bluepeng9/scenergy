@@ -1,44 +1,43 @@
-package com.wbm.scenergyspring.domain.portfolio;
+package com.wbm.scenergyspring.domain.portfolio.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PortfolioEtc {
+public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "etc_id")
+    @Column(name = "edu_id")
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
-    private String etcTitle;
-    private String etcDescription;
-    private LocalDateTime etcStartDate;
-    private LocalDateTime etcEndDate;
+    private String institution;
+    private String degree;
+    private String major;
+    private LocalDateTime graduationDate;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
     private LocalDateTime updatedAt;
-    public static PortfolioEtc createNewPortfolioEtc(
-            String etcTitle,
-            String etcDescription
+    public static Education createNewEducation(
+            String institution,
+            String degree,
+            String major
     ){
-        PortfolioEtc etc = new PortfolioEtc();
-        etc.etcTitle = etcTitle;
-        etc.etcDescription = etcDescription;
-        return etc;
+        Education education = new Education();
+        education.degree = degree;
+        education.major = major;
+        education.institution = institution;
+        return education;
     }
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;

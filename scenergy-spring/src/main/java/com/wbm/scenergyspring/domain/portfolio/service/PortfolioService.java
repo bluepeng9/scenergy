@@ -1,14 +1,12 @@
 package com.wbm.scenergyspring.domain.portfolio.service;
 
-import com.wbm.scenergyspring.domain.portfolio.Portfolio;
+import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.repository.PortfolioRepository;
 import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -1,9 +1,9 @@
 package com.wbm.scenergyspring.domain.portfolio.service.command;
 
-import com.wbm.scenergyspring.domain.portfolio.Education;
-import com.wbm.scenergyspring.domain.portfolio.Experience;
-import com.wbm.scenergyspring.domain.portfolio.Honor;
-import com.wbm.scenergyspring.domain.portfolio.PortfolioEtc;
+import com.wbm.scenergyspring.domain.portfolio.entity.Education;
+import com.wbm.scenergyspring.domain.portfolio.entity.Experience;
+import com.wbm.scenergyspring.domain.portfolio.entity.Honor;
+import com.wbm.scenergyspring.domain.portfolio.entity.PortfolioEtc;
 import lombok.Builder;
 import lombok.Data;
 
