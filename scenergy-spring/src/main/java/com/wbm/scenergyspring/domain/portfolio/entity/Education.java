@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.portfolio.entity;
 
+import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Education {
+public class Education extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "edu_id")
@@ -24,10 +25,6 @@ public class Education {
     private String degree;
     private String major;
     private LocalDateTime graduationDate;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
     public static Education createNewEducation(
             String institution,
             String degree,

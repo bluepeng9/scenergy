@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.portfolio.entity;
 
+import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PortfolioEtc {
+public class PortfolioEtc extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "etc_id")
@@ -26,10 +27,6 @@ public class PortfolioEtc {
     private String etcDescription;
     private LocalDateTime etcStartDate;
     private LocalDateTime etcEndDate;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
     public static PortfolioEtc createNewPortfolioEtc(
             String etcTitle,
             String etcDescription

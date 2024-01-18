@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.portfolio.entity;
 
+import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Experience {
+public class Experience extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exp_id")
@@ -26,10 +27,6 @@ public class Experience {
     private String position;
     private LocalDateTime expStartDate;
     private LocalDateTime expEndDate;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     public static Experience createNewExperience(
             String company,

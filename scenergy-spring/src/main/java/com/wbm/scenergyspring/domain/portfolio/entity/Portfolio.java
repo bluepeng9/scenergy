@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.portfolio.entity;
 
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
+import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -14,17 +15,13 @@ import java.util.List;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Portfolio {
+public class Portfolio extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "portfolio_id")
     private Long id;
     private int userId;
     private String description;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Education> educations = new ArrayList<>();
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
