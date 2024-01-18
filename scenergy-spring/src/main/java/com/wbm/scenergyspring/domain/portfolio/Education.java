@@ -10,9 +10,8 @@ import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
-//@ToString
+@ToString
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Education {
     @Id
@@ -42,5 +41,7 @@ public class Education {
         education.institution = institution;
         return education;
     }
-
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+    }
 }

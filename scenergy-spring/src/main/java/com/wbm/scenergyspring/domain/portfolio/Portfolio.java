@@ -46,7 +46,7 @@ public class Portfolio {
         portfolio.description = description;
         for (Education edu:educations){
             portfolio.educations.add(edu);
-//            edu.setPortfolio(portfolio);
+            edu.setPortfolio(portfolio);
         }
         for (Experience exp:experiences){
             portfolio.experiences.add(exp);
