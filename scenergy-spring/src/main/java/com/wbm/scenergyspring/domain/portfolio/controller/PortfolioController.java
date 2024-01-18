@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.portfolio.controller;
 
 import com.wbm.scenergyspring.domain.portfolio.controller.request.CreatePortfolioRequest;
+import com.wbm.scenergyspring.domain.portfolio.controller.request.UpdatePortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.service.PortfolioService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,18 @@ public class PortfolioController {
 
     final PortfolioService portfolioService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ApiResponse<Boolean> createPortfolio(
             @RequestBody CreatePortfolioRequest request
     ) {
         portfolioService.createPortfolio(request.toCreatePortfolioCommand());
+        return ApiResponse.createSuccess(true);
+    }
+    @PostMapping("/update")
+    public ApiResponse<Boolean> updatePortfolio(
+            @RequestBody UpdatePortfolioRequest request
+    ) {
+        portfolioService.updatePortfolio(request.toUpdatePortfolioCommand());
         return ApiResponse.createSuccess(true);
     }
 }
