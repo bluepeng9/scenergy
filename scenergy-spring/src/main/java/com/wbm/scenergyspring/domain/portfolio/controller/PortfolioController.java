@@ -1,18 +1,17 @@
 package com.wbm.scenergyspring.domain.portfolio.controller;
 
 import com.wbm.scenergyspring.domain.portfolio.controller.request.CreatePortfolioRequest;
+import com.wbm.scenergyspring.domain.portfolio.controller.request.DeletePortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.controller.request.UpdatePortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.controller.response.CreatePortfolioResponse;
+import com.wbm.scenergyspring.domain.portfolio.controller.response.DeletePortfolioResponse;
 import com.wbm.scenergyspring.domain.portfolio.controller.response.UpdatePortfolioResponse;
 import com.wbm.scenergyspring.domain.portfolio.service.PortfolioService;
 import com.wbm.scenergyspring.domain.user.controller.response.CreateUserResponse;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,5 +39,14 @@ public class PortfolioController {
         UpdatePortfolioResponse updatePortfolioResponse = new UpdatePortfolioResponse();
         updatePortfolioResponse.setPortfolioId(portfolioId);
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
+    }
+    @GetMapping("/delete")
+    public ResponseEntity<ApiResponse<DeletePortfolioResponse>> deletePortfolio(
+            @RequestBody DeletePortfolioRequest request
+            ){
+        Long portfolioId = portfolioService.deletePortfolio(request.toDeletePortfolioCommand());
+        DeletePortfolioResponse deletePortfolioResponse = new DeletePortfolioResponse();
+        deletePortfolioResponse.setPortfolioId(portfolioId);
+        return ResponseEntity.ok(ApiResponse.createSuccess(deletePortfolioResponse));
     }
 }
