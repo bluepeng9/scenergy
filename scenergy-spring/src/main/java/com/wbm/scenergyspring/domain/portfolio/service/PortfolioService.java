@@ -3,14 +3,12 @@ package com.wbm.scenergyspring.domain.portfolio.service;
 import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.repository.PortfolioRepository;
 import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCommand;
+import com.wbm.scenergyspring.domain.portfolio.service.command.DeletePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +33,11 @@ public class PortfolioService {
                 command.getEtcs(),
                 command.getEducations()
         );
+        return command.getPortfolioId();
+    }
+    @Transactional(readOnly = false)
+    public Long deletePortfolio(DeletePortfolioCommand command) {
+        portfolioRepository.deleteById(command.getPortfolioId());
         return command.getPortfolioId();
     }
 }
