@@ -9,8 +9,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Follow {
 
 	@Id
@@ -23,4 +25,15 @@ public class Follow {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	User to;
+
+	public static Follow createFollow(
+		User from,
+		User to
+	) {
+		Follow follow = new Follow();
+		follow.from = from;
+		follow.to = to;
+		return follow;
+	}
+
 }
