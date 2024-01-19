@@ -2,9 +2,10 @@ package com.wbm.scenergyspring.domain.portfolio.entity;
 
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,6 @@ public class Education extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "edu_id")
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
@@ -25,15 +25,20 @@ public class Education extends BaseEntity {
     private String degree;
     private String major;
     private LocalDateTime graduationDate;
+    private LocalDateTime admissionDate;
     public static Education createNewEducation(
             String institution,
             String degree,
-            String major
+            String major,
+            LocalDateTime admissionDate,
+            LocalDateTime graduationDate
     ){
         Education education = new Education();
         education.degree = degree;
         education.major = major;
         education.institution = institution;
+        education.admissionDate = admissionDate;
+        education.graduationDate = graduationDate;
         return education;
     }
     public void setPortfolio(Portfolio portfolio) {

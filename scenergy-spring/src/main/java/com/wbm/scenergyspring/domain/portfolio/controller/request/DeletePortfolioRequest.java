@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 public class DeletePortfolioRequest {
     Long portfolioId;
-    int userId;
+    Long userId;
 
     public DeletePortfolioCommand toDeletePortfolioCommand() {
         DeletePortfolioCommand command = DeletePortfolioCommand.builder()

@@ -13,5 +13,5 @@ import java.util.List;
 @Builder
 public class DeletePortfolioCommand {
     Long portfolioId;
-    int userId;
+    Long userId;
 }

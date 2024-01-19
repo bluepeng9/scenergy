@@ -22,7 +22,7 @@ public class PortfolioController {
 
     final PortfolioService portfolioService;
 
-    @PostMapping("/create")
+    @PostMapping("/create-port")
     public ResponseEntity<ApiResponse<CreatePortfolioResponse>> createPortfolio(
             @RequestBody CreatePortfolioRequest request
     ) {
@@ -33,7 +33,7 @@ public class PortfolioController {
 
         return ResponseEntity.ok(ApiResponse.createSuccess(createPortfolioResponse));
     }
-    @PostMapping("/update")
+    @PostMapping("/update-all")
     public ResponseEntity<ApiResponse<UpdatePortfolioResponse>> updatePortfolio(
             @RequestBody UpdatePortfolioRequest request
     ) {
@@ -42,7 +42,7 @@ public class PortfolioController {
         updatePortfolioResponse.setPortfolioId(portfolioId);
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
     }
-    @GetMapping("/delete")
+    @GetMapping("/delete-all")
     public ResponseEntity<ApiResponse<DeletePortfolioResponse>> deletePortfolio(
             @RequestBody DeletePortfolioRequest request
             ){

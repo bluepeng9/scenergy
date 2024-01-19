@@ -1,18 +1,16 @@
 package com.wbm.scenergyspring.domain.portfolio.entity;
 
-import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@ToString
+//@ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Portfolio extends BaseEntity {
@@ -20,14 +18,17 @@ public class Portfolio extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "portfolio_id")
     private Long id;
-    private int userId;
+    private Long userId;
     private String description;
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Education> educations = new ArrayList<>();
+
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Experience> experiences = new ArrayList<>();
+
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<Honor> honors = new ArrayList<>();
+
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<PortfolioEtc> etcs = new ArrayList<>();
 
@@ -35,7 +36,7 @@ public class Portfolio extends BaseEntity {
      * create시 호출되는 생성자
      */
     public static Portfolio createNewPortfolio(
-            int userId
+            Long userId
     ){
         Portfolio portfolio = new Portfolio();
         portfolio.userId = userId;

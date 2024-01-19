@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class CreatePortfolioRequest {
-    int userId;
+    Long userId;
     public CreatePortfolioCommand toCreatePortfolioCommand() {
         CreatePortfolioCommand command = CreatePortfolioCommand.builder()
                 .userId(userId)

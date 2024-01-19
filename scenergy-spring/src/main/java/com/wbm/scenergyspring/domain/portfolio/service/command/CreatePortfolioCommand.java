@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class CreatePortfolioCommand {
-    int userId;
+    Long userId;
 }

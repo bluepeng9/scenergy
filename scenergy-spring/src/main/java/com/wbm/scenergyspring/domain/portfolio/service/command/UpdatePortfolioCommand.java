@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 public class UpdatePortfolioCommand {
     Long portfolioId;
-    int userId;
+    Long userId;
     String description;
     List<Education> educations;
     List<PortfolioEtc> etcs;

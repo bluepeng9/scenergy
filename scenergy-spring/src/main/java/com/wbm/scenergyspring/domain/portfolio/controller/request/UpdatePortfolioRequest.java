@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class UpdatePortfolioRequest {
     Long portfolioId;
-    int userId;
+    Long userId;
     String description;
     List<Education> educations;
     List<PortfolioEtc> etcs;
