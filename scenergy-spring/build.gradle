@@ -40,6 +40,14 @@ dependencies {
 
     //sql 로그
     implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1"
+
+    // mysql 연결
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // mustache
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
