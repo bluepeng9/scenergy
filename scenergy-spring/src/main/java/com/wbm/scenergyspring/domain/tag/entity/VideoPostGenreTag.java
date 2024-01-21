@@ -13,7 +13,6 @@ public class VideoPostGenreTag {
     Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="video_post_id")
     private VideoPost videoPost;
 
