@@ -28,17 +28,6 @@ public class VideoPost extends Post {
     private List<VideoPostGenreTag> videoPostGenreTags = new ArrayList<>();
 
 
-    public void addVideoPostGenreTag(VideoPostGenreTag videoPostGenreTag) {
-        videoPostGenreTags.add(videoPostGenreTag);
-        videoPostGenreTag.updateVideoPost(this);
-    }
-
-    public void removeVideoPostGenreTag(VideoPostGenreTag videoPostGenreTag) {
-        videoPostGenreTags.remove(videoPostGenreTag);
-        videoPostGenreTag.updateVideoPost(null);
-    }
-
-
     public static VideoPost createVideoPost(
         User user,
         Video video,
