@@ -21,6 +21,7 @@ public class SecurityConfig {
 			.and()
 			.formLogin()
 			.loginPage("/loginForm")
+			// login 요청 security가 대신 처리
 			.loginProcessingUrl("login")
 			.defaultSuccessUrl("/")
 			.and()
