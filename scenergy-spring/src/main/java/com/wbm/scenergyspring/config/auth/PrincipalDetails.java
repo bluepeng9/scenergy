@@ -1,19 +1,32 @@
 package com.wbm.scenergyspring.config.auth;
 
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 /**
  * Security Session => authentication => UserDetails
+ * 일반로그인, 소셜로그인 모두 PrincipalDeatails로
+ * 접근하기 위해 둘 다 상속
  */
-public class PrincipalDetails implements UserDetails {
+public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;
+
+	// 소셜 로그인시 가져온 사용자 정보들
+	private Map<String, Object> attributes;
+	// 소셜 로그인 생성자
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
+	}
 
 	// 유저 권한
 	@Override
@@ -61,5 +74,15 @@ public class PrincipalDetails implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return null;
 	}
 }
