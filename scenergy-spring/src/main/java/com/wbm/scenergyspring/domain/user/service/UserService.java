@@ -21,6 +21,8 @@ public class UserService {
 		User newUser = User.createNewUser(
 			command.getEmail(),
 			command.getPassword(),
+			command.getUsername(),
+			command.getGender(),
 			command.getNickname()
 		);
 		return userRepository.save(newUser).getId();

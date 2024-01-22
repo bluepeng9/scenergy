@@ -50,11 +50,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 		return user.getPassword();
 	}
 
-	// 유저아이디 컬럼 만들어도 되나????????
-	// 일단 이거 email로 할게 ㅠㅠ
 	@Override
 	public String getUsername() {
-		return String.valueOf(user.getEmail());
+
+		return user.getUsername();
 	}
 
 	// 계정 만료여부

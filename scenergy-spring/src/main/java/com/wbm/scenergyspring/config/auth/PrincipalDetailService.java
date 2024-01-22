@@ -24,7 +24,7 @@ public class PrincipalDetailService implements UserDetailsService {
 	// 이것두 username으로 찾아야하는데 repository에 findByUsername 추가해도 되는지??????
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User userEntity = userRepository.findByEmail(username);
+		User userEntity = userRepository.findByUsername(username);
 		if (userEntity != null) {
 			return new PrincipalDetails(userEntity);
 		}

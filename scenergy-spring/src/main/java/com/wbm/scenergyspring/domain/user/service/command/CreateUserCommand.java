@@ -9,4 +9,6 @@ public class CreateUserCommand {
     String email;
     String password;
     String nickname;
+    String username;
+    String gender;
 }
