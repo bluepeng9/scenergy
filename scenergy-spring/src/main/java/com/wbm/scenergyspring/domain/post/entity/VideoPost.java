@@ -27,20 +27,19 @@ public class VideoPost extends Post {
     @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL)
     private List<VideoPostGenreTag> videoPostGenreTags = new ArrayList<>();
 
-
     public static VideoPost createVideoPost(
         User user,
         Video video,
         String title,
-        String content
-//        String writer
+        String content,
+        String writer
     ){
         VideoPost videopost = new VideoPost();
         videopost.user = user;
         videopost.video = video;
         videopost.title = title;
         videopost.content = content;
-//        videopost.writer = writer;
+        videopost.writer = writer;
 
         return videopost;
     }
