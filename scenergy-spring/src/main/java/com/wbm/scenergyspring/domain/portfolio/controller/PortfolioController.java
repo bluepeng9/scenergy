@@ -2,12 +2,14 @@ package com.wbm.scenergyspring.domain.portfolio.controller;
 
 import com.wbm.scenergyspring.domain.portfolio.controller.request.CreatePortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.controller.request.DeletePortfolioRequest;
+import com.wbm.scenergyspring.domain.portfolio.controller.request.GetPortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.controller.request.UpdatePortfolioRequest;
 import com.wbm.scenergyspring.domain.portfolio.controller.response.CreatePortfolioResponse;
 import com.wbm.scenergyspring.domain.portfolio.controller.response.DeletePortfolioResponse;
+import com.wbm.scenergyspring.domain.portfolio.controller.response.GetPortfolioResponse;
 import com.wbm.scenergyspring.domain.portfolio.controller.response.UpdatePortfolioResponse;
+import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.service.PortfolioService;
-import com.wbm.scenergyspring.domain.user.controller.response.CreateUserResponse;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,5 +50,15 @@ public class PortfolioController {
         DeletePortfolioResponse deletePortfolioResponse = new DeletePortfolioResponse();
         deletePortfolioResponse.setPortfolioId(portfolioId);
         return ResponseEntity.ok(ApiResponse.createSuccess(deletePortfolioResponse));
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<ApiResponse<GetPortfolioResponse>> getPortfolio(
+            @RequestBody GetPortfolioRequest request
+    ) {
+        Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
+        GetPortfolioResponse getPortfolioResponse = new GetPortfolioResponse();
+        getPortfolioResponse.setPortfolio(portfolio);
+        return ResponseEntity.ok(ApiResponse.createSuccess(getPortfolioResponse));
     }
 }
