@@ -6,4 +6,5 @@ import lombok.Data;
 public class CreateUserCommand {
     String email;
     String password;
+    String nickname;
 }

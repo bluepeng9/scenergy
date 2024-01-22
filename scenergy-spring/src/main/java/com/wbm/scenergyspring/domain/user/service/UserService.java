@@ -20,7 +20,8 @@ public class UserService {
 	public Long createUser(CreateUserCommand command) {
 		User newUser = User.createNewUser(
 			command.getEmail(),
-			command.getPassword()
+			command.getPassword(),
+			command.getNickname()
 		);
 		return userRepository.save(newUser).getId();
 	}
