@@ -14,4 +14,10 @@ public class InstrumentTag {
 
     String InstrumentName;
 
+    public static InstrumentTag createInstrumentTag(String InstrumentName){
+        InstrumentTag instrumentTag = new InstrumentTag();
+        instrumentTag.InstrumentName = InstrumentName;
+        return instrumentTag;
+    }
+
 }
