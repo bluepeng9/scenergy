@@ -18,7 +18,7 @@ public class GenreTag {
     @Column(unique = true)
     String genreName;
 
-    public void updateGenreTag(Long id, String changeGenreName){
+    public void updateGenreTag(String changeGenreName) {
         this.genreName=changeGenreName;
     }
 
