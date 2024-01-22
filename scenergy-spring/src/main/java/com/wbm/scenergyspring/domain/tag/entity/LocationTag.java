@@ -2,6 +2,7 @@ package com.wbm.scenergyspring.domain.tag.entity;
 
 import jakarta.persistence.*;
 
+import javax.xml.stream.Location;
 import java.util.List;
 
 /**
@@ -16,5 +17,11 @@ public class LocationTag {
     Long id;
 
     String locationName;
+
+    public static LocationTag createLocationTag(String locationName){
+        LocationTag locationTag = new LocationTag();
+        locationTag.locationName = locationName;
+        return locationTag;
+    }
 
 }
