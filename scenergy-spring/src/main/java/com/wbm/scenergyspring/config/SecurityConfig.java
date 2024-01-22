@@ -16,19 +16,18 @@ public class SecurityConfig {
 			.csrf(AbstractHttpConfigurer::disable)
 			.authorizeHttpRequests((authorizeRequests) ->
 				authorizeRequests
-			.requestMatchers( "/user/**").authenticated()
-			.requestMatchers("/admin/**").hasRole(ROLE.)
-			.anyRequest().permitAll()
-			)
-			.and()
-			.formLogin()
-			.loginPage("/loginForm")
-			// login 요청 security가 대신 처리
-			.loginProcessingUrl("login")
-			.defaultSuccessUrl("/")
-			.and()
-			.oauth2Login()
-			.loginPage("/loginForm");
+					.requestMatchers("/user/**").authenticated()
+					.requestMatchers("/admin/**").hasRole("ADMIN")
+					.anyRequest().permitAll()
+			);
+			// .and()
+			// .formLogin()
+			// .loginPage("/loginForm")
+			// .loginProcessingUrl("/login")
+			// .defaultSuccessUrl("/")
+			// .and()
+			// .oauth2Login()
+			// .loginPage("/loginForm");
 
 		return http.build();
 	}
