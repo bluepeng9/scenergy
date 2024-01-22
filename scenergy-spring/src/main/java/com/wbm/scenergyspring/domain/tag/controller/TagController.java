@@ -19,8 +19,23 @@ public class TagController {
         System.out.println("입력 장르 : "+genreName);
         if(tagService.createGenreTag(genreName))
             return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
-        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/Instrument/create")
+    public ResponseEntity<ApiResponse<Boolean>> createInstrumentTag(String InstrumentName){
+        System.out.println("입력 악기 : "+InstrumentName);
+        if(tagService.createInstrumentName(InstrumentName))
+            return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/Location/create")
+    public ResponseEntity<ApiResponse<Boolean>> createLocationTag(String locationName){
+        System.out.println("입력 지역 : "+locationName);
+        if(tagService.createInstrumentName(locationName))
+            return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.BAD_REQUEST);
+    }
 
 }
