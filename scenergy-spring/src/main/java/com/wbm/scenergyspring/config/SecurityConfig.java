@@ -14,10 +14,12 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
-			.authorizeRequests()
+			.authorizeHttpRequests((authorizeRequests) ->
+				authorizeRequests
 			.requestMatchers( "/user/**").authenticated()
-			.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+			.requestMatchers("/admin/**").hasRole(ROLE.)
 			.anyRequest().permitAll()
+			)
 			.and()
 			.formLogin()
 			.loginPage("/loginForm")

@@ -20,6 +20,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	private User user;
 
 	// 소셜 로그인시 가져온 사용자 정보들
+
+	public PrincipalDetails(User user) {
+		this.user = user;
+	}
+
 	private Map<String, Object> attributes;
 	// 소셜 로그인 생성자
 	public PrincipalDetails(User user, Map<String, Object> attributes) {
@@ -46,9 +51,10 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	}
 
 	// 유저아이디 컬럼 만들어도 되나????????
+	// 일단 이거 email로 할게 ㅠㅠ
 	@Override
 	public String getUsername() {
-		return String.valueOf(user.getId());
+		return String.valueOf(user.getEmail());
 	}
 
 	// 계정 만료여부

@@ -2,6 +2,7 @@ package com.wbm.scenergyspring.domain.user.entity;
 
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,10 +18,12 @@ public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	@Column(unique = true)
 	String email;
 	String password;
 	@Column(unique = true)
 	String nickname;
+
 
 	public static User createNewUser(
 		String email,
