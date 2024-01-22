@@ -70,7 +70,8 @@ public class VideoPostService {
                 user,
                 command.getVideo(),
                 command.getTitle(),
-                command.getContent()
+                command.getContent(),
+                user.getNickname()
         );
         videoPostRepository.save(videoPost);
         return videoPost;
