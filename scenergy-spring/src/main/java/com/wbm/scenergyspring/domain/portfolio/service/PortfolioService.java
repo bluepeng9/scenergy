@@ -4,6 +4,7 @@ import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.repository.PortfolioRepository;
 import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.DeletePortfolioCommand;
+import com.wbm.scenergyspring.domain.portfolio.service.command.GetPortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +40,11 @@ public class PortfolioService {
     public Long deletePortfolio(DeletePortfolioCommand command) {
         portfolioRepository.deleteById(command.getPortfolioId());
         return command.getPortfolioId();
+    }
+
+    @Transactional
+    public Portfolio getPortfolio(GetPortfolioCommand command) {
+        return portfolioRepository.findByIdJoin(command.getPortfolioId())
+                .orElseThrow(() -> new EntityNotFoundException("DB에 저장되지 않은 포트폴리오"));
     }
 }
