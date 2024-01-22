@@ -23,16 +23,22 @@ public class User extends BaseEntity {
 	String password;
 	@Column(unique = true)
 	String nickname;
+	String username;
+	String gender;
 
 
 	public static User createNewUser(
 		String email,
 		String password,
+		String username,
+		String gender,
 		String nickname
 	) {
 		User user = new User();
 		user.email = email;
 		user.password = password;
+		user.username = username;
+		user.gender = gender;
 		user.nickname = nickname;
 		return user;
 	}
