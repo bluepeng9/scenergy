@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.tag.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import javax.xml.stream.Location;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * 10:충북, 11:춤남, 12:전북, 13:전남, 14:경북, 15:경남, 16:세종, 17:제주
  */
 @Entity
+@Getter
 public class LocationTag {
 
     @Id
