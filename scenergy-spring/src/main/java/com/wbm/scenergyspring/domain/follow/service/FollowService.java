@@ -45,4 +45,20 @@ public class FollowService {
 		Follow save = followRepository.save(follow);
 		return save.getId();
 	}
+
+	/**
+	 *
+	 * @param command
+	 * @return 삭제에 성공했으면 1 아니면 0
+	 */
+	@Transactional
+	public long unFollowUser(FollowUserCommand command) {
+
+		User fromUser = userRepository.getReferenceById(command.getFromUserId());
+		User toUser = userRepository.getReferenceById(command.getToUserId());
+
+		long deletedRowCount = followRepository.deleteByFromAndTo(fromUser, toUser);
+
+		return deletedRowCount;
+	}
 }

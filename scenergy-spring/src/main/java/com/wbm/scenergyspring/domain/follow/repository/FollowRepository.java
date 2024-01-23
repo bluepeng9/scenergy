@@ -10,4 +10,6 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
 	boolean existsByFromAndTo(User from, User to);
+
+	long deleteByFromAndTo(User from, User to);
 }
