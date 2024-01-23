@@ -20,6 +20,12 @@ public class PortfolioService {
 
     @Transactional(readOnly = false)
     public Long createPortfolio(CreatePortfolioCommand command) {
+        portfolioRepository.findByIdJoin(command.getUserId())
+                .ifPresent(
+                        p -> {
+                            throw new IllegalStateException("이미 포트폴리오가 존재합니다.");
+                        }
+                );
         Portfolio newPortfolio = Portfolio.createNewPortfolio(command.getUserId());
         return portfolioRepository.save(newPortfolio).getId();
     }
@@ -38,6 +44,13 @@ public class PortfolioService {
     }
     @Transactional(readOnly = false)
     public Long deletePortfolio(DeletePortfolioCommand command) {
+
+        Portfolio existPortfolio = portfolioRepository.findByIdJoin(command.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("포트폴리오가 존재하지 않는 회원"));
+        if (!existPortfolio.getId().equals(command.getPortfolioId())) {
+            throw new IllegalStateException("삭제권한이 없는 회원");
+        }
+
         portfolioRepository.deleteById(command.getPortfolioId());
         return command.getPortfolioId();
     }
