@@ -1,10 +1,14 @@
 package com.wbm.scenergyspring.domain.follow.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
+import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowersCommand;
+import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowingCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
@@ -60,5 +64,27 @@ public class FollowService {
 		long deletedRowCount = followRepository.deleteByFromAndTo(fromUser, toUser);
 
 		return deletedRowCount;
+	}
+
+	/**
+	 * 팔로워 찾기
+	 * @param command
+	 * @return
+	 */
+	public List<Follow> findAllFollowers(FindAllFollowersCommand command) {
+		User toUser = userRepository.getReferenceById(command.getToUserId());
+		List<Follow> followers = followRepository.findAllByTo(toUser);
+		return followers;
+	}
+
+	/**
+	 * 팔로잉 하는 사람 찾기
+	 * @param command
+	 * @return
+	 */
+	public List<Follow> findAllFollowing(FindAllFollowingCommand command) {
+		User fromUser = userRepository.getReferenceById(command.getFromUserId());
+		List<Follow> following = followRepository.findAllByFrom(fromUser);
+		return following;
 	}
 }
