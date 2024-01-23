@@ -42,26 +42,23 @@ class FollowServiceTest {
 			"asdf"
 		);
 
+		Long toUserId = userRepository.save(toUser).getId();
+		Long fromUserId = userRepository.save(fromUser).getId();
 		FollowUserCommand command = FollowUserCommand.builder()
-			.fromUserId(1L)
-			.toUserId(2L)
+			.fromUserId(fromUserId)
+			.toUserId(toUserId)
 			.build();
-
-		userRepository.save(toUser);
-		userRepository.save(fromUser);
 
 		//when
 		Long followId = followService.followUser(command);
 
 		//then
-		Follow follow = followRepository.findById(1L).orElseThrow();
+		Follow follow = followRepository.findById(followId).orElseThrow();
 		User from = follow.getFrom();
 		User to = follow.getTo();
 
-		Assertions.assertThat(followId).isEqualTo(1L);
-
-		Assertions.assertThat(1L).isEqualTo(from.getId());
-		Assertions.assertThat(2L).isEqualTo(to.getId());
+		Assertions.assertThat(fromUserId).isEqualTo(from.getId());
+		Assertions.assertThat(toUserId).isEqualTo(to.getId());
 
 	}
 
