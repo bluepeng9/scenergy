@@ -92,4 +92,33 @@ class FollowServiceTest {
 			followService.followUser(command)
 		).isInstanceOf(EntityAlreadyExistException.class);
 	}
+
+	@Test
+	@DisplayName("팔로잉 삭제")
+	void followUser3() {
+		//given
+		User fromUser = User.createNewUser(
+			"test@naver.com",
+			"asdf"
+		);
+		User toUser = User.createNewUser(
+			"test2@naver.com",
+			"asdf"
+		);
+
+		Long toUserId = userRepository.save(toUser).getId();
+		Long fromUserId = userRepository.save(fromUser).getId();
+
+		followService.followUser(FollowUserCommand.builder()
+			.fromUserId(fromUserId)
+			.toUserId(toUserId)
+			.build());
+
+		//when
+		followRepository.deleteByFromAndTo(fromUser, toUser);
+
+		//then
+		long count = followRepository.count();
+		Assertions.assertThat(count).isEqualTo(0);
+	}
 }
