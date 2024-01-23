@@ -1,11 +1,13 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
-import java.sql.Timestamp;
-
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class User extends BaseEntity {
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
