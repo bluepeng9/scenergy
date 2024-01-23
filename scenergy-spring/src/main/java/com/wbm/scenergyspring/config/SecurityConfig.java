@@ -9,16 +9,21 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
 
 import com.wbm.scenergyspring.config.oauth.PrincipalOauth2UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity // 스프링 시큐리티 등록
+@RequiredArgsConstructor
 public class SecurityConfig  {
 
 	@Autowired
 	private PrincipalOauth2UserService principalOauth2UserService;
 
+	private final CorsFilter corsFilter;
 	@Bean // 패스워드 암호화
 	public BCryptPasswordEncoder encodePwd() {
 		return new BCryptPasswordEncoder();
@@ -29,6 +34,7 @@ public class SecurityConfig  {
 			.csrf(AbstractHttpConfigurer::disable)
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
+			.addFilter(corsFilter)
 			.formLogin().disable()
 			.httpBasic().disable()
 			.authorizeRequests()
