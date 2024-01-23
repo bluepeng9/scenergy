@@ -33,7 +33,8 @@ public class PortfolioController {
 
         return ResponseEntity.ok(ApiResponse.createSuccess(createPortfolioResponse));
     }
-    @PostMapping("/update-all")
+
+    @PutMapping("/update-all")
     public ResponseEntity<ApiResponse<UpdatePortfolioResponse>> updatePortfolio(
             @RequestBody UpdatePortfolioRequest request
     ) {
@@ -42,7 +43,8 @@ public class PortfolioController {
         updatePortfolioResponse.setPortfolioId(portfolioId);
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
     }
-    @GetMapping("/delete-all")
+
+    @DeleteMapping("/delete-all")
     public ResponseEntity<ApiResponse<DeletePortfolioResponse>> deletePortfolio(
             @RequestBody DeletePortfolioRequest request
             ){
