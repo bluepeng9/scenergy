@@ -6,7 +6,6 @@ import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCo
 import com.wbm.scenergyspring.domain.portfolio.service.command.DeletePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,40 +28,24 @@ class PortfolioServiceTest {
     @Autowired
     PortfolioRepository portfolioRepository;
 
-    @Test
-    @DisplayName("포트폴리오 생성 테스트")
-    void createPortfolio() {
-        //given
-        CreatePortfolioCommand command = CreatePortfolioCommand.builder()
+    CreatePortfolioCommand createPortfolioCommand() {
+        return CreatePortfolioCommand.builder()
                 .userId(1L)
                 .build();
-        //when
-        portfolioService.createPortfolio(command);
-        //then
-        assertTrue(portfolioRepository.findByIdJoin(1L).isPresent());
     }
 
-    @DisplayName("포트폴리오 수정 테스트")
-    @Test
-    @Transactional
-    void updatePortfolio() {
-        //given
-        CreatePortfolioCommand createCommand = CreatePortfolioCommand.builder()
-                .userId(1L)
-                .build();
-        Long portfolioId = portfolioService.createPortfolio(createCommand);
-
+    UpdatePortfolioCommand updatePortfolioCommand(Long portfolioId) {
+        //하위 entity 생성
         List<Education> educations = new ArrayList<>();
         List<PortfolioEtc> etcs = new ArrayList<>();
         List<Experience> experiences = new ArrayList<>();
         List<Honor> honors = new ArrayList<>();
-
         educations.add(Education.createNewEducation("inst", "degree", "major", LocalDateTime.now(), LocalDateTime.now()));
         etcs.add(PortfolioEtc.createNewPortfolioEtc("title", "desc"));
         experiences.add(Experience.createNewExperience("company", "position"));
         honors.add(Honor.createNewHonor("title", "orgam"));
-
-        UpdatePortfolioCommand updateCommand = UpdatePortfolioCommand.builder()
+        //command 발행
+        return UpdatePortfolioCommand.builder()
                 .portfolioId(portfolioId)
                 .userId(2L)
                 .description("port desc")
@@ -71,7 +54,31 @@ class PortfolioServiceTest {
                 .experiences(experiences)
                 .honors(honors)
                 .build();
+    }
 
+    DeletePortfolioCommand deletePortfolioCommand(Long portfolioId) {
+        return DeletePortfolioCommand.builder()
+                .portfolioId(portfolioId)
+                .userId(1L)
+                .build();
+    }
+
+    @Test
+    void 포트폴리오_생성_테스트() {
+        //given
+        CreatePortfolioCommand command = createPortfolioCommand();
+        //when
+        portfolioService.createPortfolio(command);
+        //then
+        assertTrue(portfolioRepository.findByIdJoin(1L).isPresent());
+    }
+
+
+    @Test
+    void 포트폴리오_수정_테스트() {
+        //given
+        Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand());
+        UpdatePortfolioCommand updateCommand = updatePortfolioCommand(portfolioId);
         //when
         Portfolio beforePortfolio = portfolioRepository.findById(portfolioId).get();
         beforePortfolio.updatePortfolio(
@@ -88,18 +95,10 @@ class PortfolioServiceTest {
     }
 
     @Test
-    @DisplayName("포트폴리오 삭제 테스트")
-    void deletePortfolio() {
+    void 포트폴리오_삭제_테스트() {
         //given
-        CreatePortfolioCommand createCommand = CreatePortfolioCommand.builder()
-                .userId(1L)
-                .build();
-        Long portfolioId = portfolioService.createPortfolio(createCommand);
-
-        DeletePortfolioCommand deletePortfolioCommand = DeletePortfolioCommand.builder()
-                .portfolioId(portfolioId)
-                .userId(1L)
-                .build();
+        Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand());
+        DeletePortfolioCommand deletePortfolioCommand = deletePortfolioCommand(portfolioId);
 
         //when
         Long deletedPortfolioId = portfolioService.deletePortfolio(deletePortfolioCommand);
@@ -113,36 +112,11 @@ class PortfolioServiceTest {
 
 
     @Test
-    @DisplayName("포트폴리오 조회 테스트")
-    void GetPortfilio() {
+    void 포트폴리오_조회_테스트() {
         //given
-        CreatePortfolioCommand createCommand = CreatePortfolioCommand.builder()
-                .userId(1L)
-                .build();
-        Long portfolioId = portfolioService.createPortfolio(createCommand);
 
-        List<Education> educations = new ArrayList<>();
-        List<PortfolioEtc> etcs = new ArrayList<>();
-        List<Experience> experiences = new ArrayList<>();
-        List<Honor> honors = new ArrayList<>();
-
-        educations.add(Education.createNewEducation("inst", "degree", "major", LocalDateTime.now(), LocalDateTime.now()));
-        educations.add(Education.createNewEducation("inst", "degree", "major", LocalDateTime.now(), LocalDateTime.now()));
-        educations.add(Education.createNewEducation("inst", "degree", "major", LocalDateTime.now(), LocalDateTime.now()));
-        etcs.add(PortfolioEtc.createNewPortfolioEtc("title", "desc"));
-        experiences.add(Experience.createNewExperience("company","position"));
-        honors.add(Honor.createNewHonor("title", "orgam"));
-
-        UpdatePortfolioCommand updateCommand = UpdatePortfolioCommand.builder()
-                .portfolioId(portfolioId)
-                .userId(2L)
-                .description("port desc")
-                .educations(educations)
-                .etcs(etcs)
-                .experiences(experiences)
-                .honors(honors)
-                .build();
-
+        Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand());
+        UpdatePortfolioCommand updateCommand = updatePortfolioCommand(portfolioId);
         Portfolio beforePortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
         beforePortfolio.updatePortfolio(
                 updateCommand.getDescription(),
@@ -156,6 +130,6 @@ class PortfolioServiceTest {
         Portfolio afterPortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
 
         //then
-        assertEquals(educations, afterPortfolio.getEducations());
+        assertEquals(updateCommand.getEducations(), afterPortfolio.getEducations());
     }
 }
