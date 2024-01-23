@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -26,17 +27,14 @@ public class SecurityConfig  {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.and()
+			.formLogin().disable()
+			.httpBasic().disable()
 			.authorizeRequests()
 			.requestMatchers( "/user/**").authenticated()
-			.requestMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
 			.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 			.anyRequest().permitAll()
-			.and()
-			.formLogin()
-			.loginPage("/loginForm")
-			.loginProcessingUrl("login")
-			.defaultSuccessUrl("/")
-
 			.and()
 			.oauth2Login()
 			.loginPage("/loginForm")
