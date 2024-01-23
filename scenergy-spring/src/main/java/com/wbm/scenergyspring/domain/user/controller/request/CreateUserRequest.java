@@ -6,15 +6,17 @@ import lombok.Data;
 
 @Data
 public class CreateUserRequest {
-	String email;
-	String password;
-	String nickname;
+    String email;
+    String password;
+	String gender;
+	String username;
 
-	public CreateUserCommand toCreateUserCommand() {
-		return CreateUserCommand.builder()
-			.email(email)
-			.password(password)
-			.nickname(nickname)
-			.build();
-	}
+    public CreateUserCommand toCreateUserCommand() {
+        CreateUserCommand command = new CreateUserCommand();
+		command.setEmail(getEmail());
+		command.setPassword(getPassword());
+		command.setGender(getGender());
+		command.setUsername(getUsername());
+        return command;
+    }
 }
