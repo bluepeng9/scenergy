@@ -1,0 +1,38 @@
+.signup-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* border: 1px solid #ccc; */
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .signup-container form {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .signup-container label {
+    display: block;
+    /* margin-bottom: 10px; */
+  }
+  
+  .signup-container input,
+  .signup-container select,
+  .signup-container button {
+    /* width: 100%; */
+    padding: 5px;
+    /* margin: 3px; */
+    /* box-sizing: border-box; */
+    /* margin-bottom: 20px; */
+  }
+  
+  /* 추가된 스타일 */
+  .signup-container p {
+    /* margin: 0; 기본 마진 제거 */
+    font-size: 12px; /* 빨간 글씨 크기 조정 */
+    color: red; /* 빨간 글씨 색상 지정 */
+  }
+  
