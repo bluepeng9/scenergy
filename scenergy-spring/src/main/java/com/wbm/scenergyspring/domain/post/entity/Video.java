@@ -1,5 +1,7 @@
 package com.wbm.scenergyspring.domain.post.entity;
 
+import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.service.command.UpdateVideoCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,27 +16,33 @@ public class Video {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    String videoUrl;
+    String videoUrlPath;
 
-    String thumbnail;
+    String thumbnailUrlPath;
 
     String musicTitle;
 
     String artist;
 
-    public static Video createVideo(
-        String videoUrl,
-        String thumbnail,
-        String musicTitle,
-        String artist
-    ){
+    public static Video createVideo(CreateVideoCommand command) {
         Video video = new Video();
-        video.videoUrl = videoUrl;
-        video.thumbnail = thumbnail;
-        video.musicTitle = musicTitle;
-        video.artist = artist;
+        video.videoUrlPath = command.getVideoUrlPath();
+        video.thumbnailUrlPath = command.getThumbnailUrlPath();
+        video.musicTitle = command.getVideoTitle();
+        video.artist = command.getArtist();
 
         return video;
+    }
+
+    public void updateVideo(UpdateVideoCommand command) {
+        if (command.getVideoUrlPath() != null)
+            videoUrlPath = command.getVideoUrlPath();
+        if (command.getThumbnailUrlPath() != null)
+            thumbnailUrlPath = command.getThumbnailUrlPath();
+        if (command.getVideoTitle() != null)
+            musicTitle = command.getVideoTitle();
+        if (command.getVideoArtist() != null)
+            artist = command.getVideoArtist();
     }
 
 }
