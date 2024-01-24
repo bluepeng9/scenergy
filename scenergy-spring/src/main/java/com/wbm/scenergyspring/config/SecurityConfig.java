@@ -13,7 +13,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.CorsFilter;
 
 import com.wbm.scenergyspring.config.jwt.JwtAuthenticationFilter;
+import com.wbm.scenergyspring.config.jwt.JwtAuthorizationFilter;
 import com.wbm.scenergyspring.config.oauth.PrincipalOauth2UserService;
+import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,6 +28,7 @@ public class 	SecurityConfig {
 	private final PrincipalOauth2UserService principalOauth2UserService;
 
 	private final CorsFilter corsFilter;
+	private final UserRepository userRepository;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -44,12 +47,12 @@ public class 	SecurityConfig {
 			.apply(new MyCustomDsl()) // 커스텀 필터 등록
 			.and()
 			.authorizeRequests()
-			.requestMatchers("/user/**").authenticated()
+			.requestMatchers("/api/user/**").authenticated()
 			.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 			.anyRequest().permitAll()
 			.and()
 			.oauth2Login()
-			.loginPage("/loginForm")
+			.loginPage("/login")
 			.userInfoEndpoint()
 			.userService(principalOauth2UserService);
 
@@ -61,7 +64,8 @@ public class 	SecurityConfig {
 			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			http
 				.addFilter(corsFilter)
-				.addFilter(new JwtAuthenticationFilter(authenticationManager));
+				.addFilter(new JwtAuthenticationFilter(authenticationManager))
+				.addFilter(new JwtAuthorizationFilter(authenticationManager,userRepository));
 		}
 	}
 }
