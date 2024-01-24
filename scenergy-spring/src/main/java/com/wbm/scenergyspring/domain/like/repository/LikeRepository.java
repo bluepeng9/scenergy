@@ -12,5 +12,5 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 @Repository
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-	Optional<Object> findByVideoPostAndUser(VideoPost videoPost, User user);
+	Optional<Like> findByVideoPostAndUser(VideoPost videoPost, User user);
 }

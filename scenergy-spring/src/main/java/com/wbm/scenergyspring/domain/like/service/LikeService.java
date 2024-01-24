@@ -1,10 +1,12 @@
 package com.wbm.scenergyspring.domain.like.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.wbm.scenergyspring.domain.like.Like;
 import com.wbm.scenergyspring.domain.like.repository.LikeRepository;
 import com.wbm.scenergyspring.domain.like.service.command.LikePostCommand;
+import com.wbm.scenergyspring.domain.like.service.command.UnlikePostCommand;
 import com.wbm.scenergyspring.domain.post.entity.VideoPost;
 import com.wbm.scenergyspring.domain.post.repository.PostRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
@@ -15,12 +17,14 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class LikeService {
 
 	final LikeRepository likeRepository;
 	final PostRepository postRepository;
 	final UserRepository userRepository;
 
+	@Transactional(readOnly = false)
 	public void likePost(LikePostCommand command) {
 		VideoPost videoPost = postRepository.getReferenceById(command.getPostId());
 		User user = userRepository.getReferenceById(command.getUserId());
@@ -36,6 +40,23 @@ public class LikeService {
 		);
 		likeRepository.save(like);
 
+	}
+
+	@Transactional(readOnly = false)
+	public void unlikePost(UnlikePostCommand command) {
+		VideoPost videoPost = postRepository.getReferenceById(command.getPostId());
+		User user = userRepository.getReferenceById(command.getUserId());
+
+		// 좋아요를 누른 적이 없는 게시물인지 확인
+		if (likeRepository.findByVideoPostAndUser(videoPost, user).isEmpty()) {
+			throw new EntityAlreadyExistException("좋아요를 누른 적이 없는 게시물입니다.");
+		}
+
+		Like like = likeRepository.findByVideoPostAndUser(videoPost, user).orElseThrow(
+			() -> new EntityAlreadyExistException("좋아요를 누른 적이 없는 게시물입니다.")
+		);
+
+		likeRepository.delete(like);
 	}
 
 }
