@@ -1,6 +1,7 @@
 import { Route, Router, Routes } from "react-router-dom";
 
 import Navbar from "./components/commons/Navbar/Navbar";
+import Login from "./components/User/Login";
 import HomePage from "./pages/HomePage";
 import PortfolioPage from "./pages/PortfolioPage";
 import SearchPage from "./pages/SearchPage";
@@ -14,10 +15,10 @@ import ChatConnect from "./components/Chat/ChatConnect";
 function App() {
   return (
     <div>
+        <Login />
       <Navbar />
       <Routes>
         <Route path="/home" component={HomePage} />
-        <Route path="/portfolio" component={PortfolioPage} />
         <Route path="/search" component={SearchPage} />
         <Route path="/scenergy" component={ScenergyPage} />
         <Route path="/videoupload" component={VideoUploadPage} />
