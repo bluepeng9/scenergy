@@ -20,12 +20,10 @@ public class PortfolioService {
 
     @Transactional(readOnly = false)
     public Long createPortfolio(CreatePortfolioCommand command) {
-        portfolioRepository.findByIdJoin(command.getUserId())
-                .ifPresent(
-                        p -> {
-                            throw new IllegalStateException("이미 포트폴리오가 존재합니다.");
-                        }
-                );
+        boolean alreadyCreated = portfolioRepository.existsById(command.getUserId());
+        if (alreadyCreated) {
+            throw new IllegalStateException("이미 존재하는 포트폴리오");
+        }
         Portfolio newPortfolio = Portfolio.createNewPortfolio(command.getUserId());
         return portfolioRepository.save(newPortfolio).getId();
     }
