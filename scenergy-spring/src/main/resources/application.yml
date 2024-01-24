@@ -1,6 +1,12 @@
 spring:
   profiles:
     active: secret
+  config:
+    import:
+      - classpath:/aws.yml
+    activate:
+      on-profile:
+        active: local
 
   jpa:
     properties:
@@ -8,12 +14,10 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
-
   servlet:
     multipart:
       max-file-size: 300MB
       max-request-size: 300MB
-
   security:
     oauth2:
       client:
@@ -45,4 +49,3 @@ decorator:
   datasource:
     p6spy:
       enable-logging=true:
-

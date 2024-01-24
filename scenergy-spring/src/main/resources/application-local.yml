@@ -1,0 +1,26 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+  config:
+    activate:
+      on-profile:
+        active: local
+  redis:
+    host: localhost
+    port: 6379
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging=true:
