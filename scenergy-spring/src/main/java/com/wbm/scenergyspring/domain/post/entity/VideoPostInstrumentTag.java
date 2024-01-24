@@ -1,12 +1,14 @@
-package com.wbm.scenergyspring.domain.tag.entity;
+package com.wbm.scenergyspring.domain.post.entity;
 
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
+import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-public class VideoInstrumentTag {
+@Getter
+public class VideoPostInstrumentTag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +21,13 @@ public class VideoInstrumentTag {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private InstrumentTag instrumentTag;
+
+    public void updateVideoPost(VideoPost videoPost) {
+        this.videoPost = videoPost;
+    }
+
+    public void updateInstrumentTag(InstrumentTag instrumentTag) {
+        this.instrumentTag = instrumentTag;
+    }
 
 }
