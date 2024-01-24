@@ -16,4 +16,6 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
 	Optional<Like> findByVideoPostAndUser(VideoPost videoPost, User user);
 
 	List<Like> findByVideoPost(VideoPost videoPost);
+
+	int countByVideoPost(VideoPost videoPost);
 }

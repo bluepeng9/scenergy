@@ -75,5 +75,10 @@ public class LikeService {
 		return likeList;
 	}
 
+	@Transactional(readOnly = true)
+	public int countLikeByPostId(Long postId) {
+		VideoPost videoPost = postRepository.getReferenceById(postId);
+		return likeRepository.countByVideoPost(videoPost);
+	}
 
 }
