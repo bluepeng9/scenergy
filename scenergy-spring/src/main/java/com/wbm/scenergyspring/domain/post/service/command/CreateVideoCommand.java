@@ -5,11 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class VideoCommand {
+public class CreateVideoCommand {
 
-    public String videoUrl;
-    public String musicTitle;
-    public String thumbnail;
+    public String videoUrlPath;
+    public String thumbnailUrlPath;
+    public String videoTitle;
     public String artist;
 
 }
