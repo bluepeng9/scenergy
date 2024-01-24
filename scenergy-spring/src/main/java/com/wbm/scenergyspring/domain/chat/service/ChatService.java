@@ -5,6 +5,8 @@ import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
 import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.CreatePubMessageCommand;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -29,11 +31,16 @@ public class ChatService {
         return chatRoomRepository.save(newChatRoom).getId();
     }
 
-    public void sendMessage(ChatMessage chatMessage) {
-        simpMessagingTemplate.convertAndSend("/sub/chat``/" + chatMessage.getChatRoom().getId(), chatMessage);
-        // 송신 주소 ws://localhost:8080/ws/sub/chat/{roomId}
+    public Long sendMessage(CreatePubMessageCommand command) {
+        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+        ChatMessage chatMessage = ChatMessage.createChatMessage(
+                command.getUserId(),
+                command.getMessageText(),
+                chatRoom
+        );
+        //message pub(ws://localhost:8080/ws/sub/chat/{roomId})
+        simpMessagingTemplate.convertAndSend("/sub/chat/" + command.getRoomId(), chatMessage);
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
-        //메시지 보낸 후 메시지 저장
-        chatMessageRepository.save(chatMessage);
+        return chatMessageRepository.save(chatMessage).getId();
     }
 }
