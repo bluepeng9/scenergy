@@ -10,6 +10,7 @@ import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowersCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowingCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
+import com.wbm.scenergyspring.domain.follow.service.command.UnFollowUserCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
@@ -56,7 +57,7 @@ public class FollowService {
 	 * @return 삭제에 성공했으면 1 아니면 0
 	 */
 	@Transactional
-	public long unFollowUser(FollowUserCommand command) {
+	public long unFollowUser(UnFollowUserCommand command) {
 
 		User fromUser = userRepository.getReferenceById(command.getFromUserId());
 		User toUser = userRepository.getReferenceById(command.getToUserId());
