@@ -28,13 +28,16 @@ public class ChatMessage extends BaseEntity {
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
-
-    public static ChatMessage createChatMessage() {
-        ChatMessage chatUser = new ChatMessage();
-        return chatUser;
-    }
-
-    public void setMessageText(String messageText) {
-        this.messageText = messageText;
+    public static ChatMessage createChatMessage(
+            Long userId
+            , String messageText
+            , ChatRoom chatRoom
+//            ,Enum<> type
+    ) {
+        ChatMessage chatMessage = new ChatMessage();
+        chatMessage.userId = userId;
+        chatMessage.messageText = messageText;
+        chatMessage.chatRoom = chatRoom;
+        return chatMessage;
     }
 }
