@@ -1,11 +1,13 @@
-package com.wbm.scenergyspring.domain.tag.entity;
+package com.wbm.scenergyspring.domain.post.entity;
 
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
+import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
+@Getter
 public class VideoPostGenreTag {
 
     @Id
