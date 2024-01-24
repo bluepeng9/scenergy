@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.like.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
 	Optional<Like> findByVideoPostAndUser(VideoPost videoPost, User user);
+
+	List<Like> findByVideoPost(VideoPost videoPost);
 }
