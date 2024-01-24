@@ -37,7 +37,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 		if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
 			oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
-			String username = oAuth2User.getAttribute("name");
+			String username = oAuth2UserInfo.getName();
 			System.out.println("++++oAuth2User name : +++"+ username);
 			String password = "pwd";
 			String gender = oAuth2User.getAttribute("gender");

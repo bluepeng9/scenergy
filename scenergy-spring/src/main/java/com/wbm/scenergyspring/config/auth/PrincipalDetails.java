@@ -10,11 +10,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import com.wbm.scenergyspring.domain.user.entity.User;
 
+import lombok.Data;
+
 /**
  * Security Session => authentication => UserDetails
  * 일반로그인, 소셜로그인 모두 PrincipalDeatails로
  * 접근하기 위해 둘 다 상속
  */
+@Data
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
 	private User user;
