@@ -54,6 +54,10 @@ dependencies {
     // jwt 설정
     implementation group: 'com.auth0', name: 'java-jwt', version: '4.3.0'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //chat
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
 }
 
 tasks.named('test') {
