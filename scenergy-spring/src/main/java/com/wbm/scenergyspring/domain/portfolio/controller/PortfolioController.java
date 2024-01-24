@@ -28,9 +28,9 @@ public class PortfolioController {
     ) {
         Long portfolioId = portfolioService.createPortfolio(request.toCreatePortfolioCommand());
 
-        CreatePortfolioResponse createPortfolioResponse = new CreatePortfolioResponse();
-        createPortfolioResponse.setPortfolioId(portfolioId);
-
+        CreatePortfolioResponse createPortfolioResponse = CreatePortfolioResponse.builder()
+                .portfolioId(portfolioId)
+                .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(createPortfolioResponse));
     }
 
@@ -39,8 +39,10 @@ public class PortfolioController {
             @RequestBody UpdatePortfolioRequest request
     ) {
         Long portfolioId = portfolioService.updatePortfolio(request.toUpdatePortfolioCommand());
-        UpdatePortfolioResponse updatePortfolioResponse = new UpdatePortfolioResponse();
-        updatePortfolioResponse.setPortfolioId(portfolioId);
+        UpdatePortfolioResponse updatePortfolioResponse = UpdatePortfolioResponse.builder()
+                .portfolioId(portfolioId)
+                .build();
+
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
     }
 
@@ -49,8 +51,9 @@ public class PortfolioController {
             @RequestBody DeletePortfolioRequest request
             ){
         Long portfolioId = portfolioService.deletePortfolio(request.toDeletePortfolioCommand());
-        DeletePortfolioResponse deletePortfolioResponse = new DeletePortfolioResponse();
-        deletePortfolioResponse.setPortfolioId(portfolioId);
+        DeletePortfolioResponse deletePortfolioResponse = DeletePortfolioResponse.builder()
+                .portfolioId(portfolioId)
+                .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(deletePortfolioResponse));
     }
 
@@ -59,8 +62,9 @@ public class PortfolioController {
             @RequestBody GetPortfolioRequest request
     ) {
         Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
-        GetPortfolioResponse getPortfolioResponse = new GetPortfolioResponse();
-        getPortfolioResponse.setPortfolio(portfolio);
+        GetPortfolioResponse getPortfolioResponse = GetPortfolioResponse.builder()
+                .portfolio(portfolio)
+                .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(getPortfolioResponse));
     }
 }
