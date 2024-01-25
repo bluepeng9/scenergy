@@ -1,20 +1,18 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import java.util.Optional;
-
+import com.wbm.scenergyspring.domain.user.entity.User;
+import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.wbm.scenergyspring.domain.user.entity.User;
-import com.wbm.scenergyspring.domain.user.repository.UserRepository;
-import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
-
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
 
 @SpringBootTest
-@RequiredArgsConstructor
+@Transactional
 class UserServiceTest {
 
 	@Autowired
