@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.wbm.scenergyspring.config.auth.PrincipalDetails;
 import com.wbm.scenergyspring.config.auth.userinfo.NaverUserInfo;
 import com.wbm.scenergyspring.config.auth.userinfo.OAuth2UserInfo;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 
@@ -41,7 +42,13 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 			oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
 			String username = oAuth2UserInfo.getName();
 			String password = "pwd";
-			String gender = oAuth2UserInfo.getGender();
+			String tmpgender = oAuth2UserInfo.getGender();
+			Gender gender = null;
+			if (tmpgender.equals("F")) {
+				gender = Gender.femail;
+			} else {
+				gender = Gender.mail;
+			}
 			String email = oAuth2UserInfo.getEmail();
 
 			// 해당아이디로 로그인 되어있는지 확인

@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.user.controller.request;
 
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.Data;
 public class CreateUserRequest {
     String email;
     String password;
-	String gender;
+	Gender gender;
 	String username;
 
     public CreateUserCommand toCreateUserCommand() {

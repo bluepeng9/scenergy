@@ -4,6 +4,8 @@ import com.wbm.scenergyspring.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,13 +34,16 @@ public class User extends BaseEntity {
 	@Column(unique = true)
 	String nickname;
 	String username;
-	String gender;
+	@Enumerated(EnumType.STRING)
+	Gender gender;
+	@Enumerated(EnumType.STRING)
+	Role role;
 
 	public static User createNewUser(
 		String email,
 		String password,
 		String username,
-		String gender,
+		Gender gender,
 		String nickname
 	) {
 		User user = new User();
@@ -47,6 +52,7 @@ public class User extends BaseEntity {
 		user.username = username;
 		user.gender = gender;
 		user.nickname = nickname;
+		user.role = Role.user;
 		return user;
 	}
 }

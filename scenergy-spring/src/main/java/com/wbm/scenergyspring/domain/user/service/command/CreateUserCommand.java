@@ -1,6 +1,8 @@
 package com.wbm.scenergyspring.domain.user.service.command;
 
 import lombok.Builder;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
+
 import lombok.Data;
 
 @Data
@@ -10,5 +12,5 @@ public class CreateUserCommand {
     String password;
     String nickname;
     String username;
-    String gender;
+    Gender gender;
 }
