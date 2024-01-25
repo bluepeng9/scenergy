@@ -14,6 +14,7 @@ public class VideoPostCommandResponse {
     public Video video;
     public String title;
     public String content;
+    public String writer;
     public List<VideoPostGenreTagCommand> genreTags;
     public List<VideoPostInstrumentTagCommand> instrumentTags;
 
