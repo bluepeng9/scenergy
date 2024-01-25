@@ -23,11 +23,12 @@ public class TagController {
     private final TagService tagService;
 
     @GetMapping("/tag/genre/create")
-    public ResponseEntity<ApiResponse<Boolean>> createGenreTag(String genreName){
+    public ResponseEntity<ApiResponse<String>> createGenreTag(String genreName) {
         System.out.println("입력 장르 : "+genreName);
-        if(tagService.createGenreTag(genreName))
-            return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
-        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.BAD_REQUEST);
+        String msg = tagService.createGenreTag(genreName);
+        if (msg.equals(genreName))
+            return new ResponseEntity<>(ApiResponse.createSuccess(genreName), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(msg), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/tag/genres")
@@ -41,16 +42,20 @@ public class TagController {
     }
 
     @DeleteMapping("/tag/genre/delete")
-    public ResponseEntity<ApiResponse<Boolean>> deleteGenreTag(String genreName) {
-        return new ResponseEntity<>(ApiResponse.createSuccess(tagService.deleteGenreTag(genreName)), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> deleteGenreTag(String genreName) {
+        String msg = tagService.deleteGenreTag(genreName);
+        if (msg.equals(genreName))
+            return ResponseEntity.ok(ApiResponse.createSuccess(genreName + " 장르가 삭제되었습니다."));
+        return new ResponseEntity<>(ApiResponse.createError("장르를 재확인 부탁드립니다."), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/tag/instrument/create")
-    public ResponseEntity<ApiResponse<Boolean>> createInstrumentTag(String InstrumentName){
-        System.out.println("입력 악기 : "+InstrumentName);
-        if (tagService.createInstrumentTag(InstrumentName))
-            return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
-        return new ResponseEntity<>(ApiResponse.createSuccess(false), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiResponse<String>> createInstrumentTag(String instrumentName) {
+        System.out.println("입력 악기 : " + instrumentName);
+        String msg = tagService.createInstrumentTag(instrumentName);
+        if (msg.equals(instrumentName))
+            return new ResponseEntity<>(ApiResponse.createSuccess(instrumentName), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(msg), HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/tag/instruments")
@@ -64,8 +69,11 @@ public class TagController {
     }
 
     @DeleteMapping("/tag/instrument/delete")
-    public ResponseEntity<ApiResponse<Boolean>> deleteInstrumentTag(String instrumentName) {
-        return ResponseEntity.ok(ApiResponse.createSuccess(tagService.deleteInstrumentTag(instrumentName)));
+    public ResponseEntity<ApiResponse<String>> deleteInstrumentTag(String instrumentName) {
+        String msg = tagService.deleteInstrumentTag(instrumentName);
+        if (msg.equals(instrumentName))
+            return ResponseEntity.ok(ApiResponse.createSuccess(instrumentName + " 악기가 삭제되었습니다."));
+        return new ResponseEntity<>(ApiResponse.createError("악기를 재확인 부탁드립니다."), HttpStatus.BAD_REQUEST);
     }
 
 

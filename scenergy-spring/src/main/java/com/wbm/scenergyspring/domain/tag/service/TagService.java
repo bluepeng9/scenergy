@@ -10,6 +10,7 @@ import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -22,11 +23,15 @@ public class TagService {
     private final InstrumentTagRepository instrumentTagRepository;
 
     @Transactional(readOnly = false)
-    public boolean createGenreTag(String genreName){
-        if(genreTagRepository.existsByGenreName(genreName))
-            return false;
-        genreTagRepository.save(GenreTag.createGenreTag(genreName));
-        return true;
+    public String createGenreTag(String genreName) {
+
+        if (!StringUtils.hasText(genreName))
+            return "장르가 입력되지 않았습니다.";
+        String str = StringUtils.trimWhitespace(genreName);
+        if (genreTagRepository.existsByGenreName(str))
+            return "이미 입력된 장르입니다.";
+        genreTagRepository.save(GenreTag.createGenreTag(str));
+        return genreName;
     }
 
     public List<GenreTag> getAllGenreTags() {
@@ -41,18 +46,24 @@ public class TagService {
     }
 
     @Transactional(readOnly = false)
-    public boolean deleteGenreTag(String genreName) {
-        GenreTag genreTag = genreTagRepository.findByGenreName(genreName).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 장르입니다."));
+    public String deleteGenreTag(String genreName) {
+        if (!StringUtils.hasText(genreName))
+            return "장르가 입력되지 않았습니다.";
+        String str = StringUtils.trimWhitespace(genreName);
+        GenreTag genreTag = genreTagRepository.findByGenreName(str).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 장르입니다."));
         genreTagRepository.delete(genreTag);
-        return true;
+        return genreName;
     }
 
     @Transactional(readOnly = false)
-    public boolean createInstrumentTag(String instrumentName) {
-        if(instrumentTagRepository.existsByInstrumentName(instrumentName))
-            return false;
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag(instrumentName));
-        return true;
+    public String createInstrumentTag(String instrumentName) {
+        if (!StringUtils.hasText(instrumentName))
+            return "악기가 입력되지 않았습니다.";
+        String str = StringUtils.trimWhitespace(instrumentName);
+        if (instrumentTagRepository.existsByInstrumentName(str))
+            return "이미 입력된 악기입니다.";
+        instrumentTagRepository.save(InstrumentTag.createInstrumentTag(str));
+        return instrumentName;
     }
 
     public List<InstrumentTag> getAllInstrumentTags() {
@@ -67,10 +78,12 @@ public class TagService {
     }
 
     @Transactional(readOnly = false)
-    public boolean deleteInstrumentTag(String instrumentName) {
+    public String deleteInstrumentTag(String instrumentName) {
+        if (!StringUtils.hasText(instrumentName))
+            return "악기가 입력되지 않았습니다.";
         InstrumentTag instrumentTag = instrumentTagRepository.findByInstrumentName(instrumentName).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 악기입니다."));
         instrumentTagRepository.delete(instrumentTag);
-        return true;
+        return instrumentName;
     }
 
 
