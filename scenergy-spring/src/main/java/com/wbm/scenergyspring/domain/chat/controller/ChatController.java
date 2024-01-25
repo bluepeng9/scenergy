@@ -22,7 +22,7 @@ public class ChatController {
      */
     @MessageMapping("/chat")
     public ResponseEntity<ApiResponse<PubMessageResponse>> pubMessage(PubMessageRequest request) {
-        log.info(request.getMessage());
+        log.info("request: " + request.getMessage());
         Long chatId = chatService.sendMessage(request.toCreatePubMessageCommand());
         PubMessageResponse pubMessageResponse = PubMessageResponse.builder()
                 .chatId(chatId)
