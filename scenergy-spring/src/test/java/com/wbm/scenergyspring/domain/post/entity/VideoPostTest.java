@@ -3,7 +3,7 @@ package com.wbm.scenergyspring.domain.post.entity;
 import com.wbm.scenergyspring.domain.post.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.post.repository.VideoRepository;
 import com.wbm.scenergyspring.domain.post.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.service.command.VideoCommand;
+import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
 import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommand;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class VideoPostTest {
@@ -40,13 +40,13 @@ class VideoPostTest {
         command.setPassword("asdf");
         userService.createUser(command);
 
-        VideoCommand videoCommand = VideoCommand.builder()
-                .musicTitle("testMusic")
-                .videoUrl("testVideoUrl")
+        CreateVideoCommand createVideoCommand = CreateVideoCommand.builder()
+                .videoTitle("testMusic")
+                .videoUrlPath("testVideoUrl")
                 .artist("testArtist")
-                .thumbnail("testThumbnailUrl")
+                .thumbnailUrlPath("testThumbnailUrl")
                 .build();
-        Video testVideo = videoPostService.createVideo(videoCommand);
+        Video testVideo = videoPostService.createVideo(createVideoCommand);
 
         VideoPostCommand videoPostCommand = VideoPostCommand.builder()
                 .video(testVideo)
