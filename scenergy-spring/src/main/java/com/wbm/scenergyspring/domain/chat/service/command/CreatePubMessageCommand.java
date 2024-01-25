@@ -9,4 +9,5 @@ public class CreatePubMessageCommand {
     Long userId;
     Long roomId;
     String messageText;
+    String messageType;
 }

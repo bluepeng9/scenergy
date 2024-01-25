@@ -19,20 +19,14 @@ public class ChatMessage extends BaseEntity {
     private String messageText;
     private int flag;
 
-    private enum type {
-        ENTER, TALK, EXIT
-    }
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
     public static ChatMessage createChatMessage(
-            Long userId
-            , String messageText
-            , ChatRoom chatRoom
-//            ,Enum<> type
+            Long userId,
+            String messageText,
+            ChatRoom chatRoom
     ) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.userId = userId;
