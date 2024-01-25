@@ -21,12 +21,14 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * username, password post로 전송하면
  * UsernamePasswordAuthenticationFilter 동작
  */
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 	private final AuthenticationManager authenticationManager;
 
@@ -37,7 +39,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
-		System.out.println("Jwt 로그인 시도중");
+		log.debug("Jwt 로그인 시도중");
 
 		/**
 		 * username, password 받아서
@@ -58,7 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			Authentication authentication =
 				authenticationManager.authenticate(authenticationToken);
 			PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-			System.out.println("로그인완료"+principalDetails.getUser().getUsername());
+			log.debug("로그인완료"+principalDetails.getUser().getUsername());
 			// 리턴될 때 session에 authentication 객체 저장
 			// 권한처리 시큐리티에서 실행
 			return authentication;
@@ -78,7 +80,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) throws IOException, ServletException {
-		System.out.println("successfulAuthentication실행 인증완료 !!!");
+		log.debug("successfulAuthentication실행 인증완료 !!!");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
 		String jwtToken = JWT.create()
