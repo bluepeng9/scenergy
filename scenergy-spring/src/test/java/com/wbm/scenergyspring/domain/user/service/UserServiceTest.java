@@ -41,4 +41,19 @@ class UserServiceTest {
 		//then
 		Assertions.assertTrue(user.isPresent());
 	}
+
+	@Test
+	public void deleteUser() {
+
+		// given
+		String username = "haeji";
+		String password = "1234";
+
+		// when
+		userService.deleteUser(password, username);
+
+		// then
+		Assertions.assertNull(userRepository.findByUsername(username));
+
+	}
 }
