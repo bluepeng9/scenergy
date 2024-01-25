@@ -21,12 +21,24 @@ public class ChatUser extends BaseEntity {
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static ChatUser createChatUser() {
+    public static ChatUser createChatUser(ChatRoom chatRoom, User user) {
         ChatUser chatUser = new ChatUser();
+        chatUser.chatRoom = chatRoom;
+        chatUser.user = user;
         return chatUser;
+    }
+
+    public int joinRoom() {
+        chatRoom.getChatUsers().add(this);
+        return chatRoom.getChatMessages().size();
+    }
+
+    public int leaveRoom() {
+        chatRoom.getChatUsers().remove(this);
+        return chatRoom.getChatMessages().size();
     }
 }
