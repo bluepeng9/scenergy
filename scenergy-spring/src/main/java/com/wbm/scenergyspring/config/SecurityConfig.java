@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -42,19 +43,19 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
-			.apply(new MyCustomDsl())
-			.and()
-			.authorizeRequests(authorizeRequests ->
-				authorizeRequests
-					.requestMatchers("/api/user/**").authenticated()
-					.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+			// .apply(new MyCustomDsl())
+			.authorizeHttpRequests(authorizeHttpRequests ->
+				authorizeHttpRequests
+					.requestMatchers("/user/**").authenticated()
+					.requestMatchers("/admin/**").hasRole("admin")
 					.anyRequest().permitAll()
 			)
 			.oauth2Login(oauth2Login ->
 				oauth2Login
 					.loginPage("/login")
 					.userInfoEndpoint(userInfo -> userInfo.userService(principalOauth2UserService))
-			);
+			)
+			.with(new MyCustomDsl(), Customizer.withDefaults());
 
 		return http.build();
 	}
