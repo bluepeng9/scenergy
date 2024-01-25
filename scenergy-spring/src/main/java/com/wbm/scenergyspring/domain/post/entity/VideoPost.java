@@ -49,6 +49,14 @@ public class VideoPost extends Post {
         return videopost;
     }
 
+    public void updateVideoPostGenreTags(List<VideoPostGenreTag> videoPostGenreTags) {
+        this.videoPostGenreTags = videoPostGenreTags;
+    }
+
+    public void updateVideoPostInstrumentTags(List<VideoPostInstrumentTag> videoPostInstrumentTags) {
+        this.videoPostInstrumentTags = videoPostInstrumentTags;
+    }
+
     public void updateVideoPost(UpdateVideoPostCommand command) {
         if (command.getPostTitle() != null)
             title = command.getPostTitle();
