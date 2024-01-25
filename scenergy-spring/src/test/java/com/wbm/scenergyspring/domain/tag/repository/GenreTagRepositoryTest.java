@@ -1,19 +1,66 @@
 package com.wbm.scenergyspring.domain.tag.repository;
 
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
+import com.wbm.scenergyspring.domain.tag.service.TagService;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@SpringBootTest
+@Transactional
 class GenreTagRepositoryTest {
 
     @Autowired
     private GenreTagRepository genreTagRepository;
+    @Autowired
+    private TagService tagService;
+
+    @Test
+    @DisplayName("장르 태그 추가 테스트")
+    public void createGenreTag() {
+        //given
+        String genreName1 = "Jazz";
+        String genreName2 = "재즈";
+        //when
+        String testGenreName1 = tagService.createGenreTag(genreName1);
+        String testGenreName2 = tagService.createGenreTag(genreName2);
+        //then
+        assertThat(genreName1).isEqualTo(testGenreName1);
+        assertThat(genreName2).isEqualTo(testGenreName2);
+    }
+
+    @Test
+    @DisplayName("장르 태그 추가 중복 테스트")
+    public void duplicateCreateGenreTag() {
+        //given
+        String genreName1 = "Jazz";
+        String genreName2 = "Jazz";
+        //when
+        String testGenreName1 = tagService.createGenreTag(genreName1);
+        String testGenreName2 = tagService.createGenreTag(genreName2);
+        //then
+        assertThat(genreName1).isEqualTo(testGenreName1);
+        assertThat(testGenreName2).isEqualTo("이미 입력된 장르입니다.");
+    }
+
+    @Test
+    @DisplayName("null & empty 태그 입력 테스트")
+    public void nullAndEmptyCreateGenreTag() {
+        //given
+        String genreName1 = null;
+        String genreName2 = "  ";
+        //when
+        String testGenreName1 = tagService.createGenreTag(genreName1);
+        String testGenreName2 = tagService.createGenreTag(genreName2);
+        //then
+        assertThat(testGenreName1).isEqualTo("장르가 입력되지 않았습니다.");
+        assertThat(testGenreName2).isEqualTo("장르가 입력되지 않았습니다.");
+    }
 
     @Test
     @DisplayName("GenreTagRepository save 테스트")
