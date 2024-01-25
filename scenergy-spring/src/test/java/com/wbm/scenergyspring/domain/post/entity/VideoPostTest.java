@@ -18,6 +18,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@Transactional
 class VideoPostTest {
 
     @Autowired
@@ -30,7 +31,6 @@ class VideoPostTest {
     public UserService userService;
 
     @Test
-    @Transactional
     @DisplayName("VideoPost 엔티티 생성 테스트")
     void createVideoPost() {
         //given
