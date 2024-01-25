@@ -1,16 +1,20 @@
 package com.wbm.scenergyspring.domain.post.controller;
 
+import com.wbm.scenergyspring.domain.post.controller.request.UpdatePostVideoRequest;
+import com.wbm.scenergyspring.domain.post.controller.request.UploadPostVideoRequest;
 import com.wbm.scenergyspring.domain.post.entity.Video;
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
-import com.wbm.scenergyspring.domain.post.controller.request.UploadPostRequest;
 import com.wbm.scenergyspring.domain.post.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.service.command.VideoCommand;
 import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommand;
+import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommandResponse;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,23 +22,61 @@ public class VideoController {
 
     private final VideoPostService videoPostService;
 
-    @PostMapping(value = "/uploadPost")
-    public ResponseEntity<ApiResponse<String>> uploadPost(@ModelAttribute UploadPostRequest request) {
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
-        String urlPath = videoPostService.uploadVideo(request.getVideo());
+    @GetMapping("video-posts")
+    public ResponseEntity<ApiResponse<List<VideoPostCommandResponse>>> getAllVideoPosts() {
 
-        VideoCommand videoCommand = request.createVideo();
-        videoCommand.videoUrl = urlPath;
-        Video video = videoPostService.createVideo(videoCommand);
+        return new ResponseEntity<>(ApiResponse.createSuccess(videoPostService.getAllVideoPost()), HttpStatus.OK);
+    }
 
-        VideoPostCommand videoPostCommand = request.createVideoPost();
-        videoPostCommand.video = video;
+    @GetMapping("video-post")
+    public ResponseEntity<ApiResponse<VideoPostCommandResponse>> getVideoPost(Long id) {
+        VideoPostCommandResponse videoPost = videoPostService.getVideoPost(id);
+        return new ResponseEntity<>(ApiResponse.createSuccess(videoPost), HttpStatus.OK);
+    }
 
-        VideoPost videoPost = videoPostService.createVideoPost(videoPostCommand);
+    @PostMapping("/upload/just-video")
+    public ResponseEntity<ApiResponse<String>> uploadJustVideo(MultipartFile justVideo) {
+        String videoUrlPath = videoPostService.uploadJustVideoS3(justVideo);
+        if (videoUrlPath == null)
+            return new ResponseEntity<>(ApiResponse.createError("video error"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.createSuccess(videoUrlPath), HttpStatus.OK);
+    }
 
-        videoPostService.createVideoPostGenreTags(request.getGenreTags(),videoPost);
+    @PostMapping("/upload/thumbnail")
+    public ResponseEntity<ApiResponse<String>> uploadThumbnail(MultipartFile thumbnail) {
+        String thumbnailUrlPath = videoPostService.uploadThumbnailS3(thumbnail);
+        if (thumbnailUrlPath == null)
+            return new ResponseEntity<>(ApiResponse.createError("video error"), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponse.createSuccess(thumbnailUrlPath), HttpStatus.OK);
+    }
+
+    @PostMapping("/upload/video-post")
+    public ResponseEntity<ApiResponse<String>> uploadVideoPost(@RequestBody UploadPostVideoRequest request) {
+
+        Video video = videoPostService.createVideo(request.toCreateVideo());
+
+        VideoPostCommand command = request.toCreateVideoPost(video);
+
+        videoPostService.createVideoPost(command);
 
         return new ResponseEntity<>(ApiResponse.createSuccess("success"), HttpStatus.OK);
+    }
+
+    @PutMapping("/update/video-post")
+    public ResponseEntity<ApiResponse<String>> updateVideoPost(@RequestBody UpdatePostVideoRequest request) {
+        if (!videoPostService.updateVideoPost(request))
+            return new ResponseEntity<>(ApiResponse.createError("변경 사항이 없습니다."), HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(ApiResponse.createSuccess("success"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete/video-post")
+    public ResponseEntity<ApiResponse<Boolean>> deleteVideoPost(Long id) {
+        videoPostService.deleteVideoPost(id);
+        return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
     }
 
 }
