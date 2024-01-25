@@ -18,9 +18,8 @@ import lombok.RequiredArgsConstructor;
 @Transactional(readOnly = true)
 public class UserService {
 
-	@Autowired
-	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	final BCryptPasswordEncoder bCryptPasswordEncoder;
 	final UserRepository userRepository;
 
 	@Transactional(readOnly = false)

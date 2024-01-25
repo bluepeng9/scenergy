@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class 	SecurityConfig {
+public class SecurityConfig {
 
 	@Autowired
 	private final PrincipalOauth2UserService principalOauth2UserService;
@@ -35,37 +35,37 @@ public class 	SecurityConfig {
 		return new BCryptPasswordEncoder();
 	}
 
-
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
 			.csrf(AbstractHttpConfigurer::disable)
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.formLogin(AbstractHttpConfigurer::disable)
+			.httpBasic(AbstractHttpConfigurer::disable)
+			.apply(new MyCustomDsl())
 			.and()
-			.formLogin().disable()
-			.httpBasic().disable()
-			.apply(new MyCustomDsl()) // 커스텀 필터 등록
-			.and()
-			.authorizeRequests()
-			.requestMatchers("/api/user/**").authenticated()
-			.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-			.anyRequest().permitAll()
-			.and()
-			.oauth2Login()
-			.loginPage("/login")
-			.userInfoEndpoint()
-			.userService(principalOauth2UserService);
+			.authorizeRequests(authorizeRequests ->
+				authorizeRequests
+					.requestMatchers("/api/user/**").authenticated()
+					.requestMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+					.anyRequest().permitAll()
+			)
+			.oauth2Login(oauth2Login ->
+				oauth2Login
+					.loginPage("/login")
+					.userInfoEndpoint(userInfo -> userInfo.userService(principalOauth2UserService))
+			);
 
 		return http.build();
 	}
+
 	public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurity> {
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
-			AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
 			http
 				.addFilter(corsFilter)
-				.addFilter(new JwtAuthenticationFilter(authenticationManager))
-				.addFilter(new JwtAuthorizationFilter(authenticationManager,userRepository));
+				.addFilter(new JwtAuthenticationFilter(http.getSharedObject(AuthenticationManager.class)))
+				.addFilter(new JwtAuthorizationFilter(http.getSharedObject(AuthenticationManager.class), userRepository));
 		}
 	}
 }

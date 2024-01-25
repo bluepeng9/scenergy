@@ -34,15 +34,6 @@ public class User extends BaseEntity {
 	String username;
 	String gender;
 
-	@Builder
-	public User(String username, String password, String email, String gender) {
-		this.username = username;
-		this.password = password;
-		this.email = email;
-		this.gender = gender;
-	}
-
-
 	public static User createNewUser(
 		String email,
 		String password,

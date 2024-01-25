@@ -23,7 +23,6 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
 	private User user;
 
 	// 소셜 로그인시 가져온 사용자 정보들
-
 	public PrincipalDetails(User user) {
 		this.user = user;
 	}

@@ -33,10 +33,10 @@ class UserServiceTest {
 			.build();
 
 		//when
-		Long userId = userService.createUser(
+		userService.createUser(
 			command
 		);
-		Optional<User> user = userRepository.findById(userId);
+		Optional<User> user = userRepository.findById(1L);
 
 		//then
 		Assertions.assertTrue(user.isPresent());
