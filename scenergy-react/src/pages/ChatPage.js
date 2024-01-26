@@ -1,10 +1,15 @@
-import ChatConnect from "../components/Chat/ChatConnect";
-
+import ChatRoomList from "../components/Chat/ChatRoomList";
+import ChatField from "../components/Chat/ChatField";
+import styles from "./ChatPage.module.css";
+import Navbar from "../components/commons/Navbar/Navbar";
 function ChatPage() {
   return (
     <>
-      <h2>채팅페이지</h2>
-        <ChatConnect/>
+      <div className={styles.ChatPageGlobal}>
+        <Navbar />
+        <ChatRoomList />
+        <ChatField />
+      </div>
     </>
   );
 }

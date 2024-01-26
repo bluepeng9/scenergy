@@ -1,0 +1,18 @@
+.FieldGlobal{
+  height: 100%;
+}
+.FieldBody{
+  display: flex;
+  flex-direction: column;
+}
+.ChatFieldHeader {
+  display: flex;
+  justify-content: space-between;
+}
+.ChatFieldInfo {
+  display: flex;
+}
+.ConnectContainer {
+  position: fixed;
+  bottom: 0;
+}

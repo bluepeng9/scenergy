@@ -2,22 +2,27 @@ import {useRef, useState, useEffect, useCallback} from "react";
 import {useParams} from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 
-function ChatConnect() {
+const ChatConnect = () => {
     //채팅 목록
     const [chatList, setChatList] = useState([]);
     const [chat, setChat] = useState("");
 
     //채팅방 식별 id url에서 가져오기
     const {room_id} = useParams();
+    // 백은 room_id long으로 받음 형 변환 해주기
+    const realRoom_id = parseInt(room_id, 10);
+    //const room_id = 1;
     const client = useRef({});
 
     const subscribe = useCallback(() => {
-        client.current.subscribe("/sub/chat/" + room_id, (body) => {
+        client.current.subscribe("/sub/chat/" + realRoom_id, (body) => {
+            //console.log(body);
             const json_body = JSON.parse(body.body);
             //_chat_list는 subscribe 함수 내에서만 사용되는 지역변수
             setChatList((_chat_list) => [..._chat_list, json_body]);
+            console.log("subsub");
         });
-    }, [room_id]);
+    }, [realRoom_id]);
 
     const connect = useCallback(() => {
         client.current = new StompJs.Client({
@@ -36,9 +41,10 @@ function ChatConnect() {
 
         //test용
         const message = {
+            //나중에 header로 user정보 담아왔을때 user_id 받자받자
             user_id: 1234,
-            room_id: 1,
-            chat: chat,
+            room_id: realRoom_id,
+            message: chat,
         };
 
         client.current.publish({
@@ -71,7 +77,11 @@ function ChatConnect() {
 
     return (
         <div>
-            <div>{chatList}</div>
+            <div>
+                {chatList.map((chatMessage) => (
+                    <div key={chatMessage.id}>{chatMessage.messageText}</div>
+                ))}
+            </div>
             <form onSubmit={(event) => handleSubmit(event, chat)}>
                 <div>
                     <input

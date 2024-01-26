@@ -1,0 +1,15 @@
+.ChatRoomContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.ChatRoomHeader {
+    display: flex;
+    justify-content: space-between;
+}
+.ChatRoomInfo {
+    display: flex;
+}
+.ConnectContainer {
+    bottom: 0;
+}

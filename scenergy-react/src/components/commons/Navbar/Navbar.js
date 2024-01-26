@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-import styles from "./Navbar.module.css";
+import styles from "./Navbar.module.css"
 function Navbar() {
   return (
-    <div>
-      <Link to="/home">scenergy</Link>
-      {/*<Link to="/portfolio">포트폴리오</Link>*/}
+    <div className={styles.NavBarContainer}>
+      <Link to="/main">scenergy</Link>
+      <Link to="/home">홈</Link>
       <Link to="/search">검색</Link>
       <Link to="/scenergy">시너지</Link>
       <Link to="/videoupload">업로드</Link>
