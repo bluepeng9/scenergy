@@ -1,0 +1,10 @@
+.sendbutton {
+  background-color: rgb(255, 32, 121);
+    color: whitesmoke;
+    font-weight: bold;
+    border: none;
+    width: 50px;
+    height: 30px;
+    border-radius: 7px;
+    padding: 3px;
+}

@@ -1,6 +1,7 @@
 import {useRef, useState, useEffect, useCallback} from "react";
 import {useParams} from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
+import styles from "./ChatConnect.module.css"
 
 const ChatConnect = () => {
     //채팅 목록
@@ -91,7 +92,7 @@ const ChatConnect = () => {
                         value={chat}
                     />
                 </div>
-                <input type={"submit"} value={"보내기"}/>
+                <input className={styles.sendbutton} type={"submit"} value={"보내기"}/>
             </form>
         </div>
     );

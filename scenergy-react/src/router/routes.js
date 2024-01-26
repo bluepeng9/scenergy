@@ -11,31 +11,34 @@ import ProfilePage from "../pages/ProfilePage";
 import ScenergyPage from "../pages/ScenergyPage";
 import SearchPage from "../pages/SearchPage";
 import VideoUploadPage from "../pages/VideoUploadPage";
+import MyScenergyPost from "../pages/MyScenergyPost";
+import MyApplyPage from "../pages/MyApplyPage";
+import BookMark from "../pages/BookMark";
 
 const router = createBrowserRouter([
   {
     path: "*",
-    element: <App />
+    element: <App />,
   },
   {
     path: "/chat",
-    element: <ChatPage />
+    element: <ChatPage />,
   },
   {
     path: "/main",
-    element: <EnterPage />
+    element: <EnterPage />,
   },
   {
     path: "/home",
-    element: <HomePage />
+    element: <HomePage />,
   },
   {
     path: "/notice",
-    element: <NoticePage />
+    element: <NoticePage />,
   },
   {
     path: "/portfolio",
-    element: <PortfolioPage />
+    element: <PortfolioPage />,
   },
   {
     path: "/profile",
@@ -43,16 +46,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/scenergy",
-    element: <ScenergyPage />
+    element: <ScenergyPage />,
+    chidren: [
+      { path: "/mypost", element: <MyScenergyPost /> },
+      { path: "/myapply", element: <MyApplyPage /> },
+      { path: "/bookmark", element: <BookMark /> },
+    ],
   },
   {
     path: "/search",
-    element: <SearchPage />
+    element: <SearchPage />,
   },
   {
     path: "/videoupload",
-    element: <VideoUploadPage />
-  }
+    element: <VideoUploadPage />,
+  },
 ]);
 
 const AppRouter = () => {
