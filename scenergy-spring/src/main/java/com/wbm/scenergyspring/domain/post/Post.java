@@ -27,3 +27,4 @@ public class Post {
         this.writer = writer;
     }
 }
+
