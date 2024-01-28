@@ -1,6 +1,6 @@
-package com.wbm.scenergyspring.domain.post.repository;
+package com.wbm.scenergyspring.domain.post.videoPost.repository;
 
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

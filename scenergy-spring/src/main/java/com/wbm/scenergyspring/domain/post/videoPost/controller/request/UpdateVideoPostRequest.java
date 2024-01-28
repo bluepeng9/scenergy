@@ -1,14 +1,14 @@
-package com.wbm.scenergyspring.domain.post.controller.request;
+package com.wbm.scenergyspring.domain.post.videoPost.controller.request;
 
-import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
-import com.wbm.scenergyspring.domain.post.service.command.UpdateVideoCommand;
-import com.wbm.scenergyspring.domain.post.service.command.UpdateVideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdatePostVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UpdatePostVideoRequest {
+public class UpdateVideoPostRequest {
 
     private Long postVideoId;
     private String postTitle;
@@ -40,8 +40,8 @@ public class UpdatePostVideoRequest {
         return command;
     }
 
-    public UpdateVideoPostCommand videoPostUpdateCommand() {
-        UpdateVideoPostCommand command = UpdateVideoPostCommand.builder()
+    public UpdatePostVideoCommand videoPostUpdateCommand() {
+        UpdatePostVideoCommand command = UpdatePostVideoCommand.builder()
                 .postTitle(postTitle)
                 .postContent(postContent)
                 .build();

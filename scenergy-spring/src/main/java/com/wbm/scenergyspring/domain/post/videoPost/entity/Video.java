@@ -1,7 +1,7 @@
-package com.wbm.scenergyspring.domain.post.entity;
+package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
-import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
-import com.wbm.scenergyspring.domain.post.service.command.UpdateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

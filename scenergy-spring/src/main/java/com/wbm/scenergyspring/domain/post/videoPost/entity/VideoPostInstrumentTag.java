@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.domain.post.entity;
+package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import jakarta.persistence.*;

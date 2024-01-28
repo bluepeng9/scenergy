@@ -1,8 +1,9 @@
 package com.wbm.scenergyspring.domain.post.entity;
 
-import com.wbm.scenergyspring.domain.post.repository.VideoRepository;
-import com.wbm.scenergyspring.domain.post.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
+import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
+import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

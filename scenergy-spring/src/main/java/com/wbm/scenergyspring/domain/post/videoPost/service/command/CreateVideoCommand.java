@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.domain.post.service.command;
+package com.wbm.scenergyspring.domain.post.videoPost.service.command;
 
 import lombok.Builder;
 import lombok.Data;

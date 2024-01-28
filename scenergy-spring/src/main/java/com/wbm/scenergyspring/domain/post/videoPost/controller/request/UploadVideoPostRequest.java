@@ -1,14 +1,14 @@
-package com.wbm.scenergyspring.domain.post.controller.request;
+package com.wbm.scenergyspring.domain.post.videoPost.controller.request;
 
-import com.wbm.scenergyspring.domain.post.entity.Video;
-import com.wbm.scenergyspring.domain.post.service.command.CreateVideoCommand;
-import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
-public class UploadPostVideoRequest {
+public class UploadVideoPostRequest {
 
     private Long userId;
     private String postTitle;

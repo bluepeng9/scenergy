@@ -1,11 +1,11 @@
-package com.wbm.scenergyspring.domain.post.controller;
+package com.wbm.scenergyspring.domain.post.videoPost.controller;
 
-import com.wbm.scenergyspring.domain.post.controller.request.UpdatePostVideoRequest;
-import com.wbm.scenergyspring.domain.post.controller.request.UploadPostVideoRequest;
-import com.wbm.scenergyspring.domain.post.entity.Video;
-import com.wbm.scenergyspring.domain.post.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommand;
-import com.wbm.scenergyspring.domain.post.service.command.VideoPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UploadVideoPostRequest;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
+import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommandResponse;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -54,7 +54,7 @@ public class VideoController {
     }
 
     @PostMapping("/upload/video-post")
-    public ResponseEntity<ApiResponse<String>> uploadVideoPost(@RequestBody UploadPostVideoRequest request) {
+    public ResponseEntity<ApiResponse<String>> uploadVideoPost(@RequestBody UploadVideoPostRequest request) {
 
         Video video = videoPostService.createVideo(request.toCreateVideo());
 
@@ -66,7 +66,7 @@ public class VideoController {
     }
 
     @PutMapping("/update/video-post")
-    public ResponseEntity<ApiResponse<String>> updateVideoPost(@RequestBody UpdatePostVideoRequest request) {
+    public ResponseEntity<ApiResponse<String>> updateVideoPost(@RequestBody UpdateVideoPostRequest request) {
         if (!videoPostService.updateVideoPost(request))
             return new ResponseEntity<>(ApiResponse.createError("변경 사항이 없습니다."), HttpStatus.BAD_REQUEST);
 

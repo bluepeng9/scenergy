@@ -1,6 +1,6 @@
-package com.wbm.scenergyspring.domain.post.service.command;
+package com.wbm.scenergyspring.domain.post.videoPost.service.command;
 
-import com.wbm.scenergyspring.domain.post.entity.Video;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import lombok.Builder;
 import lombok.Data;
 
