@@ -54,5 +54,19 @@ public class JobPost extends Post {
 		return jobPost;
 	}
 
+	// isActive 어떻게 수정???
+	public void updateJobPost(
+		String title,
+		String content,
+		LocalDateTime expirationDate,
+		Long peopleRecrutied,
+		Long bookMark
+	) {
+		this.title = title;
+		this.content = content;
+		this.expirationDate = expirationDate;
+		this.peopleRecrutied = peopleRecrutied;
+		this.bookMark = bookMark;
+	}
 
 }

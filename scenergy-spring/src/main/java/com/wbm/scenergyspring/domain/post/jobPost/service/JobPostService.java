@@ -8,8 +8,10 @@ import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostcommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,6 +35,21 @@ public class JobPostService {
 			command.getBookMark()
 		);
 		return jobPostRepository.save(newJobPost).getId();
+	}
+
+	@Transactional(readOnly = false)
+	public Long updateJobPost(UpdateJobPostcommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+			.orElseThrow(() -> new EntityNotFoundException("수정 실패"));
+		jobPost.updateJobPost(
+			command.getTitle(),
+			command.getContent(),
+			command.getExpirationDate(),
+			command.getPeopleRecruited(),
+			command.getBookMark()
+		);
+
+	return command.getJobPostId();
 	}
 
 	@Transactional(readOnly = false)
