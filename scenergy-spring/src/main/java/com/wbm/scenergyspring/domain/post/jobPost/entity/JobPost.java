@@ -35,12 +35,11 @@ public class JobPost extends Post {
 
 	Long bookMark;
 
-	public static JobPost createJobPost(
+	public static JobPost createNewJobPost(
 		User userId,
 		String title,
 		String content,
 		LocalDateTime expirationDate,
-		Boolean isActive,
 		Long peopleRecrutied,
 		Long bookMark
 	) {
@@ -49,7 +48,7 @@ public class JobPost extends Post {
 		jobPost.title = title;
 		jobPost.content = content;
 		jobPost.expirationDate = expirationDate;
-		jobPost.isActive = isActive;
+		jobPost.isActive = true;
 		jobPost.peopleRecrutied = peopleRecrutied;
 		jobPost.bookMark = bookMark;
 		return jobPost;
