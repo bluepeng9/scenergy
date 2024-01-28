@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 
@@ -32,5 +33,11 @@ public class JobPostService {
 			command.getBookMark()
 		);
 		return jobPostRepository.save(newJobPost).getId();
+	}
+
+	@Transactional(readOnly = false)
+	public Long deleteJobPost(DeleteJobPostCommand command) {
+		jobPostRepository.deleteById(command.getJobPostId());
+		return 1L;
 	}
 }
