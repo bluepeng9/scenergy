@@ -55,6 +55,6 @@ public class JobPostService {
 	@Transactional(readOnly = false)
 	public Long deleteJobPost(DeleteJobPostCommand command) {
 		jobPostRepository.deleteById(command.getJobPostId());
-		return 1L;
+		return command.getJobPostId();
 	}
 }
