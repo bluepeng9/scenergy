@@ -1,6 +1,5 @@
 package com.wbm.scenergyspring.config.jwt;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Date;
 
@@ -17,7 +16,6 @@ import com.wbm.scenergyspring.config.auth.PrincipalDetails;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -39,33 +37,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws
 		AuthenticationException {
-		log.debug("Jwt 로그인 시도중");
-
-		/**
-		 * username, password 받아서
-		 * 로그인 시도, authenticationManager로 로그인 시도시
-		 * PrincipalDetailService 호출 loadUserByUsername 실행
-		 * PrincipalDetails 세션에 담은 후(권한 관리) JWT 토큰 만들어서 응답
-		 */
 
 		try {
-			ObjectMapper om = new ObjectMapper();
-			User user = om.readValue(request.getInputStream(),User.class);
-			System.out.println(user);
+			User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
 			UsernamePasswordAuthenticationToken authenticationToken =
-				new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-			// PrincipalDetailService의 loadUserByUsername() 함수 실행 후 정상이면 authentication 리턴
-			// DB에 있는 id, pwd값이 일치할 때
-			Authentication authentication =
-				authenticationManager.authenticate(authenticationToken);
-			PrincipalDetails principalDetails = (PrincipalDetails)authentication.getPrincipal();
-			log.debug("로그인완료"+principalDetails.getUser().getUsername());
-			// 리턴될 때 session에 authentication 객체 저장
-			// 권한처리 시큐리티에서 실행
-			return authentication;
+				new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
+
+			return authenticationManager.authenticate(authenticationToken);
 		} catch (IOException e) {
-			e.printStackTrace( );
+			log.error("JwtAuthenticationFilter: " + e.getMessage());
 		}
 
 		return null;
@@ -79,16 +60,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
-		Authentication authResult) throws IOException, ServletException {
+		Authentication authResult) {
 		log.debug("successfulAuthentication실행 인증완료 !!!");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
 		String jwtToken = JWT.create()
 			.withSubject("webetterthanme 토큰")
-				.withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))
-					.withClaim("id",principalDetails.getUser().getId())
-						.withClaim("username",principalDetails.getUser().getUsername())
-							.sign(Algorithm.HMAC512("webetterthanme"));
-		response.addHeader("Authorization","Bearer"+jwtToken);
+			.withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))
+			.withClaim("id", principalDetails.getUser().getId())
+			.withClaim("username", principalDetails.getUser().getUsername())
+			.sign(Algorithm.HMAC512("webetterthanme"));
+		response.addHeader("Authorization", "Bearer" + jwtToken);
 	}
 }

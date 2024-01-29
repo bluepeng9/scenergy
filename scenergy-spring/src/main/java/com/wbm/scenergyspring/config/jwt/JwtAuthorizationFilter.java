@@ -24,6 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 	private final UserRepository userRepository;
+
 	public JwtAuthorizationFilter(AuthenticationManager authenticationManager, UserRepository userRepository) {
 		super(authenticationManager);
 		this.userRepository = userRepository;
@@ -37,30 +38,30 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		log.debug("권한 필요한 주소 요청");
 
 		String jwtHeader = request.getHeader("Authorization");
-		log.debug("========jwtHeader: "+jwtHeader);
+		log.debug("========jwtHeader: " + jwtHeader);
 
 		// header가 있는지 확인
-		if(jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
-			chain.doFilter(request,response);
+		if (jwtHeader == null || !jwtHeader.startsWith("Bearer")) {
+			chain.doFilter(request, response);
 			return;
 		}
 
 		// JWT 토큰 검증 후 정상적인 사용자인지 확인
-		String jwtToken = request.getHeader("Authorization").replace("Bearer","");
+		String jwtToken = request.getHeader("Authorization").replace("Bearer", "");
 		String username =
 			JWT.require(Algorithm.HMAC512("webetterthanme")).build().verify(jwtToken).getClaim("username").asString();
 
-		log.debug("jwt토큰"+jwtToken);
+		log.debug("jwt토큰" + jwtToken);
 		// 서명이 정상적으로 진행된 경우
 		if (username != null) {
 			User userEntity = userRepository.findByUsername(username);
-			log.debug("userEntity++"+userEntity);
+			log.debug("userEntity++" + userEntity);
 			PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
 			// JWT 토큰 서명을 통해서 정상이면 authentication 객체 만들어줌
 			Authentication authentication =
-				new UsernamePasswordAuthenticationToken(principalDetails, null,principalDetails.getAuthorities());
-			log.debug("authentication====="+authentication);
+				new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+			log.debug("authentication=====" + authentication);
 
 			// 강제로 시큐릴티 세션에 접근해서 Authentication 객체 저장
 			SecurityContextHolder.getContext().setAuthentication(authentication);

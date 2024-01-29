@@ -1,8 +1,8 @@
 package com.wbm.scenergyspring.config.oauth;
 
 import java.util.Map;
+import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -28,6 +28,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	 * Access Token 얻고나서 실행
 	 * 토큰과 유저정보 OAuth2UserRequest에 담겨있다
 	 * 리턴될 때 객체가 시큐리티 세션에 저장
+	 *
 	 */
 
 	final UserRepository userRepository;
@@ -36,40 +37,33 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
 		OAuth2User oAuth2User = super.loadUser(userRequest);
-		OAuth2UserInfo oAuth2UserInfo = null;
 
 		if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
-			oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+			OAuth2UserInfo oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+
 			String username = oAuth2UserInfo.getName();
-			String password = new BCryptPasswordEncoder().encode("naver");
-			String tmpgender = oAuth2UserInfo.getGender();
-			Gender gender = null;
-			if (tmpgender.equals("F")) {
-				gender = Gender.femail;
-			} else {
-				gender = Gender.mail;
-			}
 			String email = oAuth2UserInfo.getEmail();
 
-			// 해당아이디로 로그인 되어있는지 확인
-			User userEntity = userRepository.findByUsername(username);
-			// if (userEntity == null) {
-			// 	userEntity = User.builder()
-			// 		.username(username)
-			// 		.password(password)
-			// 		.email(email)
-			// 		.gender(gender)
-			// 		.build();
-			// 	userRepository.save(userEntity);
-			// }
-			if(userEntity == null) {
-				userEntity = User.createNewUser(email, password, username, gender);
-				userRepository.save(userEntity);
+			String password = new BCryptPasswordEncoder().encode("naver");
+
+			Gender gender = oAuth2UserInfo.getGender().equals("F") ? Gender.femail : Gender.mail;
+
+			// 해당아이디로 회원가입 되어있는지 확인
+			Optional<User> user = userRepository.findUserByEmail(email);
+
+			// 이미 회원가입이 되어있으면 그냥 로그인
+			if (user.isPresent()) {
+				User userEntity = user.get();
+
+				return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
 			}
-			return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+
+			User newUser = User.createNewUser(email, password, username, gender);
+			userRepository.save(newUser);
+
+			return new PrincipalDetails(newUser, oAuth2User.getAttributes());
 		}
 		return super.loadUser(userRequest);
 	}
-
 
 }
