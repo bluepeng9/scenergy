@@ -2,6 +2,7 @@ package com.wbm.scenergyspring.domain.post.jobPost.controller.request;
 
 import java.time.LocalDateTime;
 
+import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 
 import lombok.Data;
@@ -15,6 +16,7 @@ public class CreateJobPostRequest {
 	LocalDateTime expirationDate;
 	Long peopleRecruited;
 	Long bookMark;
+	IsActive isActive;
 
 	public CreateJobPostCommand toCreateJobPost() {
 		CreateJobPostCommand command = new CreateJobPostCommand();
@@ -24,6 +26,7 @@ public class CreateJobPostRequest {
 		command.setExpirationDate(getExpirationDate());
 		command.setPeopleRecruited(getPeopleRecruited());
 		command.setBookMark(getBookMark());
+		command.setIsActive(getIsActive());
 		return command;
 	}
 

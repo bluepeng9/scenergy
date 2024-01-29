@@ -45,7 +45,7 @@ public class JobPostController {
 	) {
 		Long jobPostId = jobPostService.updateJobPost(request.toUpdateJobPost());
 
-		UpdateJobPostResponse updateJobPostResponse = new UpdateJobPostResponse();
+		UpdateJobPostResponse updateJobPostRespon = new UpdateJobPostResponse();
 		updateJobPostResponse.setJobPostId(jobPostId);
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(updateJobPostResponse));
