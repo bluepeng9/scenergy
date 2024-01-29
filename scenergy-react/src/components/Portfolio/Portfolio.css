@@ -1,0 +1,158 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/*body*/
+/*{*/
+/*    background:#1e0f21;*/
+/*}*/
+.boardname{
+    position: absolute;
+    z-index: 9;
+    color: #000000;
+    font-size: 50px;
+    top: 120vh;
+    text-align: center;
+    width: 100%;
+}
+header {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /*background-image: url(https://2.bp.blogspot.com/-R-T9z4XhCFE/W87EN1hyorI/AAAAAAAAPYU/Df9oBQv2hvwPvwC8zOMagzJPwkNG5w7EwCLcBGAs/s1600/back-desktop%25401x.jpg);*/
+    background-image: url(./portfolio_head.jpg);
+
+
+
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+#header-front
+{
+    top: 25.3125vw;
+    left: calc(52.65% - 65.98958333333333vw / 2);
+    width: 65.98958vw;
+    position: absolute;
+    z-index: 3;
+    height: auto;
+}
+
+#header-stones
+{
+    position: absolute;
+    top: 35.08333vw;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+section {
+    width: 100%;
+    height: 1000px;
+}
+
+.profile-image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.file-upload-label {
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    width: 300px; /* 이미지 업로드 박스의 가로 크기 조절 */
+    height: 300px; /* 이미지 업로드 박스의 세로 크기 조절 */
+    overflow: hidden; /* 넘치는 부분을 감추기 위한 설정 */
+}
+
+.file-upload-label input {
+    display: none;
+}
+
+.uploaded-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover; /* 이미지 비율 유지 및 크기 맞춤 */
+}
+
+.file-upload-label span {
+    padding: 10px 15px;
+    background-color: #000000;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+
+.profile-input {
+    display: block;
+    margin: 0 auto;
+    width: 70%; /* 너비 조절 */
+    border: none;
+    border-bottom: 1px solid #000000; /* 밑줄 스타일 */
+    outline: none;
+    padding: 10px;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.profile-link {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 30px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.profile-card {
+    margin: 20px 100px 20px 100px; /*위 오 아 왼*/
+    background-color: rgba(243, 240, 240, 0.5); /* 투명한 박스 배경 색상 */
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.video-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.video-upload-label {
+    width: 30%; /* 각 영상 업로드 박스의 가로 크기 조절 */
+    height: 200px; /* 각 영상 업로드 박스의 세로 크기 조절 */
+}
+
+.uploaded-video {
+    width: 100%; /* 영상 가로 폭 */
+    max-height: 100%;
+    object-fit: cover; /* 영상 비율 유지 및 크기 맞춤 */
+}
+
+.portfolio_contact {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.contact-icon {
+    width: 20px; /* 아이콘 크기 조절 */
+    height: 20px;
+    margin-right: 10px; /* 아이콘 간격 조절 */
+}

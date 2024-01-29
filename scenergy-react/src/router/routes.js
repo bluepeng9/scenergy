@@ -1,3 +1,4 @@
+import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import App from "../App";
@@ -5,7 +6,7 @@ import ChatPage from "../pages/ChatPage";
 import EnterPage from "../pages/EnterPage";
 import HomePage from "../pages/HomePage";
 import NoticePage from "../pages/NoticePage";
-import PortfolioPage from "../pages/PortfolioPage";
+import PortfolioPage from "../components/Portfolio/Portfolio"; //포트폴리오
 import ProfilePage from "../pages/ProfilePage";
 import ScenergyPage from "../pages/ScenergyPage";
 import SearchPage from "../pages/SearchPage";
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/profile",
-    element: <ProfilePage />
+    element: <ProfilePage />,
   },
   {
     path: "/scenergy",
