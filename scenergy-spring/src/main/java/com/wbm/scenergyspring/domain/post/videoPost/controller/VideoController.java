@@ -37,6 +37,11 @@ public class VideoController {
         return new ResponseEntity<>(ApiResponse.createSuccess(videoPost), HttpStatus.OK);
     }
 
+    @GetMapping("video-posts/following")
+    public ResponseEntity<ApiResponse<List<VideoPostCommandResponse>>> getAllFollowingVideoPosts(Long id) {
+        return new ResponseEntity<>(ApiResponse.createSuccess(videoPostService.getFollowingVideoPost(id)), HttpStatus.OK);
+    }
+
     @PostMapping("/upload/just-video")
     public ResponseEntity<ApiResponse<String>> uploadJustVideo(MultipartFile justVideo) {
         String videoUrlPath = videoPostService.uploadJustVideoS3(justVideo);
@@ -78,5 +83,6 @@ public class VideoController {
         videoPostService.deleteVideoPost(id);
         return new ResponseEntity<>(ApiResponse.createSuccess(true), HttpStatus.OK);
     }
+
 
 }
