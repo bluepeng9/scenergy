@@ -15,7 +15,7 @@ const SearchCategory = () => {
         <input type="text" id="search" placeholder="검색어를 입력해주세요." />
       </div>
       <div className={styles.FieldCategoryGlobal}>
-        <button
+        <div
           className={`${styles.FieldCategory} ${expanded && styles.expanded}`}
           onClick={handleExpand}
         >
@@ -43,7 +43,7 @@ const SearchCategory = () => {
               </div>
             )}
           </div>
-        </button>
+        </div>
       </div>
     </div>
   );

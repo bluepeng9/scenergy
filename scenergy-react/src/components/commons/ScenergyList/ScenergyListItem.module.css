@@ -1,57 +1,62 @@
-.ItemGlobalContainer{
+.ItemGlobalContainer {
   width: 100%;
   display: flex;
   justify-content: space-evenly;
 }
 .ItemGlobal {
-  margin-top: 1rem;
+  margin-top: 20px;
   color: black;
   background-color: white;
   border-radius: 7px;
   display: flex;
   height: 200px;
   flex-direction: column;
-  width: 400px;
+  width: 450px;
+}
+@media (max-width: 800px) {
+  .ItemGlobal {
+    width: 300px;
+  }
 }
 .ItemHeader {
-  margin-top: 3px;
-  margin-left: 3px;
+  margin: 10px;
   height: 30px;
-  padding: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 .ItemState {
-  border-radius: 15px;
+  border-radius: 5px;
   padding: 5px;
   width: 55px;
   text-align: center;
-  background-color: #FF2079;
+  background-color: #000000;
   color: white;
   font-weight: 600;
 }
-.ItemName{
-  padding: 5px;
+.ItemName {
+  margin-right: 20px;
   font-weight: 600;
 }
-.ItemBody{
-  padding-left: 10px;
-  margin: 5px;
-  height: 135px;
+.ItemBody {
+  margin-left: 10px;
+  height: 125px;
+  padding: 5px;
 }
-.ItemTitle{
+.ItemTitle {
   font-size: 20px;
+  margin-bottom: 10px;
 }
-.hrline{
+.hrline {
   border: 1px solid black;
 }
 .ItemFooter {
   padding: 5px;
+  margin-left: 3px;
   font-size: 15px;
-  height: 35px;
+  height: 45px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 30px;
+  gap: 2rem;
 }

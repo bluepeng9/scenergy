@@ -11,8 +11,6 @@ import VideoUploadPage from "./pages/VideoUploadPage";
 import NoticePage from "./pages/NoticePage";
 import ChatPage from "./pages/ChatPage";
 import ProfilePage from "./pages/ProfilePage";
-import MyScenergyPost from "./pages/MyScenergyPost";
-import EnterPage from "./pages/EnterPage";
 import Portfolio from "./components/Portfolio/Portfolio";
 import MyScenergyPost from "./pages/MyScenergyPost";
 import EnterPage from "./pages/EnterPage";

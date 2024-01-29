@@ -1,12 +1,22 @@
 .ListGlobal {
-  width: 80%;
+  /*  width: 100%;*/
+  margin-left: 100px;
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(2, 1fr);
-  row-gap: 20px;
+  row-gap: 10px;
+  column-gap: 20px;
 }
-@media (max-width: 900px) {
+
+@media (max-width: 1000px) {
   .ListGlobal {
     grid-template-columns: repeat(1, 1fr); /* 화면이 작을 때 1열로 변경 */
+    margin-left: 10px;
+    column-gap: 20px;
+  }
+}
+@media (min-width: 1001px) {
+  .ListGlobal {
+    column-gap: 30px; /* 1000px 이상에서 column-gap을 20px로 유지 */
   }
 }

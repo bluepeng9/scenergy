@@ -23,7 +23,7 @@ a:hover,
     align-items: center;
 }
 .NavBarContainer {
-  width: 10vw;
+  width: 200px;
   height: 100vh;
   background-color: black;
   display: flex;
@@ -45,7 +45,7 @@ a:hover,
 .NavBarDropMenu {
   position: absolute;
   display: none;
-  width: 10vw;
+  width: 150px;
   background: rgba(255, 255, 255, 0.82);
   border: none;
   top: 100%;
@@ -55,12 +55,12 @@ a:hover,
     0 15px 12px rgba(0, 0, 0, 0.22);*/
 }
 .NavBarDropMenu a {
-    display: block;
-    color: black;
-    padding: 0.5rem;
-    font-size: 13px;
+  display: block;
+  color: black;
+  padding: 0.5rem;
+  font-size: 13px;
 }
 
 .NavBarDropdownGlobal:hover .NavBarDropMenu {
-    display: block;
+  display: block;
 }

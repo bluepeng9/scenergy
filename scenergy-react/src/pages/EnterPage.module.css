@@ -1,14 +1,16 @@
-* {
+/** {
   box-sizing: content-box;
-}
+}*/
+/*
 html,
 body {
   margin: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden;
+  !*overflow: hidden;*!
   position: relative;
 }
+*/
 
 .title .avatar {
   width: 40px;

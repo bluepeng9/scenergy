@@ -1,13 +1,44 @@
-
 .FieldItemsGlobal {
-  width: 80%;
+  /*  width: 80%;*/
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin: auto;
 }
+.FieldHeader {
+  margin-left: 100px;
+  height: 60px;
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  /* justify-content: space-around;*/
+}
+@media (max-width: 800px) {
+  .FieldHeader{
+    margin-left: 50px;
+  }
+}
+.FieldWrite{
+padding: 10px;
+}
+.FieldWriteBtn {
+  border: none;
+  background-color: transparent;
+  width: 100px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.FieldTitle {
+  padding: 10px;
+}
 .FieldList {
-  width: 80vw;
+  /*width: 80vw;*/
   display: flex;
   justify-content: center;
+}
+.FieldItemsGlobal {
+  width: 80%;
+  display: flex;
+  justify-content: flex-end;
 }
