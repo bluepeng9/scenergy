@@ -1,7 +1,9 @@
+import Navbar from "../components/commons/Navbar/Navbar";
+
 function HomePage() {
   return (
     <>
-      <h2>메인 피드</h2>
+     <Navbar/>
     </>
   );
 }

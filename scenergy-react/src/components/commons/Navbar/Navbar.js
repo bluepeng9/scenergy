@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
-function Navbar() {
+
+const Navbar = () => {
+
   return (
     <div className={styles.NavBarContainer}>
       <div className={styles.ScenergyTab}>
-        <Link to="/main">scenergy</Link>
+        <Link to="/">scenergy</Link>
       </div>
       <Link to="/home">홈</Link>
       <Link to="/search">검색</Link>
@@ -26,11 +28,13 @@ function Navbar() {
         </div>
       </div>
       <Link to="/videoupload">업로드</Link>
-      <Link to="/notice">알림</Link>
+      <div className={styles.NavBarNotice}>
+        <p>알림</p>
+      </div>
+
       <Link to="/chat">메세지</Link>
       <Link to="/profile">프로필</Link>
     </div>
   );
-}
-
+};
 export default Navbar;

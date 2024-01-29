@@ -1,17 +1,13 @@
-.FieldInput {
+
+.FieldItemsGlobal {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+}
+.FieldList {
   width: 80vw;
   display: flex;
   justify-content: center;
-}
-.FieldInput input {
-  padding: 3px;
-  margin: 10px;
-  text-align: center;
-  font-size: 1rem;
-  width: 80%;
-  border-radius: 7px;
-  border: 1.5px solid black;
-}
-.FiledCategoryGlobal {
-
 }

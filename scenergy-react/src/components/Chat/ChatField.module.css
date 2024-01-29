@@ -1,9 +1,16 @@
 .FieldGlobal{
   height: 100%;
+  width: 100%;
 }
 .FieldBody{
   display: flex;
   flex-direction: column;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.FieldBodyIcon{
+  font-size: 10rem;
 }
 .ChatFieldHeader {
   display: flex;

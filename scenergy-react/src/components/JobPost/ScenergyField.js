@@ -1,13 +1,25 @@
 import styles from "./ScenergyField.module.css";
+import SearchCategory from "../commons/Search/SearchCategory";
+import ScenergyList from "./ScenergyList";
 const ScenergyField = () => {
   return (
     <div className={styles.FieldGlobal}>
-      <div className={styles.FieldInput}>
-        <input type="text" placeholder="검색어를 입력해주세요." />
-      </div>
-        <div className={styles.FieldCategoryGlobal}>
-
+      <SearchCategory />
+      <div className={styles.FieldItemsGlobal}>
+        <div className={styles.FieldTitle}>
+          <h2>시너지</h2>
         </div>
+        <div className={styles.FieldSelectContainer}>
+          <select className={styles.FiledStateSelect}>
+            <option>전체</option>
+            <option>모집</option>
+            <option>종료</option>
+          </select>
+        </div>
+      </div>
+      <div className={styles.FieldList}>
+        <ScenergyList />
+      </div>
     </div>
   );
 };

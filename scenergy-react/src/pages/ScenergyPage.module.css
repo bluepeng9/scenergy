@@ -1,4 +1,68 @@
 .ScenergyGlobal{
     display: flex;
-    width: 100%;
+    width: 100vw;
+}
+.ScenergyModalHeader{
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 3rem;
+}
+.ScenergyModalHeader p:first-child{
+    font-weight: bold;
+}
+.ScenergyContainer{
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.Category{
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+.Category p:first-child{
+    font-weight: bold;
+    padding: 2px;
+    text-align: center;
+}
+.Category p:nth-child(2){
+    border-radius: 10px;
+    padding: 2px;
+    background-color: white;
+    color: black;
+    font-weight: bold;
+    width: 4rem;
+    text-align: center;
+}
+.ScenergyContentContainer{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    gap: 10px;
+}
+.ScenergyContentHeader{
+    font-weight: bold;
+}
+.ScenergyContent{
+    height: 180px;
+    border-radius: 10px;
+    border: 2px solid #cccccc;
+    padding: 10px;
+    color: black;
+}
+.ScenergyApply{
+    text-align: center;
+}
+.ScenergyApply button {
+    background: rgba(255, 32, 121, 0.82);
+    border-radius: 10px;
+    border: none;
+    width: 5rem;
+    padding: 5px;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
 }

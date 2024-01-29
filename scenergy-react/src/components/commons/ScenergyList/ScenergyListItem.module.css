@@ -1,0 +1,57 @@
+.ItemGlobalContainer{
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.ItemGlobal {
+  margin-top: 1rem;
+  color: black;
+  background-color: white;
+  border-radius: 7px;
+  display: flex;
+  height: 200px;
+  flex-direction: column;
+  width: 400px;
+}
+.ItemHeader {
+  margin-top: 3px;
+  margin-left: 3px;
+  height: 30px;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ItemState {
+  border-radius: 15px;
+  padding: 5px;
+  width: 55px;
+  text-align: center;
+  background-color: #FF2079;
+  color: white;
+  font-weight: 600;
+}
+.ItemName{
+  padding: 5px;
+  font-weight: 600;
+}
+.ItemBody{
+  padding-left: 10px;
+  margin: 5px;
+  height: 135px;
+}
+.ItemTitle{
+  font-size: 20px;
+}
+.hrline{
+  border: 1px solid black;
+}
+.ItemFooter {
+  padding: 5px;
+  font-size: 15px;
+  height: 35px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 30px;
+}

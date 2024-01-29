@@ -1,21 +1,21 @@
 .NavBarContainer a,
 .NavBarContainer p {
-    text-decoration: none;
-    color: whitesmoke;
-    font-size: 15px;
-    font-weight: 600;
+  text-decoration: none;
+  color: whitesmoke;
+  font-size: 15px;
+  font-weight: 600;
 }
 a,
 .NavBarNotice {
-    transition: 0.35s;
+  transition: 0.35s;
 }
 a:hover,
 .NavBarNotice:hover {
-    text-shadow: 0 0 15px #ffffff;
-    -moz-transform: scale(1.05);
-    -webkit-transform: scale(1.05);
-    -o-transform: scale(1.05);
-    transform: scale(1.05);
+  text-shadow: 0 0 15px #ffffff;
+  -moz-transform: scale(1.05);
+  -webkit-transform: scale(1.05);
+  -o-transform: scale(1.05);
+  transform: scale(1.05);
 }
 .ScenergyTab {
     height: 2rem;
@@ -23,18 +23,18 @@ a:hover,
     align-items: center;
 }
 .NavBarContainer {
-    width: 10vw;
-    height: 100vh;
-    background-color: black;
-    display: flex;
-    flex-direction: column;
-    padding: 1.5rem;
-    gap: 1.5rem;
-    border-top-right-radius: 10px;
+  width: 10vw;
+  height: 100vh;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  border-top-right-radius: 10px;
 }
 .NavBarNotice {
-    color: whitesmoke;
-    cursor: pointer;
+  color: whitesmoke;
+  cursor: pointer;
 }
 /*시너지 호버하면 서브 메뉴 나오기*/
 .NavBarDropdownGlobal {
@@ -43,16 +43,16 @@ a:hover,
     display: inline-block;
 }
 .NavBarDropMenu {
-    position: absolute;
-    display: none;
-    width: 10vw;
-    background: rgba(255, 255, 255, 0.82);
-    border: none;
-    top: 100%;
-    backdrop-filter: blur(5px);
-    /*  box-shadow:
-      0 19px 19px rgba(0, 0, 0, 0.3),
-      0 15px 12px rgba(0, 0, 0, 0.22);*/
+  position: absolute;
+  display: none;
+  width: 10vw;
+  background: rgba(255, 255, 255, 0.82);
+  border: none;
+  top: 100%;
+  backdrop-filter: blur(5px);
+  /*  box-shadow:
+    0 19px 19px rgba(0, 0, 0, 0.3),
+    0 15px 12px rgba(0, 0, 0, 0.22);*/
 }
 .NavBarDropMenu a {
     display: block;

@@ -1,0 +1,12 @@
+.ListGlobal {
+  width: 80%;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: repeat(2, 1fr);
+  row-gap: 20px;
+}
+@media (max-width: 900px) {
+  .ListGlobal {
+    grid-template-columns: repeat(1, 1fr); /* 화면이 작을 때 1열로 변경 */
+  }
+}
