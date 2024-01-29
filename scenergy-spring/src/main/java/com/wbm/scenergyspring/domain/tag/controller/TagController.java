@@ -9,10 +9,7 @@ import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,9 +19,8 @@ public class TagController {
 
     private final TagService tagService;
 
-    @GetMapping("/tag/genre/create")
+    @PostMapping("/tag/genre/create")
     public ResponseEntity<ApiResponse<String>> createGenreTag(String genreName) {
-        System.out.println("입력 장르 : "+genreName);
         String msg = tagService.createGenreTag(genreName);
         if (msg.equals(genreName))
             return new ResponseEntity<>(ApiResponse.createSuccess(genreName), HttpStatus.OK);
@@ -51,7 +47,6 @@ public class TagController {
 
     @GetMapping("/tag/instrument/create")
     public ResponseEntity<ApiResponse<String>> createInstrumentTag(String instrumentName) {
-        System.out.println("입력 악기 : " + instrumentName);
         String msg = tagService.createInstrumentTag(instrumentName);
         if (msg.equals(instrumentName))
             return new ResponseEntity<>(ApiResponse.createSuccess(instrumentName), HttpStatus.OK);
