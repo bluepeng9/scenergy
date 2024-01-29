@@ -8,11 +8,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class CreateChatRoomCommand {
-    private String roomName;
-    /**
-     * 0: 1대1 채팅방, 1: 그룹 채팅방
-     */
-    private int status;
-    private List<User> users;
+public class InviteChatRoomCommand {
+    Long roomId;
+    List<User> users;
 }

@@ -6,8 +6,7 @@ import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
 import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatUserRepository;
-import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
-import com.wbm.scenergyspring.domain.chat.service.command.CreatePubMessageCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.*;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
@@ -15,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,10 +34,10 @@ public class ChatService {
             //TODO: 같은 스테이터스를 가지고 챗 맴버도 동일한 방을 찾아봐야함
         }
         ChatRoom newChatRoom = ChatRoom.createNewRoom(
-                command.getName(),
-                command.getStatus(),
-                command.getChatUsers()
+                command.getRoomName(),
+                command.getStatus()
         );
+        newChatRoom.inviteChatUsers(command.getUsers());
         return chatRoomRepository.save(newChatRoom).getId();
     }
 
@@ -79,5 +80,24 @@ public class ChatService {
         simpMessagingTemplate.convertAndSend("/sub/chat/" + command.getRoomId(), chatMessage);
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
         return chatMessageRepository.save(chatMessage).getId();
+    }
+
+    public Long renameChatRoom(RenameChatRoomCommand command) {
+        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+        chatRoom.rename(command.getRoomName());
+        return chatRoom.getId();
+    }
+
+    public Long inviteChatRoom(InviteChatRoomCommand command) {
+        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+        chatRoom.inviteChatUsers(command.getUsers());
+        return chatRoom.getId();
+    }
+
+    public List<ChatRoom> listMyChatRoom(ListMyChatRoomCommand listMyChatRoomCommand) {
+        List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(listMyChatRoomCommand.getUserId());
+        return myChatRoom;
     }
 }
