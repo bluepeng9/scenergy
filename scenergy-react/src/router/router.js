@@ -5,7 +5,6 @@ import ChatPage from "../pages/ChatPage";
 /*import EnterPage from "../pages/EnterPage";*/
 import HomePage from "../pages/HomePage";
 import NoticePage from "../pages/NoticePage";
-import PortfolioPage from "../pages/PortfolioPage";
 import ProfilePage from "../pages/ProfilePage";
 import ScenergyPage from "../pages/ScenergyPage";
 import SearchPage from "../pages/SearchPage";
@@ -14,6 +13,7 @@ import MyScenergyPost from "../pages/MyScenergyPost";
 import MyApplyPage from "../pages/MyApplyPage";
 import BookMark from "../pages/BookMark";
 import EnterPage from "../pages/EnterPage";
+import Portfolio from "../components/Portfolio/Portfolio";
 
 const routes = [
   { path: "*", element: <App /> },
@@ -21,8 +21,8 @@ const routes = [
   { path: "/chat", element: <ChatPage /> },
   { path: "/home", element: <HomePage /> },
   { path: "/notice", element: <NoticePage /> },
-  { path: "/portfolio", element: <PortfolioPage /> },
   { path: "/profile", element: <ProfilePage /> },
+  { path: "/profile/portfolio", element: <Portfolio /> },
   { path: "/scenergy", element: <ScenergyPage /> },
   { path: "/scenergy/mypost", element: <MyScenergyPost /> },
   { path: "/scenergy/myapply", element: <MyApplyPage /> },
