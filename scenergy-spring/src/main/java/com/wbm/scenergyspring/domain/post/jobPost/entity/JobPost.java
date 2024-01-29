@@ -6,6 +6,8 @@ import com.wbm.scenergyspring.domain.post.Post;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +31,8 @@ public class JobPost extends Post {
 
 	LocalDateTime expirationDate;
 
-	Boolean isActive;
+	@Enumerated(EnumType.STRING)
+	IsActive isActive;
 
 	Long peopleRecrutied;
 
@@ -41,32 +44,34 @@ public class JobPost extends Post {
 		String content,
 		LocalDateTime expirationDate,
 		Long peopleRecrutied,
-		Long bookMark
+		Long bookMark,
+		IsActive isActive
 	) {
 		JobPost jobPost = new JobPost();
 		jobPost.userId = userId;
 		jobPost.title = title;
 		jobPost.content = content;
 		jobPost.expirationDate = expirationDate;
-		jobPost.isActive = true;
 		jobPost.peopleRecrutied = peopleRecrutied;
 		jobPost.bookMark = bookMark;
+		jobPost.isActive = isActive;
 		return jobPost;
 	}
 
-	// isActive 어떻게 수정???
 	public void updateJobPost(
 		String title,
 		String content,
 		LocalDateTime expirationDate,
 		Long peopleRecrutied,
-		Long bookMark
+		Long bookMark,
+		IsActive isActive
 	) {
 		this.title = title;
 		this.content = content;
 		this.expirationDate = expirationDate;
 		this.peopleRecrutied = peopleRecrutied;
 		this.bookMark = bookMark;
+		this.isActive = isActive;
 	}
 
 }

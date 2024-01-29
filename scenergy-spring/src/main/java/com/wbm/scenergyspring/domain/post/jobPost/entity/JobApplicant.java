@@ -22,7 +22,7 @@ public class JobApplicant {
 	JobPost postId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	User userId;
+	User user;
 
 	public static JobApplicant createJobApplicant(
 		JobPost postId,
@@ -30,7 +30,7 @@ public class JobApplicant {
 	) {
 		JobApplicant jobApplicant = new JobApplicant();
 		jobApplicant.postId = postId;
-		jobApplicant.userId = userId;
+		jobApplicant.user = userId;
 		return jobApplicant;
 	}
 
