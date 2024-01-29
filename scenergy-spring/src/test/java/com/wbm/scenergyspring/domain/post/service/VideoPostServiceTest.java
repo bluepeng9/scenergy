@@ -3,8 +3,6 @@ package com.wbm.scenergyspring.domain.post.service;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
-import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostGenreTagRepository;
-import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostInstrumentTagRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
@@ -24,14 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 class VideoPostServiceTest {
 
     @Autowired
@@ -41,10 +37,6 @@ class VideoPostServiceTest {
     @Autowired
     private VideoPostRepository videoPostRepository;
     @Autowired
-    private VideoPostGenreTagRepository videoPostGenreTagRepository;
-    @Autowired
-    private VideoPostInstrumentTagRepository videoPostInstrumentTagRepository;
-    @Autowired
     private UserRepository userRepository;
     @Autowired
     private GenreTagRepository genreTagRepository;
@@ -52,60 +44,27 @@ class VideoPostServiceTest {
     private InstrumentTagRepository instrumentTagRepository;
 
     @Test
+    @Transactional
     @DisplayName("모든 videoPost 조회 테스트")
     void getAllVideoPost() {
         //given
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
+        CreateVideoCommand command = createVideoCommand();
         Video video1 = Video.createVideo(command);
         Video video2 = Video.createVideo(command);
         videoRepository.save(video1);
         videoRepository.save(video2);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand command1 = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video1)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
-
-        VideoPostCommand command2 = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video2)
-                .title("testTitle2")
-                .content("testContent2")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand command1 = createVideoPostCommand(user, video1, genreTagIds, instrumentTagIds);
+        VideoPostCommand command2 = createVideoPostCommand(user, video2, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost1 = videoPostService.createVideoPost(command1);
         VideoPost videoPost2 = videoPostService.createVideoPost(command2);
@@ -120,52 +79,27 @@ class VideoPostServiceTest {
     }
 
     @Test
+    @Transactional
     void getVideoPost() {
         //given
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
-        Video video = Video.createVideo(command);
-        videoRepository.save(video);
+        CreateVideoCommand command = createVideoCommand();
+        Video video1 = Video.createVideo(command);
+        videoRepository.save(video1);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand command1 = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand command1 = createVideoPostCommand(user, video1, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost1 = videoPostService.createVideoPost(command1);
         //when
-        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(1L);
+        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost1.getId());
         //then
         assertThat(videoPost1.getVideo()).isEqualTo(testVideoPost.getVideo());
         assertThat(videoPost1.getTitle()).isEqualTo(testVideoPost.getTitle());
@@ -181,7 +115,7 @@ class VideoPostServiceTest {
     }
 
     @Test
-    void uploadJustVideoS3() throws IOException {
+    void uploadJustVideoS3() {
         //given
         //when
         //then
@@ -195,19 +129,11 @@ class VideoPostServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("Video 생성 테스트")
     void createVideo() {
         //given
-        String videoUrlPath = "videoUrlPath";
-        String thumbnailUrlPath = "thumbnailUrlPath";
-        String videoTitle = "videoTitle";
-        String videoArtist = "videoArtist";
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoUrlPath(videoUrlPath)
-                .thumbnailUrlPath(thumbnailUrlPath)
-                .videoTitle(videoTitle)
-                .artist(videoArtist)
-                .build();
+        CreateVideoCommand command = createVideoCommand();
         Video video = Video.createVideo(command);
         //when
         Video testVideo = videoRepository.save(video);
@@ -221,54 +147,29 @@ class VideoPostServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("VideoPost & VideoPostGenreTag & VideoPostInstrumentTag 생성 테스트")
     void createVideoPost() {
         //given
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
+        CreateVideoCommand command = createVideoCommand();
         Video video = Video.createVideo(command);
         videoRepository.save(video);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand testCommand = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
         videoPostRepository.save(videoPost);
         //when
-        VideoPost testVideoPost = videoPostRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(1 + "은(는) 존재하지 않는 VideoPost Id입니다."));
+        VideoPost testVideoPost = videoPostRepository.findById(videoPost.getId()).orElseThrow(() -> new EntityNotFoundException(1 + "은(는) 존재하지 않는 VideoPost Id입니다."));
         //then
         assertThat(videoPost).isEqualTo(testVideoPost);
         assertThat(videoPost.getVideo()).isEqualTo(testVideoPost.getVideo());
@@ -284,49 +185,24 @@ class VideoPostServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("VideoPost & VideoPostGenreTag & VideoPostInstrumentTag 업데이트 테스트")
     void updateVideoPost() {
         //given
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
+        CreateVideoCommand command = createVideoCommand();
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
         Video video = Video.createVideo(command);
         videoRepository.save(video);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand testCommand = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
         VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(1L);
@@ -360,119 +236,123 @@ class VideoPostServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("VideoPost 삭제 테스트")
     void deleteVideoPost() {
         //given
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
+        CreateVideoCommand command = createVideoCommand();
         Video video = Video.createVideo(command);
         videoRepository.save(video);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand testCommand = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
         //when
-        videoPostService.deleteVideoPost(1L);
+        videoPostService.deleteVideoPost(videoPost.getId());
         //then
         assertThat(videoPostRepository.count()).isEqualTo(0);
     }
 
     @Test
+    @Transactional
     @DisplayName("모든 VideoPost 삭제 테스트")
     void deleteAllVideoPosts() {
         //give
-        User testUser = User.createNewUser(
-                "testEmail",
-                "testPassword",
-                "testNickname"
-        );
-        User user = userRepository.save(testUser);
+        User user = createTestUser();
+        userRepository.save(user);
 
-        CreateVideoCommand command = CreateVideoCommand.builder()
-                .videoTitle("testVideoTitle")
-                .artist("testArtist")
-                .videoUrlPath("testVideoUrlPath")
-                .thumbnailUrlPath("testThumbnailUrlPath")
-                .build();
+        CreateVideoCommand command = createVideoCommand();
         Video video = Video.createVideo(command);
         Video video1 = Video.createVideo(command);
         videoRepository.save(video);
         videoRepository.save(video1);
 
-        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
-        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
-        genreTagRepository.save(GenreTag.createGenreTag("rock"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+        createGenreTags();
+        createInstrumentTags();
 
-        List<Long> genreTagIds = new ArrayList<>();
-        genreTagIds.add(1L);
-        genreTagIds.add(2L);
-        genreTagIds.add(3L);
-        List<Long> instrumentTagIds = new ArrayList<>();
-        instrumentTagIds.add(1L);
-        instrumentTagIds.add(2L);
-        instrumentTagIds.add(3L);
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentTagIds = createInstrumentsTagIds();
 
-        VideoPostCommand testCommand = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video)
-                .title("testTitle")
-                .content("testContent")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
-        VideoPostCommand testCommand1 = VideoPostCommand.builder()
-                .userId(user.getId())
-                .video(video1)
-                .title("testTitle1")
-                .content("testContent1")
-                .instrumentTagIds(instrumentTagIds)
-                .genreTagIds(genreTagIds)
-                .build();
+        VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
+        VideoPostCommand testCommand1 = createVideoPostCommand(user, video1, genreTagIds, instrumentTagIds);
 
-
-        VideoPost videoPost = videoPostService.createVideoPost(testCommand);
-        VideoPost videoPost1 = videoPostService.createVideoPost(testCommand1);
+        videoPostService.createVideoPost(testCommand);
+        videoPostService.createVideoPost(testCommand1);
         //when
         videoPostService.deleteAllVideoPosts();
         //then
         assertThat(videoPostRepository.count()).isEqualTo(0);
     }
 
+    public User createTestUser() {
+        User testUser = User.createNewUser(
+                "testEmail",
+                "testPassword",
+                "testNickname"
+        );
+
+        return testUser;
+    }
+
+    public CreateVideoCommand createVideoCommand() {
+        CreateVideoCommand command = CreateVideoCommand.builder()
+                .videoTitle("testVideoTitle")
+                .artist("testArtist")
+                .videoUrlPath("testVideoUrlPath")
+                .thumbnailUrlPath("testThumbnailUrlPath")
+                .build();
+
+        return command;
+    }
+
+    public void createGenreTags() {
+        genreTagRepository.save(GenreTag.createGenreTag("Jazz"));
+        genreTagRepository.save(GenreTag.createGenreTag("Pop"));
+        genreTagRepository.save(GenreTag.createGenreTag("rock"));
+    }
+
+    public void createInstrumentTags() {
+        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
+        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
+        instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+    }
+
+    public VideoPostCommand createVideoPostCommand(User user, Video video, List<Long> genreTagIds, List<Long> instrumentTagIds) {
+        VideoPostCommand command = VideoPostCommand.builder()
+                .userId(user.getId())
+                .video(video)
+                .title("testTitle")
+                .content("testContent")
+                .instrumentTagIds(instrumentTagIds)
+                .genreTagIds(genreTagIds)
+                .build();
+        return command;
+    }
+
+    public List<Long> createGenreTagIds() {
+        List<Long> genreTagIds = new ArrayList<>();
+        genreTagIds.add(genreTagRepository.findByGenreName("Jazz").get().getId());
+        genreTagIds.add(genreTagRepository.findByGenreName("Pop").get().getId());
+        genreTagIds.add(genreTagRepository.findByGenreName("rock").get().getId());
+
+        return genreTagIds;
+    }
+
+    public List<Long> createInstrumentsTagIds() {
+        List<Long> instrumentsTagIds = new ArrayList<>();
+        instrumentsTagIds.add(instrumentTagRepository.findByInstrumentName("기타").get().getId());
+        instrumentsTagIds.add(instrumentTagRepository.findByInstrumentName("드럼").get().getId());
+        instrumentsTagIds.add(instrumentTagRepository.findByInstrumentName("베이스").get().getId());
+
+        return instrumentsTagIds;
+    }
 }
