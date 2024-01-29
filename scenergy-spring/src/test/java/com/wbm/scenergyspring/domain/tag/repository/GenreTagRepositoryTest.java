@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 class GenreTagRepositoryTest {
 
     @Autowired
@@ -21,6 +20,7 @@ class GenreTagRepositoryTest {
     private TagService tagService;
 
     @Test
+    @Transactional
     @DisplayName("장르 태그 추가 테스트")
     public void createGenreTag() {
         //given
@@ -35,6 +35,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("장르 태그 추가 중복 테스트")
     public void duplicateCreateGenreTag() {
         //given
@@ -49,6 +50,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("null & empty 태그 입력 테스트")
     public void nullAndEmptyCreateGenreTag() {
         //given
@@ -63,6 +65,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("GenreTagRepository save 테스트")
     public void saveGenreTag() {
         //given
@@ -75,6 +78,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("GenreTagRepository find 테스트")
     public void findGenreTag() {
         //given
@@ -91,6 +95,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("GenreTagRepository delete 테스트")
     public void deleteGenreTag() {
         //given
@@ -102,6 +107,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("GenreTagRepository exists 테스트")
     public void existsGenreTag() {
         //given
@@ -114,6 +120,7 @@ class GenreTagRepositoryTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("GenreTagRepository GenreName 테스트")
     public void findByGenreName() {
         //given
