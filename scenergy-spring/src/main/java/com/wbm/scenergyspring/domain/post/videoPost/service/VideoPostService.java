@@ -55,10 +55,11 @@ public class VideoPostService {
         List<VideoPostCommandResponse> list = new ArrayList<>();
         for (VideoPost videoPost : videoPostRepository.findAll()) {
             VideoPostCommandResponse command = VideoPostCommandResponse.builder()
-                    .userId(videoPost.getId())
+                    .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
                     .video(videoPost.getVideo())
+                    .writer(videoPost.getWriter())
                     .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(videoPost.getVideoPostGenreTags()))
                     .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(videoPost.getVideoPostInstrumentTags()))
                     .build();
@@ -72,6 +73,7 @@ public class VideoPostService {
     public VideoPostCommandResponse getVideoPost(Long id) {
         VideoPost videoPost = videoPostRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "은(는) 존재하지 않는 VideoPost Id입니다."));
         VideoPostCommandResponse videoPostCommandResponse = VideoPostCommandResponse.builder()
+                .userId(videoPost.getUser().getId())
                 .title(videoPost.getTitle())
                 .content(videoPost.getContent())
                 .video(videoPost.getVideo())
@@ -82,9 +84,23 @@ public class VideoPostService {
         return videoPostCommandResponse;
     }
 
-//    public List<VideoPost> getFollowingVideoPost(){
-//        return videoPostRepository.findAll();
-//    }
+    public List<VideoPostCommandResponse> getFollowingVideoPost(Long id) {
+        List<VideoPostCommandResponse> list = new ArrayList<>();
+        for (VideoPost videoPost : videoPostRepository.findAllByFollowing(id)) {
+            VideoPostCommandResponse command = VideoPostCommandResponse.builder()
+                    .userId(videoPost.getUser().getId())
+                    .title(videoPost.getTitle())
+                    .content(videoPost.getContent())
+                    .video(videoPost.getVideo())
+                    .writer(videoPost.getWriter())
+                    .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(videoPost.getVideoPostGenreTags()))
+                    .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(videoPost.getVideoPostInstrumentTags()))
+                    .build();
+
+            list.add(command);
+        }
+        return list;
+    }
 
     @Transactional(readOnly = false)
     public String uploadJustVideoS3(MultipartFile justVideo) {
