@@ -1,5 +1,7 @@
 package com.wbm.scenergyspring.domain.post.service;
 
+import com.wbm.scenergyspring.domain.follow.entity.Follow;
+import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
@@ -42,6 +44,8 @@ class VideoPostServiceTest {
     private GenreTagRepository genreTagRepository;
     @Autowired
     private InstrumentTagRepository instrumentTagRepository;
+    @Autowired
+    private FollowRepository followRepository;
 
     @Test
     @Transactional
@@ -80,6 +84,7 @@ class VideoPostServiceTest {
 
     @Test
     @Transactional
+    @DisplayName("VideoPost 조회 테스트")
     void getVideoPost() {
         //given
         User user = createTestUser();
@@ -112,6 +117,68 @@ class VideoPostServiceTest {
         assertThat(videoPost1.getVideoPostInstrumentTags().get(1).getVideoPost()).isEqualTo(testVideoPost.getInstrumentTags().get(1).getVideoPost());
         assertThat(videoPost1.getVideoPostInstrumentTags().get(1).getInstrumentTag()).isEqualTo(testVideoPost.getInstrumentTags().get(1).getInstrumentTag());
 
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("팔로잉 게시물 조회")
+    public void getFollowingVideoPosts() {
+        //given
+        User user1 = User.createNewUser(
+                "email1",
+                "password1",
+                "nickname1"
+        );
+        User user2 = User.createNewUser(
+                "email2",
+                "password2",
+                "nickname2"
+        );
+        User user3 = User.createNewUser(
+                "email3",
+                "password3",
+                "nickname3"
+        );
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        Follow follow12 = Follow.createFollow(user1, user2);
+        Follow follow13 = Follow.createFollow(user1, user3);
+
+        followRepository.save(follow12);
+        followRepository.save(follow13);
+
+        CreateVideoCommand command = createVideoCommand();
+        Video video1 = Video.createVideo(command);
+        Video video2 = Video.createVideo(command);
+        Video video3 = Video.createVideo(command);
+        Video video4 = Video.createVideo(command);
+        videoRepository.save(video1);
+        videoRepository.save(video2);
+        videoRepository.save(video3);
+        videoRepository.save(video4);
+        List<Long> genreTagIds = new ArrayList<>();
+        List<Long> instrumentsTagIds = new ArrayList<>();
+        VideoPostCommand command1 = createVideoPostCommand(user2, video1, genreTagIds, instrumentsTagIds);
+        VideoPostCommand command2 = createVideoPostCommand(user2, video2, genreTagIds, instrumentsTagIds);
+        VideoPostCommand command3 = createVideoPostCommand(user3, video3, genreTagIds, instrumentsTagIds);
+        VideoPostCommand command4 = createVideoPostCommand(user1, video4, genreTagIds, instrumentsTagIds);
+
+        VideoPost videoPost1 = videoPostService.createVideoPost(command1);
+        VideoPost videoPost2 = videoPostService.createVideoPost(command2);
+        VideoPost videoPost3 = videoPostService.createVideoPost(command3);
+        VideoPost videoPost4 = videoPostService.createVideoPost(command4);
+
+        //when
+        List<VideoPostCommandResponse> resultList = videoPostService.getFollowingVideoPost(user1.getId());
+        //then
+        assertThat(resultList.size()).isEqualTo(3);
+        assertThat(resultList.get(0).getUserId()).isEqualTo(videoPost1.getUser().getId());
+        assertThat(resultList.get(0).getVideo()).isEqualTo(videoPost1.getVideo());
+        assertThat(resultList.get(0).getTitle()).isEqualTo(videoPost1.getTitle());
+        assertThat(resultList.get(0).getContent()).isEqualTo(videoPost1.getContent());
+        assertThat(resultList.get(0).getWriter()).isEqualTo(videoPost1.getWriter());
     }
 
     @Test
