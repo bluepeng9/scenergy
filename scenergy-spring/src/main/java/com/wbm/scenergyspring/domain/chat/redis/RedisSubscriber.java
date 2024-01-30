@@ -28,7 +28,7 @@ public class RedisSubscriber implements MessageListener {
      * @param pattern
      */
     @SneakyThrows // readValue 부터 오는 throw
-    @Override
+    @Override // publish되면 작동하는 메서드
     public void onMessage(Message message, byte[] pattern) {
         //redis에서 발행된 데이터를 받아 deserialize
         String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());

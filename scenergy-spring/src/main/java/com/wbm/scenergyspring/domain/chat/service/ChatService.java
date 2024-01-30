@@ -3,15 +3,16 @@ package com.wbm.scenergyspring.domain.chat.service;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
+import com.wbm.scenergyspring.domain.chat.redis.RedisPublisher;
 import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatUserRepository;
+import com.wbm.scenergyspring.domain.chat.repository.RedisChatRepository;
 import com.wbm.scenergyspring.domain.chat.service.command.*;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,7 +27,9 @@ public class ChatService {
     final ChatMessageRepository chatMessageRepository;
     final ChatUserRepository chatUserRepository;
     final UserRepository userRepository;
-    final SimpMessagingTemplate simpMessagingTemplate;
+    final RedisPublisher redisPublisher;
+    final RedisChatRepository redisChatRepository;
+//    final SimpMessagingTemplate simpMessagingTemplate;
 
     @Transactional(readOnly = false)
     public Long createChatRoom(CreateChatRoomCommand command) {
@@ -38,7 +41,12 @@ public class ChatService {
                 command.getStatus()
         );
         newChatRoom.inviteChatUsers(command.getUsers());
-        return chatRoomRepository.save(newChatRoom).getId();
+        //mysql 등록
+        Long roomId = chatRoomRepository.save(newChatRoom).getId();
+        //redis 등록
+        redisChatRepository.createChatRoom(roomId, newChatRoom.getName(), newChatRoom.getStatus(), newChatRoom.getChatUsers().size());
+        redisChatRepository.enterChatRoom(roomId);
+        return roomId;
     }
 
     /**
@@ -63,7 +71,8 @@ public class ChatService {
         } else if (messageType.equals("EXIT")) {
             command.setMessageText(user.getName() + "님이 퇴장하셨습니다.");
             int remainingMembersCount = chatUser.leaveRoom();
-            if (remainingMembersCount <= 0) { // 채팅방 삭제
+            int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
+            if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
                 chatRoomRepository.delete(chatRoom);
                 return 0L;
             }
@@ -77,8 +86,9 @@ public class ChatService {
         chatRoom.addChatMessages(chatMessage);
         //chatRoom을 통하여 save할 것인지 chatMessage를 통하여 save할 것인지?
         //message pub(ws://localhost:8080/ws/sub/chat/{roomId})
-        simpMessagingTemplate.convertAndSend("/sub/chat/" + command.getRoomId(), chatMessage);
-        // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
+//        simpMessagingTemplate.convertAndSend("/sub/chat/" + command.getRoomId(), chatMessage);
+//        // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
+        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessage);
         return chatMessageRepository.save(chatMessage).getId();
     }
 
@@ -86,6 +96,7 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
         chatRoom.rename(command.getRoomName());
+        redisChatRepository.renameChatRoom(chatRoom.getId(), command.getRoomName());
         return chatRoom.getId();
     }
 
@@ -93,6 +104,7 @@ public class ChatService {
         ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
         chatRoom.inviteChatUsers(command.getUsers());
+        redisChatRepository.updateMemberCount(command.getRoomId(), command.getUsers().size());
         return chatRoom.getId();
     }
 
