@@ -16,13 +16,14 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 @RequestMapping("/chatroom")
 public class ChatRoomController {
 
     private final ChatService chatService;
 
     @PostMapping("/create-room")
-    public ResponseEntity<ApiResponse<CreateChatRoomResponse>> createChatRoom(CreateChatRoomRequest request) {
+    public ResponseEntity<ApiResponse<CreateChatRoomResponse>> createChatRoom(@RequestBody CreateChatRoomRequest request) {
         log.info("CreateChatRoomRequest: " + request);
         Long chatRoomId = chatService.createChatRoom(request.toCreateChatRoomCommand());
         CreateChatRoomResponse response = CreateChatRoomResponse.builder()
@@ -32,7 +33,7 @@ public class ChatRoomController {
     }
 
     @PutMapping("/rename-room")
-    public ResponseEntity<ApiResponse<RenameChatRoomResponse>> renameChatRoom(RenameChatRoomRequest request) {
+    public ResponseEntity<ApiResponse<RenameChatRoomResponse>> renameChatRoom(@RequestBody RenameChatRoomRequest request) {
         log.info("RenameChatRoomRequest: " + request);
         Long roomId = chatService.renameChatRoom(request.toRenameChatRoomCommand());
         RenameChatRoomResponse response = RenameChatRoomResponse.builder()
@@ -42,7 +43,7 @@ public class ChatRoomController {
     }
 
     @PostMapping("/invite-room")
-    public ResponseEntity<ApiResponse<InviteChatRoomResponse>> inviteChatRoom(InviteChatRoomRequest request) {
+    public ResponseEntity<ApiResponse<InviteChatRoomResponse>> inviteChatRoom(@RequestBody InviteChatRoomRequest request) {
         log.info("InviteChatRoomRequest: " + request);
         Long roomId = chatService.inviteChatRoom(request.toInviteChatRoomCommand());
         InviteChatRoomResponse response = InviteChatRoomResponse.builder()
@@ -52,7 +53,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/list-mychatroom")
-    public ResponseEntity<ApiResponse<ListMyChatRoomResponse>> listMyChatRoom(ListMyChatRoomRequest request) {
+    public ResponseEntity<ApiResponse<ListMyChatRoomResponse>> listMyChatRoom(@RequestBody ListMyChatRoomRequest request) {
         log.info("ListMyChatRoomRequest: " + request);
         List<ChatRoom> list = chatService.listMyChatRoom(request.toListMyChatRoomCommand());
         ListMyChatRoomResponse response = ListMyChatRoomResponse.builder()
@@ -62,7 +63,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/load-message-room")
-    public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(LoadChatMessageRequest request) {
+    public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(@RequestBody LoadChatMessageRequest request) {
         log.info("LoadChatMessageRequest: " + request);
         List<ChatMessage> messageList = chatService.loadChatMessage(request.toLoadChatMessageCommand());
         LoadChatMessageResponse response = LoadChatMessageResponse.builder()
