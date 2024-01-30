@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
@@ -67,10 +68,22 @@ public class JobPostService {
 		return command.getJobPostId();
 	}
 
-	public Long getJobPost(GetJobPostCommand command) {
-		jobPostRepository.findById(command.getJobPostId())
+	public GetJobPostResponse getJobPost(GetJobPostCommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
 			.orElseThrow(() -> new EntityNotFoundException("없는 게시글"));
-		return command.getJobPostId();
+		User user = jobPost.getUserId();
+		GetJobPostResponse getJobPostResponse = GetJobPostResponse.builder()
+			.jobPostId(jobPost.getId())
+			.userId(user.getId())
+			.title(jobPost.getTitle())
+			.content(jobPost.getContent())
+			.expirationDate(jobPost.getExpirationDate())
+			.peopleRecruited(jobPost.getPeopleRecrutied())
+			.bookMark(jobPost.getBookMark())
+			.isActive(jobPost.getIsActive())
+			.build();
+
+		return getJobPostResponse;
 	}
 
 	public List<GetAllJobPostResponse> getAllJobPostList() {

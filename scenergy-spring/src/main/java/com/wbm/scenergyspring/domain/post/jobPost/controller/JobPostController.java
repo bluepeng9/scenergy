@@ -46,10 +46,7 @@ public class JobPostController {
 		@RequestBody GetJobPostRequest request
 	) {
 
-		Long jobPostId = jobPostService.getJobPost(request.toGetJobPost());
-
-		GetJobPostResponse getJobPostResponse = new GetJobPostResponse();
-		getJobPostResponse.setJobPostId(jobPostId);
+		GetJobPostResponse getJobPostResponse = jobPostService.getJobPost(request.toGetJobPost());
 		return ResponseEntity.ok(ApiResponse.createSuccess(getJobPostResponse));
 
 	}
