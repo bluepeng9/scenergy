@@ -16,10 +16,49 @@
   display: flex;
   justify-content: space-between;
 }
+.DialogSearchGlobal{
+  padding: 10px;
+  position: relative;
+}
+.DialogSearchGlobal span{
+  font-weight: bold;
+}
+.DialogSearchInput{
+  padding: 5px;
+  width: 300px;
+  border: none;
+  margin-left: 10px;
+  background-color: transparent;
+}
+.DialogSearchInput input:focus{
+  border: none;
+  outline: none;
+}
+.DialogSearchInput::placeholder{
+  text-align: center;
+}
+.DialogUserList{
+  margin: 10px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+}
+.DialogUserNick{
+  font-weight: bold;
+}
+.SearchResultFalse{
+  padding: 10px;
+  margin-left: 10px;
+}
 .ChatFieldInfo {
   display: flex;
 }
-.ConnectContainer {
-  position: fixed;
-  bottom: 0;
+.CreateBtn{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  bottom: 20px;
 }

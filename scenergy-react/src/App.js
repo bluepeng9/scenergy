@@ -12,8 +12,6 @@ import NoticePage from "./pages/NoticePage";
 import ChatPage from "./pages/ChatPage";
 import ProfilePage from "./pages/ProfilePage";
 import Portfolio from "./components/Portfolio/Portfolio";
-import MyScenergyPost from "./pages/MyScenergyPost";
-import EnterPage from "./pages/EnterPage";
 function App() {
   return (
     <div>
