@@ -12,12 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RedisPublisher {
-
     private final RedisTemplate<String, Object> redisTemplate;
-
     /**
      * 채팅 발행 method
-     *
      * @param topic   발행할 topic
      * @param message 발행할 chat
      */

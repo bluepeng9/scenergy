@@ -23,7 +23,6 @@ public class RedisSubscriber implements MessageListener {
 
     /**
      * redis message 전송 method
-     *
      * @param message
      * @param pattern
      */

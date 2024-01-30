@@ -10,9 +10,6 @@ import java.util.List;
 @Builder
 public class CreateChatRoomCommand {
     private String roomName;
-    /**
-     * 0: 1대1 채팅방, 1: 그룹 채팅방
-     */
-    private int status;
+    private int status; //0: 1대1 채팅방, 1: 그룹 채팅방
     private List<User> users;
 }

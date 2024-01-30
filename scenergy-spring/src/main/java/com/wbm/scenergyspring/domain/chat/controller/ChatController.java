@@ -20,12 +20,12 @@ public class ChatController {
 
     private final ChatService chatService;
 
-    /**
+    /** 메시지 전송 controller
      * 현재 ws://localhost:8080/ws/pub/chat
      */
     @MessageMapping("/chat")
     public ResponseEntity<ApiResponse<PubMessageResponse>> pubMessage(@RequestBody PubMessageRequest request) {
-        log.info("request: " + request.getMessage());
+        log.info("PubMessageRequest: " + request.getMessage());
         Long chatId = chatService.sendMessage(request.toCreatePubMessageCommand());
         PubMessageResponse pubMessageResponse = PubMessageResponse.builder()
                 .chatId(chatId)
