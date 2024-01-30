@@ -1,10 +1,13 @@
 package com.wbm.scenergyspring.domain.post.jobPost.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.wbm.scenergyspring.domain.post.Post;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -13,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
 @Entity
@@ -37,6 +41,15 @@ public class JobPost extends Post {
 	Long peopleRecrutied;
 
 	Long bookMark;
+
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	private List<JobPostInstrumentTag> jobPostInstrumentTags = new ArrayList<>();
+
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	private List<JobPostLocationTag> jobPostLocationTags = new ArrayList<>();
+
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	private List<JobPostGenreTag> jobPostGenreTags = new ArrayList<>();
 
 	public static JobPost createNewJobPost(
 		User userId,
@@ -73,6 +86,28 @@ public class JobPost extends Post {
 		this.peopleRecrutied = peopleRecrutied;
 		this.bookMark = bookMark;
 		this.isActive = isActive;
+	}
+
+	public void updateJobPostInstrumentTags(List<JobPostInstrumentTag> jobPostInstrumentTags) {
+		this.jobPostInstrumentTags = jobPostInstrumentTags;
+	}
+
+	public void updateJobPostLocationTags(List<JobPostLocationTag> jobPostLocationTags) {
+		this.jobPostLocationTags = jobPostLocationTags;
+	}
+	public void updateJobPostGenreTags(List<JobPostGenreTag> jobPostGenreTags) {
+		this.jobPostGenreTags = jobPostGenreTags;
+	}
+
+	public void deleteJobPostInstrumentTags() {
+		jobPostInstrumentTags = null;
+	}
+
+	public void deleteJobPostLocationTags() {
+		jobPostLocationTags = null;
+	}
+	public void deleteJobPostGenreTags() {
+		jobPostGenreTags = null;
 	}
 
 }

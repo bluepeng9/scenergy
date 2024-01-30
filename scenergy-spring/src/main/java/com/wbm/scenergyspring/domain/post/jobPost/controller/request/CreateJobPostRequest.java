@@ -1,8 +1,10 @@
 package com.wbm.scenergyspring.domain.post.jobPost.controller.request;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 
 import lombok.Builder;
@@ -18,6 +20,9 @@ public class CreateJobPostRequest {
 	Long peopleRecruited;
 	Long bookMark;
 	IsActive isActive;
+	List<Long> genreTags;
+	List<Long> instrumentTags;
+	List<Long> locationTags;
 
 	public CreateJobPostCommand toCreateJobPost() {
 		CreateJobPostCommand command = CreateJobPostCommand.builder()
@@ -28,10 +33,15 @@ public class CreateJobPostRequest {
 			.peopleRecruited(getPeopleRecruited())
 			.bookMark(getBookMark())
 			.isActive(getIsActive())
+			.genreTagIds(genreTags)
+			.instrumentTagIds(instrumentTags)
+			.locationTagIds(locationTags)
 			.build();
 
 		return command;
 	}
+
+
 
 
 }
