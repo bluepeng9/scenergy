@@ -117,4 +117,23 @@ public class ChatService {
         List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(command.getUserId());
         return myChatRoom;
     }
+
+    public List<ChatMessage> loadChatMessage(LoadChatMessageCommand command) {
+        List<ChatMessage> messageList = new ArrayList<>();
+        List<ChatMessage> redisMessageList = redisChatRepository.loadChatMessage(command.getRoomId());
+        if (redisMessageList == null || redisMessageList.isEmpty()) {
+            ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+                    .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+            List<ChatMessage> RDBMessageList = chatMessageRepository.findTop100ByChatRoomOrderByCreatedAtAsc(chatRoom);
+            for (ChatMessage chatMessage : RDBMessageList) {
+                redisChatRepository.chatMessageSave(chatMessage);
+                messageList.add(chatMessage);
+            }
+        } else {
+            messageList.addAll(redisMessageList);
+        }
+        return messageList;
+    }
+
+
 }
