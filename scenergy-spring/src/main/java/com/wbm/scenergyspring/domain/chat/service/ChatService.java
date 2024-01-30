@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,9 +28,54 @@ public class ChatService {
     final ChatMessageRepository chatMessageRepository;
     final ChatUserRepository chatUserRepository;
     final UserRepository userRepository;
-    final RedisPublisher redisPublisher;
     final RedisChatRepository redisChatRepository;
-//    final SimpMessagingTemplate simpMessagingTemplate;
+    final RedisPublisher redisPublisher;
+
+    /**
+     * 메시지 전송
+     *
+     * @param command: userId, roomId, messageText, messageType
+     * @return MessageId (0L: 채팅방 삭제)
+     */
+    @Transactional(readOnly = false)
+    public Long sendMessage(CreatePubMessageCommand command) {
+        //chatUser 조회||생성
+        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+        User user = userRepository.findById(command.getUserId())
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));
+        ChatUser chatUser = chatUserRepository.findByChatRoomAndUser(chatRoom, user)
+                .orElse(ChatUser.createChatUser(chatRoom, user));
+
+        String messageType = command.getMessageType();
+        if (messageType.equals("EXIT")) {
+            command.setMessageText(user.getName() + "님이 퇴장하셨습니다.");
+            int remainingMembersCount = chatUser.leaveRoom();
+            int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
+            if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
+                chatRoomRepository.delete(chatRoom);
+                return 0L;
+            }
+        } else if (messageType.equals("ENTER")) {
+            command.setMessageText(user.getName() + "님이 입장하셨습니다.");
+            chatUser.joinRoom();
+        }
+        ChatMessage chatMessage = ChatMessage.createChatMessage(
+                command.getUserId(),
+                command.getMessageText(),
+                chatRoom
+        );
+
+        //전송
+        // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
+        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessage);
+
+        //RDB 저장
+        chatRoom.addChatMessages(chatMessage);
+        //redis 저장
+        redisChatRepository.chatMessageSave(chatMessage);
+        return chatMessageRepository.save(chatMessage).getId();
+    }
 
     @Transactional(readOnly = false)
     public Long createChatRoom(CreateChatRoomCommand command) {
@@ -49,49 +95,7 @@ public class ChatService {
         return roomId;
     }
 
-    /**
-     * 메시지 전송
-     *
-     * @param command: userId, roomId, messageText, messageType
-     * @return MessageId (0L: 채팅방 삭제)
-     */
     @Transactional(readOnly = false)
-    public Long sendMessage(CreatePubMessageCommand command) {
-        ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
-        User user = userRepository.findById(command.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));
-        ChatUser chatUser = chatUserRepository.findByChatRoomAndUser(chatRoom, user)
-                .orElse(ChatUser.createChatUser(chatRoom, user));
-
-        String messageType = command.getMessageType();
-        if (messageType.equals("ENTER")) {
-            command.setMessageText(user.getName() + "님이 입장하셨습니다.");
-            chatUser.joinRoom();
-        } else if (messageType.equals("EXIT")) {
-            command.setMessageText(user.getName() + "님이 퇴장하셨습니다.");
-            int remainingMembersCount = chatUser.leaveRoom();
-            int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
-            if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
-                chatRoomRepository.delete(chatRoom);
-                return 0L;
-            }
-        }
-        ChatMessage chatMessage = ChatMessage.createChatMessage(
-                command.getUserId(),
-                command.getMessageText(),
-                chatRoom
-        );
-
-        chatRoom.addChatMessages(chatMessage);
-        //chatRoom을 통하여 save할 것인지 chatMessage를 통하여 save할 것인지?
-        //message pub(ws://localhost:8080/ws/sub/chat/{roomId})
-//        simpMessagingTemplate.convertAndSend("/sub/chat/" + command.getRoomId(), chatMessage);
-//        // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
-        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessage);
-        return chatMessageRepository.save(chatMessage).getId();
-    }
-
     public Long renameChatRoom(RenameChatRoomCommand command) {
         ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
@@ -100,6 +104,7 @@ public class ChatService {
         return chatRoom.getId();
     }
 
+    @Transactional(readOnly = false)
     public Long inviteChatRoom(InviteChatRoomCommand command) {
         ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
@@ -108,8 +113,8 @@ public class ChatService {
         return chatRoom.getId();
     }
 
-    public List<ChatRoom> listMyChatRoom(ListMyChatRoomCommand listMyChatRoomCommand) {
-        List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(listMyChatRoomCommand.getUserId());
+    public List<ChatRoom> listMyChatRoom(ListMyChatRoomCommand command) {
+        List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(command.getUserId());
         return myChatRoom;
     }
 }
