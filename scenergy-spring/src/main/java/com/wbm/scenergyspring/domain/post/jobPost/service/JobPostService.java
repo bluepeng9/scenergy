@@ -51,6 +51,7 @@ public class JobPostService {
 		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
 			.orElseThrow(() -> new EntityNotFoundException("수정 실패"));
 		jobPost.updateJobPost(
+			command.getJobPostId(),
 			command.getTitle(),
 			command.getContent(),
 			command.getExpirationDate(),

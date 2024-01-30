@@ -19,14 +19,15 @@ public class UpdateJobPostRequest {
 	IsActive isActive;
 
 	public UpdateJobPostcommand toUpdateJobPost() {
-		UpdateJobPostcommand command = new UpdateJobPostcommand();
-		command.setJobPostId(getJobPostId());
-		command.setTitle(getTitle());
-		command.setContent(getContent());
-		command.setExpirationDate(getExpirationDate());
-		command.setPeopleRecruited(getPeopleRecruited());
-		command.setBookMark(getBookMark());
-		command.setIsActive(getIsActive());
+		UpdateJobPostcommand command = UpdateJobPostcommand.builder()
+			.jobPostId(getJobPostId())
+			.title(getTitle())
+			.content(getContent())
+			.expirationDate(getExpirationDate())
+			.peopleRecruited(getPeopleRecruited())
+			.bookMark(getBookMark())
+			.isActive(getIsActive())
+			.build();
 		return command;
 	}
 }

@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class UpdateJobPostcommand {
 	Long jobPostId;
 	String title;

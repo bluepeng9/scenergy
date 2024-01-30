@@ -59,6 +59,7 @@ public class JobPost extends Post {
 	}
 
 	public void updateJobPost(
+		Long jobPostId,
 		String title,
 		String content,
 		LocalDateTime expirationDate,
