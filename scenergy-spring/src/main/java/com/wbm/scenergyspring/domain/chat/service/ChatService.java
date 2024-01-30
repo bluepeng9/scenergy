@@ -49,7 +49,7 @@ public class ChatService {
 
         String messageType = command.getMessageType();
         if (messageType.equals("EXIT")) {
-            command.setMessageText(user.getName() + "님이 퇴장하셨습니다.");
+            command.setMessageText(user.getNickname() + "님이 퇴장하셨습니다.");
             int remainingMembersCount = chatUser.leaveRoom();
             int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
             if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
@@ -57,7 +57,7 @@ public class ChatService {
                 return 0L;
             }
         } else if (messageType.equals("ENTER")) {
-            command.setMessageText(user.getName() + "님이 입장하셨습니다.");
+            command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
             chatUser.joinRoom();
         }
         ChatMessage chatMessage = ChatMessage.createChatMessage(
@@ -92,6 +92,16 @@ public class ChatService {
         //redis 등록
         redisChatRepository.createChatRoom(roomId, newChatRoom.getName(), newChatRoom.getStatus(), newChatRoom.getChatUsers().size());
         redisChatRepository.enterChatRoom(roomId);
+
+        //초대됨 메시지 발행
+        for (User user : command.getUsers()) {
+            CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()
+                    .messageType("ENTER")
+                    .roomId(roomId)
+                    .userId(user.getId())
+                    .build();
+            sendMessage(pubMessageCommand);
+        }
         return roomId;
     }
 
@@ -110,6 +120,16 @@ public class ChatService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
         chatRoom.inviteChatUsers(command.getUsers());
         redisChatRepository.updateMemberCount(command.getRoomId(), command.getUsers().size());
+
+        //초대됨 메시지 발행
+        for (User user : command.getUsers()) {
+            CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()
+                    .messageType("ENTER")
+                    .roomId(command.getRoomId())
+                    .userId(user.getId())
+                    .build();
+            sendMessage(pubMessageCommand);
+        }
         return chatRoom.getId();
     }
 
