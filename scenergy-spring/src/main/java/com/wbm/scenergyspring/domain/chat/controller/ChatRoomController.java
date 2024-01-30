@@ -1,13 +1,8 @@
 package com.wbm.scenergyspring.domain.chat.controller;
 
-import com.wbm.scenergyspring.domain.chat.controller.request.CreateChatRoomRequest;
-import com.wbm.scenergyspring.domain.chat.controller.request.InviteChatRoomRequest;
-import com.wbm.scenergyspring.domain.chat.controller.request.ListMyChatRoomRequest;
-import com.wbm.scenergyspring.domain.chat.controller.request.RenameChatRoomRequest;
-import com.wbm.scenergyspring.domain.chat.controller.response.CreateChatRoomResponse;
-import com.wbm.scenergyspring.domain.chat.controller.response.InviteChatRoomResponse;
-import com.wbm.scenergyspring.domain.chat.controller.response.ListMyChatRoomResponse;
-import com.wbm.scenergyspring.domain.chat.controller.response.RenameChatRoomResponse;
+import com.wbm.scenergyspring.domain.chat.controller.request.*;
+import com.wbm.scenergyspring.domain.chat.controller.response.*;
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -62,6 +57,16 @@ public class ChatRoomController {
         List<ChatRoom> list = chatService.listMyChatRoom(request.toListMyChatRoomCommand());
         ListMyChatRoomResponse response = ListMyChatRoomResponse.builder()
                 .MyChatRoomList(list)
+                .build();
+        return ResponseEntity.ok(ApiResponse.createSuccess(response));
+    }
+
+    @GetMapping("/load-message-room")
+    public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(LoadChatMessageRequest request) {
+        log.info("LoadChatMessageRequest: " + request);
+        List<ChatMessage> messageList = chatService.loadChatMessage(request.toLoadChatMessageCommand());
+        LoadChatMessageResponse response = LoadChatMessageResponse.builder()
+                .messageList(messageList)
                 .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
