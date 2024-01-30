@@ -4,6 +4,7 @@
     /*flex-direction: row;*/
     margin: auto;
     margin-top: 100px;
+    margin-bottom: 80px;
     /*justify-content: space-between;*/
 }
 
@@ -69,6 +70,6 @@
     padding-top: 45px;
 }
 
-.profileNickname  h2 {
+.profileNickname h2 {
     margin-bottom: 20px;
 }

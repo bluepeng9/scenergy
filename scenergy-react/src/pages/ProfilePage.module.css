@@ -1,12 +1,14 @@
 .ProfilePage-global {
-  display: flex;
-}/* 네브바 때문에 임시로 한 코드. 네브바 고정하면 바뀔 곳 */
+    display: flex;
+}
+
+/* 네브바 때문에 임시로 한 코드. 네브바 고정하면 바뀔 곳 */
 
 .profile-page {
-  display: flex;
-  width: 100vw;
+    display: flex;
+    width: 100vw;
 }
 
 .portfolio-link {
-  margin-left: 500px;
+    margin-left: 500px;
 }

@@ -4,9 +4,9 @@ const ProfileVideoList = () => {
 
     return (
         <>
-            <hr/>
+            <div className={styles['division-line']}></div>
             <h1>대표 영상</h1>
-            <hr/>
+            <div className={styles['division-line']}></div>
             <h1>영상 목록</h1>
         </>
     )
