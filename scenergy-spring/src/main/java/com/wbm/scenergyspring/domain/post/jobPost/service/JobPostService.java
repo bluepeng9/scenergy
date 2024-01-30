@@ -77,16 +77,18 @@ public class JobPostService {
 		List<GetAllJobPostResponse> jobPosts = new ArrayList<>();
 		for (JobPost jobPost : jobPostRepository.findAll()) {
 			User user = jobPost.getUserId();
-			GetAllJobPostResponse command = new GetAllJobPostResponse();
-			command.setJobPostId(jobPost.getId());
-			command.setUserId(user.getId());
-			command.setTitle(jobPost.getTitle());
-			command.setContent(jobPost.getContent());
-			command.setExpirationDate(jobPost.getExpirationDate());
-			command.setPeopleRecruited(jobPost.getPeopleRecrutied());
-			command.setBookMark(jobPost.getBookMark());
-			command.setIsActive(jobPost.getIsActive());
-			jobPosts.add(command);
+			GetAllJobPostResponse response = GetAllJobPostResponse.builder()
+				.jobPostId(jobPost.getId())
+				.userId(user.getId())
+				.title(jobPost.getTitle())
+				.content(jobPost.getContent())
+				.expirationDate(jobPost.getExpirationDate())
+				.peopleRecruited(jobPost.getPeopleRecrutied())
+				.bookMark(jobPost.getBookMark())
+				.isActive(jobPost.getIsActive())
+				.build();
+
+			jobPosts.add(response);
 		}
 		return jobPosts;
 	}
