@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.repository;
 
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.RedisChatRoom;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
@@ -8,6 +9,7 @@ import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -23,6 +25,7 @@ public class RedisChatRepository {
     private final RedisSubscriber redisSubscriber;
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private final RedisTemplate<String, ChatMessage> redisTemplateMessage;
     private final RedisTemplate<String, Object> redisTemplate;
     private HashOperations<String, String, RedisChatRoom> opsHashChatRoom;
     //채팅방에 대화메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic 정보를 map에 넣어 roomId로 찾을 수 있도록 한다.
@@ -85,4 +88,15 @@ public class RedisChatRepository {
         return topics.get(Long.toString(roomId));
     }
 
+    public void chatMessageSave(ChatMessage chatMessage) {
+        String strRoomId = Long.toString(chatMessage.getChatRoom().getId());
+        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessage.class));
+        redisTemplateMessage.opsForList().rightPush(strRoomId, chatMessage);
+    }
+
+    public List<ChatMessage> loadChatMessage(Long roomId) {
+        String strRoomId = Long.toString(roomId);
+        List<ChatMessage> messageList = redisTemplateMessage.opsForList().range(strRoomId, 0, 99);
+        return messageList;
+    }
 }
