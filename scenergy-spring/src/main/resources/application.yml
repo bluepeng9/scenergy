@@ -7,7 +7,6 @@ spring:
     activate:
       on-profile:
         active: local
-
   jpa:
     properties:
       hibernate:
