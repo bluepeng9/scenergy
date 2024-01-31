@@ -23,6 +23,10 @@ const ChatField = () => {
     { id: 3, email: "홍준표", password: "이태경", name: "사용자3" },
   ];
 
+  const handleRoomCreated = (created) => {
+    setIsCreated(created);
+  };
+
   const handleOpenChange = () => {
     /*setIsModalOpen(true);*/
     dispatch(openModal());
@@ -61,109 +65,122 @@ const ChatField = () => {
 
   return (
     <>
-      <div className={styles.FieldGlobal}>
-        <div className={styles.FieldBody}>
-          <FontAwesomeIcon className={styles.FieldBodyIcon} icon={faComments} />
-          <p>원하는 뮤지션에게 메세지를 보내보세요.</p>
-          {/*나중에 Button 컴포넌트 만들어서 바꾸기*/}
-          <button onClick={handleOpenChange}>뮤지션 찾기</button>
-        </div>
-        {isModalOpen && (
-          //default로 팔로우한 뮤지션 목록들 다 불러올것
-          <Dialog title="뮤지션 검색" onClose={() => dispatch(closeModal())}>
-            <form onSubmit={handleSubmit}>
-              <div className={styles.DialogSearchGlobal}>
-                <div className={styles.DialogSearchContainer}>
-                  <span>받는 사람 : </span>
-                  <input
-                    className={styles.DialogSearchInput}
-                    placeholder="닉네임/아이디를 입력해주세요"
-                    type="text"
-                    value={searchInput}
-                    onChange={handleInputChange}
-                  />
-                  <button onClick={handleSearch}>검색</button>
+      {isCreated ? (
+        <div className={styles.FieldGlobal}>
+          <div className={styles.FieldBody}>
+            <FontAwesomeIcon
+              className={styles.FieldBodyIcon}
+              icon={faComments}
+            />
+            <p>원하는 뮤지션에게 메세지를 보내보세요.</p>
+            {/*나중에 Button 컴포넌트 만들어서 바꾸기*/}
+            <button onClick={handleOpenChange}>뮤지션 찾기</button>
+          </div>
+          {isModalOpen && (
+            //default로 팔로우한 뮤지션 목록들 다 불러올것
+            <Dialog title="뮤지션 검색" onClose={() => dispatch(closeModal())}>
+              <form onSubmit={handleSubmit}>
+                <div className={styles.DialogSearchGlobal}>
+                  <div className={styles.DialogSearchContainer}>
+                    <span>받는 사람 : </span>
+                    <input
+                      className={styles.DialogSearchInput}
+                      placeholder="닉네임/아이디를 입력해주세요"
+                      type="text"
+                      value={searchInput}
+                      onChange={handleInputChange}
+                    />
+                    <button onClick={handleSearch}>검색</button>
+                  </div>
                 </div>
-              </div>
-              <hr className={styles.hrline} />
-              {/*검색어 입력되기 전, 유저 선택하기 전에 */}
-              {searchInput === "" ? null : (
-                <div className={styles.DialogUserListContainer}>
-                  {/*map으로 리스트 쏴주기*/}
-                  {users.map((user) => (
-                    <div
-                      className={styles.DialogUserList}
-                      key={user.id}
-                      onClick={() => handleUserSelect(user)}
-                    >
-                      <div className={styles.DialogUserImg}>
-                        {/* 유저 프로필 이미지 */}
-                        <p>유저프로필</p>
-                      </div>
-                      <div className={styles.DialogUserNick}>
-                        {/* 유저 닉네임 */}
-                        <p>{user.name}</p>
-                      </div>
-                    </div>
-                  ))}
-                  {/*<div className={styles.DialogUserList}>*/}
-                  {/*  <div className={styles.DialogUserImg}>*/}
-                  {/*    <p>유저프로필</p>*/}
-                  {/*  </div>*/}
-                  {/*  <div className={styles.DialogUserNick}>*/}
-                  {/*    <p>유저닉네임</p>*/}
-                  {/*  </div>*/}
-                  {/*</div>*/}
-                </div>
-              )}
-              {/*{searchInput && searchResults.length !== 0 ? (*/}
-              {/*{searchInput || searchResults.length !== 0 ? (*/}
-              {/*  <div className={styles.SearchResultTrue}>*/}
-              {/*    <div>*/}
-              {/*      {searchResults.map((user) => (*/}
-              {/*        <div*/}
-              {/*          key={user.nickname}*/}
-              {/*          onClick={() => handleUserSelect(user)}*/}
-              {/*        >*/}
-              {/*          <p>이미지</p>*/}
-              {/*          <p>{user.nickname}</p>*/}
-              {/*        </div>*/}
-              {/*      ))}*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*) : (*/}
-              {/*  <div className={styles.SearchResultFalse}>*/}
-              {/*    <div>*/}
-              {/*      <p>일치하는 뮤지션이 없습니다.</p>*/}
-              {/*    </div>*/}
-              {/*  </div>*/}
-              {/*)}*/}
-              {searchInput || selectedUsers.length !== 0 ? (
-                <div className={styles.SearchResultTrue}>
-                  <div>
-                    {selectedUsers.map((user) => (
-                      <div key={user.id} onClick={() => handleUserSelect(user)}>
-                        <p>이미지</p>
-                        <p>{user.name}</p>
+                <hr className={styles.hrline} />
+                {/*검색어 입력되기 전, 유저 선택하기 전에 */}
+                {searchInput === "" ? null : (
+                  <div className={styles.DialogUserListContainer}>
+                    {/*map으로 리스트 쏴주기*/}
+                    {users.map((user) => (
+                      <div
+                        className={styles.DialogUserList}
+                        key={user.id}
+                        onClick={() => handleUserSelect(user)}
+                      >
+                        <div className={styles.DialogUserImg}>
+                          {/* 유저 프로필 이미지 */}
+                          <p>유저프로필</p>
+                        </div>
+                        <div className={styles.DialogUserNick}>
+                          {/* 유저 닉네임 */}
+                          <p>{user.name}</p>
+                        </div>
                       </div>
                     ))}
+                    {/*<div className={styles.DialogUserList}>*/}
+                    {/*  <div className={styles.DialogUserImg}>*/}
+                    {/*    <p>유저프로필</p>*/}
+                    {/*  </div>*/}
+                    {/*  <div className={styles.DialogUserNick}>*/}
+                    {/*    <p>유저닉네임</p>*/}
+                    {/*  </div>*/}
+                    {/*</div>*/}
                   </div>
-                </div>
-              ) : (
-                <div className={styles.SearchResultFalse}>
-                  <div>
-                    <p>일치하는 뮤지션이 없습니다.</p>
+                )}
+                {/*{searchInput && searchResults.length !== 0 ? (*/}
+                {/*{searchInput || searchResults.length !== 0 ? (*/}
+                {/*  <div className={styles.SearchResultTrue}>*/}
+                {/*    <div>*/}
+                {/*      {searchResults.map((user) => (*/}
+                {/*        <div*/}
+                {/*          key={user.nickname}*/}
+                {/*          onClick={() => handleUserSelect(user)}*/}
+                {/*        >*/}
+                {/*          <p>이미지</p>*/}
+                {/*          <p>{user.nickname}</p>*/}
+                {/*        </div>*/}
+                {/*      ))}*/}
+                {/*    </div>*/}
+                {/*  </div>*/}
+                {/*) : (*/}
+                {/*  <div className={styles.SearchResultFalse}>*/}
+                {/*    <div>*/}
+                {/*      <p>일치하는 뮤지션이 없습니다.</p>*/}
+                {/*    </div>*/}
+                {/*  </div>*/}
+                {/*)}*/}
+                {searchInput || selectedUsers.length !== 0 ? (
+                  <div className={styles.SearchResultTrue}>
+                    <div>
+                      {selectedUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          onClick={() => handleUserSelect(user)}
+                        >
+                          <p>이미지</p>
+                          <p>{user.name}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className={styles.SearchResultFalse}>
+                    <div>
+                      <p>일치하는 뮤지션이 없습니다.</p>
+                    </div>
+                  </div>
+                )}
 
-              <div className={styles.CreateBtn}>
-                <ChatRoomCreate selectedUsers={selectedUsers} />
-              </div>
-            </form>
-          </Dialog>
-        )}
-      </div>
+                <div className={styles.CreateBtn}>
+                  <ChatRoomCreate
+                    selectedUsers={selectedUsers}
+                    isRoomCreated={handleRoomCreated}
+                  />
+                </div>
+              </form>
+            </Dialog>
+          )}
+        </div>
+      ) : (
+        <ChatRoomReal />
+      )}
     </>
   );
 };

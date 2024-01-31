@@ -1,15 +1,42 @@
-.ChatRoomContainer{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.ChatRoomContainer {
+  display: flex;
+  text-align: center;
+  width: 100%;
+  flex-direction: column;
+  position: relative;
 }
-.ChatRoomHeader {
-    display: flex;
-    justify-content: space-between;
-}
+
 .ChatRoomInfo {
-    display: flex;
+  height: 70px;
+  margin: 0 10px;
+  border-bottom: 1px solid black;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  font-size: 1.1rem;
+}
+.chatRoomProfileContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.ChatRoomUserName p {
+  white-space: nowrap;
+}
+.ChatRoomIcon {
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  font-size: 1.5rem;
+  vertical-align: center;
 }
 .ConnectContainer {
-    bottom: 0;
+  width: 100%;
+  position: absolute;
+  padding: 20px;
+  bottom: 0;
 }

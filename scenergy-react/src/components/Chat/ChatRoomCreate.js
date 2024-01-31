@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const ChatRoomCreate = ({ selectedUsers }) => {
+const ChatRoomCreate = ({ selectedUsers, isRoomCreated }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const roomStatus = selectedUsers.length > 1 ? 1 : 0; //1대1채팅, 단체채팅 상태 변경해주기
@@ -11,9 +11,9 @@ const ChatRoomCreate = ({ selectedUsers }) => {
       const response = await axios.post(
         "http://localhost:8080/chatroom/create-room",
         {
-          chatroom_name: roomName,
-          status: roomStatus,
-          users: selectedUsers.map((user) => user.id),
+          "chatroom_name": roomName,
+          "status": roomStatus,
+          "users": selectedUsers,
         },
         {
           headers: {
@@ -21,13 +21,11 @@ const ChatRoomCreate = ({ selectedUsers }) => {
           },
         },
       );
-      console.log(response);
+      isRoomCreated(true);
     } catch (error) {
       console.error("에러", error);
     }
-    console.log(roomName);
-    console.log(roomStatus);
-    console.log(selectedUsers);
+
   };
   return (
     <div>

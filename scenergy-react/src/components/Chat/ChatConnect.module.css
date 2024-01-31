@@ -1,10 +1,39 @@
-.sendbutton {
-  background-color: rgb(255, 32, 121);
-    color: whitesmoke;
-    font-weight: bold;
-    border: none;
-    width: 50px;
-    height: 30px;
-    border-radius: 7px;
-    padding: 3px;
+.ChatMsgField {
+}
+.ChatInput {
+  display: flex;
+  justify-content: stretch;
+  border: 1.6px solid black;
+  border-radius: 15px;
+  width: 100%;
+  padding: 7px;
+}
+.ChatInput textarea {
+  resize: none;
+  overflow: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+  width: 100% !important;
+  font-size: 1rem;
+  padding: 7px;
+  border: none;
+  background-color: transparent;
+}
+.ChatInput textarea:focus {
+  border: none;
+  outline: none;
+  width: 100%;
+}
+.ChatSendBtn button {
+  background-color: transparent;
+  color: black;
+  width: 30px;
+  height: 100%;
+  vertical-align: center;
+  text-align: center;
+  font-weight: bold;
+  border: none;
+  border-radius: 7px;
+  font-size: 1.2rem;
+  padding: 3px;
 }
