@@ -1,6 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.redis;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -18,7 +18,7 @@ public class RedisPublisher {
      * @param topic   발행할 topic
      * @param message 발행할 chat
      */
-    public void publish(ChannelTopic topic, ChatMessage message) {
+    public void publish(ChannelTopic topic, ChatMessageDto message) {
         redisTemplate.convertAndSend(topic.getTopic(), message);
     }
 }

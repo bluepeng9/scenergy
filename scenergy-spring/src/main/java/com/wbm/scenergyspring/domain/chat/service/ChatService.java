@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
 import com.wbm.scenergyspring.domain.chat.redis.RedisPublisher;
@@ -66,13 +67,21 @@ public class ChatService {
                 command.getMessageText(),
                 chatRoom
         );
+        //메시지 dto 생성
+        ChatMessageDto chatMessageDto = ChatMessageDto.builder()
+                .chatRoomId(command.getRoomId())
+                .messageText(chatMessage.getMessageText())
+                .senderId(command.getUserId())
+                .createdAt(chatMessage.getCreatedAt())
+                .flag(1)
+                .build();
         //메시지 전송
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
-        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessage);
+        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessageDto);
         //RDB 저장
         chatRoom.addChatMessages(chatMessage);
         //redis 저장
-        redisChatRepository.chatMessageSave(chatMessage);
+        redisChatRepository.chatMessageSave(chatMessageDto);
         return chatMessageRepository.save(chatMessage).getId();
     }
 
@@ -167,18 +176,26 @@ public class ChatService {
      * @param command roomId
      * @return List<ChatMessage>
      */
-    public List<ChatMessage> loadChatMessage(LoadChatMessageCommand command) {
-        List<ChatMessage> messageList = new ArrayList<>(); // return
+    public List<ChatMessageDto> loadChatMessage(LoadChatMessageCommand command) {
+        List<ChatMessageDto> messageList = new ArrayList<>(); // return
         //redis 조회
-        List<ChatMessage> redisMessageList = redisChatRepository.loadChatMessage(command.getRoomId());
+        List<ChatMessageDto> redisMessageList = redisChatRepository.loadChatMessage(command.getRoomId());
         if (redisMessageList == null || redisMessageList.isEmpty()) {
             ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
                     .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
             //RDB 조회
             List<ChatMessage> RDBMessageList = chatMessageRepository.findTop100ByChatRoomOrderByCreatedAtAsc(chatRoom);
             for (ChatMessage chatMessage : RDBMessageList) {
-                redisChatRepository.chatMessageSave(chatMessage);
-                messageList.add(chatMessage);
+                //메시지 dto 생성
+                ChatMessageDto chatMessageDto = ChatMessageDto.builder()
+                        .chatRoomId(chatMessage.getChatRoom().getId())
+                        .messageText(chatMessage.getMessageText())
+                        .senderId(chatMessage.getSenderId())
+                        .createdAt(chatMessage.getCreatedAt())
+                        .flag(1)
+                        .build();
+                redisChatRepository.chatMessageSave(chatMessageDto);
+                messageList.add(chatMessageDto);
             }
         } else {
             messageList.addAll(redisMessageList);

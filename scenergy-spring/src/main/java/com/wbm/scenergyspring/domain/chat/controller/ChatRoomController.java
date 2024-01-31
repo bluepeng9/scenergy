@@ -2,7 +2,7 @@ package com.wbm.scenergyspring.domain.chat.controller;
 
 import com.wbm.scenergyspring.domain.chat.controller.request.*;
 import com.wbm.scenergyspring.domain.chat.controller.response.*;
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -65,7 +65,7 @@ public class ChatRoomController {
     @GetMapping("/load-message-room")
     public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(@RequestBody LoadChatMessageRequest request) {
         log.info("LoadChatMessageRequest: " + request);
-        List<ChatMessage> messageList = chatService.loadChatMessage(request.toLoadChatMessageCommand());
+        List<ChatMessageDto> messageList = chatService.loadChatMessage(request.toLoadChatMessageCommand());
         LoadChatMessageResponse response = LoadChatMessageResponse.builder()
                 .messageList(messageList)
                 .build();

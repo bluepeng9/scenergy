@@ -1,6 +1,6 @@
 package com.wbm.scenergyspring.global.config;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
+import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -38,8 +38,8 @@ public class RedisConfig {
 
     // Redis 에 메시지 내역을 저장하기 위한 RedisTemplate 을 설정
     @Bean
-    public RedisTemplate<String, ChatMessage> redisTemplateMessage(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, ChatMessage> redisTemplateMessage = new RedisTemplate<>();
+    public RedisTemplate<String, ChatMessageDto> redisTemplateMessage(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, ChatMessageDto> redisTemplateMessage = new RedisTemplate<>();
         redisTemplateMessage.setConnectionFactory(connectionFactory);
         redisTemplateMessage.setKeySerializer(new StringRedisSerializer());        // Key Serializer
         redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(String.class));      // Value Serializer
