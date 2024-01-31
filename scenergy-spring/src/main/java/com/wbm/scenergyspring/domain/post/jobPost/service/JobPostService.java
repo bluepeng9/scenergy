@@ -103,25 +103,13 @@ public class JobPostService {
 		return getJobPostCommandResponse;
 	}
 
-	public List<GetAllJobPostResponse> getAllJobPostList() {
-		List<GetAllJobPostResponse> jobPosts = new ArrayList<>();
+	public List<GetJobPostCommandResponse> getAllJobPostList() {
+		List<GetJobPostCommandResponse> jobPosts = new ArrayList<>();
 		for (JobPost jobPost : jobPostRepository.findAll()) {
 			User user = jobPost.getUserId();
-			GetAllJobPostResponse response = GetAllJobPostResponse.builder()
-				.jobPostId(jobPost.getId())
-				.userId(user.getId())
-				.title(jobPost.getTitle())
-				.content(jobPost.getContent())
-				.expirationDate(jobPost.getExpirationDate())
-				.peopleRecruited(jobPost.getPeopleRecrutied())
-				.bookMark(jobPost.getBookMark())
-				.isActive(jobPost.getIsActive())
-				.genreTags(JobPostGenreTagCommand.createJobPostGenreTagCommand(jobPost.getJobPostGenreTags()))
-				.instrumentTags(JobPostInstrumentCommand.createJobPostGenreTagCommand(jobPost.getJobPostInstrumentTags()))
-				.locationTags(JobPostLocationCommand.createJobPostLocationTagCommand(jobPost.getJobPostLocationTags()))
-				.build();
+			GetJobPostCommandResponse getJobPostCommandResponse = GetJobPostCommandResponse.from(jobPost);
+			jobPosts.add(getJobPostCommandResponse);
 
-			jobPosts.add(response);
 		}
 		return jobPosts;
 	}

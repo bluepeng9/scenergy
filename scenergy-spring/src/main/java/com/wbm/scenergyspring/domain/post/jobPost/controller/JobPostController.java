@@ -36,7 +36,7 @@ public class JobPostController {
 	final JobPostService jobPostService;
 
 	@GetMapping("/getAll")
-	public ResponseEntity<ApiResponse<List<GetAllJobPostResponse>>> getAllJobPost() {
+	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllJobPost() {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getAllJobPostList()), HttpStatus.OK);
 	}
 

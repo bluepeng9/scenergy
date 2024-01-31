@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.domain.post.jobPost.controller.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostGenreTagCommandResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
 
 import lombok.Builder;
@@ -20,7 +19,7 @@ public class GetJobPostResponse {
 	Long peopleRecruited;
 	Long bookMark;
 	IsActive isActive;
-	public List<GetJobPostGenreTagCommandResponse> genreTags;
+	public List<GenreTagResponse> genreTags;
 	public List<InstrumentTagResponse> instrumentTags;
 	public List<LocationTagResponse> locationTags;
 }
@@ -33,4 +32,9 @@ class InstrumentTagResponse {
 class LocationTagResponse {
 	Long ind;
 	String locationName;
+}
+
+class GenreTagResponse {
+	Long id;
+	String genreName;
 }
