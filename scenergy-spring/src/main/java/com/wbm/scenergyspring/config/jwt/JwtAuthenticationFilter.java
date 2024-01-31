@@ -1,7 +1,6 @@
 package com.wbm.scenergyspring.config.jwt;
 
 import java.io.IOException;
-import java.util.Date;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -9,9 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.wbm.scenergyspring.config.JwtUtil;
 import com.wbm.scenergyspring.config.auth.PrincipalDetails;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
@@ -61,15 +59,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 		Authentication authResult) {
-		log.debug("successfulAuthentication실행 인증완료 !!!");
 		PrincipalDetails principalDetails = (PrincipalDetails)authResult.getPrincipal();
 
-		String jwtToken = JWT.create()
-			.withSubject("webetterthanme 토큰")
-			.withExpiresAt(new Date(System.currentTimeMillis() + (60000 * 10)))
-			.withClaim("id", principalDetails.getUser().getId())
-			.withClaim("username", principalDetails.getUser().getUsername())
-			.sign(Algorithm.HMAC512("webetterthanme"));
-		response.addHeader("Authorization", "Bearer" + jwtToken);
+		//TODO 시간 수정
+		String token = JwtUtil.generateJwtToken(principalDetails.getUser().getId(), 1000L * 60 * 60 * 24 * 30);
+		JwtUtil.addJwtTokenToResponseHeader(response, token);
 	}
 }
