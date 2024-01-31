@@ -57,10 +57,12 @@ dependencies {
 
     //chat
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
-    implementation group: 'it.ozimov', name: 'embedded-redis', version: '0.7.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
 
-
+    //json 직렬화 역직렬화
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {
