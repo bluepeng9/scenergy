@@ -13,9 +13,10 @@ public class UserGenerator {
 		User user = User.createNewUser(
 			email,
 			"password" + userCount,
-				"tester" + userCount,
+				"username" + userCount,
 				Gender.MALE,
-			"nickname" + userCount
+				"testnickname" + userCount
+
 		);
 		userCount += 1;
 		return user;
@@ -23,9 +24,7 @@ public class UserGenerator {
 
 	private static String getRandomGender() {
 		Random random = new Random();
-
 		String s = random.nextInt() > 0 ? "M" : "F";
-
 		return UserGenerator.getRandomGender();
 	}
 }

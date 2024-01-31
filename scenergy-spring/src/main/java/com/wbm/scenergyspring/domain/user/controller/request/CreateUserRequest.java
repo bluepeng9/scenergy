@@ -2,7 +2,6 @@ package com.wbm.scenergyspring.domain.user.controller.request;
 
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
-
 import lombok.Data;
 
 @Data
