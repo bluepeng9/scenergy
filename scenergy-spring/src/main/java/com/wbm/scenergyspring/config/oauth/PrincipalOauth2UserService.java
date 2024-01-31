@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.config.oauth;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -38,32 +37,34 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 
-		if (userRequest.getClientRegistration().getRegistrationId().equals("naver")) {
-			OAuth2UserInfo oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
-
-			String username = oAuth2UserInfo.getName();
-			String email = oAuth2UserInfo.getEmail();
-
-			String password = new BCryptPasswordEncoder().encode("naver");
-
-			Gender gender = oAuth2UserInfo.getGender().equals("F") ? Gender.femail : Gender.mail;
-
-			// 해당아이디로 회원가입 되어있는지 확인
-			Optional<User> user = userRepository.findUserByEmail(email);
-
-			// 이미 회원가입이 되어있으면 그냥 로그인
-			if (user.isPresent()) {
-				User userEntity = user.get();
-
-				return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
-			}
-
-			User newUser = User.createNewUser(email, password, username, gender);
-			userRepository.save(newUser);
-
-			return new PrincipalDetails(newUser, oAuth2User.getAttributes());
+		String registrationId = userRequest.getClientRegistration().getRegistrationId();
+		if (registrationId.equals("naver")) {
+			return handleNaverLogin(oAuth2User);
 		}
 		return super.loadUser(userRequest);
+	}
+
+	private PrincipalDetails handleNaverLogin(OAuth2User oAuth2User) {
+		OAuth2UserInfo oAuth2UserInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
+
+		String email = oAuth2UserInfo.getEmail();
+		Gender gender = oAuth2UserInfo.getGender().equals("F") ? Gender.FEMALE : Gender.MALE;
+
+		// 해당아이디로 회원가입 되어있는지 확인
+		Optional<User> user = userRepository.findUserByEmail(email);
+
+		// 이미 회원가입이 되어있으면 그냥 로그인
+		if (user.isPresent()) {
+			User userEntity = user.get();
+
+			return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+		}
+
+		String username = oAuth2UserInfo.getName();
+		User newUser = User.createNewUser(email, null, username, gender);
+		userRepository.save(newUser);
+
+		return new PrincipalDetails(newUser, oAuth2User.getAttributes());
 	}
 
 }
