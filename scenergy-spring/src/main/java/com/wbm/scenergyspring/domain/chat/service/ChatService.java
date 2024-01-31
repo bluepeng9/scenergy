@@ -60,7 +60,6 @@ public class ChatService {
             }
         } else if (messageType.equals("ENTER")) {
             command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
-            chatUser.joinRoom();
         }
         //메시지 entity 생성
         ChatMessage chatMessage = ChatMessage.createChatMessage(

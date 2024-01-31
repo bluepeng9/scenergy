@@ -1,6 +1,5 @@
 package com.wbm.scenergyspring.domain.chat.repository;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.RedisChatRoom;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
@@ -91,7 +90,7 @@ public class RedisChatRepository {
 
     public void chatMessageSave(ChatMessageDto chatMessage) {
         String strRoomId = Long.toString(chatMessage.getChatRoomId());
-        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessage.class));
+        redisTemplateMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatMessageDto.class));
         redisTemplateMessage.opsForList().rightPush(strRoomId, chatMessage);
     }
 
