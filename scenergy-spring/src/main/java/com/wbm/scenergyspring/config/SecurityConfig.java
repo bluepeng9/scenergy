@@ -28,6 +28,8 @@ public class SecurityConfig {
 
 	private final CorsFilter corsFilter;
 	private final UserRepository userRepository;
+	private final String oauthSuccessRedirectUrl = "http://localhost:3000/oauth2/redirect";
+	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@Bean
 	public BCryptPasswordEncoder encodePwd() {
@@ -41,16 +43,21 @@ public class SecurityConfig {
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.formLogin(AbstractHttpConfigurer::disable)
 			.httpBasic(AbstractHttpConfigurer::disable)
+			.oauth2Login(oauth2Login ->
+				oauth2Login
+					.userInfoEndpoint(userInfo -> userInfo.userService(principalOauth2UserService))
+					.successHandler(new OAuth2LoginSuccessHandler(oauthSuccessRedirectUrl))
+			)
 			.authorizeHttpRequests(authorizeHttpRequests ->
 				authorizeHttpRequests
 					.requestMatchers("/user/**").authenticated()
 					.requestMatchers("/admin/**").hasRole("admin")
 					.anyRequest().permitAll()
 			)
-			.oauth2Login(oauth2Login ->
-				oauth2Login
-					.loginPage("/login")
-					.userInfoEndpoint(userInfo -> userInfo.userService(principalOauth2UserService))
+			.exceptionHandling(exceptionHandling ->
+				exceptionHandling
+					.authenticationEntryPoint(customAuthenticationEntryPoint)
+					.accessDeniedHandler(new CustomAccessDeniedHandler())
 			)
 			.with(new MyCustomDsl(), Customizer.withDefaults());
 

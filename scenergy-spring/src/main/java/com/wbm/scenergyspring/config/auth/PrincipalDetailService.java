@@ -23,7 +23,7 @@ public class PrincipalDetailService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User userEntity = userRepository.findUserByEmail(username)
+		User userEntity = userRepository.findByEmail(username)
 			.orElseThrow(() -> new EntityNotFoundException("유저 정보가 없습니다."));
 
 		if (userEntity != null) {

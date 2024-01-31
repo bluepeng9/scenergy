@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -47,15 +46,16 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 		}
 
 		// JWT 토큰 검증 후 정상적인 사용자인지 확인
-		String jwtToken = request.getHeader("Authorization").replace("Bearer", "");
-		String username =
-			JWT.require(Algorithm.HMAC512("webetterthanme")).build().verify(jwtToken).getClaim("username").asString();
+		String jwtToken = request.getHeader("Authorization").replace("Bearer ", "");
+		String userId =
+			JWT.require(Algorithm.HMAC512("webetterthanme")).build().verify(jwtToken).getSubject();
 
 		log.debug("jwt토큰" + jwtToken);
 		// 서명이 정상적으로 진행된 경우
-		if (username != null) {
-			User userEntity = userRepository.findByUsername(username);
+		if (userId != null) {
+			User userEntity = userRepository.findById(Long.valueOf(userId)).get();
 			log.debug("userEntity++" + userEntity);
+			System.out.println("userEntity = " + userEntity);
 			PrincipalDetails principalDetails = new PrincipalDetails(userEntity);
 
 			// JWT 토큰 서명을 통해서 정상이면 authentication 객체 만들어줌
@@ -64,7 +64,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			log.debug("authentication=====" + authentication);
 
 			// 강제로 시큐릴티 세션에 접근해서 Authentication 객체 저장
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			// SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		}
 		chain.doFilter(request, response);

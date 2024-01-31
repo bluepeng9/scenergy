@@ -1,11 +1,11 @@
 spring:
   profiles:
     active: secret
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/security?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8
-    username: root
-    password: ssafy
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost:3306/security?serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8
+  #    username: root
+  #    password: ssafy
 
   jpa:
     properties:

@@ -9,7 +9,7 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-	User findByUsername(String username);
+    User findByUsername(String username);
 
-	Optional<User> findUserByEmail(String userEmail);
+    Optional<User> findByEmail(String userEmail);
 }

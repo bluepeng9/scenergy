@@ -51,7 +51,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		Gender gender = oAuth2UserInfo.getGender().equals("F") ? Gender.FEMALE : Gender.MALE;
 
 		// 해당아이디로 회원가입 되어있는지 확인
-		Optional<User> user = userRepository.findUserByEmail(email);
+		Optional<User> user = userRepository.findByEmail(email);
 
 		// 이미 회원가입이 되어있으면 그냥 로그인
 		if (user.isPresent()) {
