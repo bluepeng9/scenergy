@@ -203,5 +203,8 @@ public class ChatService {
         return messageList;
     }
 
-
+    public ChatRoom findChatRoom(Long roomId) {
+        return chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
+    }
 }
