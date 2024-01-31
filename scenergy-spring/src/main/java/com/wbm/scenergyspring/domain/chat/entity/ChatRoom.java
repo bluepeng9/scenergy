@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -26,9 +27,11 @@ public class ChatRoom extends BaseEntity {
     @Column(name = "status")
     private int status;
 
+    @JsonManagedReference(value = "chatroom-users")
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<ChatUser> chatUsers;
 
+    @JsonManagedReference(value = "chatroom-messages")
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     private List<ChatMessage> chatMessages;
 

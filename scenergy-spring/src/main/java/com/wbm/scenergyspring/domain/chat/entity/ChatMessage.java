@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ public class ChatMessage extends BaseEntity {
     private String messageText;
     private int flag;
 
+    @JsonBackReference(value = "chatroom-messages")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", insertable = false, updatable = false)
     private ChatRoom chatRoom;
