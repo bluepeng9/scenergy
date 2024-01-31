@@ -14,15 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetAllJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.UpdateJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 
@@ -42,13 +41,11 @@ public class JobPostController {
 	}
 
 	@GetMapping("get")
-	public ResponseEntity<ApiResponse<GetJobPostResponse>> getJobPost(
+	public ResponseEntity<ApiResponse<GetJobPostCommandResponse>> getJobPost(
 		@RequestBody GetJobPostRequest request
 	) {
-
-		GetJobPostResponse getJobPostResponse = jobPostService.getJobPost(request.toGetJobPost());
-		return ResponseEntity.ok(ApiResponse.createSuccess(getJobPostResponse));
-
+		GetJobPostCommandResponse getJobPostCommandResponse = jobPostService.getJobPost(request.toGetJobPost());
+		return ResponseEntity.ok(ApiResponse.createSuccess(getJobPostCommandResponse));
 	}
 
 	@PostMapping
