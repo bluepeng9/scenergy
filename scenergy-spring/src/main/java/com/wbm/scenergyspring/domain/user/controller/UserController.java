@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.domain.user.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wbm.scenergyspring.domain.user.controller.request.CreateUserRequest;
 import com.wbm.scenergyspring.domain.user.controller.response.CreateUserResponse;
-import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
-
 import lombok.RequiredArgsConstructor;
-
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -28,6 +26,7 @@ public class UserController {
 	public ResponseEntity<ApiResponse<CreateUserResponse>> createUser(
 		@RequestBody CreateUserRequest request
 	) {
+		log.info("CreateUserRequest: " + request);
 		Long userId = userService.createUser(request.toCreateUserCommand());
 
 		CreateUserResponse createUserResponse = new CreateUserResponse();
