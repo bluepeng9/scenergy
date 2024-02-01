@@ -27,7 +27,7 @@ public class JobPostGenreTag {
 	@JoinColumn(name="job_post_id")
 	private JobPost jobPost;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "genre_tag_id")
 	private GenreTag genreTag;
