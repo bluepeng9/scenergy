@@ -1,23 +1,13 @@
 package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.wbm.scenergyspring.domain.post.Post;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdatePostVideoCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -41,18 +31,18 @@ public class VideoPost extends Post {
     @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL)
     private List<VideoPostInstrumentTag> videoPostInstrumentTags = new ArrayList<>();
 
-    public static VideoPost createVideoPost(
-        User user,
-        Video video,
-        String title,
-        String content,
-        String writer
+    public void createVideoPost(
+            User user,
+            Video video,
+            String title,
+            String content,
+            String writer
     ) {
-        VideoPost videoPost = new VideoPost();
-        videoPost.user = user;
-        videoPost.video = video;
-        videoPost.updatePost(title, content, writer);
-        return videoPost;
+        this.user = user;
+        this.video = video;
+        this.title = title;
+        this.content = content;
+        this.writer = writer;
     }
 
     public void updateVideoPostGenreTags(List<VideoPostGenreTag> videoPostGenreTags) {

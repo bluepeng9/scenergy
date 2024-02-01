@@ -66,7 +66,13 @@ public class VideoPostService {
                     .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
-                    .video(videoPost.getVideo())
+                    .video(VideoCommand.builder()
+                            .id(videoPost.getVideo().getId())
+                            .videoUrlPath(videoPost.getVideo().getVideoUrlPath())
+                            .thumbnailUrlPath(videoPost.getVideo().getThumbnailUrlPath())
+                            .musicTitle(videoPost.getVideo().getMusicTitle())
+                            .artist(videoPost.getVideo().getArtist())
+                            .build())
                     .writer(videoPost.getWriter())
                     .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(videoPost.getVideoPostGenreTags()))
                     .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(videoPost.getVideoPostInstrumentTags()))
@@ -84,7 +90,13 @@ public class VideoPostService {
                 .userId(videoPost.getUser().getId())
                 .title(videoPost.getTitle())
                 .content(videoPost.getContent())
-                .video(videoPost.getVideo())
+                .video(VideoCommand.builder()
+                        .id(videoPost.getVideo().getId())
+                        .videoUrlPath(videoPost.getVideo().getVideoUrlPath())
+                        .thumbnailUrlPath(videoPost.getVideo().getThumbnailUrlPath())
+                        .musicTitle(videoPost.getVideo().getMusicTitle())
+                        .artist(videoPost.getVideo().getArtist())
+                        .build())
                 .writer(videoPost.getWriter())
                 .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(videoPost.getVideoPostGenreTags()))
                 .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(videoPost.getVideoPostInstrumentTags()))
@@ -92,6 +104,7 @@ public class VideoPostService {
         return videoPostCommandResponse;
     }
 
+    @Transactional(readOnly = true)
     public List<VideoPostCommandResponse> getFollowingVideoPost(Long id) {
         List<VideoPostCommandResponse> list = new ArrayList<>();
         for (VideoPost videoPost : videoPostRepository.findAllByFollowing(id)) {
@@ -99,7 +112,13 @@ public class VideoPostService {
                     .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
-                    .video(videoPost.getVideo())
+                    .video(VideoCommand.builder()
+                            .id(videoPost.getVideo().getId())
+                            .videoUrlPath(videoPost.getVideo().getVideoUrlPath())
+                            .thumbnailUrlPath(videoPost.getVideo().getThumbnailUrlPath())
+                            .musicTitle(videoPost.getVideo().getMusicTitle())
+                            .artist(videoPost.getVideo().getArtist())
+                            .build())
                     .writer(videoPost.getWriter())
                     .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(videoPost.getVideoPostGenreTags()))
                     .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(videoPost.getVideoPostInstrumentTags()))
