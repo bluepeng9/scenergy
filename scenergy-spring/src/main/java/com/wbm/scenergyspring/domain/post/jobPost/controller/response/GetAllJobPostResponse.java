@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.post.jobPost.controller.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
 
@@ -18,4 +19,7 @@ public class GetAllJobPostResponse {
 	Long peopleRecruited;
 	Long bookMark;
 	IsActive isActive;
+	List<GenreTagResponse> genreTags;
+	List<InstrumentTagResponse> instrumentTags;
+	List<LocationTagResponse> locationTags;
 }
