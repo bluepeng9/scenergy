@@ -15,6 +15,7 @@ import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
@@ -127,16 +128,22 @@ class VideoPostServiceTest {
         User user1 = User.createNewUser(
                 "email1",
                 "password1",
+                "tester1",
+                Gender.MALE,
                 "nickname1"
         );
         User user2 = User.createNewUser(
                 "email2",
                 "password2",
+                "tester2",
+                Gender.MALE,
                 "nickname2"
         );
         User user3 = User.createNewUser(
                 "email3",
                 "password3",
+                "tester3",
+                Gender.MALE,
                 "nickname3"
         );
         userRepository.save(user1);
@@ -364,6 +371,8 @@ class VideoPostServiceTest {
         User testUser = User.createNewUser(
                 "testEmail",
                 "testPassword",
+                "tester",
+                Gender.MALE,
                 "testNickname"
         );
 
