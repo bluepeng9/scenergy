@@ -138,21 +138,21 @@ class VideoPostServiceTest {
         User user1 = User.createNewUser(
                 "email1",
                 "password1",
-                "tester1",
+                "username1",
                 Gender.MALE,
                 "nickname1"
         );
         User user2 = User.createNewUser(
                 "email2",
                 "password2",
-                "tester2",
+                "username2",
                 Gender.MALE,
                 "nickname2"
         );
         User user3 = User.createNewUser(
                 "email3",
                 "password3",
-                "tester3",
+                "username3",
                 Gender.MALE,
                 "nickname3"
         );
@@ -384,7 +384,7 @@ class VideoPostServiceTest {
         User testUser = User.createNewUser(
                 "testEmail",
                 "testPassword",
-                "tester",
+                "username",
                 Gender.MALE,
                 "testNickname"
         );
