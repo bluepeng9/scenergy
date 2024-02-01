@@ -191,6 +191,7 @@ public class VideoPostService {
     public void createVideoPostGenreTags(List<Long> genreTagIds, VideoPost videoPost) {
         List<VideoPostGenreTag> videoPostGenreTags = videoPost.getVideoPostGenreTags();
         if (videoPostGenreTags != null) {
+            videoPostGenreTagRepository.deleteAll(videoPostGenreTags);
             videoPost.deleteVideoPostGenreTags();
             videoPostGenreTags.clear();
         }
@@ -212,6 +213,7 @@ public class VideoPostService {
     public void createVideoPostInstrumentTag(List<Long> instrumentTags, VideoPost videoPost) {
         List<VideoPostInstrumentTag> videoPostInstrumentTags = videoPost.getVideoPostInstrumentTags();
         if (videoPostInstrumentTags != null) {
+            videoPostInstrumentTagRepository.deleteAll(videoPostInstrumentTags);
             videoPost.deleteVideoPostInstrumentTags();
             videoPostInstrumentTags.clear();
         }
