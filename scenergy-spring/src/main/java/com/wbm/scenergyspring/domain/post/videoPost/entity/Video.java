@@ -2,6 +2,7 @@ package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +25,12 @@ public class Video {
 
     String artist;
 
+	/**
+	 * @deprecated 다른 생성 메서드 사용 {@link #createVideo(String, String, String, String)}
+	 * @param command
+	 * @return
+	 */
+	@Deprecated
     public static Video createVideo(CreateVideoCommand command) {
         Video video = new Video();
         video.videoUrlPath = command.getVideoUrlPath();
@@ -33,6 +40,21 @@ public class Video {
 
         return video;
     }
+
+	public static Video createVideo(
+		String videoUrlPath,
+		String thumbnailUrlPath,
+		String videoTitle,
+		String artist
+	) {
+		Video video = new Video();
+		video.videoUrlPath = videoUrlPath;
+		video.thumbnailUrlPath = thumbnailUrlPath;
+		video.musicTitle = videoTitle;
+		video.artist = artist;
+
+		return video;
+	}
 
     public void updateVideo(UpdateVideoCommand command) {
         if (command.getVideoUrlPath() != null)

@@ -1,5 +1,15 @@
 package com.wbm.scenergyspring.domain.post.videoPost.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
@@ -11,7 +21,13 @@ import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostGenreTag
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostInstrumentTagRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.*;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdatePostVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostGenreTagCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostInstrumentTagCommand;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
@@ -19,16 +35,8 @@ import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -148,8 +156,7 @@ public class VideoPostService {
     @Transactional(readOnly = false)
     public VideoPost createVideoPost(VideoPostCommand command){
         User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 사용자입니다."));
-        VideoPost videoPost = new VideoPost();
-        videoPost.createVideoPost(
+        VideoPost videoPost = VideoPost.createVideoPost(
                 user,
                 command.getVideo(),
                 command.getTitle(),
