@@ -2,7 +2,9 @@ package com.wbm.scenergyspring.domain.tag.repository;
 
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.service.TagService;
+import com.wbm.scenergyspring.global.exception.BusinessException;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +45,9 @@ class GenreTagRepositoryTest {
         String genreName2 = "Jazz";
         //when
         String testGenreName1 = tagService.createGenreTag(genreName1);
-        String testGenreName2 = tagService.createGenreTag(genreName2);
         //then
         assertThat(genreName1).isEqualTo(testGenreName1);
-        assertThat(testGenreName2).isEqualTo("이미 입력된 장르입니다.");
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createGenreTag(genreName2));
     }
 
     @Test
@@ -57,11 +58,9 @@ class GenreTagRepositoryTest {
         String genreName1 = null;
         String genreName2 = "  ";
         //when
-        String testGenreName1 = tagService.createGenreTag(genreName1);
-        String testGenreName2 = tagService.createGenreTag(genreName2);
         //then
-        assertThat(testGenreName1).isEqualTo("장르가 입력되지 않았습니다.");
-        assertThat(testGenreName2).isEqualTo("장르가 입력되지 않았습니다.");
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createGenreTag(genreName1));
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createGenreTag(genreName2));
     }
 
     @Test

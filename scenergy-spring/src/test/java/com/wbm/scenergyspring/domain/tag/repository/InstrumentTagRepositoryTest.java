@@ -2,7 +2,9 @@ package com.wbm.scenergyspring.domain.tag.repository;
 
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.service.TagService;
+import com.wbm.scenergyspring.global.exception.BusinessException;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +40,13 @@ class InstrumentTagRepositoryTest {
     @DisplayName("악기 태그 추가 중복 테스트")
     public void duplicateCreateInstrumentTag() {
         //given
-        String instrument1 = "Jazz";
-        String instrument2 = "Jazz";
+        String instrument1 = "기타";
+        String instrument2 = "기타";
         //when
         String testInstrumentName1 = tagService.createInstrumentTag(instrument1);
-        String testInstrumentName2 = tagService.createInstrumentTag(instrument2);
         //then
         assertThat(testInstrumentName1).isEqualTo(instrument1);
-        assertThat(testInstrumentName2).isEqualTo("이미 입력된 악기입니다.");
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createInstrumentTag(instrument2));
     }
 
     @Test
@@ -55,11 +56,9 @@ class InstrumentTagRepositoryTest {
         String instrumentName1 = null;
         String instrumentName2 = "  ";
         //when
-        String testInstrumentName1 = tagService.createInstrumentTag(instrumentName1);
-        String testInstrumentName2 = tagService.createInstrumentTag(instrumentName2);
         //then
-        assertThat(testInstrumentName1).isEqualTo("악기가 입력되지 않았습니다.");
-        assertThat(testInstrumentName2).isEqualTo("악기가 입력되지 않았습니다.");
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createInstrumentTag(instrumentName1));
+        Assertions.assertThrows(BusinessException.class, () -> tagService.createInstrumentTag(instrumentName2));
     }
 
     @Test
@@ -80,7 +79,7 @@ class InstrumentTagRepositoryTest {
         //given
         InstrumentTag saveInstrumentTag = instrumentTagRepository.save(InstrumentTag.createInstrumentTag("바이올린"));
         //when
-        InstrumentTag findInstrumentTag = instrumentTagRepository.findById(1L).orElseThrow(() -> new EntityNotFoundException(1 + "은 존재하지 않는 악기 Id입니다."));
+        InstrumentTag findInstrumentTag = instrumentTagRepository.findById(saveInstrumentTag.getId()).orElseThrow(() -> new EntityNotFoundException(1 + "은 존재하지 않는 악기 Id입니다."));
         //then
         assertThat(saveInstrumentTag).isEqualTo(findInstrumentTag);
         assertThat(saveInstrumentTag.getInstrumentName()).isEqualTo(findInstrumentTag.getInstrumentName());

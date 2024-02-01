@@ -35,7 +35,7 @@ class VideoTest {
                 .build();
         //when
         Video video = videoPostService.createVideo(createVideoCommand);
-        Optional<Video> testVideo = videoRepository.findById(1L);
+        Optional<Video> testVideo = videoRepository.findById(video.getId());
 
         //then
         assertThat(testVideo).isPresent();

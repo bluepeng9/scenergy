@@ -272,7 +272,7 @@ class VideoPostServiceTest {
         VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
-        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(1L);
+        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost.getId());
         //when
         List<Long> changedGenreTags = new ArrayList<>();
         changedGenreTags.add(1L);

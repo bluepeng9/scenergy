@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,7 +42,7 @@ class VideoPostTest {
         );
         command.setEmail("test@gmail.com");
         command.setPassword("asdf");
-        userService.createUser(command);
+        Long userId = userService.createUser(command);
 
         CreateVideoCommand createVideoCommand = CreateVideoCommand.builder()
                 .videoTitle("testMusic")
@@ -49,12 +51,15 @@ class VideoPostTest {
                 .thumbnailUrlPath("testThumbnailUrl")
                 .build();
         Video testVideo = videoPostService.createVideo(createVideoCommand);
-
+        List<Long> genreTagIds = new ArrayList<>();
+        List<Long> instrumentTagIds = new ArrayList<>();
         VideoPostCommand videoPostCommand = VideoPostCommand.builder()
                 .video(testVideo)
                 .title("testTitle")
                 .content("testContent")
-                .userId(1L)
+                .genreTagIds(genreTagIds)
+                .instrumentTagIds(instrumentTagIds)
+                .userId(userId)
                 .build();
         //when
         VideoPost videoPost = videoPostService.createVideoPost(videoPostCommand);
