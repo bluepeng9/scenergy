@@ -61,7 +61,12 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 		}
 
 		String username = oAuth2UserInfo.getName();
-		User newUser = User.createNewUser(email, null, username, gender);
+		User newUser = User.createNewUser(email,
+			null,
+			username,
+			gender,
+			null
+		);
 		userRepository.save(newUser);
 
 		return new PrincipalDetails(newUser, oAuth2User.getAttributes());
