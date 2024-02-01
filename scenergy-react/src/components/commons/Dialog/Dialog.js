@@ -7,9 +7,9 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 
 import { useState } from "react";
 
-const Dialog = ({ title, onClose, children, showBookmarkButton }) => {
+const Dialog = ({ title, onClose, children, showBookmarkButton, isModalOpen }) => {
   const [isSolid, setIsSolid] = useState(false);
-  const isModalOpen = useSelector((state) => state.isModalOpen);
+  // const isModalOpen = useSelector((state) => state.isModalOpen);
   const dispatch = useDispatch();
 
   const handleMarkChange = () => {
@@ -21,7 +21,7 @@ const Dialog = ({ title, onClose, children, showBookmarkButton }) => {
     return null;
   }
   return (
-    <div className={styles.DialogBack} onClick={() => dispatch(closeModal())}>
+    <div className={styles.DialogBack} onClick={onClose}>
       <div
         className={styles.DialogContent}
         onClick={(e) => e.stopPropagation()}
@@ -37,7 +37,7 @@ const Dialog = ({ title, onClose, children, showBookmarkButton }) => {
             </button>)}
             <button
               className={styles.DialogCloseButton}
-              onClick={() => dispatch(closeModal())}
+              onClick={onClose}
             >
               <FontAwesomeIcon icon={faTimes} />
             </button>

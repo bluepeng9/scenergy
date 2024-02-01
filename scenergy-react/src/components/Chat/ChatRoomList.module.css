@@ -1,17 +1,48 @@
 .roomListGlobal {
   padding: 10px;
-  height: 100vh;
   width: 500px;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid black;
 }
-.roomListHeader{
+.roomListHeader {
+  margin: 0 10px;
   display: flex;
   flex-direction: column;
 }
-.ListUserNickname{
-  height: 3.2rem;
+.Message {
+  margin: 0 10px;
 }
+.ListUserNickname {
+  margin-left: 10px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+.roomListContainer {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.ListItemContainer{
+  padding: 10px;
+  height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.ListItemContainer:hover {
+  background-color: #CF9EAB;
+  transition: 0.3s ease-in-out;
+}
+.ListContentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
 .ListContainer {
   display: flex;
   flex-direction: row;

@@ -1,7 +1,10 @@
-function SearchPage() {
+import NavBar from "../components/commons/Navbar/Navbar"
+import SearchCategory from "../components/commons/Search/SearchCategory";
+const SearchPage=()=> {
   return (
     <>
-      <h2>검색 페이지</h2>
+        <NavBar/>
+        <SearchCategory/>
     </>
   );
 }

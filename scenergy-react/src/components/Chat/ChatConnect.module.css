@@ -1,4 +1,23 @@
-.ChatMsgField {
+.ChatMsg {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.myMessage {
+  color: white;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+  border-radius: 8px;
+  height: 3rem;
+  width: 300px;
+  background-color: #cf9eab;
+}
+
+.otherMessage {
+  text-align: left;
 }
 .ChatInput {
   display: flex;

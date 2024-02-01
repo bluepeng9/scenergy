@@ -26,7 +26,6 @@ const ChatField = () => {
   const handleRoomCreated = (created) => {
     setIsCreated(created);
   };
-
   const handleOpenChange = () => {
     /*setIsModalOpen(true);*/
     dispatch(openModal());
