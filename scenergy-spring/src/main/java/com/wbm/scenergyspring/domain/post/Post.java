@@ -1,13 +1,20 @@
 package com.wbm.scenergyspring.domain.post;
 
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Getter
-public class Post {
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class Post {
 
-    private String title;
-    private String content;
-    private String writer;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    protected String title;
+    protected String content;
+    protected String writer;
 
     public void updatePost(String title, String content, String writer) {
         this.title = title;
