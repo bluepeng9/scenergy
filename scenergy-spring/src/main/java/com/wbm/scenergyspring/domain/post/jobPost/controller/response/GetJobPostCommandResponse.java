@@ -73,7 +73,7 @@ public class GetJobPostCommandResponse {
             .content(jobPost.getContent())
             .expirationDate(jobPost.getExpirationDate())
             .isActive(jobPost.getIsActive())
-            .peopleRecruited(jobPost.getPeopleRecrutied())
+            .peopleRecruited(jobPost.getPeopleRecruited())
             .bookMark(jobPost.getBookMark())
             .build();
     }
@@ -85,20 +85,6 @@ class UserDto {
     Long id;
     String email;
     String nickname;
-}
-
-@Data
-@Builder
-class InstrumentTagDto {
-    Long id;
-    String instrumentName;
-
-    static InstrumentTagDto from(InstrumentTag instrumentTag) {
-        return InstrumentTagDto.builder()
-            .id(instrumentTag.getId())
-            .instrumentName(instrumentTag.getInstrumentName())
-            .build();
-    }
 }
 
 @Data
@@ -127,6 +113,19 @@ class GenreTagDto {
         return GenreTagDto.builder()
             .id(genreTag.getId())
             .genreName(genreTag.getGenreName())
+            .build();
+    }
+}
+@Data
+@Builder
+class InstrumentTagDto {
+    Long id;
+    String instrumentName;
+
+    static InstrumentTagDto from(InstrumentTag instrumentTag) {
+        return InstrumentTagDto.builder()
+            .id(instrumentTag.getId())
+            .instrumentName(instrumentTag.getInstrumentName())
             .build();
     }
 }
