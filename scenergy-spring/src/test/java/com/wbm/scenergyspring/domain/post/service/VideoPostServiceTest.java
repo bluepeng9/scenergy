@@ -318,8 +318,8 @@ class VideoPostServiceTest {
         assertThat(videoPost.getVideo().getThumbnailUrlPath()).isEqualTo(request.getThumbnailUrlPath());
         assertThat(videoPost.getTitle()).isEqualTo(request.getPostTitle());
         assertThat(videoPost.getContent()).isEqualTo(request.getPostContent());
-//        assertThat(videoPostGenreTagRepository.findByVideoPost(videoPost).get().size()).isEqualTo(1);
-//        assertThat(videoPostGenreTagRepository.findByVideoPost(videoPost).get().size()).isEqualTo(1);
+        assertThat(videoPostGenreTagRepository.findByVideoPost(videoPost).get().size()).isEqualTo(1);
+        assertThat(videoPostInstrumentTagRepository.findByVideoPost(videoPost).get().size()).isEqualTo(1);
     }
 
     @Test
