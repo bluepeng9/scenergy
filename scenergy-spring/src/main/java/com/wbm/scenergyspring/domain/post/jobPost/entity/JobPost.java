@@ -95,17 +95,14 @@ public class JobPost extends Post {
 		this.jobPostGenreTags = jobPostGenreTags;
 	}
 
-	@Transactional
 	public void deleteJobPostInstrumentTags() {
 		jobPostInstrumentTags.clear();
 	}
 
-	@Transactional
 	public void deleteJobPostLocationTags() {
 		jobPostLocationTags.clear();
 	}
 
-	@Transactional
 	public void deleteJobPostGenreTags() {
 		jobPostGenreTags.clear();
 	}
