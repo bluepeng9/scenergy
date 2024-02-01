@@ -9,8 +9,8 @@ import com.wbm.scenergyspring.domain.like.Like;
 import com.wbm.scenergyspring.domain.like.repository.LikeRepository;
 import com.wbm.scenergyspring.domain.like.service.command.LikePostCommand;
 import com.wbm.scenergyspring.domain.like.service.command.UnlikePostCommand;
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
-import com.wbm.scenergyspring.domain.post.repository.PostRepository;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
+import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
@@ -23,12 +23,16 @@ import lombok.RequiredArgsConstructor;
 public class LikeService {
 
 	final LikeRepository likeRepository;
-	final PostRepository postRepository;
+	final VideoPostRepository videoPostRepository;
 	final UserRepository userRepository;
 
+	/**
+	 * 게시물에 좋아요 누르기
+	 * @param command
+	 */
 	@Transactional(readOnly = false)
 	public void likePost(LikePostCommand command) {
-		VideoPost videoPost = postRepository.getReferenceById(command.getPostId());
+		VideoPost videoPost = videoPostRepository.getReferenceById(command.getPostId());
 		User user = userRepository.getReferenceById(command.getUserId());
 
 		// 이미 좋아요를 눌렀는지 확인
@@ -46,7 +50,7 @@ public class LikeService {
 
 	@Transactional(readOnly = false)
 	public void unlikePost(UnlikePostCommand command) {
-		VideoPost videoPost = postRepository.getReferenceById(command.getPostId());
+		VideoPost videoPost = videoPostRepository.getReferenceById(command.getPostId());
 		User user = userRepository.getReferenceById(command.getUserId());
 
 		// 좋아요를 누른 적이 없는 게시물인지 확인
@@ -70,14 +74,19 @@ public class LikeService {
 	 */
 	@Transactional(readOnly = true)
 	public List<Like> findLikeListByPostId(Long postId) {
-		VideoPost videoPost = postRepository.getReferenceById(postId);
+		VideoPost videoPost = videoPostRepository.getReferenceById(postId);
 		List<Like> likeList = likeRepository.findByVideoPost(videoPost);
 		return likeList;
 	}
 
+	/**
+	 * 게시물에 좋아요를 누른 유저 수 조회
+	 * @param postId
+	 * @return
+	 */
 	@Transactional(readOnly = true)
 	public int countLikeByPostId(Long postId) {
-		VideoPost videoPost = postRepository.getReferenceById(postId);
+		VideoPost videoPost = videoPostRepository.getReferenceById(postId);
 		return likeRepository.countByVideoPost(videoPost);
 	}
 

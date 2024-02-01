@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.wbm.scenergyspring.domain.like.Like;
-import com.wbm.scenergyspring.domain.post.entity.VideoPost;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 @Repository
