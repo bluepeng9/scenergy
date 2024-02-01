@@ -4,7 +4,9 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.transaction.annotation.Transactional;
 import com.wbm.scenergyspring.domain.post.Post;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 import jakarta.persistence.CascadeType;
@@ -38,17 +40,17 @@ public class JobPost extends Post {
 	@Enumerated(EnumType.STRING)
 	IsActive isActive;
 
-	Long peopleRecrutied;
+	Long peopleRecruited;
 
 	Long bookMark;
 
-	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostInstrumentTag> jobPostInstrumentTags = new ArrayList<>();
 
-	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostLocationTag> jobPostLocationTags = new ArrayList<>();
 
-	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostGenreTag> jobPostGenreTags = new ArrayList<>();
 
 	public static JobPost createNewJobPost(
@@ -56,7 +58,7 @@ public class JobPost extends Post {
 		String title,
 		String content,
 		LocalDateTime expirationDate,
-		Long peopleRecrutied,
+		Long peopleRecruited,
 		Long bookMark,
 		IsActive isActive
 	) {
@@ -65,27 +67,21 @@ public class JobPost extends Post {
 		jobPost.title = title;
 		jobPost.content = content;
 		jobPost.expirationDate = expirationDate;
-		jobPost.peopleRecrutied = peopleRecrutied;
+		jobPost.peopleRecruited = peopleRecruited;
 		jobPost.bookMark = bookMark;
 		jobPost.isActive = isActive;
 		return jobPost;
 	}
 
-	public void updateJobPost(
-		Long jobPostId,
-		String title,
-		String content,
-		LocalDateTime expirationDate,
-		Long peopleRecrutied,
-		Long bookMark,
-		IsActive isActive
-	) {
-		this.title = title;
-		this.content = content;
-		this.expirationDate = expirationDate;
-		this.peopleRecrutied = peopleRecrutied;
-		this.bookMark = bookMark;
-		this.isActive = isActive;
+	public void updateJobPost(UpdateJobPostCommand command) {
+
+		this.title = command.getTitle();
+		this.content = command.getContent();
+		this.expirationDate = command.getExpirationDate();
+		this.peopleRecruited = command.getPeopleRecruited();
+		this.bookMark = command.getBookMark();
+		this.isActive = command.getIsActive();
+
 	}
 
 	public void updateJobPostInstrumentTags(List<JobPostInstrumentTag> jobPostInstrumentTags) {
@@ -99,15 +95,19 @@ public class JobPost extends Post {
 		this.jobPostGenreTags = jobPostGenreTags;
 	}
 
+	@Transactional
 	public void deleteJobPostInstrumentTags() {
-		jobPostInstrumentTags = null;
+		jobPostInstrumentTags.clear();
 	}
 
+	@Transactional
 	public void deleteJobPostLocationTags() {
-		jobPostLocationTags = null;
+		jobPostLocationTags.clear();
 	}
+
+	@Transactional
 	public void deleteJobPostGenreTags() {
-		jobPostGenreTags = null;
+		jobPostGenreTags.clear();
 	}
 
 }
