@@ -8,14 +8,11 @@ spring:
         show_sql: true
         format_sql: true
         use_sql_comments: true
+
   servlet:
     multipart:
       max-file-size: 300MB
       max-request-size: 300MB
-  config:
-    import:
-      - classpath:/aws.yml
-
 
   security:
     oauth2:
