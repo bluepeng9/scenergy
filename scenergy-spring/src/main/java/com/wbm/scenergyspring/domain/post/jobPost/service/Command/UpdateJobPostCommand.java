@@ -9,8 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UpdateJobPostcommand {
-	Long jobPostId;
+public class UpdateJobPostCommand {
 	String title;
 	String content;
 	LocalDateTime expirationDate;
