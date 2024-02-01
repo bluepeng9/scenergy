@@ -42,6 +42,7 @@ class JobPostServiceTest {
 		// given
 		User user = User.createNewUser(
 			"aaa@naver.com",
+			"aaaaa",
 			"aaaaa"
 		);
 		User saveUser = userRepository.save(user);
@@ -61,7 +62,7 @@ class JobPostServiceTest {
 			.title(newJobPost.getTitle())
 			.content(newJobPost.getContent())
 			.expirationDate(newJobPost.getExpirationDate())
-			.peopleRecruited(newJobPost.getPeopleRecrutied())
+			.peopleRecruited(newJobPost.getPeopleRecruited())
 			.bookMark(newJobPost.getBookMark())
 			.isActive(newJobPost.getIsActive())
 			.build();
@@ -83,6 +84,7 @@ class JobPostServiceTest {
 		// given
 		User user = User.createNewUser(
 			"aaa@naver.com",
+			"aaaaa",
 			"aaaaa"
 		);
 
@@ -126,7 +128,8 @@ class JobPostServiceTest {
 		// given
 		User user = User.createNewUser(
 			"aaa@naver.com",
-			"aaaaa"
+			"aaaaa",
+			"aaaa"
 		);
 		JobPost newJobPost = JobPost.createNewJobPost(
 			user,
@@ -155,7 +158,7 @@ class JobPostServiceTest {
 		// given
 		GetJobPostCommand command = new GetJobPostCommand();
 		command.setJobPostId(3L);
-		GetJobPostResponse response = jobPostService.getJobPost(command);
+		GetJobPostResponse response = jobPostService.getJobPost(3L);
 
 		// when
 		JobPost findJob = jobPostRepository.findById(3L)
