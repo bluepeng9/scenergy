@@ -286,7 +286,7 @@ class VideoPostServiceTest {
         List<Long> changedInstrumentTags = new ArrayList<>();
         changedInstrumentTags.add(1L);
         UpdateVideoPostRequest request = new UpdateVideoPostRequest();
-        request.setPostVideoId(1L);
+        request.setPostVideoId(videoPost.getId());
         request.setPostTitle("changedPostTitle");
         request.setPostContent("changedPostContent");
         request.setGenreTags(changedGenreTags);
