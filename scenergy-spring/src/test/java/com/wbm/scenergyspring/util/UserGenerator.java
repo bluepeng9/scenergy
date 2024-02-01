@@ -12,8 +12,7 @@ public class UserGenerator {
 		User user = User.createNewUser(
 			email,
 			"password" + userCount,
-			"M",
-			getRandomGender()
+			"nickname" + userCount
 		);
 		userCount += 1;
 		return user;

@@ -17,6 +17,7 @@ import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
+import com.wbm.scenergyspring.util.UserGenerator;
 
 @SpringBootTest
 @Transactional
@@ -33,14 +34,8 @@ class FollowServiceTest {
 	@DisplayName("팔로잉 정상 테스트")
 	void followUser() {
 		//given
-		User fromUser = User.createNewUser(
-			"test@naver.com",
-			"asdf"
-		);
-		User toUser = User.createNewUser(
-			"test2@naver.com",
-			"asdf"
-		);
+		User fromUser = UserGenerator.createRandomMember();
+		User toUser = UserGenerator.createRandomMember();
 
 		Long toUserId = userRepository.save(toUser).getId();
 		Long fromUserId = userRepository.save(fromUser).getId();
@@ -66,14 +61,8 @@ class FollowServiceTest {
 	@DisplayName("이미 팔로잉 하는 경우")
 	void followUser2() {
 		//given
-		User fromUser = User.createNewUser(
-			"test@naver.com",
-			"asdf"
-		);
-		User toUser = User.createNewUser(
-			"test2@naver.com",
-			"asdf"
-		);
+		User fromUser = UserGenerator.createRandomMember();
+		User toUser = UserGenerator.createRandomMember();
 
 		Long toUserId = userRepository.save(toUser).getId();
 		Long fromUserId = userRepository.save(fromUser).getId();
@@ -98,14 +87,8 @@ class FollowServiceTest {
 	@DisplayName("팔로잉 삭제")
 	void unFollowUser() {
 		//given
-		User fromUser = User.createNewUser(
-			"test@naver.com",
-			"asdf"
-		);
-		User toUser = User.createNewUser(
-			"test2@naver.com",
-			"asdf"
-		);
+		User fromUser = UserGenerator.createRandomMember();
+		User toUser = UserGenerator.createRandomMember();
 
 		Long toUserId = userRepository.save(toUser).getId();
 		Long fromUserId = userRepository.save(fromUser).getId();
@@ -127,18 +110,9 @@ class FollowServiceTest {
 	@DisplayName("모든 팔로워 찾기")
 	void findAllFollowers() {
 		//given
-		User parent = User.createNewUser(
-			"test@naver.com",
-			"asdf"
-		);
-		User child1 = User.createNewUser(
-			"test2@naver.com",
-			"asdf"
-		);
-		User child2 = User.createNewUser(
-			"test3@naver.com",
-			"asdf"
-		);
+		User parent = UserGenerator.createRandomMember();
+		User child1 = UserGenerator.createRandomMember();
+		User child2 = UserGenerator.createRandomMember();
 
 		Long toUserId = userRepository.save(parent).getId();
 		Long child1Id = userRepository.save(child1).getId();
@@ -172,18 +146,9 @@ class FollowServiceTest {
 	void findAllFollowing() {
 
 		//given
-		User parent = User.createNewUser(
-			"test@naver.com",
-			"asdf"
-		);
-		User parent2 = User.createNewUser(
-			"test2@naver.com",
-			"asdf"
-		);
-		User child = User.createNewUser(
-			"test3@naver.com",
-			"asdf"
-		);
+		User parent = UserGenerator.createRandomMember();
+		User parent2 = UserGenerator.createRandomMember();
+		User child = UserGenerator.createRandomMember();
 
 		Long parentId = userRepository.save(parent).getId();
 		Long parentId2 = userRepository.save(parent2).getId();
