@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,10 +19,7 @@ import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostR
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetAllJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.UpdateJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 
@@ -40,7 +38,7 @@ public class JobPostController {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getAllJobPostList()), HttpStatus.OK);
 	}
 
-	@GetMapping("get")
+	@GetMapping("/get")
 	public ResponseEntity<ApiResponse<GetJobPostCommandResponse>> getJobPost(
 		@RequestBody GetJobPostRequest request
 	) {
@@ -61,16 +59,12 @@ public class JobPostController {
 			return ResponseEntity.ok(ApiResponse.createSuccess(createJobPostResponse));
 	}
 
-	@PutMapping
-	public ResponseEntity<ApiResponse<UpdateJobPostResponse>> updateJobPost(
-		@RequestBody UpdateJobPostRequest request
+	@PutMapping("{id}")
+	public ResponseEntity<ApiResponse<String>> updateJobPost(
+		@PathVariable Long id,  @RequestBody UpdateJobPostRequest request
 	) {
-		Long jobPostId = jobPostService.updateJobPost(request.toUpdateJobPost());
-
-		UpdateJobPostResponse updateJobPostResponse = new UpdateJobPostResponse();
-		updateJobPostResponse.setJobPostId(jobPostId);
-
-		return ResponseEntity.ok(ApiResponse.createSuccess(updateJobPostResponse));
+		jobPostService.updateJobPost(id, request);
+		return new ResponseEntity<>(ApiResponse.createSuccess("success"), HttpStatus.OK);
 	}
 
 	@DeleteMapping

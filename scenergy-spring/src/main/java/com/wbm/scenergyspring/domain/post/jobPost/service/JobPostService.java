@@ -7,24 +7,20 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostGenreTagRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostInstrumentrepository;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostInstrumentRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostLocationRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.JobPostGenreTagCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.JobPostInstrumentCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.JobPostLocationCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostcommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostCommand;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
@@ -39,7 +35,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class JobPostService {
 
 	final UserRepository userRepository;
@@ -50,7 +45,7 @@ public class JobPostService {
 	final LocationTagRepository locationTagRepository;
 
 	final JobPostGenreTagRepository jobPostGenreTagRepository;
-	final JobPostInstrumentrepository jobPostInstrumentrepository;
+	final JobPostInstrumentRepository jobPostInstrumentrepository;
 	final JobPostLocationRepository jobPostLocationRepository;
 
 	@Transactional(readOnly = false)
@@ -73,20 +68,20 @@ public class JobPostService {
 	}
 
 	@Transactional(readOnly = false)
-	public Long updateJobPost(UpdateJobPostcommand command) {
-		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+	public boolean updateJobPost(Long id, UpdateJobPostRequest request) {
+		JobPost jobPost = jobPostRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("수정 실패"));
-		jobPost.updateJobPost(
-			command.getJobPostId(),
-			command.getTitle(),
-			command.getContent(),
-			command.getExpirationDate(),
-			command.getPeopleRecruited(),
-			command.getBookMark(),
-			command.getIsActive()
-		);
 
-	return command.getJobPostId();
+		if (request.getGenreTags() != null)
+			createJobPostGenreTag(request.getGenreTags(), jobPost);
+		if(request.getInstrumentTags() != null)
+			createJobPostInstrumentTag(request.getInstrumentTags(),jobPost);
+		if(request.getLocationTags() != null)
+			createJobPostLocationTag(request.getLocationTags(),jobPost);
+
+		UpdateJobPostCommand command = request.updateJobPostCommand();
+		jobPost.updateJobPost(command);
+		return true;
 	}
 
 	@Transactional(readOnly = false)
@@ -118,7 +113,6 @@ public class JobPostService {
 		List<JobPostGenreTag> jobPostGenreTags = jobPost.getJobPostGenreTags();
 		if (jobPostGenreTags != null) {
 			jobPost.deleteJobPostGenreTags();
-			jobPostGenreTags.clear();
 		}
 
 		for (Long genreTagId : genreTags) {
@@ -140,12 +134,11 @@ public class JobPostService {
 		List<JobPostInstrumentTag> jobPostInstrumentTags = jobPost.getJobPostInstrumentTags();
 		if (jobPostInstrumentTags != null) {
 			jobPost.deleteJobPostInstrumentTags();
-			jobPostInstrumentTags.clear();
 		}
 
 		for (Long instrumentId : instrumentTags) {
 			InstrumentTag instrumentTag = instrumentTagRepository.findById(instrumentId)
-				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 장르태그"));
+				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 악기태그"));
 
 			JobPostInstrumentTag jobPostInstrumentTag = new JobPostInstrumentTag();
 			jobPostInstrumentTag.updateJobPost(jobPost);
@@ -156,18 +149,17 @@ public class JobPostService {
 			jobPostInstrumentTags.add(jobPostInstrumentTag);
 		}
 		jobPost.updateJobPostInstrumentTags(jobPostInstrumentTags);
-	}
 
+		}
 	public void createJobPostLocationTag(List<Long> locationTags, JobPost jobPost) {
 		List<JobPostLocationTag> jobPostLocationTags = jobPost.getJobPostLocationTags();
 		if (jobPostLocationTags != null) {
 			jobPost.deleteJobPostLocationTags();
-			jobPostLocationTags.clear();
 		}
 
 		for (Long locationId : locationTags) {
 			LocationTag locationTag = locationTagRepository.findById(locationId)
-				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 장르태그"));
+				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역태그"));
 
 			JobPostLocationTag jobPostLocationTag = new JobPostLocationTag();
 			jobPostLocationTag.updateJobPost(jobPost);
