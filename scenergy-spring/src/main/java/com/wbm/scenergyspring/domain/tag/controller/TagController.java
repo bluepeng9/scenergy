@@ -45,7 +45,7 @@ public class TagController {
         return new ResponseEntity<>(ApiResponse.createError("장르를 재확인 부탁드립니다."), HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/tag/instrument/create")
+    @PostMapping("/tag/instrument/create")
     public ResponseEntity<ApiResponse<String>> createInstrumentTag(String instrumentName) {
         String msg = tagService.createInstrumentTag(instrumentName);
         if (msg.equals(instrumentName))
