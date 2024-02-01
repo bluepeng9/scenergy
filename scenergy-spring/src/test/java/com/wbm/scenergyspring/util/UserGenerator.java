@@ -2,6 +2,7 @@ package com.wbm.scenergyspring.util;
 
 import java.util.Random;
 
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 public class UserGenerator {
@@ -12,6 +13,8 @@ public class UserGenerator {
 		User user = User.createNewUser(
 			email,
 			"password" + userCount,
+			"username" + userCount,
+			Gender.FEMALE,
 			"nickname" + userCount
 		);
 		userCount += 1;
