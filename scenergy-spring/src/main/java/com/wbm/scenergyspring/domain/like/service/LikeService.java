@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wbm.scenergyspring.domain.like.Like;
+import com.wbm.scenergyspring.domain.like.entity.Like;
 import com.wbm.scenergyspring.domain.like.repository.LikeRepository;
 import com.wbm.scenergyspring.domain.like.service.command.LikePostCommand;
 import com.wbm.scenergyspring.domain.like.service.command.UnlikePostCommand;
