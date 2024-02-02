@@ -24,7 +24,7 @@ public class ChatMessage extends BaseEntity {
 
     @JsonBackReference(value = "chatroom-messages")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "room_id", insertable = false, updatable = false)
+    @JoinColumn(name = "room_id", updatable = false)
     private ChatRoom chatRoom;
 
     public static ChatMessage createChatMessage(
