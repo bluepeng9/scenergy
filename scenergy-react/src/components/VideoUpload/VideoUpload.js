@@ -1,13 +1,16 @@
 import React, {useState, useRef} from 'react';
 import styles from './VideoUploadModal.module.css';
 import videoUploadImage from '../../assets/VideoUpload/VideoUpload.png';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
+
 
 const VideoUpload = () => {
     // 장르와 악기 카테고리 목록
     const genres = ['팝', '발라드', '인디', '힙합', '락', 'R&B', '재즈', '클래식', '그 외'];
     const instruments = ['기타', '베이스', '드럼', '키보드', '보컬', '그 외'];
 
-    // 선택된 장르와 악기 상태
+    // 선택 장르와 악기 상태
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [selectedInstruments, setSelectedInstruments] = useState([]);
 
@@ -83,20 +86,41 @@ const VideoUpload = () => {
 
     const thumbnailInputRef = useRef(null);
 
+    // 업로드 버튼 누른 후 로직
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
+
     const handleUpload = () => {
-        // TODO: Handle video upload and details submission logic
+        // Handle video upload, details
         console.log('Video uploaded:', selectedVideo); //동영상
         console.log('Thumbnail uploaded:', thumbnail); //썸네일
         console.log('Video details:', videoDetails); //세부정보
         console.log('Video category genres:', selectedGenres); //검색 카테고리 (장르)
         console.log('Video category instruments:', selectedInstruments); //검색 카테고리 (악기)
         // 서버와 통신하고, 동영상 업로드 및 세부 정보 저장하는 로직 추가하기
+
+        // 업로드 성공 여부에 따라 모달 표시
+        if (1) { /*업로드 성공시*/
+            setShowSuccessModal(true);
+        } else {
+            setShowErrorModal(true);
+        }
     };
 
+    const closeSuccessModal = () => {
+        setShowSuccessModal(false);
+
+        // 성공 모달이 닫힐 때, 동영상 업로드 창으로 돌아가기
+        setSelectedVideo(null);
+    };
+
+    const closeErrorModal = () => {
+        setShowErrorModal(false);
+    };
 
     return (
         <div className={styles.videoUploadContainer}>
-            <h2>동영상 업로드</h2>
+            <h2 className={styles.title}>동영상 업로드</h2>
             <hr/>
 
             {selectedVideo ? (
@@ -137,98 +161,118 @@ const VideoUpload = () => {
             )}
 
             {selectedVideo && (
+
                 <>
+                    <hr/>
                     <div className={styles.videoDetail}>
                         <h2 style={{textAlign: 'center'}}>세부정보</h2>
-                        <div>
-                            <label>
-                                <p>제목 (필수항목)</p>
-                                <input
-                                    type="text"
-                                    value={videoDetails.title}
-                                    onChange={(e) => setVideoDetails({...videoDetails, title: e.target.value})}
-                                />
-                            </label>
-                        </div>
-
-                        <div>
-                            <label>
-                                <p>연주곡 또는 원제목 (필수항목)</p>
-                                <input
-                                    type="text"
-                                    value={videoDetails.musicTitle}
-                                    onChange={(e) => setVideoDetails({...videoDetails, musicTitle: e.target.value})}
-                                />
-                            </label>
-                        </div>
-
-                        <div>
-                            <label>
-                                <p> 연주곡 원작자 (필수항목)</p>
-                                <input
-                                    type="text"
-                                    value={videoDetails.artist}
-                                    onChange={(e) => setVideoDetails({...videoDetails, artist: e.target.value})}
-                                />
-                            </label>
-                        </div>
-
-                        <div>
-                            <label>
-                                <p>설명</p>
-                                <textarea
-                                    value={videoDetails.description}
-                                    onChange={(e) => setVideoDetails({...videoDetails, description: e.target.value})}
-                                />
-                            </label>
-                        </div>
-
-
-                        <div className={styles.searchCategory}>
-                            <h3>검색 카테고리</h3>
-
-                            <p>영상과 관련한 카테고리를 선택해주세요. 선택한 카테고리는 시청자의 빠른 검색에 도움이 될 것입니다.</p>
-                            {/* 장르 선택 */}
-                            <p>장르</p>
-                            <div className={styles.categoryCheckboxContainer}>
-                                {genres.map((genre) => (
-                                    <label key={genre}>
-                                        <input
-                                            type="checkbox"
-                                            value={genre}
-                                            checked={selectedGenres.includes(genre)}
-                                            onChange={() => handleGenreSelect(genre)}
-                                        />
-                                        {genre}
-                                    </label>
-                                ))}
+                        <div className={styles.videoDetailInputDiv}>
+                            <div>
+                                <label>
+                                    <p>제목 (필수항목)</p>
+                                    <input
+                                        className={styles.DetailInputBox}
+                                        type="text"
+                                        value={videoDetails.title}
+                                        onChange={(e) => setVideoDetails({...videoDetails, title: e.target.value})}
+                                    />
+                                </label>
                             </div>
 
-                            {/* 악기 선택 */}
-                            <p>악기</p>
-                            <div className={styles.categoryCheckboxContainer}>
-                                {instruments.map((instrument) => (
-                                    <label key={instrument}>
-                                        <input
-                                            type="checkbox"
-                                            value={instrument}
-                                            checked={selectedInstruments.includes(instrument)}
-                                            onChange={() => handleInstrumentSelect(instrument)}
-                                        />
-                                        {instrument}
-                                    </label>
-                                ))}
+                            <div>
+                                <label>
+                                    <p>연주곡 또는 원제목 (필수항목)</p>
+                                    <input
+                                        className={styles.DetailInputBox}
+                                        type="text"
+                                        value={videoDetails.musicTitle}
+                                        onChange={(e) => setVideoDetails({...videoDetails, musicTitle: e.target.value})}
+                                    />
+                                </label>
+                            </div>
+
+                            <div>
+                                <label>
+                                    <p> 연주곡 원작자 (필수항목)</p>
+                                    <input
+                                        className={styles.DetailInputBox}
+                                        type="text"
+                                        value={videoDetails.artist}
+                                        onChange={(e) => setVideoDetails({...videoDetails, artist: e.target.value})}
+                                    />
+                                </label>
+                            </div>
+
+                            <div>
+                                <label>
+                                    <p>설명</p>
+                                    <textarea
+                                        className={styles.DetailInputBox}
+                                        value={videoDetails.description}
+                                        onChange={(e) => setVideoDetails({
+                                            ...videoDetails,
+                                            description: e.target.value
+                                        })}
+                                    />
+                                </label>
+                            </div>
+                        </div>
+
+                        <div className={styles.searchCategory}>
+                            <h3>검색 카테고리
+                                <FontAwesomeIcon icon={faCircleInfo} className={styles.infomationIcon}/>
+                            </h3>
+
+                            <p className={styles.searchCategoryText}>영상과 관련한 카테고리를 선택해주세요. 선택한 카테고리는 시청자의 빠른 검색에 도움이 될
+                                것입니다.</p>
+                            {/* 장르 선택 */}
+                            <div className={styles.categoryDiv}>
+                                <h4>장르</h4>
+                                <div className={styles.categoryCheckboxContainer}>
+                                    {genres.map((genre) => (
+                                        <label key={genre}>
+                                            <input
+                                                className={styles.categoryGenre}
+                                                type="checkbox"
+                                                value={genre}
+                                                checked={selectedGenres.includes(genre)}
+                                                onChange={() => handleGenreSelect(genre)}
+                                            />
+                                            {genre}
+                                        </label>
+                                    ))}
+                                </div>
+
+
+                                {/* 악기 선택 */}
+                                <h4>악기</h4>
+                                <div className={styles.categoryCheckboxContainer}>
+                                    {instruments.map((instrument) => (
+                                        <label key={instrument}>
+                                            <input
+                                                type="checkbox"
+                                                value={instrument}
+                                                checked={selectedInstruments.includes(instrument)}
+                                                onChange={() => handleInstrumentSelect(instrument)}
+                                            />
+                                            {instrument}
+                                        </label>
+                                    ))}
+                                </div>
                             </div>
 
                         </div>
 
                     </div>
 
+<hr/>
 
-                    <div className={styles.uploadSection}>
+                    <div className={styles.uploadSectionThumbnail}>
                         <label>
                             <h2>썸네일</h2>
-                            <p> 동영상의 내용을 알려주는 사진을 선택하거나 업로드하세요. 시청자의 시선을 사로잡을만한 이미지를 사용해 보세요.</p>
+
+                            <p> 동영상의 내용을 알려주는 사진을 선택하거나 업로드하세요. </p>
+                            <p className={styles.ThumbnailInfoText}>시청자의 시선을 사로잡을만한 이미지를 사용해 보세요.</p>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -251,10 +295,15 @@ const VideoUpload = () => {
                         </button>
                     </div>
 
+                    <hr/>
+
                     <div className={styles.uploadSection}>
                         <h2>재생목록</h2>
-                        <p>일반 영상목록에 업로드가 됩니다. 대표영상으로 지정하고 싶다면, '프로필 > 대표영상편집'에서 설정할 수 있습니다.</p>
+                        <p>일반 영상목록에 업로드가 됩니다.</p>
+                        <p>대표영상으로 지정하고 싶다면, '프로필 > 대표영상편집'에서 설정할 수 있습니다.</p>
                     </div>
+
+                    <hr/>
 
                     <div className={styles.uploadSection}>
                         <p>불법촬영물 게재시 삭제 조치되고 관련 법에 따라 처벌 받을 수 있습니다.</p>
@@ -263,6 +312,29 @@ const VideoUpload = () => {
                             업로드
                         </button>
                     </div>
+
+                    {/* 성공 모달 */}
+                    {showSuccessModal && (
+                        <div className={`${styles.modal} ${styles.successModal}`}>
+                            <div className={`${styles.modalContent} ${styles.successModalContent}`}>
+                                {/*<span className={styles.closeModal} onClick={closeSuccessModal}>&times;</span>*/}
+                                <p>업로드가 성공적으로 완료되었습니다.</p>
+                                <p>프로필에서 확인할 수 있습니다.</p>
+                                <button className={styles.closeModal} onClick={closeSuccessModal}>확인</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* 에러 모달 */}
+                    {showErrorModal && (
+                        <div className={`${styles.modal} ${styles.errorModal}`}>
+                            <div className={`${styles.modalContent} ${styles.errorModalContent}`}>
+                                {/*<span className={styles.closeModal} onClick={closeErrorModal}>&times;</span>*/}
+                                <p>업로드 중 오류가 발생했습니다. 다시 시도해주세요.</p>
+                                <button className={styles.closeModal} onClick={closeErrorModal}>확인</button>
+                            </div>
+                        </div>
+                    )}
                 </>
             )}
         </div>

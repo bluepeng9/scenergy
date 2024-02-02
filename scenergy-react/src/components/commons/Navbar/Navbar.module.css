@@ -1,101 +1,103 @@
 .NavBarContainer {
-  width: 200px;
-  height: 100vh;
-  background-color: black;
-  padding: 1.5rem;
-  border-top-right-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    width: 200px;
+    height: 100vh;
+    background-color: black;
+    padding: 1.5rem;
+    border-top-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
   box-shadow: 0px 0px 10px rgba(0, 0, 0);
 }
 
 .NavBarContainer ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .NavBarContainer li {
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .NavBarContainer a,
 .NavBarContainer p {
-  border-radius: 5px;
-  text-decoration: none;
-  color: whitesmoke;
-  font-size: 1rem;
-  font-weight: 600;
-  display: block;
-  padding: 15px 15px;
-  transition: all 0.2s ease;
+    border-radius: 5px;
+    text-decoration: none;
+    color: whitesmoke;
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    padding: 15px 15px;
+    transition: all 0.2s ease;
 }
+
 .NavBarContainer a:not(.ScenergyTab a):not(.NavBarDropMenu a):not(:nth-child(3)):hover,
 .NavBarContainer p:hover {
-  background-color: white;
-  transform: scale(1.05);
-  color: black;
+    background-color: white;
+    transform: scale(1.05);
+    color: black;
 }
 
 .ScenergyTab {
-  height: 3rem;
-  display: flex;
-  align-items: center;
+    height: 3rem;
+    display: flex;
+    align-items: center;
 }
+
 .ScenergyTab a {
-  font-size: 2rem;
+    font-size: 2rem;
 }
 
 .NavBarNotice {
-  color: whitesmoke;
-  cursor: pointer;
+    color: whitesmoke;
+    cursor: pointer;
 }
 
 /* 드롭다운 메뉴 스타일 */
 .NavBarDropdownGlobal {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .NavBarDropMenu {
-  display: none;
-  background-color: rgb(0, 0, 0);
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  width: 100%;
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 0.1s ease;
+    display: none;
+    background-color: rgb(0, 0, 0);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.1s ease;
 }
 
 .NavBarDropdownGlobal.dropdownOpen .NavBarDropMenu {
-  display: block;
-  opacity: 1;
-  transform: translateY(0);
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .NavBarDropMenu li {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .NavBarDropMenu a {
-  border-radius: 0px;
-  padding: 10px;
-  color: rgba(242, 242, 242, 0.66);
-  font-size: 13px;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
+    border-radius: 0px;
+    padding: 10px;
+    color: rgba(242, 242, 242, 0.66);
+    font-size: 13px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
 }
 
 .NavBarDropMenu a:hover {
-  background-color: white;
-  color: black;
-  border-radius: 0px;
+    background-color: white;
+    color: black;
+    border-radius: 0px;
 }
 
 .NavBarDropdownGlobal:hover .NavBarDropMenu {
-  display: block;
-  opacity: 1;
-  transform: translate(0);
-  display: block;
+    display: block;
+    opacity: 1;
+    transform: translate(0);
+    display: block;
 }
