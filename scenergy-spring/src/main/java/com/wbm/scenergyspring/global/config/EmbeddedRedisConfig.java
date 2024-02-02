@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import redis.embedded.RedisServer;
 
 //@Profile("local"): 로컬 환경에서만 작동하도록
-@Profile("local")
+@Profile("secret")
 @Configuration
 public class EmbeddedRedisConfig {
     @Value("${spring.redis.port}")

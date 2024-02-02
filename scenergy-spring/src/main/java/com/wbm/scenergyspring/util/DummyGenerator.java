@@ -3,6 +3,7 @@ package com.wbm.scenergyspring.util;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,9 +26,21 @@ public class DummyGenerator {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional
     public void init() {
+        createAdminUser();
         List<User> dummyUsers = createDummyUsers(3);
         createDummyChatRoom(dummyUsers.get(0), dummyUsers.get(1));
         createDummyChatRoom(dummyUsers.get(0), dummyUsers.get(2));
+    }
+
+    private void createAdminUser() {
+        User user = User.createNewUser(
+                "admin@scenergy.com",
+                "1234",
+                "admin",
+                Gender.MALE,
+                "admin"
+        );
+        userRepository.save(user);
     }
 
     public List<User> createDummyUsers(int count) {
@@ -36,6 +49,8 @@ public class DummyGenerator {
             User user = User.createNewUser(
                     "email" + userCount + "@test.com",
                     "password" + userCount,
+                    "username" + userCount,
+                    Gender.MALE,
                     "uniquenickname" + userCount
             );
             users.add(user);
@@ -55,10 +70,6 @@ public class DummyGenerator {
                 .roomName("room" + chatRoomCount)
                 .status(userList.size() < 3 ? 0 : 1)
                 .build();
-        System.out.println(command);
-        System.out.println(command);
-        System.out.println(command);
-        System.out.println(command);
         Long chatRoomId = chatService.createChatRoom(command);
         chatRoomCount += 1;
         return chatService.findChatRoom(chatRoomId);

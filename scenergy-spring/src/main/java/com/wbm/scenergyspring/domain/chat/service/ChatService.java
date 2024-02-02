@@ -30,6 +30,7 @@ public class ChatService {
     final ChatUserRepository chatUserRepository;
     final UserRepository userRepository;
     final RedisChatRepository redisChatRepository;
+
     final RedisPublisher redisPublisher;
 
     /**
