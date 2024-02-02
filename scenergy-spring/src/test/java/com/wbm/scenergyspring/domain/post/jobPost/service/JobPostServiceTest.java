@@ -2,6 +2,8 @@ package com.wbm.scenergyspring.domain.post.jobPost.service;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -56,6 +58,10 @@ class JobPostServiceTest {
 			IsActive.active
 		);
 
+		List<Long> genreTags = new ArrayList<>();
+		List<Long> instrumentTags = new ArrayList<>();
+		List<Long> locationTags = new ArrayList<>();
+
 		CreateJobPostCommand command = CreateJobPostCommand.builder()
 			.userId(saveUser.getId())
 			.title(newJobPost.getTitle())
@@ -64,6 +70,9 @@ class JobPostServiceTest {
 			.peopleRecruited(newJobPost.getPeopleRecruited())
 			.bookMark(newJobPost.getBookMark())
 			.isActive(newJobPost.getIsActive())
+			.locationTagIds(locationTags)
+			.genreTagIds(genreTags)
+			.instrumentTagIds(instrumentTags)
 			.build();
 
 		// when
