@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class LoadChatMessageRequest {
-    Long room_id;
+    Long chatMessage_id;
 
     public LoadChatMessageCommand toLoadChatMessageCommand() {
         LoadChatMessageCommand command = LoadChatMessageCommand.builder()
-                .roomId(room_id)
+                .chatMessageId(chatMessage_id)
                 .build();
         return command;
     }

@@ -166,9 +166,19 @@ public class ChatService {
      * @param command userId
      * @return List<ChatRoom>
      */
-    public List<ChatRoom> listMyChatRoom(ListMyChatRoomCommand command) {
+    public List<ChatRoomDto> listMyChatRoom(ListMyChatRoomCommand command) {
+        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
         List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(command.getUserId());
-        return myChatRoom;
+        for (ChatRoom chatRoom : myChatRoom) {
+            ChatRoomDto chatRoomDto = ChatRoomDto.from(chatRoom);
+            List<User> chatUsers = chatUserRepository.findAllByChatRoom(chatRoom);
+            ChatMessage firstChatMessage = chatMessageRepository.findTop1ByChatRoomOrderByCreatedAtDesc(chatRoom).orElseThrow(() -> new EntityNotFoundException("채팅방에 message가 존재하지 않음"));
+            ChatMessageDto firstChatMessageDto = ChatMessageDto.from(firstChatMessage);
+            chatRoomDto.setFirstChatMessage(firstChatMessageDto);
+            chatRoomDto.setChatUsers(chatUsers);
+            chatRoomDtoList.add(chatRoomDto);
+        }
+        return chatRoomDtoList;
     }
 
     /**
@@ -178,22 +188,19 @@ public class ChatService {
      */
     public List<ChatMessageDto> loadChatMessage(LoadChatMessageCommand command) {
         List<ChatMessageDto> messageList = new ArrayList<>(); // return
+        //메시지 조회 후 dto에 삽입
+        ChatMessageDto lastChatMessageDto = ChatMessageDto.from(chatMessageRepository.findById(command.getChatMessageId()).get());
         //redis 조회
-        List<ChatMessageDto> redisMessageList = redisChatRepository.loadChatMessage(command.getRoomId());
-        if (redisMessageList == null || redisMessageList.isEmpty()) {
-            ChatRoom chatRoom = chatRoomRepository.findById(command.getRoomId())
+        List<ChatMessageDto> redisMessageList = redisChatRepository.loadChatMessage(lastChatMessageDto);
+        if (redisMessageList == null) { // redis에 존재하지 않는 경우
+            ChatRoom chatRoom = chatRoomRepository.findById(lastChatMessageDto.getChatRoomId())
                     .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
             //RDB 조회
-            List<ChatMessage> RDBMessageList = chatMessageRepository.findTop100ByChatRoomOrderByCreatedAtAsc(chatRoom);
+            List<ChatMessage> RDBMessageList = chatMessageRepository.findTop100OrderByCreatedAtDescWhereCurrent(lastChatMessageDto);
             for (ChatMessage chatMessage : RDBMessageList) {
                 //메시지 dto 생성
-                ChatMessageDto chatMessageDto = ChatMessageDto.builder()
-                        .chatRoomId(chatMessage.getChatRoom().getId())
-                        .messageText(chatMessage.getMessageText())
-                        .senderId(chatMessage.getSenderId())
-                        .createdAt(chatMessage.getCreatedAt())
-                        .flag(1)
-                        .build();
+                ChatMessageDto chatMessageDto = ChatMessageDto.from(chatMessage);
+                //redis 등록
                 redisChatRepository.chatMessageSave(chatMessageDto);
                 messageList.add(chatMessageDto);
             }

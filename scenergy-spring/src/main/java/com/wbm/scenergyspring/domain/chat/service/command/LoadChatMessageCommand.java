@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class LoadChatMessageCommand {
-    private Long roomId;
+    private Long chatMessageId;
 }
