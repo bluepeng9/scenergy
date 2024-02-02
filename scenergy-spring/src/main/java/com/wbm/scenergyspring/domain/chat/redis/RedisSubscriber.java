@@ -1,7 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.data.redis.connection.Message;
@@ -32,6 +32,6 @@ public class RedisSubscriber implements MessageListener {
         //redis에서 발행된 데이터를 받아 deserialize
         String publishMessage = (String) redisTemplate.getStringSerializer().deserialize(message.getBody());
         ChatMessageDto chatMessage = objectMapper.readValue(publishMessage, ChatMessageDto.class);
-        messagingTemplate.convertAndSend("sub/chat/room/" + chatMessage.getChatRoomId(), chatMessage);
+        messagingTemplate.convertAndSend("/sub/chat/room/" + chatMessage.getChatRoomId(), chatMessage);
     }
 }
