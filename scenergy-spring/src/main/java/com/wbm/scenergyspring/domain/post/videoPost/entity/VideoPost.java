@@ -25,10 +25,10 @@ public class VideoPost extends Post {
     @JoinColumn(name = "video_id")
     Video video;
 
-    @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VideoPostGenreTag> videoPostGenreTags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "videoPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VideoPostInstrumentTag> videoPostInstrumentTags = new ArrayList<>();
 
     public void createVideoPost(
@@ -63,10 +63,10 @@ public class VideoPost extends Post {
     }
 
     public void deleteVideoPostGenreTags() {
-        videoPostGenreTags = null;
+        videoPostGenreTags.clear();
     }
 
     public void deleteVideoPostInstrumentTags() {
-        videoPostInstrumentTags = null;
+        videoPostInstrumentTags.clear();
     }
 }
