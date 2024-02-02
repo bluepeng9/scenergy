@@ -53,17 +53,17 @@ public class ChatRoomController {
     }
 
     @GetMapping("/list-mychatroom")
-    public ResponseEntity<ApiResponse<ListMyChatRoomResponse>> listMyChatRoom(@RequestBody ListMyChatRoomRequest request) {
+    public ResponseEntity<ApiResponse<ListMyChatRoomResponse>> listMyChatRoom(ListMyChatRoomRequest request) {
         log.info("ListMyChatRoomRequest: " + request);
         List<ChatRoomDto> list = chatService.listMyChatRoom(request.toListMyChatRoomCommand());
         ListMyChatRoomResponse response = ListMyChatRoomResponse.builder()
-                .MyChatRoomList(list)
+                .myChatRoomList(list)
                 .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
 
     @GetMapping("/load-message-room")
-    public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(@RequestBody LoadChatMessageRequest request) {
+    public ResponseEntity<ApiResponse<LoadChatMessageResponse>> loadChatMessage(LoadChatMessageRequest request) {
         log.info("LoadChatMessageRequest: " + request);
         List<ChatMessageDto> messageList = chatService.loadChatMessage(request.toLoadChatMessageCommand());
         LoadChatMessageResponse response = LoadChatMessageResponse.builder()
