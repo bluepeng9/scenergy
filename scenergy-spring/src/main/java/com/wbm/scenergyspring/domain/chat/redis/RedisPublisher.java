@@ -1,6 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.redis;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;

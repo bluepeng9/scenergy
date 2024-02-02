@@ -1,7 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.repository;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.entity.RedisChatRoom;
+import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -37,38 +37,38 @@ public class RedisChatRepository {
         topics = new HashMap<>();
     }
 
-    public List<RedisChatRoom> findAllRoom() {
+    public List<RedisChatRoomDto> findAllRoom() {
         return opsHashChatRoom.values(CHAT_ROOMS);
     }
 
-    public RedisChatRoom findRoomById(String id) {
+    public RedisChatRoomDto findRoomById(String id) {
         return opsHashChatRoom.get(CHAT_ROOMS, id);
     }
 
     public Long renameChatRoom(Long roomId, String name) {
         String strRoomId = Long.toString(roomId);
-        RedisChatRoom redisChatRoom = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
-        redisChatRoom.updateRoomName(name);
-        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoom.getRoomId()), redisChatRoom);
+        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        redisChatRoomDto.updateRoomName(name);
+        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
         return roomId;
     }
 
     public int updateMemberCount(Long roomId, int count) {
         String strRoomId = Long.toString(roomId);
-        RedisChatRoom redisChatRoom = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
-        redisChatRoom.updateMemberCount(count);
-        if (redisChatRoom.getMemberCount() <= 0) {
+        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        redisChatRoomDto.updateMemberCount(count);
+        if (redisChatRoomDto.getMemberCount() <= 0) {
             opsHashChatRoom.delete(CHAT_ROOMS, strRoomId);
         } else {
-            opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoom.getRoomId()), redisChatRoom);
+            opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
         }
-        return redisChatRoom.getMemberCount();
+        return redisChatRoomDto.getMemberCount();
     }
 
-    public RedisChatRoom createChatRoom(Long roomId, String name, int status, int memberCount) {
-        RedisChatRoom redisChatRoom = RedisChatRoom.createRedisChatRoom(roomId, name, status, memberCount);
-        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoom.getRoomId()), redisChatRoom);
-        return redisChatRoom;
+    public RedisChatRoomDto createChatRoom(Long roomId, String name, int status, int memberCount) {
+        RedisChatRoomDto redisChatRoomDto = RedisChatRoomDto.createRedisChatRoom(roomId, name, status, memberCount);
+        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
+        return redisChatRoomDto;
     }
 
     // ------- 위는 redis를 사용하는 chatRoom crud(mysql로 관리한다면 안사용해도 괜찮을 듯?)

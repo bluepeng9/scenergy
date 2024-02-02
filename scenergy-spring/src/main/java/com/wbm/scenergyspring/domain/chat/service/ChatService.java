@@ -1,7 +1,8 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
+import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
 import com.wbm.scenergyspring.domain.chat.redis.RedisPublisher;
@@ -30,7 +31,6 @@ public class ChatService {
     final ChatUserRepository chatUserRepository;
     final UserRepository userRepository;
     final RedisChatRepository redisChatRepository;
-
     final RedisPublisher redisPublisher;
 
     /**
