@@ -111,9 +111,7 @@ public class JobPostService {
 
 	public void createJobPostGenreTag(List<Long> genreTags, JobPost jobPost) {
 		List<JobPostGenreTag> jobPostGenreTags = jobPost.getJobPostGenreTags();
-		if (jobPostGenreTags != null) {
 			jobPost.deleteJobPostGenreTags();
-		}
 
 		for (Long genreTagId : genreTags) {
 			GenreTag genreTag = genreTagRepository.findById(genreTagId)
@@ -123,8 +121,6 @@ public class JobPostService {
 			jobPostGenreTag.updateJobPost(jobPost);
 			jobPostGenreTag.updateGenreTag(genreTag);
 
-			jobPostGenreTagRepository.save(jobPostGenreTag);
-
 			jobPostGenreTags.add(jobPostGenreTag);
 		}
 		jobPost.updateJobPostGenreTags(jobPostGenreTags);
@@ -132,9 +128,8 @@ public class JobPostService {
 
 	public void createJobPostInstrumentTag(List<Long> instrumentTags, JobPost jobPost) {
 		List<JobPostInstrumentTag> jobPostInstrumentTags = jobPost.getJobPostInstrumentTags();
-		if (jobPostInstrumentTags != null) {
+
 			jobPost.deleteJobPostInstrumentTags();
-		}
 
 		for (Long instrumentId : instrumentTags) {
 			InstrumentTag instrumentTag = instrumentTagRepository.findById(instrumentId)
@@ -144,11 +139,9 @@ public class JobPostService {
 			jobPostInstrumentTag.updateJobPost(jobPost);
 			jobPostInstrumentTag.updateInstrumentTag(instrumentTag);
 
-			jobPostInstrumentrepository.save(jobPostInstrumentTag);
-
 			jobPostInstrumentTags.add(jobPostInstrumentTag);
 		}
-		jobPost.updateJobPostInstrumentTags(jobPostInstrumentTags);
+		// jobPost.updateJobPostInstrumentTags(jobPostInstrumentTags);
 
 		}
 	public void createJobPostLocationTag(List<Long> locationTags, JobPost jobPost) {
@@ -164,8 +157,6 @@ public class JobPostService {
 			JobPostLocationTag jobPostLocationTag = new JobPostLocationTag();
 			jobPostLocationTag.updateJobPost(jobPost);
 			jobPostLocationTag.updateLocationTag(locationTag);
-
-			jobPostLocationRepository.save(jobPostLocationTag);
 
 			jobPostLocationTags.add(jobPostLocationTag);
 		}
