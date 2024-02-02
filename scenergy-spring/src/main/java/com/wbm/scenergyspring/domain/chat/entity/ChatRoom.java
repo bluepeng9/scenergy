@@ -44,8 +44,6 @@ public class ChatRoom extends BaseEntity {
         chatRoom.status = status;
         chatRoom.chatUsers = new ArrayList<>();
         chatRoom.chatMessages = new ArrayList<>();
-        ChatMessage firstMessage = ChatMessage.createChatMessage(0L, "채팅방이 시작되었습니다.", chatRoom);
-        chatRoom.chatMessages.add(firstMessage);
         return chatRoom;
     }
 

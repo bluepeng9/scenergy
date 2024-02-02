@@ -67,22 +67,16 @@ public class ChatService {
                 command.getMessageText(),
                 chatRoom
         );
+        //RDB 저장
+        chatMessage = chatMessageRepository.save(chatMessage);
         //메시지 dto 생성
-        ChatMessageDto chatMessageDto = ChatMessageDto.builder()
-                .chatRoomId(command.getRoomId())
-                .messageText(chatMessage.getMessageText())
-                .senderId(command.getUserId())
-                .createdAt(chatMessage.getCreatedAt())
-                .flag(1)
-                .build();
+        ChatMessageDto chatMessageDto = ChatMessageDto.from(chatMessage);
+        //redis 저장
+        redisChatRepository.chatMessageSave(chatMessageDto);
         //메시지 전송
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
         redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessageDto);
-        //RDB 저장
-        chatRoom.addChatMessages(chatMessage);
-        //redis 저장
-        redisChatRepository.chatMessageSave(chatMessageDto);
-        return chatMessageRepository.save(chatMessage).getId();
+        return chatMessage.getId();
     }
 
     /**
@@ -107,14 +101,22 @@ public class ChatService {
         //redis 등록
         redisChatRepository.createChatRoom(roomId, newChatRoom.getName(), newChatRoom.getStatus(), newChatRoom.getChatUsers().size());
         redisChatRepository.enterChatRoom(roomId);
+        //생성메시지 발행
+        CreatePubMessageCommand pubCreateMessageCommand = CreatePubMessageCommand.builder()
+                .messageType("TALK")
+                .messageText("채팅방이 시작되었습니다.")
+                .roomId(roomId)
+                .userId(1L)
+                .build();
+        sendMessage(pubCreateMessageCommand);
         //초대됨 메시지 발행
         for (User user : command.getUsers()) {
-            CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()
+            CreatePubMessageCommand pubInviteMessageCommand = CreatePubMessageCommand.builder()
                     .messageType("ENTER")
                     .roomId(roomId)
                     .userId(user.getId())
                     .build();
-            sendMessage(pubMessageCommand);
+            sendMessage(pubInviteMessageCommand);
         }
         return roomId;
     }
