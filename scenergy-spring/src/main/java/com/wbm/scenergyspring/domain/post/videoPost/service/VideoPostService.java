@@ -182,12 +182,7 @@ public class VideoPostService {
     }
 
     public void createVideoPostGenreTags(List<Long> genreTagIds, VideoPost videoPost) {
-        List<VideoPostGenreTag> videoPostGenreTags = videoPost.getVideoPostGenreTags();
-        if (videoPostGenreTags != null) {
-            videoPostGenreTagRepository.deleteAll(videoPostGenreTags);
-            videoPost.deleteVideoPostGenreTags();
-            videoPostGenreTags.clear();
-        }
+        videoPost.getVideoPostGenreTags().clear();
 
         for (Long genreTagId : genreTagIds) {
             GenreTag genreTag = genreTagRepository.findById(genreTagId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역태그입니다."));
@@ -196,20 +191,12 @@ public class VideoPostService {
             videoPostGenreTag.updateVideoPost(videoPost);
             videoPostGenreTag.updateGenreTag(genreTag);
 
-            videoPostGenreTagRepository.save(videoPostGenreTag);
-
-            videoPostGenreTags.add(videoPostGenreTag);
+            videoPost.getVideoPostGenreTags().add(videoPostGenreTag);
         }
-        videoPost.updateVideoPostGenreTags(videoPostGenreTags);
     }
 
     public void createVideoPostInstrumentTag(List<Long> instrumentTags, VideoPost videoPost) {
-        List<VideoPostInstrumentTag> videoPostInstrumentTags = videoPost.getVideoPostInstrumentTags();
-        if (videoPostInstrumentTags != null) {
-            videoPostInstrumentTagRepository.deleteAll(videoPostInstrumentTags);
-            videoPost.deleteVideoPostInstrumentTags();
-            videoPostInstrumentTags.clear();
-        }
+        videoPost.getVideoPostInstrumentTags().clear();
 
         for (Long instrumentTagId : instrumentTags) {
             InstrumentTag instrumentTag = instrumentTagRepository.findById(instrumentTagId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 악기태그입니다."));
@@ -218,11 +205,8 @@ public class VideoPostService {
             videoPostInstrumentTag.updateVideoPost(videoPost);
             videoPostInstrumentTag.updateInstrumentTag(instrumentTag);
 
-            videoPostInstrumentTagRepository.save(videoPostInstrumentTag);
-
-            videoPostInstrumentTags.add(videoPostInstrumentTag);
+            videoPost.getVideoPostInstrumentTags().add(videoPostInstrumentTag);
         }
-        videoPost.updateVideoPostInstrumentTags(videoPostInstrumentTags);
     }
 
     @Transactional(readOnly = false)
