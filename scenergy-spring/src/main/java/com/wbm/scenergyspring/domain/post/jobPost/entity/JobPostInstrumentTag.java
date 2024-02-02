@@ -22,7 +22,6 @@ public class JobPostInstrumentTag {
 	Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	private JobPost jobPost;
 
 	@ManyToOne(fetch = FetchType.LAZY)

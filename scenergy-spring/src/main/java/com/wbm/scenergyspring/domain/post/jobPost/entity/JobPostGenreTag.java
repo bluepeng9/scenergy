@@ -23,7 +23,6 @@ public class JobPostGenreTag {
 	Long id;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name="job_post_id")
 	private JobPost jobPost;
 
