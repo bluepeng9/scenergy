@@ -1,12 +1,2 @@
 server:
   port: 9001
-
-spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
-      authentication-database: admin
-      database: my-database
-      username: root
-      password: 1234
