@@ -293,6 +293,8 @@ class VideoPostServiceTest {
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
         VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost.getId());
+//        videoPostGenreTagRepository.flush();
+//        videoPostInstrumentTagRepository.flush();
         System.out.println("*****************");
         System.out.println(videoPost.getVideoPostGenreTags().size());
         //when
