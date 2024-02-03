@@ -20,7 +20,7 @@ public class ChatMessageDto {
     private Long id;
     private Long senderId;
     private String messageText;
-    private int flag;
+    private int unreadCount;
     private Long chatRoomId;
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
@@ -31,7 +31,7 @@ public class ChatMessageDto {
                 .id(chatMessage.getId())
                 .senderId(chatMessage.getSenderId())
                 .messageText(chatMessage.getMessageText())
-                .flag(chatMessage.getFlag())
+                .unreadCount(chatMessage.getUnreadCount())
                 .chatRoomId(chatMessage.getChatRoom().getId())
                 .createdAt(chatMessage.getCreatedAt())
                 .build();

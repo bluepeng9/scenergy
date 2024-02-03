@@ -20,7 +20,7 @@ public class ChatMessage extends BaseEntity {
     private Long id;
     private Long senderId;
     private String messageText;
-    private int flag;
+    private int unreadCount;
 
     @JsonBackReference(value = "chatroom-messages")
     @ManyToOne(fetch = FetchType.LAZY)
