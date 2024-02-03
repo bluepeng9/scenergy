@@ -33,12 +33,13 @@ public class FollowController {
 	private final FollowService followService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<CreateFollowResponse>> createFollow (
+	public ResponseEntity<ApiResponse<CreateFollowResponse>> createFollow(
 		@RequestBody CreateFollowRequest request
-	){
+	) {
 		Long followId = followService.followUser(request.toCreateFollow());
-		CreateFollowResponse createFollowResponse = new CreateFollowResponse();
-		createFollowResponse.setFollowId(followId);
+		CreateFollowResponse createFollowResponse = CreateFollowResponse.builder()
+			.followId(followId)
+			.build();
 		return ResponseEntity.ok(ApiResponse.createSuccess(createFollowResponse));
 	}
 
@@ -48,8 +49,10 @@ public class FollowController {
 	) {
 
 		Long isSuccess = followService.unFollowUser(request.toDeleteFollow());
-		DeleteFollowResponse deleteFollowResponse = new DeleteFollowResponse();
-		deleteFollowResponse.setIsSuccess(isSuccess);
+		DeleteFollowResponse deleteFollowResponse = DeleteFollowResponse.builder()
+			.isSuccess(isSuccess)
+			.build();
+
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteFollowResponse));
 	}
 
@@ -58,8 +61,9 @@ public class FollowController {
 		@RequestBody FindAllFollowersRequest request
 	) {
 		List<Follow> followers = followService.findAllFollowers(request.getAllFollowers());
-		FindAllFollowersResponse findAllFollowersResponse = new FindAllFollowersResponse();
-		findAllFollowersResponse.setFollowers(followers);
+		FindAllFollowersResponse findAllFollowersResponse = FindAllFollowersResponse.builder()
+			.followers(followers)
+			.build();
 		return ResponseEntity.ok(ApiResponse.createSuccess(findAllFollowersResponse));
 	}
 
@@ -68,8 +72,9 @@ public class FollowController {
 		@RequestBody FindAllFollowingRequest request
 	) {
 		List<Follow> following = followService.findAllFollowing(request.getAllFollowing());
-		FindAllFollowingResponse findAllFollowingResponse = new FindAllFollowingResponse();
-		findAllFollowingResponse.setFollwing(following);
+		FindAllFollowingResponse findAllFollowingResponse = FindAllFollowingResponse.builder()
+			.following(following)
+			.build();
 		return ResponseEntity.ok(ApiResponse.createSuccess(findAllFollowingResponse));
 	}
 
