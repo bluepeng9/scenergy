@@ -2,31 +2,34 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import styles from "./ChatConnect.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import ChatInput from "./ChatInput";
+import { ChatList, ChatMessage } from "./ChatMessageList";
 
-const ChatConnect = () => {
+const ChatConnect = ({ roomId }) => {
   //채팅 목록
   const [chatList, setChatList] = useState([]);
   const [chat, setChat] = useState("");
+  const maxWord = 30;
 
   //채팅방 식별 id url에서 가져오기
-  const { room_id } = useParams();
   // 백은 room_id long으로 받음 형 변환 해주기
   // const realRoom_id = parseInt(room_id, 10);
-  const realRoom_id = 1;
+  // 나중에 roomId로 바꿔주기
+  const room_id = 1;
+  const chatMessage_id = 3;
   const client = useRef({});
-  const userId = 1;
+  const userId = 2;
+  const chatMsgFieldRef = useRef(null);
+
   const subscribe = useCallback(() => {
-    client.current.subscribe("/sub/chat/room/" + realRoom_id, (body) => {
-      console.log(body);
-      const json_body = JSON.parse(body.body);
-      //_chat_list는 subscribe 함수 내에서만 사용되는 지역변수
-      setChatList((_chat_list) => [..._chat_list, json_body]);
+    client.current.subscribe("/sub/chat/room/" + room_id, (body) => {
+      const messageBody = JSON.parse(body.body);
+      setChatList((prevChatList) => [...prevChatList, messageBody]);
       console.log("subsub");
-      console.log(chatList);
+      // console.log(chatList);
     });
-  }, [realRoom_id]);
+  }, [room_id]);
 
   const connect = useCallback(() => {
     client.current = new StompJs.Client({
@@ -51,8 +54,8 @@ const ChatConnect = () => {
 
     //test용
     const message = {
-      //나중에 header로 user정보 담아왔을때 user_id 받자받자
-      user_id: 1,
+      //TODO:나중에 header로 user정보 담아왔을때 user_id 받자받자
+      user_id: 2,
       room_id: 1,
       message: chat,
       messageType: "TALK",
@@ -68,7 +71,6 @@ const ChatConnect = () => {
     setChat("");
     console.log("pubpub");
   };
-
   const disconnect = () => {
     client.current.deactivate();
   };
@@ -76,6 +78,7 @@ const ChatConnect = () => {
     //입력값 state로 변경해주기
     setChat(event.target.value);
   };
+
   const handleSubmit = (event, chat) => {
     //보내기 누르면 publish되도록
     event.preventDefault();
@@ -86,56 +89,46 @@ const ChatConnect = () => {
 
   useEffect(() => {
     connect();
-
     return () => disconnect();
   }, [connect]);
 
   useEffect(() => {
-    console.log(chatList);
+    const LoadPrevMessage = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/chatroom/load-message-room",
+          {
+            params: { chatMessage_id },
+          },
+        );
+        setChatList(response.data.data.messageList);
+        console.log("바로 읽어버렸쥬?");
+      } catch (error) {
+        console.error("읽기 실패", error);
+      }
+    };
+
+    LoadPrevMessage();
+    //나중에 roomId로 바꾸기
+  }, [room_id]);
+
+  useEffect(() => {
+    const chatMsgElement = chatMsgFieldRef.current;
+
+    if (chatMsgElement) {
+      chatMsgElement.scrollTop = chatMsgElement.scrollHeight;
+    }
+    console.log(chatMsgFieldRef.current);
   }, [chatList]);
 
   return (
-    <div className={styles.ChatMsgFieldGlobal}>
-      <div className={styles.ChatMsgField}>
-        <div className={styles.ChatMsg}>
-          {chatList.map((chatMessage) => (
-              <div
-                  key={chatMessage.id}
-                  className={
-                    chatMessage.senderId === userId
-                        ? styles.myMessage
-                        : styles.otherMessage
-                  }
-              >
-                <p>{chatMessage.messageText}</p>
-              </div>
-          ))}
-        </div>
-      </div>
-      <form onSubmit={(event) => handleSubmit(event, chat)}>
-        <div className={styles.ChatInput}>
-          <textarea
-            tabIndex="0"
-            rows={1}
-            type={"text"}
-            name={"chatInput"}
-            onChange={handleChange}
-            value={chat}
-            placeholder="메세지 보내기"
-            onKeyDown={(e) => {
-              if (e.keyCode === 13) {
-                e.preventDefault();
-                handleSubmit(e, chat);
-              }
-            }}
-          />
-          <div className={styles.ChatSendBtn}>
-            <button>
-              <FontAwesomeIcon icon={faArrowUp} />
-            </button>
-          </div>
-        </div>
-      </form>
+    <div className={styles.chatMsgFieldGlobal}>
+      <ChatList chatList={chatList} userId={userId} />
+      <ChatInput
+        chat={chat}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+      />
     </div>
   );
 };

@@ -1,42 +1,64 @@
-.FieldGlobal{
-  height: 100vh;
+/* ChatField.module.css */
+
+.fieldGlobal {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.FieldBody{
+
+.fieldBody {
+  gap: 10px;
   display: flex;
   flex-direction: column;
   text-align: center;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
-.FieldBodyIcon{
+
+.fieldBody button {
+  border: none;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  width: 100px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fieldBodyIcon {
   font-size: 10rem;
 }
-.ChatFieldHeader {
+
+.chatFieldHeader {
   display: flex;
   justify-content: space-between;
 }
-.DialogSearchGlobal{
+
+.dialogSearchGlobal {
+  z-index: 1;
   padding: 10px;
-  position: relative;
 }
-.DialogSearchGlobal span{
+
+.dialogSearchGlobal span {
   font-weight: bold;
 }
-.DialogSearchInput{
+
+.dialogSearchInput {
   padding: 5px;
   width: 300px;
   border: none;
   margin-left: 10px;
   background-color: transparent;
 }
-.DialogSearchInput input:focus{
+
+.dialogSearchInput:focus {
   border: none;
   outline: none;
 }
-.DialogSearchInput::placeholder{
-  text-align: center;
-}
-.DialogUserList{
+
+.dialogUserList {
   margin: 10px;
   height: 50px;
   display: flex;
@@ -44,20 +66,23 @@
   justify-content: flex-start;
   gap: 30px;
 }
-.DialogUserNick{
+
+.dialogUserNick {
   font-weight: bold;
 }
-.SearchResultFalse{
-  padding: 10px;
-  margin-left: 10px;
+
+.searchResultTrue,
+.searchResultFalse {
+  margin-top: auto;
 }
-.ChatFieldInfo {
+
+.chatFieldInfo {
   display: flex;
 }
-.CreateBtn{
+
+.createBtn {
   width: 100%;
   display: flex;
   justify-content: center;
-  position: absolute;
-  bottom: 20px;
+  margin-top: auto;
 }

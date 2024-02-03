@@ -6,26 +6,46 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Dialog from "../commons/Dialog/Dialog";
 import axios from "axios";
+import {useParams} from "react-router-dom";
 
 const ChatRoomReal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const realRoomId = 1;
+  // 나중에 user까지 다 받아오면
+  const {roomId} = useParams();
+  // const roomId = 1;
   //더미데이터
   const users = [
-    { id: 1, email: "user1@test.com", password: "password1", nickname: "nickname1" },
-    { id: 2, email: "user2@test.com", password: "password2", nickname: "nickname2" },
-    { id: 3, email: "user3@test.com", password: "password3", nickname: "nickname3" },
-    { id: 4, email: "user4@test.com", password: "password4", nickname: "nickname4" },
+    {
+      id: 1,
+      email: "user1@test.com",
+      password: "password1",
+      nickname: "nickname1",
+    },
+    {
+      id: 2,
+      email: "user2@test.com",
+      password: "password2",
+      nickname: "nickname2",
+    },
+    {
+      id: 3,
+      email: "user3@test.com",
+      password: "password3",
+      nickname: "nickname3",
+    },
+    {
+      id: 4,
+      email: "user4@test.com",
+      password: "password4",
+      nickname: "nickname4",
+    },
   ];
-  const handleModalOpen = () => {
-    setIsModalOpen(!isModalOpen);
-    console.log(isModalOpen);
-  };
+  const handleModalOpen = () => setIsModalOpen(!isModalOpen);
 
   const handleUserSelect = (user) => {
     if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id))
-      setSelectedUsers([...selectedUsers, user]);
+      setSelectedUsers(prevUsers=>[...prevUsers, user]);
     console.log(selectedUsers);
   };
 
@@ -37,10 +57,11 @@ const ChatRoomReal = () => {
       return;
     }
     try {
+        //room_id useParam으로 받아온거 고쳐주기
       const response = await axios.post(
         "http://localhost:8080/chatroom/invite-room",
         {
-          room_id: realRoomId,
+          room_id: roomId,
           users: selectedUsers,
         },
       );
@@ -55,72 +76,73 @@ const ChatRoomReal = () => {
   };
 
   return (
-    <div className={styles.ChatRoomContainer}>
-      <div className={styles.ChatRoomHeader}>
-        <div className={styles.ChatRoomInfo}>
-          <div className={styles.chatRoomProfileContainer}>
-            <div className={styles.ChatRoomProfile}>
-              {/*상대방 프로필 사진*/}
-              <p>프로필</p>
+      <div className={styles.chatRoomContainer}>
+        <div className={styles.chatRoomHeader}>
+          <div className={styles.chatRoomInfo}>
+            <div className={styles.chatRoomProfileContainer}>
+              <div className={styles.chatRoomProfile}>
+                {/*상대방 프로필 사진*/}
+                <p>프로필</p>
+              </div>
+              <div className={styles.chatRoomUserName}>
+                {/*상대방 닉네임*/}
+                <p>상대방 닉네임</p>
+              </div>
             </div>
-            <div className={styles.ChatRoomUserName}>
-              {/*상대방 닉네임*/}
-              <p>상대방 닉네임</p>
+            <div className={styles.chatRoomIcon}>
+              {/*누르면 회원 초대*/}
+              <div className={styles.userInvite} onClick={handleModalOpen}>
+                <FontAwesomeIcon icon={faPlus}/>
+              </div>
+              <div className={styles.doRtc}>
+                <FontAwesomeIcon icon={faVideo}/>
+              </div>
+              <div>
+                <FontAwesomeIcon icon={faCircleInfo}/>
+              </div>
             </div>
-          </div>
-          <div className={styles.ChatRoomIcon}>
-            {/*누르면 회원 초대*/}
-            <div className={styles.UserInvite} onClick={handleModalOpen}>
-              <FontAwesomeIcon icon={faPlus} />
-            </div>
-            <div className={styles.DoRtc}>
-              <FontAwesomeIcon icon={faVideo} />
-            </div>
-            <div>
-              <FontAwesomeIcon icon={faCircleInfo} />
-            </div>
-          </div>
-          {isModalOpen && (
-            <div className={styles.DialogContainer}>
-              <form onSubmit={handleInvite}>
-                <Dialog
-                  isModalOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  title="초대하기"
-                >
-                  <div>
-                    <div className={styles.RoomInviteContainer}>
-                      <span>받는 사람</span>
-                      <input type="text" />
-                    </div>
-                    <div className={styles.RoomInviteGlobal}>
-                      <div className={styles.InviteListContainer}>
-                        {users.map((user) => (
-                          <div
-                            key={user.id}
-                            className={styles.InviteList}
-                            onClick={() => handleUserSelect(user)}
-                          >
-                            <div className={styles.InviteImg}>이미지</div>
-                            <div className={styles.InviteUserName}>
-                              <p>{user.nickname}</p>
-                            </div>
+            {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
+            {isModalOpen && (
+                <div className={styles.dialogContainer}>
+                  <form onSubmit={handleInvite}>
+                    <Dialog
+                        isModalOpen={isModalOpen}
+                        onClose={() => setIsModalOpen(false)}
+                        title="초대하기"
+                    >
+                      <div>
+                        <div className={styles.roomInviteContainer}>
+                          <span>받는 사람</span>
+                          <input type="text"/>
+                        </div>
+                        <div className={styles.roomInviteGlobal}>
+                          <div className={styles.inviteListContainer}>
+                            {users.map((user) => (
+                                <div
+                                    key={user.id}
+                                    className={styles.inviteList}
+                                    onClick={() => handleUserSelect(user)}
+                                >
+                                  <div className={styles.inviteImg}>이미지</div>
+                                  <div className={styles.inviteUserName}>
+                                    <p>{user.nickname}</p>
+                                  </div>
+                                </div>
+                            ))}
                           </div>
-                        ))}
+                          <div className={styles.inviteBtn}>
+                            <button>초대하기</button>
+                          </div>
+                        </div>
                       </div>
-                      <div className={styles.InviteBtn}>
-                        <button>초대하기</button>
-                      </div>
-                    </div>
-                  </div>
-                </Dialog>
-              </form>
-            </div>
-          )}
+                    </Dialog>
+                  </form>
+                </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div className={styles.ConnectContainer}>
-        <ChatConnect />
+        <div className={styles.connectContainer}>
+        <ChatConnect roomId={roomId}/>
       </div>
     </div>
   );
