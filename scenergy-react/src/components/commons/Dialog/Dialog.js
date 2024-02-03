@@ -1,13 +1,21 @@
 import styles from "./Dialog.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal } from "../../../actions/actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes, faBookmark as solidBookmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimes,
+  faBookmark as solidBookmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 
 import { useState } from "react";
 
-const Dialog = ({ title, onClose, children, showBookmarkButton, isModalOpen }) => {
+const Dialog = ({
+  title,
+  onClose,
+  children,
+  showBookmarkButton,
+  isModalOpen,
+}) => {
   const [isSolid, setIsSolid] = useState(false);
   // const isModalOpen = useSelector((state) => state.isModalOpen);
   const dispatch = useDispatch();
@@ -17,9 +25,6 @@ const Dialog = ({ title, onClose, children, showBookmarkButton, isModalOpen }) =
     setIsSolid(!isSolid);
   };
 
-  if (!isModalOpen) {
-    return null;
-  }
   return (
     <div className={styles.DialogBack} onClick={onClose}>
       <div
@@ -27,18 +32,19 @@ const Dialog = ({ title, onClose, children, showBookmarkButton, isModalOpen }) =
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles.DialogHeader}>
-          <h2>{title}</h2>
+          <p>{title}</p>
           <div className={styles.DialogButtonContainer}>
-            {showBookmarkButton && (<button
+            {showBookmarkButton && (
+              <button
                 className={styles.DialogBookmarkButton}
                 onClick={handleMarkChange}
-            >
-              <FontAwesomeIcon icon={isSolid ? solidBookmark : regularBookmark}/>
-            </button>)}
-            <button
-              className={styles.DialogCloseButton}
-              onClick={onClose}
-            >
+              >
+                <FontAwesomeIcon
+                  icon={isSolid ? solidBookmark : regularBookmark}
+                />
+              </button>
+            )}
+            <button className={styles.DialogCloseButton} onClick={onClose}>
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>

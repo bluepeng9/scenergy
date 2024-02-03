@@ -31,7 +31,6 @@
     padding: 15px 15px;
     transition: all 0.2s ease;
 }
-
 .NavBarContainer a:not(.ScenergyTab a):not(.NavBarDropMenu a):not(:nth-child(3)):hover,
 .NavBarContainer p:hover {
     background-color: white;
@@ -44,7 +43,6 @@
     display: flex;
     align-items: center;
 }
-
 .ScenergyTab a {
     font-size: 2rem;
 }
@@ -71,9 +69,9 @@
 }
 
 .NavBarDropdownGlobal.dropdownOpen .NavBarDropMenu {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .NavBarDropMenu li {

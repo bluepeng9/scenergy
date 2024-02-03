@@ -1,25 +1,57 @@
-.ChatMsg {
+.chatMsgFieldGlobal{
   display: flex;
   flex-direction: column;
-  gap: 10px;
+}
+.chatMsgField {
+  max-height: 500px;
+  overflow: auto;
+  transition: 0.3s ease;
+  padding: 5px;
+}
+
+.chatMsg {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+}
+.chatMsgList .myMessage{
+  float: right;
+}
+.chatMsgList .otherMessage{
+  float: left;
+}
+.myMessage,
+.otherMessage {
+  white-space: normal !important;
+  font-size: 13px;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 20px;
+  width: fit-content;
+  min-height:3rem;
+  height: fit-content;
+  max-width: 400px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  background-color: #cf9eab;
+  transition: 0.3s ease;
+  text-align: left;
 }
 
 .myMessage {
   color: white;
-  padding: 7px;
-  display: flex;
-  flex-direction: column;
-  text-align: right;
-  border-radius: 8px;
-  height: 3rem;
-  width: 300px;
   background-color: #cf9eab;
 }
 
 .otherMessage {
-  text-align: left;
+  color: black;
+  background-color: #ffffff;
 }
-.ChatInput {
+
+.chatInput {
   display: flex;
   justify-content: stretch;
   border: 1.6px solid black;
@@ -27,7 +59,8 @@
   width: 100%;
   padding: 7px;
 }
-.ChatInput textarea {
+
+.chatInput textarea {
   resize: none;
   overflow: hidden;
   white-space: pre-wrap;
@@ -38,12 +71,14 @@
   border: none;
   background-color: transparent;
 }
-.ChatInput textarea:focus {
+
+.chatInput textarea:focus {
   border: none;
   outline: none;
   width: 100%;
 }
-.ChatSendBtn button {
+
+.chatSendBtn button {
   background-color: transparent;
   color: black;
   width: 30px;
@@ -55,4 +90,11 @@
   border-radius: 7px;
   font-size: 1.2rem;
   padding: 3px;
+}
+
+@media (max-height: 600px) {
+  .chatMsgField {
+    max-height: 200px;
+    overflow: auto;
+  }
 }

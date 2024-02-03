@@ -3,47 +3,67 @@
   width: 500px;
   display: flex;
   flex-direction: column;
-  border-right: 1px solid black;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
+
 .roomListHeader {
   margin: 0 10px;
   display: flex;
   flex-direction: column;
 }
-.Message {
+
+.message {
   margin: 0 10px;
 }
-.ListUserNickname {
+
+.listUserNickname {
   margin-left: 10px;
   height: 70px;
   display: flex;
   align-items: center;
 }
+
 .roomListContainer {
   margin: 10px;
   display: flex;
   flex-direction: column;
+  max-height: 100vh;
+  overflow: auto;
 }
 
-.ListItemContainer{
+.listItemContainer {
+  text-decoration: none;
+  color: black;
   padding: 10px;
   height: 70px;
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 10px;
 }
-.ListItemContainer:hover {
-  background-color: #CF9EAB;
+
+.listItemContainer:hover {
+  background-color: #cf9eab;
   transition: 0.3s ease-in-out;
 }
-.ListContentContainer {
+
+.listUserProfileImg {
+  width: 50px;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.listContentContainer {
   display: flex;
   flex-direction: column;
   gap: 3px;
 }
 
-.ListContainer {
-  display: flex;
-  flex-direction: row;
+.chatLastMsg {
+  color: #8c8c8c;
 }
