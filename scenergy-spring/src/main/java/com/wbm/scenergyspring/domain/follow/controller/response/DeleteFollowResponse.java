@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class DeleteFollowResponse {
-	Long isSuccess;
+	boolean isSuccess;
 }
