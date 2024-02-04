@@ -11,4 +11,6 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 public interface JobPostApplyRepository extends JpaRepository<JobPostApply, Long> {
 	JobPostApply findByJobPostAndUser(JobPost jobPost, User user);
 	JobPostApply findApplyByJobPost(JobPost jobPost);
+
+
 }

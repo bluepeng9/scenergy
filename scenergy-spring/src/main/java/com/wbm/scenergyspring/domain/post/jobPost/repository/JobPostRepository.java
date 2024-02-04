@@ -10,7 +10,13 @@ import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 
 @Repository
 public interface JobPostRepository extends JpaRepository<JobPost, Long> {
+
 	@Query("select jp from JobPost jp " +
 		"where jp.userId.id in (select u.id from User u where u.id=:id)")
 	List<JobPost> findAllByPost(Long id);
+
+
+	@Query("SELECT ja.jobPost FROM JobPostApply ja "
+		+ "WHERE ja.user.id = :userId AND ja.status = true")
+	List<JobPost> findAllApplyPostByUser(Long userId);
 }

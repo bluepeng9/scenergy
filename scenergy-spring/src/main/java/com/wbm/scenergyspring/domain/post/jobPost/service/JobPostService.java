@@ -130,6 +130,16 @@ public class JobPostService {
 		return list;
 	}
 
+	public List<GetJobPostCommandResponse> getAllMyApply(Long id) {
+		List<GetJobPostCommandResponse> list = new ArrayList<>();
+		for (JobPost jobPost : jobPostRepository.findAllApplyPostByUser(id)) {
+			User user = jobPost.getUserId();
+			GetJobPostCommandResponse getJobPostCommandResponse = GetJobPostCommandResponse.from(jobPost);
+			list.add(getJobPostCommandResponse);
+		}
+		return list;
+	}
+
 	public List<GetJobPostCommandResponse> getAllJobPostList() {
 		List<GetJobPostCommandResponse> jobPosts = new ArrayList<>();
 		for (JobPost jobPost : jobPostRepository.findAll()) {
