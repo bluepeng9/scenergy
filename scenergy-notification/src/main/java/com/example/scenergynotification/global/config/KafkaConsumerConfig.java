@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
@@ -14,25 +13,38 @@ import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import com.example.scenergynotification.domain.notification.controller.request.OnFollowRequest;
+import com.example.scenergynotification.domain.notification.controller.request.OnLikeRequest;
 
 @Configuration
 @EnableKafka
 public class KafkaConsumerConfig {
 
 	@Bean
-	ConcurrentKafkaListenerContainerFactory<String, OnFollowRequest> kafkaListenerContainerFactory() {
+	ConcurrentKafkaListenerContainerFactory<String, OnFollowRequest> followEventKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, OnFollowRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(consumerFactory());
+		factory.setConsumerFactory(followEventConsumerFactory());
 		return factory;
 	}
 
 	@Bean
-	public ConsumerFactory<String, OnFollowRequest> consumerFactory() {
+	public ConsumerFactory<String, OnFollowRequest> followEventConsumerFactory() {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), new StringDeserializer(),
 			new JsonDeserializer<>(OnFollowRequest.class, false));
+	}
+
+	@Bean
+	public ConsumerFactory<String, OnLikeRequest> likeEventConsumerFactory() {
+		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), new StringDeserializer(),
+			new JsonDeserializer<>(OnLikeRequest.class, false));
+	}
+
+	@Bean
+	public ConcurrentKafkaListenerContainerFactory<String, OnLikeRequest> likeEventKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, OnLikeRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(likeEventConsumerFactory());
+		return factory;
 	}
 
 	@Bean
