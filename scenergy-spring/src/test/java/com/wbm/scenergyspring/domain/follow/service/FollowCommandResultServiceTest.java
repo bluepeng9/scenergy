@@ -21,7 +21,7 @@ import com.wbm.scenergyspring.util.UserGenerator;
 
 @SpringBootTest
 @Transactional
-class FollowServiceTest {
+class FollowCommandResultServiceTest {
 
 	@Autowired
 	FollowService followService;
@@ -45,7 +45,7 @@ class FollowServiceTest {
 			.build();
 
 		//when
-		Long followId = followService.followUser(command);
+		Long followId = followService.followUser(command).getFollowId();
 
 		//then
 		Follow follow = followRepository.findById(followId).orElseThrow();

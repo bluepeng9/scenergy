@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.wbm.scenergyspring.domain.follow.controller.request.CreateFollowRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.DeleteFollowRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowersRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowingRequest;
-import com.wbm.scenergyspring.domain.follow.controller.response.CreateFollowResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.DeleteFollowResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.FindAllResponse;
-import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.service.FollowService;
-import com.wbm.scenergyspring.domain.follow.controller.request.CreateFollowRequest;
+import com.wbm.scenergyspring.domain.follow.service.commandresult.FollowCommandResult;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -32,14 +31,11 @@ public class FollowController {
 	private final FollowService followService;
 
 	@PostMapping
-	public ResponseEntity<ApiResponse<CreateFollowResponse>> createFollow(
+	public ResponseEntity<ApiResponse<FollowCommandResult>> createFollow(
 		@RequestBody CreateFollowRequest request
 	) {
-		Long followId = followService.followUser(request.toCreateFollow());
-		CreateFollowResponse createFollowResponse = CreateFollowResponse.builder()
-			.followId(followId)
-			.build();
-		return ResponseEntity.ok(ApiResponse.createSuccess(createFollowResponse));
+		FollowCommandResult commandResult = followService.followUser(request.toCreateFollow());
+		return ResponseEntity.ok(ApiResponse.createSuccess(commandResult));
 	}
 
 	@DeleteMapping
@@ -61,10 +57,11 @@ public class FollowController {
 	public ResponseEntity<ApiResponse<List<FindAllResponse>>> getAllFollowers(
 		@RequestBody FindAllFollowersRequest request
 	) {
-		List<Follow> followers = followService.findAllFollowers(request.getAllFollowers());
+		List<com.wbm.scenergyspring.domain.follow.entity.Follow> followers = followService.findAllFollowers(
+			request.getAllFollowers());
 		List<FindAllResponse> followersResponseList = new ArrayList<>();
 
-		for (Follow follow : followers) {
+		for (com.wbm.scenergyspring.domain.follow.entity.Follow follow : followers) {
 			FindAllResponse followersResponse = FindAllResponse.builder()
 				.from(follow.getFrom())
 				.to(follow.getTo())
@@ -79,9 +76,10 @@ public class FollowController {
 	public ResponseEntity<ApiResponse<List<FindAllResponse>>> getAllFollowing(
 		@RequestBody FindAllFollowingRequest request
 	) {
-		List<Follow> followings = followService.findAllFollowing(request.getAllFollowing());
+		List<com.wbm.scenergyspring.domain.follow.entity.Follow> followings = followService.findAllFollowing(
+			request.getAllFollowing());
 		List<FindAllResponse> followingResponseList = new ArrayList<>();
-		for (Follow following : followings) {
+		for (com.wbm.scenergyspring.domain.follow.entity.Follow following : followings) {
 			FindAllResponse followingResponse = FindAllResponse.builder()
 				.from(following.getFrom())
 				.to(following.getTo())
