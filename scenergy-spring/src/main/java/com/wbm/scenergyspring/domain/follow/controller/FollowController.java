@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class FollowController {
 
 	private final FollowService followService;
+	private final KafkaTemplate<String, Object> kafkaTemplate;
 
 
 	@PostMapping
@@ -38,6 +40,7 @@ public class FollowController {
 		@RequestBody CreateFollowRequest request
 	) {
 		FollowCommandResult commandResult = followService.followUser(request.toCreateFollow());
+		kafkaTemplate.send("follow", commandResult);
 		return ResponseEntity.ok(ApiResponse.createSuccess(commandResult));
 	}
 
