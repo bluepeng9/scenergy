@@ -8,6 +8,7 @@ spring:
       - classpath:/redis.yml
       - classpath:/jpa.yml
       - classpath:/security.yml
+      - classpath:/logging.yml
       - classpath:/application-secret.yml
   servlet:
     multipart:
