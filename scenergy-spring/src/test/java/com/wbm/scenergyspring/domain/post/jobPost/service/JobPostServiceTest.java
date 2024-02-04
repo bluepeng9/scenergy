@@ -23,6 +23,7 @@ import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 
@@ -49,7 +50,9 @@ class JobPostServiceTest {
 		User user = User.createNewUser(
 			"aaa@naver.com",
 			"aaaaa",
-			"aaaaa"
+			"aaaaa",
+			Gender.FEMALE,
+			"aaa"
 		);
 		User saveUser = userRepository.save(user);
 
@@ -111,7 +114,9 @@ class JobPostServiceTest {
 		User user = User.createNewUser(
 			"aaa@naver.com",
 			"aaaaa",
-			"aaaaa"
+			"aaaaa",
+			Gender.FEMALE,
+			"aaa"
 		);
 
 		User saveUser = userRepository.save(user);
@@ -198,7 +203,9 @@ class JobPostServiceTest {
 		User user = User.createNewUser(
 			"aaa@naver.com",
 			"aaaaa",
-			"aaaa"
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
 		);
 
 		User saveUser = userRepository.save(user);
@@ -255,6 +262,16 @@ class JobPostServiceTest {
 
 		// then
 		Assertions.assertThat(response.getTitle()).isEqualTo(findJob.getTitle());
+	}
+
+	@Test
+	@DisplayName("특정 유저의 게시글 조회")
+	void getMyJobPost() {
+		List<GetJobPostCommandResponse> result = jobPostService.getMyJobPost(1L);
+		int resultSize = result.size();
+		System.out.println(resultSize);
+		Assertions.assertThat(resultSize).isEqualTo(jobPostRepository.findAllByPost(1L).size());
+
 	}
 
 	@Test
