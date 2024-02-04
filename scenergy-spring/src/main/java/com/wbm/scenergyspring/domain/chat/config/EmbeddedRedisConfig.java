@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.global.config;
+package com.wbm.scenergyspring.domain.chat.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

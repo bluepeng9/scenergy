@@ -1,4 +1,4 @@
-package com.wbm.scenergyspring.global.config;
+package com.wbm.scenergyspring.domain.chat.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -29,6 +29,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.enableSimpleBroker("/sub"); //destination prefix
         registry.setApplicationDestinationPrefixes("/pub"); //prefix인 메시지는 @MessageMapping이 붙은 method로 바운드
     }
-
-
 }
