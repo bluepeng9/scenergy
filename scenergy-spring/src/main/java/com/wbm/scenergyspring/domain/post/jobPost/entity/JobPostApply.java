@@ -48,8 +48,4 @@ public class JobPostApply {
 		this.status = true;
 	}
 
-	public void remove(JobPost jobPost) {
-		this.status = false;
-		jobPost.minusApplicant();
-	}
 }
