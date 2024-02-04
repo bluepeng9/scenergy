@@ -3,7 +3,7 @@ package com.example.scenergynotification.domain.notification.controller.request;
 import lombok.Data;
 
 @Data
-public class OnLikeRequest {
+public class OnLikeEvent {
 	private Long likeId;
 	private Long fromUserId;
 	private Long toUserId;
