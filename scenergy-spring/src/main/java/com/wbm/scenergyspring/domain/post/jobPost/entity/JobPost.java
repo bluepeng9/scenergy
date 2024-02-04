@@ -44,6 +44,8 @@ public class JobPost extends Post {
 
 	Long bookMark;
 
+	Long totalApplicant;
+
 	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostInstrumentTag> jobPostInstrumentTags = new ArrayList<>();
 
@@ -96,6 +98,10 @@ public class JobPost extends Post {
 	}
 	public void updateJobPostGenreTags(List<JobPostGenreTag> jobPostGenreTags) {
 		this.jobPostGenreTags = jobPostGenreTags;
+	}
+
+	public void reomveApplicant() {
+		this.totalApplicant -= 1;
 	}
 
 	public void deleteJobPostInstrumentTags() {
