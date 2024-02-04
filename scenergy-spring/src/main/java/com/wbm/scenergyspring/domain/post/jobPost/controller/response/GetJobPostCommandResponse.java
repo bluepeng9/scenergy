@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobApplicant;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
@@ -12,6 +13,8 @@ import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
+import com.wbm.scenergyspring.domain.user.entity.Role;
 import com.wbm.scenergyspring.domain.user.entity.User;
 
 import lombok.Builder;
@@ -38,6 +41,8 @@ public class GetJobPostCommandResponse {
 
     private List<GenreTagDto> jobPostGenreTags = new ArrayList<>();
 
+    private List<JobApplicantDto> jobApplicants = new ArrayList<>();
+
     public static GetJobPostCommandResponse from(JobPost jobPost) {
         User user = jobPost.getUserId();
         List<JobPostInstrumentTag> jobPostInstrumentTags1 = jobPost.getJobPostInstrumentTags();
@@ -60,10 +65,18 @@ public class GetJobPostCommandResponse {
             locationTags.add(from);
         }
 
+        List<JobApplicant> jobApplicantList = jobPost.getJobApplicants();
+        List<JobApplicantDto> applicants = new ArrayList<>();
+        for(JobApplicant applicant : jobApplicantList) {
+            JobApplicantDto from = JobApplicantDto.from(applicant.getUser());
+            applicants.add(from);
+        }
+
         return GetJobPostCommandResponse.builder()
             .jobPostInstrumentTags(instrumentTags)
             .jobPostGenreTags(genreTags)
             .jobPostLocationTags(locationTags)
+            .jobApplicants(applicants)
             .userDto(UserDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
@@ -126,6 +139,28 @@ class InstrumentTagDto {
         return InstrumentTagDto.builder()
             .id(instrumentTag.getId())
             .instrumentName(instrumentTag.getInstrumentName())
+            .build();
+    }
+}
+
+@Data
+@Builder
+class JobApplicantDto {
+    Long id;
+    String email;
+    String nickname;
+    String username;
+    Gender gender;
+    Role role;
+
+    static JobApplicantDto from(User user) {
+        return JobApplicantDto.builder()
+            .id(user.getId())
+            .email(user.getEmail())
+            .nickname(user.getNickname())
+            .username(user.getUsername())
+            .gender(user.getGender())
+            .role(user.getRole())
             .build();
     }
 }

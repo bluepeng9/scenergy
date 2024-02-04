@@ -151,7 +151,7 @@ public class JobPostService {
 
 			jobPostInstrumentTags.add(jobPostInstrumentTag);
 		}
-		// jobPost.updateJobPostInstrumentTags(jobPostInstrumentTags);
+		jobPost.updateJobPostInstrumentTags(jobPostInstrumentTags);
 
 		}
 	public void createJobPostLocationTag(List<Long> locationTags, JobPost jobPost) {
