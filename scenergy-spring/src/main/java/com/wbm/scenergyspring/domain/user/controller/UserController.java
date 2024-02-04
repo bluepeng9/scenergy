@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wbm.scenergyspring.domain.user.controller.request.CreateUserRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.UploadProfileRequest;
 import com.wbm.scenergyspring.domain.user.controller.response.CreateUserResponse;
+import com.wbm.scenergyspring.domain.user.controller.response.DeleteUserResponse;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
@@ -66,11 +67,13 @@ public class UserController {
 
 
 	@DeleteMapping
-	public ResponseEntity<ApiResponse<Long>> deleteUser(
+	public ResponseEntity<ApiResponse<DeleteUserResponse>> deleteUser(
 		@RequestParam("password") String password,
 		@RequestParam("username") String username
 	) {
 		Long delUser = userService.deleteUser(password,username);
-		return ResponseEntity.ok(ApiResponse.createSuccess(delUser));
+		DeleteUserResponse deleteUserResponse = new DeleteUserResponse();
+		deleteUserResponse.setUserId(delUser);
+		return ResponseEntity.ok(ApiResponse.createSuccess(deleteUserResponse));
 	}
 }
