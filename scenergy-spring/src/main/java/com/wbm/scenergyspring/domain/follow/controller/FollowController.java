@@ -34,7 +34,6 @@ public class FollowController {
 	private final FollowService followService;
 	private final KafkaTemplate<String, Object> kafkaTemplate;
 
-
 	@PostMapping
 	public ResponseEntity<ApiResponse<FollowCommandResult>> createFollow(
 		@RequestBody CreateFollowRequest request
