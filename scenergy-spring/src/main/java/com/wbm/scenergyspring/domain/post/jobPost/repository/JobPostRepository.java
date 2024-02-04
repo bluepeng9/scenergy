@@ -19,4 +19,8 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long> {
 	@Query("SELECT ja.jobPost FROM JobPostApply ja "
 		+ "WHERE ja.user.id = :userId AND ja.status = true")
 	List<JobPost> findAllApplyPostByUser(Long userId);
+
+	@Query("select jp From JobPost jp "
+	+ "where jp.id in (select jb.jobPost.id from JobBookMark jb where jb.user.id=:id)")
+	List<JobPost> findAllBookMark(Long id);
 }

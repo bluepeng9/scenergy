@@ -9,17 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobBookMark;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostApply;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.JobBookMarkRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostApplyRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostGenreTagRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostInstrumentRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostLocationRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.ApplyJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.BookMarkCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
@@ -51,6 +54,7 @@ public class JobPostService {
 	final JobPostInstrumentRepository jobPostInstrumentrepository;
 	final JobPostLocationRepository jobPostLocationRepository;
 	final JobPostApplyRepository jobPostApplyRepository;
+	final JobBookMarkRepository jobBookMarkRepository;
 
 	@Transactional(readOnly = false)
 	public Long createJobPost(CreateJobPostCommand command) {
@@ -90,6 +94,25 @@ public class JobPostService {
 	}
 
 	@Transactional(readOnly = false)
+	public String BookMarkJobPost(BookMarkCommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
+		User user = userRepository.findByUsername(command.getUserName());
+		if (jobBookMarkRepository.findByJobPostAndUser(jobPost, user) == null) {
+			JobBookMark jobBookMark = new JobBookMark(jobPost, user);
+			jobPost.plusBookMark();
+			jobBookMarkRepository.save(jobBookMark);
+			return "북마크";
+		} else {
+			JobBookMark jobBookMark = jobBookMarkRepository.findBookMarkByJobPost(jobPost);
+			jobBookMarkRepository.delete(jobBookMark);
+			jobPost.minusBookMark();
+			return "북마크 취소";
+		}
+	}
+
+
+	@Transactional(readOnly = false)
 	public boolean updateJobPost(Long id, UpdateJobPostRequest request) {
 		JobPost jobPost = jobPostRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("수정 실패"));
@@ -118,6 +141,16 @@ public class JobPostService {
 		User user = jobPost.getUserId();
 		GetJobPostCommandResponse getJobPostCommandResponse = GetJobPostCommandResponse.from(jobPost);
 		return getJobPostCommandResponse;
+	}
+
+	public List<GetJobPostCommandResponse> getBookMarkJobPost(Long id) {
+		List<GetJobPostCommandResponse> list = new ArrayList<>();
+		for (JobPost jobPost: jobPostRepository.findAllBookMark(id)) {
+			User user = jobPost.getUserId();
+			GetJobPostCommandResponse getJobPostCommandResponse = GetJobPostCommandResponse.from(jobPost);
+			list.add(getJobPostCommandResponse);
+		}
+		return list;
 	}
 
 	public List<GetJobPostCommandResponse> getMyJobPost(Long id) {

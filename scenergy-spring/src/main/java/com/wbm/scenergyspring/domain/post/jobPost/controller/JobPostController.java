@@ -17,11 +17,13 @@ import com.wbm.scenergyspring.domain.post.jobPost.controller.request.ApplyJobPos
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.JobPostBookMarkRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.ApplyJobPostReponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 
@@ -45,6 +47,13 @@ public class JobPostController {
 		@PathVariable Long id
 	) {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getAllMyApply(id)),HttpStatus.OK);
+	}
+
+	@GetMapping("get/bookmark/{id}")
+	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllBookMark(
+		@PathVariable Long id
+	) {
+		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getBookMarkJobPost(id)),HttpStatus.OK);
 	}
 
 	@GetMapping("/get/{id}")
@@ -71,6 +80,17 @@ public class JobPostController {
 			.isSuccess(true)
 			.build();
 		return ResponseEntity.ok(ApiResponse.createSuccess(applyJobPostReponse));
+	}
+
+	@PostMapping("/bookmark")
+	public ResponseEntity<ApiResponse<JobPostBookMarkResponse>> bookMarkJobPost(
+		@RequestBody JobPostBookMarkRequest request
+	) {
+		jobPostService.BookMarkJobPost(request.bookMarkJobPost());
+		JobPostBookMarkResponse bookMarkResponse = JobPostBookMarkResponse.builder()
+			.isSuccess(true)
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(bookMarkResponse));
 	}
 
 	@PostMapping

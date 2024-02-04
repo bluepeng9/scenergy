@@ -57,6 +57,8 @@ public class JobPost extends Post {
 	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostApply> jobApplicant = new ArrayList<>();
 
+
+
 	public static JobPost createNewJobPost(
 		User userId,
 		String title,
@@ -104,6 +106,12 @@ public class JobPost extends Post {
 	}
 	public void minusApplicant() {
 		this.totalApplicant -= 1;
+	}
+	public void plusBookMark() {
+		this.bookMark += 1;
+	}
+	public void minusBookMark() {
+		this.bookMark -= 1;
 	}
 
 	public void deleteJobPostInstrumentTags() {
