@@ -1,8 +1,5 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
-
 
 	final BCryptPasswordEncoder bCryptPasswordEncoder;
 	final UserRepository userRepository;
@@ -41,5 +39,15 @@ public class UserService {
 			userRepository.delete(user);
 		}
 		return 1L;
+	}
+
+	public FindUserCommandResult findUser(Long userId) {
+		User user = userRepository.findById(userId).orElseThrow(
+			() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다.")
+		);
+
+		return FindUserCommandResult.builder()
+			.nickname(user.getNickname())
+			.build();
 	}
 }

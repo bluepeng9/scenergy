@@ -1,16 +1,18 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import com.wbm.scenergyspring.domain.user.entity.Gender;
-import com.wbm.scenergyspring.domain.user.entity.User;
-import com.wbm.scenergyspring.domain.user.repository.UserRepository;
-import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import com.wbm.scenergyspring.domain.user.entity.Gender;
+import com.wbm.scenergyspring.domain.user.entity.User;
+import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 
 @SpringBootTest
 @Transactional
@@ -65,5 +67,25 @@ class UserServiceTest {
 		// then
 		Assertions.assertNull(userRepository.findByUsername(username));
 
+	}
+
+	@Test
+	@Transactional
+	void findUserReturnsCorrectUser() {
+		// given
+		CreateUserCommand command = CreateUserCommand.builder()
+			.email("test@naver.com")
+			.password("1234")
+			.nickname("test")
+			.gender(Gender.FEMALE)
+			.username("haeji")
+			.build();
+		Long userId = userService.createUser(command);
+
+		// when
+		FindUserCommandResult result = userService.findUser(userId);
+
+		// then
+		Assertions.assertEquals("test", result.getNickname());
 	}
 }
