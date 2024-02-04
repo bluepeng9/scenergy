@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.domain.follow.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +16,6 @@ import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowersR
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowingRequest;
 import com.wbm.scenergyspring.domain.follow.controller.response.CreateFollowResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.DeleteFollowResponse;
-import com.wbm.scenergyspring.domain.follow.controller.response.FindAllFollowersResponse;
-import com.wbm.scenergyspring.domain.follow.controller.response.FindAllFollowingResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.FindAllResponse;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.service.FollowService;
@@ -35,6 +32,7 @@ public class FollowController {
 
 	private final FollowService followService;
 
+
 	@PostMapping
 	public ResponseEntity<ApiResponse<FollowCommandResult>> createFollow(
 		@RequestBody CreateFollowRequest request
@@ -42,6 +40,7 @@ public class FollowController {
 		FollowCommandResult commandResult = followService.followUser(request.toCreateFollow());
 		return ResponseEntity.ok(ApiResponse.createSuccess(commandResult));
 	}
+
 
 	@DeleteMapping
 	public ResponseEntity<ApiResponse<DeleteFollowResponse>> deleteFollow(
@@ -57,8 +56,6 @@ public class FollowController {
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteFollowResponse));
 	}
-
-
 
 	@GetMapping("/followers")
 	public ResponseEntity<ApiResponse<List<FindAllResponse>>> getAllFollowers(
