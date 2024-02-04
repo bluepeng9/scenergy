@@ -1,7 +1,6 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.wbm.scenergyspring.domain.chat.entity.UnreadMessage;
 import java.util.ArrayList;
 import java.util.List;
 

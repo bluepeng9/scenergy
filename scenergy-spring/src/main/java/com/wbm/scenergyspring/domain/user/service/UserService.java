@@ -65,8 +65,11 @@ public class UserService {
 			command.getGender(),
 			command.getNickname()
 		);
-		return userRepository.save(newUser).getId();
+		User result = userRepository.save(newUser);
+		createUserLocationTags(command.getLocationTagIds(), result);
+		return result.getId();
 	}
+
 
 	@Transactional(readOnly = false)
 	public Long deleteUser(String password, String username) {
@@ -101,8 +104,6 @@ public class UserService {
 
 			userLocationTags.add(userLocationTag);
 		}
-		user.updateUserLocationTag(userLocationTags);
+		user.updateUserLocationTag(userLocationTags);;
 	}
-
-
 }

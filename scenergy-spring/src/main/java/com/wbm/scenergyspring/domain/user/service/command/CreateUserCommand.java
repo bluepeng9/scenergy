@@ -15,5 +15,5 @@ public class CreateUserCommand {
     String nickname;
     String username;
     Gender gender;
-    public List<Long> locationTagIds;
+    List<Long> locationTagIds;
 }
