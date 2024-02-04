@@ -2,17 +2,22 @@ package com.wbm.scenergyspring.domain.user.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
+import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
+import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
-import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -26,6 +31,7 @@ public class UserService {
 
 	final BCryptPasswordEncoder bCryptPasswordEncoder;
 	final UserRepository userRepository;
+	final LocationTagRepository locationTagRepository;
 	final AmazonS3Client amazonS3Client;
 
 	@Value("${cloud.aws.s3.bucket}")
@@ -80,4 +86,23 @@ public class UserService {
 			.nickname(user.getNickname())
 			.build();
 	}
+
+	private void createUserLocationTags(List<Long> locationTagIds, User user) {
+		List<UserLocationTag> userLocationTags = user.getUserLocationTags();
+		userLocationTags.clear();
+
+		for (Long locationTagId : locationTagIds) {
+			LocationTag locationTag = locationTagRepository.findById(locationTagId)
+				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역태그 입니다."));
+
+			UserLocationTag userLocationTag = new UserLocationTag();
+			userLocationTag.updateUser(user);
+			userLocationTag.updateLocationTag(locationTag);
+
+			userLocationTags.add(userLocationTag);
+		}
+		user.updateUserLocationTag(userLocationTags);
+	}
+
+
 }

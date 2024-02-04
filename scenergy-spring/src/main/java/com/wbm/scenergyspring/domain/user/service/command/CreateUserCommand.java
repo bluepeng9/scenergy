@@ -1,5 +1,7 @@
 package com.wbm.scenergyspring.domain.user.service.command;
 
+import java.util.List;
+
 import lombok.Builder;
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 
@@ -13,4 +15,5 @@ public class CreateUserCommand {
     String nickname;
     String username;
     Gender gender;
+    public List<Long> locationTagIds;
 }

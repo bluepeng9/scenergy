@@ -1,5 +1,7 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
+import java.util.List;
+
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -22,5 +24,13 @@ public class UserLocationTag {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "location_tag_id")
     private LocationTag locationTag;
+
+   public void updateUser(User user) {
+       this.user = user;
+   }
+
+   public void updateLocationTag(LocationTag locationTag) {
+       this.locationTag = locationTag;
+   }
 
 }
