@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.transaction.annotation.Transactional;
 import com.wbm.scenergyspring.domain.post.Post;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
@@ -44,7 +43,7 @@ public class JobPost extends Post {
 
 	Long bookMark;
 
-	Long totalApplicant;
+	Long totalApplicant = 0L;
 
 	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostInstrumentTag> jobPostInstrumentTags = new ArrayList<>();
@@ -56,7 +55,7 @@ public class JobPost extends Post {
 	private List<JobPostGenreTag> jobPostGenreTags = new ArrayList<>();
 
 	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<JobApplicant> jobApplicants = new ArrayList<>();
+	private List<JobPostApply> jobApplicant = new ArrayList<>();
 
 	public static JobPost createNewJobPost(
 		User userId,
@@ -100,7 +99,10 @@ public class JobPost extends Post {
 		this.jobPostGenreTags = jobPostGenreTags;
 	}
 
-	public void reomveApplicant() {
+	public void plusApplicant() {
+		this.totalApplicant += 1;
+	}
+	public void minusApplicant() {
 		this.totalApplicant -= 1;
 	}
 

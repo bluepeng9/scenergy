@@ -7,6 +7,7 @@ import java.util.List;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobApplicant;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostApply;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
@@ -35,13 +36,15 @@ public class GetJobPostCommandResponse {
 
     Long bookMark;
 
+    Long totalCount;
+
     private List<InstrumentTagDto> jobPostInstrumentTags = new ArrayList<>();
 
     private List<LocationTagDto> jobPostLocationTags = new ArrayList<>();
 
     private List<GenreTagDto> jobPostGenreTags = new ArrayList<>();
 
-    private List<JobApplicantDto> jobApplicants = new ArrayList<>();
+    private List<JobApplicantDto> jobApplicant = new ArrayList<>();
 
     public static GetJobPostCommandResponse from(JobPost jobPost) {
         User user = jobPost.getUserId();
@@ -64,19 +67,20 @@ public class GetJobPostCommandResponse {
             LocationTagDto from = LocationTagDto.from(tag.getLocationTag());
             locationTags.add(from);
         }
-
-        List<JobApplicant> jobApplicantList = jobPost.getJobApplicants();
-        List<JobApplicantDto> applicants = new ArrayList<>();
-        for(JobApplicant applicant : jobApplicantList) {
-            JobApplicantDto from = JobApplicantDto.from(applicant.getUser());
-            applicants.add(from);
+        Long cnt = 0L;
+        List<JobPostApply> jobApplicantList = jobPost.getJobApplicant();
+        List<JobApplicantDto> applicant = new ArrayList<>();
+        for(JobPostApply jobApplicant : jobApplicantList) {
+            JobApplicantDto from = JobApplicantDto.from(jobApplicant.getUser());
+            cnt += 1;
+            applicant.add(from);
         }
 
         return GetJobPostCommandResponse.builder()
             .jobPostInstrumentTags(instrumentTags)
             .jobPostGenreTags(genreTags)
             .jobPostLocationTags(locationTags)
-            .jobApplicants(applicants)
+            .jobApplicant(applicant)
             .userDto(UserDto.builder()
                     .id(user.getId())
                     .email(user.getEmail())
@@ -88,6 +92,7 @@ public class GetJobPostCommandResponse {
             .isActive(jobPost.getIsActive())
             .peopleRecruited(jobPost.getPeopleRecruited())
             .bookMark(jobPost.getBookMark())
+            .totalCount(cnt)
             .build();
     }
 }
