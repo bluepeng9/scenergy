@@ -10,13 +10,16 @@ import org.springframework.transaction.annotation.Transactional;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostApply;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostApplyRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostGenreTagRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostInstrumentRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostLocationRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.ApplyJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
@@ -47,6 +50,7 @@ public class JobPostService {
 	final JobPostGenreTagRepository jobPostGenreTagRepository;
 	final JobPostInstrumentRepository jobPostInstrumentrepository;
 	final JobPostLocationRepository jobPostLocationRepository;
+	final JobPostApplyRepository jobPostApplyRepository;
 
 	@Transactional(readOnly = false)
 	public Long createJobPost(CreateJobPostCommand command) {
@@ -65,6 +69,24 @@ public class JobPostService {
 		createJobPostInstrumentTag(command.getInstrumentTagIds(), result);
 		createJobPostLocationTag(command.getLocationTagIds(), result);
 		return result.getId();
+	}
+
+	@Transactional(readOnly = false)
+	public String ApplyJobPost(ApplyJobPostCommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
+		User user = userRepository.findByUsername(command.getUserName());
+		if (jobPostApplyRepository.findByJobPostAndUser(jobPost, user) == null) {
+			jobPost.plusApplicant();
+			JobPostApply jobPostApply = new JobPostApply(jobPost, user);
+			jobPostApplyRepository.save(jobPostApply);
+			return "지원완료";
+		} else {
+			JobPostApply jobPostApply = jobPostApplyRepository.findApplyByJobPost(jobPost);
+			jobPost.minusApplicant();
+			jobPostApplyRepository.delete(jobPostApply);
+			return "지원취소";
+		}
 	}
 
 	@Transactional(readOnly = false)
