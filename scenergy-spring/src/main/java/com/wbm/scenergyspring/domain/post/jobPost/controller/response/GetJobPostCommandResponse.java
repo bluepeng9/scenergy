@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobApplicant;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostApply;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
