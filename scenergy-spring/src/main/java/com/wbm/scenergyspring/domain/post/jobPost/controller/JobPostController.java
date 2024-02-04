@@ -38,6 +38,13 @@ public class JobPostController {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getAllJobPostList()), HttpStatus.OK);
 	}
 
+	@GetMapping("/get/{id}")
+	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllMyJobPost(
+		@PathVariable Long id
+	) {
+		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getMyJobPost(id)),HttpStatus.OK);
+	}
+
 	@GetMapping("/get")
 	public ResponseEntity<ApiResponse<GetJobPostCommandResponse>> getJobPost(
 		@RequestBody GetJobPostRequest request
