@@ -1,0 +1,51 @@
+version: "3.8"
+services:
+  zookeeper:
+    image: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+  kafka-1:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-1
+    ports:
+      - "10001:10001"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_HOST_NAME: kafka-1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://kafka-1:10001
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://localhost:10001
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    depends_on:
+      - zookeeper
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "10000:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-1:9092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+    depends_on:
+      - kafka-1
+  mysql-scenergy:
+    image: mysql:latest
+    container_name: mysql-scenergy
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: scenergy
+  mysql-notification:
+    image: mysql:latest
+    container_name: mysql-notification
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: notification

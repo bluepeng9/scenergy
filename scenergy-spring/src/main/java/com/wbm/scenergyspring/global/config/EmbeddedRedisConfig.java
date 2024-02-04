@@ -1,14 +1,15 @@
 package com.wbm.scenergyspring.global.config;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import redis.embedded.RedisServer;
 
 //@Profile("local"): 로컬 환경에서만 작동하도록
-@Profile("secret")
+@Profile("test")
 @Configuration
 public class EmbeddedRedisConfig {
     @Value("${spring.redis.port}")
