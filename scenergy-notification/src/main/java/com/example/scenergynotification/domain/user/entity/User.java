@@ -1,16 +1,20 @@
 package com.example.scenergynotification.domain.user.entity;
 
-import com.example.scenergynotification.global.entity.BaseEntity;
+import lombok.Getter;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+@Getter
+public class User {
 
-@Entity
-public class User extends BaseEntity {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	private String nickname;
+
+	public static User createUser(
+		Long id,
+		String nickname
+	) {
+		User user = new User();
+		user.id = id;
+		user.nickname = nickname;
+		return user;
+	}
 }

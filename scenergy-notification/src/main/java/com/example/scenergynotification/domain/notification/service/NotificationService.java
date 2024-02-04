@@ -7,8 +7,7 @@ import com.example.scenergynotification.domain.notification.entity.FollowNotific
 import com.example.scenergynotification.domain.notification.entity.Notification;
 import com.example.scenergynotification.domain.notification.repository.NotificationRepository;
 import com.example.scenergynotification.domain.notification.service.command.SendFollowNotificationCommand;
-import com.example.scenergynotification.domain.user.entity.User;
-import com.example.scenergynotification.domain.user.repository.UserRepository;
+import com.example.scenergynotification.domain.notification.service.commandresult.SendFollowNotificationCommandResult;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -19,20 +18,19 @@ import lombok.RequiredArgsConstructor;
 public class NotificationService {
 
 	private final NotificationRepository notificationRepository;
-	private final UserRepository userRepository;
 
 	@Transactional(readOnly = false)
-	public Long sendFollowNotification(SendFollowNotificationCommand command) {
-
-		User fromUser = userRepository.getReferenceById(command.getFromUserId());
-		User toUser = userRepository.getReferenceById(command.getToUserId());
-
-		FollowNotification followNotification = FollowNotification.createFollowNotification(
-			toUser,
-			fromUser
+	public SendFollowNotificationCommandResult sendFollowNotification(SendFollowNotificationCommand command) {
+		FollowNotification notification = FollowNotification.createFollowNotification(
+			command.getFromUserId(),
+			command.getToUserId()
 		);
-
-		return notificationRepository.save(followNotification).getId();
+		FollowNotification save = notificationRepository.save(notification);
+		return SendFollowNotificationCommandResult.builder()
+			.notificationId(save.getId())
+			.fromUserId(save.getSender())
+			.toUserId(save.getReceiver())
+			.build();
 	}
 
 	@Transactional(readOnly = false)
@@ -42,4 +40,5 @@ public class NotificationService {
 		);
 		notification.readNotification();
 	}
+
 }
