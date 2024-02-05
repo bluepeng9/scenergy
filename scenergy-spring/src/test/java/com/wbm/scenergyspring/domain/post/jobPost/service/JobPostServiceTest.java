@@ -2,10 +2,12 @@ package com.wbm.scenergyspring.domain.post.jobPost.service;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,12 @@ import com.wbm.scenergyspring.domain.post.jobPost.service.Command.BookMarkComman
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
+import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
+import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
+import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
+import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
@@ -51,11 +59,64 @@ class JobPostServiceTest {
 	@Autowired
 	JobBookMarkRepository jobBookMarkRepository;
 
+	@Autowired
+	GenreTagRepository genreTagRepository;
+
+	@Autowired
+	InstrumentTagRepository instrumentTagRepository;
+
+	@Autowired
+	LocationTagRepository locationTagRepository;
+
+	GenreTag saveGenreTag(String name) {
+		GenreTag tag = genreTagRepository.save(GenreTag.createGenreTag(name));
+		return tag;
+	}
+
+	InstrumentTag saveInstrumentTag(String name) {
+		InstrumentTag tag = instrumentTagRepository.save(InstrumentTag.createInstrumentTag(name));
+		return tag;
+		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
+		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
+		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
+	}
+
+	LocationTag saveLocationTag(String name) {
+		LocationTag tag = locationTagRepository.save(LocationTag.createLocationTag(name));
+		return tag;
+		// locationTagRepository.save(LocationTag.createLocationTag("서울"));
+		// locationTagRepository.save(LocationTag.createLocationTag("인천"));
+		// locationTagRepository.save(LocationTag.createLocationTag("대전"));
+	}
 
 	@Test
 	@DisplayName("게시글 추가")
 	@Transactional
 	void createJobPost() {
+		List<InstrumentTag> instrumentTagList = new ArrayList<>();
+		InstrumentTag instrumentTag1 = saveInstrumentTag("기타");
+		InstrumentTag instrumentTag2 = saveInstrumentTag("드럼");
+		InstrumentTag instrumentTag3 = saveInstrumentTag("베이스");
+		instrumentTagList.add(instrumentTag1);
+		instrumentTagList.add(instrumentTag2);
+		instrumentTagList.add(instrumentTag3);
+
+		List<GenreTag> genreTagList = new ArrayList<>();
+		GenreTag genreTag1 = saveGenreTag("Jazz");
+		GenreTag genreTag2 = saveGenreTag("Pop");
+		GenreTag genreTag3 = saveGenreTag("Hiphop");
+		genreTagList.add(genreTag1);
+		genreTagList.add(genreTag2);
+		genreTagList.add( genreTag3);
+
+		List<LocationTag> locationTagList = new ArrayList<>();
+		LocationTag locationTag1 = saveLocationTag("서울");
+		LocationTag locationTag2 = saveLocationTag("인천");
+		LocationTag locationTag3 = saveLocationTag("대전");
+		locationTagList.add(locationTag1);
+		locationTagList.add(locationTag2);
+		locationTagList.add(locationTag3);
+
 
 		// given
 		User user = User.createNewUser(
@@ -77,9 +138,9 @@ class JobPostServiceTest {
 			IsActive.active
 		);
 
-		List<Long> genreTags = Arrays.asList(1L, 2L, 3L);
-		List<Long> instrumentTags = Arrays.asList(1L, 2L, 3L);
-		List<Long> locationTags = Arrays.asList(1L, 2L, 3L);
+		List<Long> genreTags = Arrays.asList(genreTag1.getId(),genreTag2.getId(),genreTag3.getId());
+		List<Long> instrumentTags = Arrays.asList(instrumentTag1.getId(), instrumentTag2.getId(), instrumentTag3.getId());
+		List<Long> locationTags = Arrays.asList(locationTag1.getId(), locationTag2.getId(), locationTag3.getId());
 
 		CreateJobPostCommand command = CreateJobPostCommand.builder()
 			.userId(saveUser.getId())
@@ -123,6 +184,30 @@ class JobPostServiceTest {
 	@Transactional
 	void updateJobPost() {
 		// given
+		List<InstrumentTag> instrumentTagList = new ArrayList<>();
+		InstrumentTag instrumentTag1 = saveInstrumentTag("기타");
+		InstrumentTag instrumentTag2 = saveInstrumentTag("드럼");
+		InstrumentTag instrumentTag3 = saveInstrumentTag("베이스");
+		instrumentTagList.add(instrumentTag1);
+		instrumentTagList.add(instrumentTag2);
+		instrumentTagList.add(instrumentTag3);
+
+		List<GenreTag> genreTagList = new ArrayList<>();
+		GenreTag genreTag1 = saveGenreTag("Jazz");
+		GenreTag genreTag2 = saveGenreTag("Pop");
+		GenreTag genreTag3 = saveGenreTag("Hiphop");
+		genreTagList.add(genreTag1);
+		genreTagList.add(genreTag2);
+		genreTagList.add( genreTag3);
+
+		List<LocationTag> locationTagList = new ArrayList<>();
+		LocationTag locationTag1 = saveLocationTag("서울");
+		LocationTag locationTag2 = saveLocationTag("인천");
+		LocationTag locationTag3 = saveLocationTag("대전");
+		locationTagList.add(locationTag1);
+		locationTagList.add(locationTag2);
+		locationTagList.add(locationTag3);
+
 		User user = User.createNewUser(
 			"aaa@naver.com",
 			"aaaaa",
@@ -143,9 +228,9 @@ class JobPostServiceTest {
 			IsActive.active
 		);
 
-		List<Long> genreTags = Arrays.asList(1L, 2L, 3L);
-		List<Long> instrumentTags = Arrays.asList(1L, 2L, 3L);
-		List<Long> locationTags = Arrays.asList(1L, 2L, 3L);
+		List<Long> genreTags = Arrays.asList(genreTag1.getId(),genreTag2.getId(),genreTag3.getId());
+		List<Long> instrumentTags = Arrays.asList(instrumentTag1.getId(), instrumentTag2.getId(), instrumentTag3.getId());
+		List<Long> locationTags = Arrays.asList(locationTag1.getId(), locationTag2.getId(), locationTag3.getId());
 
 		CreateJobPostCommand createCommand = CreateJobPostCommand.builder()
 			.userId(saveUser.getId())
@@ -169,9 +254,9 @@ class JobPostServiceTest {
 			.peopleRecruited(5L)
 			.bookMark(1L)
 			.isActive(IsActive.active)
-			.locationTags(Arrays.asList(1L, 2L))
-			.genreTags(Arrays.asList(1L))
-			.instrumentTags(Arrays.asList(2L))
+			.genreTags(Arrays.asList(genreTag1.getId()))
+			.locationTags(Arrays.asList(locationTag1.getId()))
+			.instrumentTags(Arrays.asList(instrumentTag1.getId()))
 			.build();
 
 		// when
@@ -200,7 +285,7 @@ class JobPostServiceTest {
 
 		List<JobPostLocationTag> updatedLocationTagsInJobPost = updatedJobPost.getJobPostLocationTags();
 		Assertions.assertThat(updatedLocationTagsInJobPost).isNotNull();
-		Assertions.assertThat(updatedLocationTagsInJobPost).hasSize(2);
+		Assertions.assertThat(updatedLocationTagsInJobPost).hasSize(1);
 
 		jobPostRepository.deleteById(id);
 	}
@@ -210,9 +295,33 @@ class JobPostServiceTest {
 	@Transactional
 	void deleteJobPost() {
 
+		// given
 		long now = jobPostRepository.count();
 
-		// given
+		List<InstrumentTag> instrumentTagList = new ArrayList<>();
+		InstrumentTag instrumentTag1 = saveInstrumentTag("기타");
+		InstrumentTag instrumentTag2 = saveInstrumentTag("드럼");
+		InstrumentTag instrumentTag3 = saveInstrumentTag("베이스");
+		instrumentTagList.add(instrumentTag1);
+		instrumentTagList.add(instrumentTag2);
+		instrumentTagList.add(instrumentTag3);
+
+		List<GenreTag> genreTagList = new ArrayList<>();
+		GenreTag genreTag1 = saveGenreTag("Jazz");
+		GenreTag genreTag2 = saveGenreTag("Pop");
+		GenreTag genreTag3 = saveGenreTag("Hiphop");
+		genreTagList.add(genreTag1);
+		genreTagList.add(genreTag2);
+		genreTagList.add( genreTag3);
+
+		List<LocationTag> locationTagList = new ArrayList<>();
+		LocationTag locationTag1 = saveLocationTag("서울");
+		LocationTag locationTag2 = saveLocationTag("인천");
+		LocationTag locationTag3 = saveLocationTag("대전");
+		locationTagList.add(locationTag1);
+		locationTagList.add(locationTag2);
+		locationTagList.add(locationTag3);
+
 		User user = User.createNewUser(
 			"aaa@naver.com",
 			"aaaaa",
@@ -233,9 +342,9 @@ class JobPostServiceTest {
 			IsActive.active
 		);
 
-		List<Long> genreTags = Arrays.asList(1L, 2L, 3L);
-		List<Long> instrumentTags = Arrays.asList(1L, 2L);
-		List<Long> locationTags = Arrays.asList(2L, 3L);
+		List<Long> genreTags = Arrays.asList(genreTag1.getId(),genreTag2.getId(),genreTag3.getId());
+		List<Long> instrumentTags = Arrays.asList(instrumentTag1.getId(), instrumentTag2.getId(), instrumentTag3.getId());
+		List<Long> locationTags = Arrays.asList(locationTag1.getId(), locationTag2.getId(), locationTag3.getId());
 
 		CreateJobPostCommand command1 = CreateJobPostCommand.builder()
 			.userId(saveUser.getId())
