@@ -1,27 +1,37 @@
 package com.wbm.scenergyspring.domain.chat.dto;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
+import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
+import lombok.Builder;
+import lombok.Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
+@Data
+@Builder
 public class RedisChatRoomDto implements Serializable {
     private static final long serialVersionUID = 32112411231245123L;
-    private Long roomId;
+    private Long id;
     private String name;
-    private String status;
-    private int memberCount;
+    private int status;
+    private ChatMessageDto firstChatMessage;
+    private int chatUsersCount;
+    private List<Long> chatUserIds;
 
-    public static RedisChatRoomDto createRedisChatRoom(Long roomId, String name, int status, int memberCount) {
-        RedisChatRoomDto redisChatRoomDto = new RedisChatRoomDto();
-        redisChatRoomDto.roomId = roomId;
-        redisChatRoomDto.name = name;
-        redisChatRoomDto.status = Integer.toString(status);
-        redisChatRoomDto.memberCount = memberCount;
-        return redisChatRoomDto;
+    public static RedisChatRoomDto from(ChatRoom chatRoom) {
+        List<Long> chatUserIds = new ArrayList<>();
+        for (ChatUser chatUser : chatRoom.getChatUsers()) {
+            chatUserIds.add(chatUser.getId());
+        }
+        return RedisChatRoomDto.builder()
+                .id(chatRoom.getId())
+                .name(chatRoom.getName())
+                .status(chatRoom.getStatus())
+                .chatUsersCount(chatRoom.getChatUsers().size())
+                .chatUserIds(chatUserIds)
+                .build();
     }
 
     public void updateRoomName(String name) {
@@ -29,6 +39,6 @@ public class RedisChatRoomDto implements Serializable {
     }
 
     public void updateMemberCount(int count) {
-        this.memberCount += count;
+        this.chatUsersCount += count;
     }
 }
