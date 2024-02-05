@@ -1,17 +1,15 @@
 /* ProfileHeader.module.css */
 .profileHeader {
     display: flex;
-    /*flex-direction: row;*/
-    margin: auto;
-    margin-top: 100px;
-    margin-bottom: 80px;
-    /*justify-content: space-between;*/
+    /*align-items: center; !* 가운데 정렬 *!*/
+    margin: 100px auto 80px auto;
 }
 
 .profileHeader img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
+    object-fit: cover; /* 이미지 비율 유지 */
 }
 
 .profileHeader .uploadContainer {
@@ -23,7 +21,6 @@
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
-
 }
 
 .profileHeader .uploadContainer div {
@@ -43,13 +40,29 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    cursor: pointer; /* Add cursor pointer for better UX */
+    cursor: pointer;
 }
 
 .profileHeader .actionButtons {
     display: flex;
     gap: 10px;
     margin-top: 10px;
+}
+
+.actionButtons button{
+    background-color: #22232f;
+    color: white;
+    padding: 7px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    font-weight: bolder;
+}
+
+.actionButtons button:hover {
+    background-color: #cf9eab;
+    color: #ffffff;
 }
 
 .profileInfo {
@@ -61,9 +74,14 @@
     margin-right: 80px;
 }
 
+/*프로필 영상 팔로워 팔로수*/
 .profileInfoCount {
     margin-bottom: 50px;
     padding-top: 50px;
+}
+
+.profileInfoCount span {
+    margin-right: 20px;
 }
 
 .profileNickname {
