@@ -104,6 +104,6 @@ public class UserService {
 
 			userLocationTags.add(userLocationTag);
 		}
-		user.updateUserLocationTag(userLocationTags);;
+		user.updateUserLocationTags(userLocationTags);;
 	}
 }
