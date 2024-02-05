@@ -64,3 +64,11 @@ services:
     depends_on:
         - mysql-scenergy
         - redis
+  scenergy-react:
+    container_name: scenergy-react
+    build:
+      context: scenergy-react/.
+    ports:
+      - "3000:3000"
+    depends_on:
+      - scenergy-spring
