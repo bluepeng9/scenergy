@@ -1,24 +1,26 @@
 package com.wbm.scenergyspring.domain.chat.dto;
 
 import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
-import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
-import com.wbm.scenergyspring.domain.user.entity.User;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @Builder
-public class ChatOnlineInfoDto {
+@AllArgsConstructor
+public class ChatOnlineInfoDto implements Serializable {
     private Long id;
-    private ChatRoom chatRoom;
-    private User user;
+    private Long chatRoomId;
+    private Long userId;
     private Boolean onlineStatus;
 
     public static ChatOnlineInfoDto from(ChatOnlineInfo onlineInfo) {
         return ChatOnlineInfoDto.builder()
                 .id(onlineInfo.getId())
-                .chatRoom(onlineInfo.getChatRoom())
-                .user(onlineInfo.getUser())
+                .chatRoomId(onlineInfo.getChatRoom().getId())
+                .userId(onlineInfo.getChatUser().getUser().getId())
                 .onlineStatus(onlineInfo.getOnlineStatus())
                 .build();
     }

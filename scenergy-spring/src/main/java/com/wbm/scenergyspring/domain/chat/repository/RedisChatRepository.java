@@ -1,12 +1,14 @@
 package com.wbm.scenergyspring.domain.chat.repository;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatOnlineInfoDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
+import com.wbm.scenergyspring.domain.user.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +31,16 @@ public class RedisChatRepository {
     private final RedisSubscriber redisSubscriber;
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private static final String ROOM_ONLINE_MEMBER = "ROOM_ONLINE_MEMBER";
     private static final String UNREAD_MESSAGE = "UNREAD_MESSAGE";
     private final RedisTemplate<String, ChatMessageDto> redisTemplateMessage;
     //operators
-    @Resource(name = "redisTemplate")
+    @Resource(name = "redisTemplateChatRoom")
     private HashOperations<String, String, RedisChatRoomDto> opsHashChatRoom;
     @Resource(name = "redisTemplateUnreadMessage")
     private HashOperations<String, String, UnreadMessageDto> opsHashUnreadMessage;
+    @Resource(name = "redisTemplateOnlineMember")
+    private HashOperations<String, String, ChatOnlineInfoDto> opsHashOnlineMember;
     @Resource(name = "redisTemplateMessage")
     private ListOperations<String, ChatMessageDto> opsListChatMessage;
     @Resource(name = "redisTemplateMessageIndex")
@@ -59,28 +64,50 @@ public class RedisChatRepository {
 
     public Long renameChatRoom(Long roomId, String name) {
         String strRoomId = Long.toString(roomId);
-        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
-        redisChatRoomDto.updateRoomName(name);
-        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
+        RedisChatRoomDto chatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        chatRoomDto.updateRoomName(name);
+        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(chatRoomDto.getId()), chatRoomDto);
         return roomId;
     }
 
     public int updateMemberCount(Long roomId, int count) {
         String strRoomId = Long.toString(roomId);
-        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
-        redisChatRoomDto.updateMemberCount(count);
-        if (redisChatRoomDto.getMemberCount() <= 0) {
+        RedisChatRoomDto chatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        chatRoomDto.updateMemberCount(count);
+        if (chatRoomDto.getChatUsersCount() <= 0) {
             opsHashChatRoom.delete(CHAT_ROOMS, strRoomId);
         } else {
-            opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
+            opsHashChatRoom.put(CHAT_ROOMS, strRoomId, chatRoomDto);
         }
-        return redisChatRoomDto.getMemberCount();
+        return chatRoomDto.getChatUsersCount();
     }
 
-    public RedisChatRoomDto createChatRoom(Long roomId, String name, int status, int memberCount) {
-        RedisChatRoomDto redisChatRoomDto = RedisChatRoomDto.createRedisChatRoom(roomId, name, status, memberCount);
-        opsHashChatRoom.put(CHAT_ROOMS, Long.toString(redisChatRoomDto.getRoomId()), redisChatRoomDto);
-        return redisChatRoomDto;
+    public void inviteChatUsers(ChatRoom chatRoom, List<User> users) {
+        String strRoomId = Long.toString(chatRoom.getId());
+        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        if (redisChatRoomDto != null) {
+            //redis room update
+            opsHashChatRoom.delete(CHAT_ROOMS, strRoomId);
+            opsHashChatRoom.put(CHAT_ROOMS, strRoomId, RedisChatRoomDto.from(chatRoom));
+            //redis onlineMember update
+            for (int i = chatRoom.getChatUsers().size() - users.size(); i < chatRoom.getChatUsers().size(); i++) {
+                ChatUser invitedChatUser = chatRoom.getChatUsers().get(i);
+                String strChatUserId = Long.toString(invitedChatUser.getId());
+                opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, ChatOnlineInfoDto.from(invitedChatUser.getChatOnlineInfo()));
+            }
+        }
+    }
+
+    public void createChatRoom(ChatRoom chatRoom) {
+        String strRoomId = Long.toString(chatRoom.getId());
+        //채팅방 등록
+        opsHashChatRoom.put(CHAT_ROOMS, strRoomId, RedisChatRoomDto.from(chatRoom));
+        //채팅 맴버 online table 등록
+        for (ChatUser chatUser : chatRoom.getChatUsers()) {
+            String strChatUserId = Long.toString(chatUser.getId());
+            ChatOnlineInfo chatOnlineInfo = chatUser.getChatOnlineInfo();
+            opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, ChatOnlineInfoDto.from(chatOnlineInfo));
+        }
     }
 
     //topic을 만들고 listener 설정
@@ -125,6 +152,42 @@ public class RedisChatRepository {
         Collections.reverse(messageList);
         return messageList;
     }
+    //TODO: invite시 onlineInfo추가 할 것
+
+    public void connectRoom(Long roomId, Long chatUserId) {
+        String strRoomId = Long.toString(roomId);
+        String strChatUserId = Long.toString(chatUserId);
+        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+        if (chatOnlineInfoDto != null) { //update
+            chatOnlineInfoDto.setOnlineStatus(true);
+            opsHashOnlineMember.delete(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+            opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, chatOnlineInfoDto);
+        }
+    }
+
+    public void disconnectRoom(Long roomId, Long chatUserId) {
+        String strRoomId = Long.toString(roomId);
+        String strChatUserId = Long.toString(chatUserId);
+        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+        if (chatOnlineInfoDto != null) { //update
+            chatOnlineInfoDto.setOnlineStatus(false);
+            opsHashOnlineMember.delete(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+            opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, chatOnlineInfoDto);
+        }
+    }
+
+    public List<Long> findOfflineMember(RedisChatRoomDto chatRoomDto) {
+        String strRoomId = Long.toString(chatRoomDto.getId());
+        List<ChatOnlineInfoDto> onlineInfoDtos = opsHashOnlineMember.values(ROOM_ONLINE_MEMBER + strRoomId);
+        List<Long> offlineMembers = new ArrayList<>();
+        for (ChatOnlineInfoDto onlineInfoDto : onlineInfoDtos) {
+            if (!onlineInfoDto.getOnlineStatus()) {
+                offlineMembers.add(onlineInfoDto.getUserId());
+            }
+        }
+        return offlineMembers;
+    }
+
     /**
      * 메시지 전송 요청이 들어왔을때 미접속 유저에게 unreadMessage 추가
      *

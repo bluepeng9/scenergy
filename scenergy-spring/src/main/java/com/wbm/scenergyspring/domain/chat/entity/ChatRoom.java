@@ -51,6 +51,11 @@ public class ChatRoom extends BaseEntity {
         chatMessages.add(chatMessage);
     }
 
+    /**
+     * 유저 초대기능
+     *
+     * @param users 초대할 user
+     */
     public void inviteChatUsers(List<User> users) {
         for (User user : users) {
             ChatUser chatUser = ChatUser.createChatUser(this, user);

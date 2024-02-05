@@ -1,7 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -21,19 +20,28 @@ public class ChatOnlineInfo extends BaseEntity {
     @JoinColumn(name = "room_id")
     private ChatRoom chatRoom;
 
-    @JsonBackReference(value = "user-chat_online_infos")
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JsonBackReference(value = "chatuser-chat_online_infos")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "chat_user_id")
+    private ChatUser chatUser;
 
     private Boolean onlineStatus;
 
-    public static ChatOnlineInfo createOnlineInfo(ChatRoom chatRoom, User user, boolean onlineStatus) {
+    public static ChatOnlineInfo createOnlineInfo(ChatRoom chatRoom, ChatUser chatUser, boolean onlineStatus) {
         ChatOnlineInfo onlineInfo = new ChatOnlineInfo();
         onlineInfo.chatRoom = chatRoom;
-        onlineInfo.user = user;
+        onlineInfo.chatUser = chatUser;
         onlineInfo.onlineStatus = onlineStatus;
         return onlineInfo;
     }
+
+    public void changeStatusOn() {
+        onlineStatus = true;
+    }
+
+    public void changeStatusOff() {
+        onlineStatus = false;
+    }
+
 
 }

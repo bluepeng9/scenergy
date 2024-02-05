@@ -28,10 +28,16 @@ public class ChatUser extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonBackReference(value = "chatuser-chat_online_infos")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "chat_user_id")
+    private ChatOnlineInfo chatOnlineInfo;
+
     public static ChatUser createChatUser(ChatRoom chatRoom, User user) {
         ChatUser chatUser = new ChatUser();
         chatUser.chatRoom = chatRoom;
         chatUser.user = user;
+        chatUser.chatOnlineInfo = ChatOnlineInfo.createOnlineInfo(chatRoom, chatUser, false);
         return chatUser;
     }
 
@@ -43,5 +49,19 @@ public class ChatUser extends BaseEntity {
     public int leaveRoom() {
         chatRoom.getChatUsers().remove(this);
         return chatRoom.getChatMessages().size();
+    }
+
+    /**
+     * chatOnlineInfo true로 변경
+     */
+    public void connectRoom() {
+        this.chatOnlineInfo.changeStatusOn();
+    }
+
+    /**
+     * chatOnlineInfo false로 변경
+     */
+    public void disconnectRoom() {
+        this.chatOnlineInfo.changeStatusOff();
     }
 }

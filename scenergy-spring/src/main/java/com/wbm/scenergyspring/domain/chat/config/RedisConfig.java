@@ -1,6 +1,9 @@
 package com.wbm.scenergyspring.domain.chat.config;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatOnlineInfoDto;
+import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,9 +62,36 @@ public class RedisConfig {
     }
 
     @Bean
+    public RedisTemplate<String, RedisChatRoomDto> redisTemplateChatRoom(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, RedisChatRoomDto> redisTemplateChatRoom = new RedisTemplate<>();
+        redisTemplateChatRoom.setConnectionFactory(connectionFactory);
+        redisTemplateChatRoom.setKeySerializer(new StringRedisSerializer());        // Key Serializer
+        redisTemplateChatRoom.setValueSerializer(new Jackson2JsonRedisSerializer<>(RedisChatRoomDto.class));      // Value Serializer
+        return redisTemplateChatRoom;
+    }
+
+    @Bean
     public RedisTemplate<?, ?> redisTemplateMessageIndex(RedisConnectionFactory connectionFactory) {
         RedisTemplate<?, ?> redisTemplateMessageIndex = new RedisTemplate<>();
         redisTemplateMessageIndex.setConnectionFactory(connectionFactory);
         return redisTemplateMessageIndex;
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplateOnlineMember(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplateOnlineMember = new RedisTemplate<>();
+        redisTemplateOnlineMember.setConnectionFactory(redisConnectionFactory);
+        redisTemplateOnlineMember.setKeySerializer(new StringRedisSerializer());
+        redisTemplateOnlineMember.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatOnlineInfoDto.class));
+        return redisTemplateOnlineMember;
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplateUnreadMessage(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplateUnreadMessage = new RedisTemplate<>();
+        redisTemplateUnreadMessage.setConnectionFactory(redisConnectionFactory);
+        redisTemplateUnreadMessage.setKeySerializer(new StringRedisSerializer());
+        redisTemplateUnreadMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(UnreadMessageDto.class));
+        return redisTemplateUnreadMessage;
     }
 }
