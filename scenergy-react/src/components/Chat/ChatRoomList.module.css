@@ -1,3 +1,4 @@
+
 .roomListGlobal {
   padding: 10px;
   width: 500px;
@@ -27,7 +28,7 @@
   margin: 10px;
   display: flex;
   flex-direction: column;
-  max-height: 100vh;
+  height: calc(100vh - 70px);
   overflow: auto;
 }
 

@@ -1,41 +1,25 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./ChatConnect.module.css";
 
-function formatMessage(message) {
-  const maxWord = 30;
-  let formattedMessage = "";
-  let currentLine = "";
-
-  for (let i = 0; i < message.length; i++) {
-    currentLine += message[i];
-    if (currentLine.length >= maxWord || message[i] === " ") {
-      formattedMessage += currentLine + "\n";
-      currentLine = "";
-    }
-  }
-  if (currentLine !== "") {
-    formattedMessage += currentLine + "\n";
-  }
-  return formattedMessage;
-}
-
 const ChatList = ({ chatList, userId }) => {
+  const chatMsgFieldRef = useRef(null);
+  useEffect(() => {
+    const chatMsgElement = chatMsgFieldRef.current;
+
+    if (chatMsgElement) {
+      chatMsgElement.scrollTop = chatMsgElement.scrollHeight;
+    }
+  }, [chatList]);
+
   return (
-    <div className={styles.chatMsgField}>
+    <div className={styles.chatMsgField} ref={chatMsgFieldRef}>
       <div className={styles.chatMsg}>
-        {chatList.map((chatMessage) => (
-          <div className={styles.chatMsgList} key={chatMessage.id}>
-            <div
-              className={
-                chatMessage.senderId === userId
-                  ? styles.myMessage
-                  : styles.otherMessage
-              }
-            >
-              <p>{formatMessage(chatMessage.messageText)}</p>
-              {/* <p>{chatMessage.messageText}</p> */}
-            </div>
-          </div>
+        {chatList.slice().reverse().map((chatMessage) => (
+          <ChatMessage
+            key={chatMessage.id}
+            message={chatMessage}
+            userId={userId}
+          />
         ))}
       </div>
     </div>
@@ -43,9 +27,26 @@ const ChatList = ({ chatList, userId }) => {
 };
 
 const ChatMessage = ({ message, userId }) => {
+  function formatMessage(message) {
+    const maxWord = 30;
+    let formattedMessage = "";
+    let currentLine = "";
+
+    for (let i = 0; i < message.length; i++) {
+      currentLine += message[i];
+      if (currentLine.length >= maxWord || message[i] === " ") {
+        formattedMessage += currentLine + "\n";
+        currentLine = "";
+      }
+    }
+    if (currentLine !== "") {
+      formattedMessage += currentLine + "\n";
+    }
+    return formattedMessage;
+  }
+
   return (
     <div
-      key={message.id}
       className={
         message.senderId === userId ? styles.myMessage : styles.otherMessage
       }

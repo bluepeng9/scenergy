@@ -6,15 +6,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Dialog from "../commons/Dialog/Dialog";
 import axios from "axios";
-import {useParams} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const ChatRoomReal = () => {
+const ChatRoomReal = ({roomId}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   // 나중에 user까지 다 받아오면
-  const {roomId} = useParams();
-  // const roomId = 1;
-  //더미데이터
+  const location = useLocation();
+  const lastMessageId = location.state?.lastMessageId;
+
   const users = [
     {
       id: 1,
@@ -45,7 +45,7 @@ const ChatRoomReal = () => {
 
   const handleUserSelect = (user) => {
     if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id))
-      setSelectedUsers(prevUsers=>[...prevUsers, user]);
+      setSelectedUsers((prevUsers) => [...prevUsers, user]);
     console.log(selectedUsers);
   };
 
@@ -57,7 +57,7 @@ const ChatRoomReal = () => {
       return;
     }
     try {
-        //room_id useParam으로 받아온거 고쳐주기
+      //room_id useParam으로 받아온거 고쳐주기
       const response = await axios.post(
         "http://localhost:8080/chatroom/invite-room",
         {
@@ -76,73 +76,73 @@ const ChatRoomReal = () => {
   };
 
   return (
-      <div className={styles.chatRoomContainer}>
-        <div className={styles.chatRoomHeader}>
-          <div className={styles.chatRoomInfo}>
-            <div className={styles.chatRoomProfileContainer}>
-              <div className={styles.chatRoomProfile}>
-                {/*상대방 프로필 사진*/}
-                <p>프로필</p>
-              </div>
-              <div className={styles.chatRoomUserName}>
-                {/*상대방 닉네임*/}
-                <p>상대방 닉네임</p>
-              </div>
+    <div className={styles.chatRoomContainer}>
+      <div className={styles.chatRoomHeader}>
+        <div className={styles.chatRoomInfo}>
+          <div className={styles.chatRoomProfileContainer}>
+            <div className={styles.chatRoomProfile}>
+              {/*상대방 프로필 사진*/}
+              <p>프로필</p>
             </div>
-            <div className={styles.chatRoomIcon}>
-              {/*누르면 회원 초대*/}
-              <div className={styles.userInvite} onClick={handleModalOpen}>
-                <FontAwesomeIcon icon={faPlus}/>
-              </div>
-              <div className={styles.doRtc}>
-                <FontAwesomeIcon icon={faVideo}/>
-              </div>
-              <div>
-                <FontAwesomeIcon icon={faCircleInfo}/>
-              </div>
+            <div className={styles.chatRoomUserName}>
+              {/*상대방 닉네임*/}
+              <p>상대방 닉네임</p>
             </div>
-            {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
-            {isModalOpen && (
-                <div className={styles.dialogContainer}>
-                  <form onSubmit={handleInvite}>
-                    <Dialog
-                        isModalOpen={isModalOpen}
-                        onClose={() => setIsModalOpen(false)}
-                        title="초대하기"
-                    >
-                      <div>
-                        <div className={styles.roomInviteContainer}>
-                          <span>받는 사람</span>
-                          <input type="text"/>
-                        </div>
-                        <div className={styles.roomInviteGlobal}>
-                          <div className={styles.inviteListContainer}>
-                            {users.map((user) => (
-                                <div
-                                    key={user.id}
-                                    className={styles.inviteList}
-                                    onClick={() => handleUserSelect(user)}
-                                >
-                                  <div className={styles.inviteImg}>이미지</div>
-                                  <div className={styles.inviteUserName}>
-                                    <p>{user.nickname}</p>
-                                  </div>
-                                </div>
-                            ))}
-                          </div>
-                          <div className={styles.inviteBtn}>
-                            <button>초대하기</button>
-                          </div>
-                        </div>
-                      </div>
-                    </Dialog>
-                  </form>
-                </div>
-            )}
           </div>
+          <div className={styles.chatRoomIcon}>
+            {/*누르면 회원 초대*/}
+            <div className={styles.userInvite} onClick={handleModalOpen}>
+              <FontAwesomeIcon icon={faPlus} />
+            </div>
+            <div className={styles.doRtc}>
+              <FontAwesomeIcon icon={faVideo} />
+            </div>
+            <div>
+              <FontAwesomeIcon icon={faCircleInfo} />
+            </div>
+          </div>
+          {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
+          {isModalOpen && (
+            <div className={styles.dialogContainer}>
+              <form onSubmit={handleInvite}>
+                <Dialog
+                  isModalOpen={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  title="초대하기"
+                >
+                  <div>
+                    <div className={styles.roomInviteContainer}>
+                      <span>받는 사람</span>
+                      <input type="text" />
+                    </div>
+                    <div className={styles.roomInviteGlobal}>
+                      <div className={styles.inviteListContainer}>
+                        {users.map((user) => (
+                          <div
+                            key={user.id}
+                            className={styles.inviteList}
+                            onClick={() => handleUserSelect(user)}
+                          >
+                            <div className={styles.inviteImg}>이미지</div>
+                            <div className={styles.inviteUserName}>
+                              <p>{user.nickname}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className={styles.inviteBtn}>
+                        <button>초대하기</button>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog>
+              </form>
+            </div>
+          )}
         </div>
-        <div className={styles.connectContainer}>
-        <ChatConnect roomId={roomId}/>
+      </div>
+      <div className={styles.connectContainer}>
+        <ChatConnect lastMessageId={lastMessageId} roomId={roomId} />
       </div>
     </div>
   );

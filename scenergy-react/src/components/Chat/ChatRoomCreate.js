@@ -1,11 +1,16 @@
 import axios from "axios";
-
+import { useChatRoom } from "../../contexts/ChatRoomContext";
+import { useState } from "react";
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
+  const { addChatRoom } = useChatRoom();
+  const [isCreating, setIsCreating] = useState(false);
   const handleSubmit = async (event) => {
     event.preventDefault();
     //나중에 user 상태 받아와서 room member에 한명 자동을 넣어주고 수식 바꿔주기
     const roomStatus = selectedUsers.length > 1 ? 1 : 0; //1대1채팅, 단체채팅 상태 변경해주기
     const roomName = selectedUsers.map((user) => user.name).join(",");
+
+    setIsCreating(true);
 
     try {
       const response = await axios.post(
@@ -22,19 +27,23 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
         },
       );
       console.log(response.data.data);
-        const chatRoomNumber = response.data.data.chatRoomId;
-        console.log(chatRoomNumber)
-        isRoomCreated(chatRoomNumber);
-      setIsModalOpen(false)
+      const chatRoomNumber = response.data.data.chatRoomId;
+
+      const newRoom = response.data.data;
+      addChatRoom(newRoom);
+
+      setIsCreating(false);
+      setIsModalOpen(false);
     } catch (error) {
       console.error("에러", error);
+      setIsCreating(false);
     }
   };
   return (
     <div>
       <button
         onClick={handleSubmit}
-        disabled={!selectedUsers || selectedUsers.length === 0}
+        disabled={!selectedUsers || selectedUsers.length === 0 || isCreating}
       >
         채팅하기
       </button>
