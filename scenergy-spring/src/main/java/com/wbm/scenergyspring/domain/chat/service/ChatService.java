@@ -51,13 +51,13 @@ public class ChatService {
                 .orElse(ChatUser.createChatUser(chatRoom, user));
         //메시지 타입 ENTER, EXIT, TALK 분기
         String messageType = command.getMessageType();
+        //시스템 알림
         if (messageType.equals("OPER")) {
-            //메시지 entity 생성
-            //TODO: 업데이트 방식 결정 필요
+            //operation 생성
             ChatMessageDto chatMessageDto = ChatMessageDto.builder()
                     .chatRoomId(command.getRoomId())
                     .senderId(0L)
-                    .messageText("업데이트 하세용~~")
+                    .operationCode(1)
                     .build();
             redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessageDto);
             return 0L;
@@ -72,7 +72,6 @@ public class ChatService {
         } else if (messageType.equals("ENTER")) {
             command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
         }
-        //TODO: 현재 접속 중 맴버 조회후 redaCount 계산
         List<Long> offlineMembers = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
         int unreadCount = offlineMembers.size();
 
@@ -99,9 +98,10 @@ public class ChatService {
                     chatMessage
             );
             //mysql 저장
-            offlineUser.getUnreadMessages().add(unreadMessage);
+//            offlineUser.getUnreadMessages().add(unreadMessage);
+            UnreadMessage savedUnreadMessage = unreadMessageRepository.save(unreadMessage);
             //redis 저장
-            redisChatRepository.addUnreadMessage(UnreadMessageDto.from(unreadMessage));
+            redisChatRepository.addUnreadMessage(UnreadMessageDto.from(savedUnreadMessage));
         }
         return chatMessage.getId();
     }
@@ -262,12 +262,13 @@ public class ChatService {
         //redis 접속상태 등록
         redisChatRepository.connectRoom(roomId, chatUser.getId());
         //unreadmessage 제거
-        List<UnreadMessageDto> unreadMessageDtos = redisChatRepository.deleteUnreadMessage(roomId, userId); //redis
-        for (UnreadMessageDto unreadMessageDto : unreadMessageDtos) { //mysql
+        List<UnreadMessageDto> deletedUnreadMessages = redisChatRepository.deleteUnreadMessage(roomId, userId); //redis
+        for (UnreadMessageDto unreadMessageDto : deletedUnreadMessages) { //mysql
             unreadMessageRepository.deleteById(unreadMessageDto.getId());
             //unreadCount update
             ChatMessage chatMessage = chatMessageRepository.findById(unreadMessageDto.getChatMessageId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 메시지"));
             chatMessage.updateUnreadCount();
+            redisChatRepository.updateChatMessageUnreadCount(unreadMessageDto);
         }
         //다른 채팅방 유저에게 채팅 목록 최신화 요청
         CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()

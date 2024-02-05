@@ -1,12 +1,14 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.ListChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatUserRepository;
+import com.wbm.scenergyspring.domain.chat.repository.RedisChatRepository;
 import com.wbm.scenergyspring.domain.chat.service.command.*;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
@@ -36,26 +38,8 @@ class ChatServiceTest {
     UserRepository userRepository;
     @Autowired
     ChatMessageRepository chatMessageRepository;
-
-    List<User> createSaveUsers(int count) {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < count; i++) {
-            User user = UserGenerator.createRandomMember();
-            users.add(user);
-            userRepository.save(user);
-        }
-        return users;
-    }
-
-    CreateChatRoomCommand createChatRoomCommand(String roomName, List<User> users) {
-        CreateChatRoomCommand command = CreateChatRoomCommand
-                .builder()
-                .roomName(roomName)
-                .status(0)
-                .users(users)
-                .build();
-        return command;
-    }
+    @Autowired
+    RedisChatRepository redisChatRepository;
 
     @Test
     @Transactional
@@ -128,9 +112,9 @@ class ChatServiceTest {
         chatService.createChatRoom(createChatRoomCommand("testroom2", room2users));
 
         //when
-        List<ChatRoom> myChatRoom1 = chatRoomRepository.findMyChatRoom(saveUsers.get(0).getId());
-        List<ChatRoom> myChatRoom2 = chatRoomRepository.findMyChatRoom(saveUsers.get(1).getId());
-        List<ChatRoom> myChatRoom3 = chatRoomRepository.findMyChatRoom(saveUsers.get(2).getId());
+        List<ChatRoom> myChatRoom1 = chatRoomRepository.findMyChatRoomByUserId(saveUsers.get(0).getId());
+        List<ChatRoom> myChatRoom2 = chatRoomRepository.findMyChatRoomByUserId(saveUsers.get(1).getId());
+        List<ChatRoom> myChatRoom3 = chatRoomRepository.findMyChatRoomByUserId(saveUsers.get(2).getId());
         //then
         Assertions.assertThat(myChatRoom1.size()).isEqualTo(room1users.size());
         Assertions.assertThat(myChatRoom1.get(0).getChatUsers().get(0).getUser()).isEqualTo(myChatRoom3.get(0).getChatUsers().get(0).getUser());
@@ -175,6 +159,7 @@ class ChatServiceTest {
     @Test
     @Transactional
     void 채팅_100건이상에서_조회테스트() {
+        //given
         List<User> saveUsers = createSaveUsers(2);
         Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
@@ -203,8 +188,8 @@ class ChatServiceTest {
             lastCommand = command;
             chatService.sendMessage(command);
         }
-        List<ChatRoomDto> myChatRooms = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(0).getId()).build());
-        ChatRoomDto myChatRoom = myChatRooms.get(0);
+        List<ListChatRoomDto> myChatRooms = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(0).getId()).build());
+        ListChatRoomDto myChatRoom = myChatRooms.get(0);
 
         LoadChatMessageCommand LoadCommand1 = LoadChatMessageCommand.builder()
                 .chatMessageId(myChatRoom.getFirstChatMessage().getId())
@@ -229,5 +214,92 @@ class ChatServiceTest {
         //then
         Assertions.assertThat(firstchatMessageDtoList.size() + secondChatMessageDtoList.size()).isEqualTo(100 + 50 + 3);
         Assertions.assertThat(lastChatMessage2.getSenderId()).isEqualTo(1L);
+    }
+
+    @Test
+    @Transactional
+    void 채팅_미접속유저_테스트() {
+        //given
+        //room making
+        List<User> saveUsers = createSaveUsers(3);
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
+        //when
+        List<Long> offlineMember1 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        chatService.connectRoom(chatRoomId, saveUsers.get(1).getId());
+        List<Long> offlineMember2 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        chatService.disconnectRoom(chatRoomId, saveUsers.get(0).getId());
+        List<Long> offlineMember3 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        //then
+        Assertions.assertThat(offlineMember1.size()).isEqualTo(saveUsers.size() - 1);
+        Assertions.assertThat(offlineMember2.size()).isEqualTo(saveUsers.size() - 2);
+        Assertions.assertThat(offlineMember2.get(0)).isEqualTo(saveUsers.get(2).getId());
+        Assertions.assertThat(offlineMember3.size()).isEqualTo(saveUsers.size() - 1);
+    }
+
+    @Test
+    @Transactional
+    void 채팅_안읽은_메시지_테스트() {
+        //given
+        List<User> saveUsers = createSaveUsers(3);
+        User user1 = saveUsers.get(0);
+        User user2 = saveUsers.get(1);
+        User user3 = saveUsers.get(2);
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
+
+        int sendCount = 5;
+        //when
+        sendMessage(user1, chatRoomId, sendCount);
+        int unreadMessageCount1 = redisChatRepository.getUnreadMessageCount(chatRoomId, user1.getId());
+        int unreadMessageCount2 = redisChatRepository.getUnreadMessageCount(chatRoomId, user2.getId());
+        int unreadMessageCount3 = redisChatRepository.getUnreadMessageCount(chatRoomId, user3.getId());
+
+        chatService.connectRoom(chatRoomId, user2.getId());
+        sendMessage(user2, chatRoomId, sendCount);
+        int unreadMessageCount4 = redisChatRepository.getUnreadMessageCount(chatRoomId, user1.getId());
+        int unreadMessageCount5 = redisChatRepository.getUnreadMessageCount(chatRoomId, user2.getId());
+        int unreadMessageCount6 = redisChatRepository.getUnreadMessageCount(chatRoomId, user3.getId());
+        //then
+        Assertions.assertThat(unreadMessageCount1).isEqualTo(0);
+        Assertions.assertThat(unreadMessageCount2).isEqualTo(sendCount + 4);
+        Assertions.assertThat(unreadMessageCount3).isEqualTo(sendCount + 4);
+
+        Assertions.assertThat(unreadMessageCount4).isEqualTo(0);
+        Assertions.assertThat(unreadMessageCount5).isEqualTo(0);
+        Assertions.assertThat(unreadMessageCount6).isEqualTo(sendCount * 2 + 4);
+    }
+
+
+    private void sendMessage(User user, Long chatRoomId, int user1SendCount) {
+        for (int i = 0; i < user1SendCount; i++) {
+            CreatePubMessageCommand command = CreatePubMessageCommand.builder()
+                    .userId(user.getId())
+                    .roomId(chatRoomId)
+                    .messageText(user.getUsername() + (i + 1))
+                    .messageType("TALK")
+                    .build();
+            Long chatMessageId = chatService.sendMessage(command);
+        }
+    }
+
+    List<User> createSaveUsers(int count) {
+        List<User> users = new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            User user = UserGenerator.createRandomMember();
+            users.add(user);
+            userRepository.save(user);
+        }
+        return users;
+    }
+
+    CreateChatRoomCommand createChatRoomCommand(String roomName, List<User> users) {
+        CreateChatRoomCommand command = CreateChatRoomCommand
+                .builder()
+                .roomName(roomName)
+                .status(0)
+                .users(users)
+                .build();
+        return command;
     }
 }

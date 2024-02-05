@@ -31,6 +31,7 @@ public class RedisChatRepository {
     private final RedisSubscriber redisSubscriber;
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private static final String CHAT_MESSAGE = "CHAT_MESSAGE";
     private static final String ROOM_ONLINE_MEMBER = "ROOM_ONLINE_MEMBER";
     private static final String UNREAD_MESSAGE = "UNREAD_MESSAGE";
     private final RedisTemplate<String, ChatMessageDto> redisTemplateMessage;
@@ -87,7 +88,6 @@ public class RedisChatRepository {
         RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
         if (redisChatRoomDto != null) {
             //redis room update
-            opsHashChatRoom.delete(CHAT_ROOMS, strRoomId);
             opsHashChatRoom.put(CHAT_ROOMS, strRoomId, RedisChatRoomDto.from(chatRoom));
             //redis onlineMember update
             for (int i = chatRoom.getChatUsers().size() - users.size(); i < chatRoom.getChatUsers().size(); i++) {
@@ -132,7 +132,7 @@ public class RedisChatRepository {
         opsListChatMessage.rightPush(strRoomId, chatMessage);
         //채팅 index 저장
         Long index = redisTemplateMessage.opsForList().size(strRoomId) - 1L;
-        opsHashChatMessageIndex.put(strRoomId, chatMessage.getId(), index);
+        opsHashChatMessageIndex.put(CHAT_MESSAGE + strRoomId, chatMessage.getId(), index);
     }
 
     /**
@@ -143,24 +143,31 @@ public class RedisChatRepository {
      */
     public List<ChatMessageDto> loadChatMessage(ChatMessageDto lastMessage) {
         String strRoomId = Long.toString(lastMessage.getChatRoomId());
-        Long index = (Long) opsHashChatMessageIndex.get(strRoomId, lastMessage.getId()) - 1L;
+        Long index = (Long) opsHashChatMessageIndex.get(CHAT_MESSAGE + strRoomId, lastMessage.getId());
         if (index < 0) {
             return new ArrayList<ChatMessageDto>();
         }
         long searchStart = (index - 99 <= 0) ? 0 : index - 99;
-        List<ChatMessageDto> messageList = opsListChatMessage.range(strRoomId, searchStart, index);
+        List<ChatMessageDto> messageList = opsListChatMessage.range(strRoomId, searchStart, index - 1L);
         Collections.reverse(messageList);
         return messageList;
     }
-    //TODO: invite시 onlineInfo추가 할 것
+
+    public void updateChatMessageUnreadCount(UnreadMessageDto unreadMessageDto) {
+        String strRoomId = Long.toString(unreadMessageDto.getChatRoomId());
+        String strMessageId = Long.toString(unreadMessageDto.getChatMessageId());
+        Long index = (Long) opsHashChatMessageIndex.get(CHAT_MESSAGE + strRoomId, unreadMessageDto.getChatMessageId());
+        ChatMessageDto saveChatMessage = opsListChatMessage.index(strRoomId, index);
+        saveChatMessage.updateUnreadCount();
+        opsListChatMessage.set(strRoomId, index, saveChatMessage);
+    }
 
     public void connectRoom(Long roomId, Long chatUserId) {
         String strRoomId = Long.toString(roomId);
         String strChatUserId = Long.toString(chatUserId);
-        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId);
         if (chatOnlineInfoDto != null) { //update
             chatOnlineInfoDto.setOnlineStatus(true);
-            opsHashOnlineMember.delete(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
             opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, chatOnlineInfoDto);
         }
     }
@@ -168,10 +175,9 @@ public class RedisChatRepository {
     public void disconnectRoom(Long roomId, Long chatUserId) {
         String strRoomId = Long.toString(roomId);
         String strChatUserId = Long.toString(chatUserId);
-        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
+        ChatOnlineInfoDto chatOnlineInfoDto = opsHashOnlineMember.get(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId);
         if (chatOnlineInfoDto != null) { //update
             chatOnlineInfoDto.setOnlineStatus(false);
-            opsHashOnlineMember.delete(ROOM_ONLINE_MEMBER + strRoomId, strRoomId);
             opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, chatOnlineInfoDto);
         }
     }
@@ -210,7 +216,10 @@ public class RedisChatRepository {
         String strRoomId = Long.toString(roomId);
         String strUserId = Long.toString(userId);
         List<UnreadMessageDto> unreadMessageDtos = opsHashUnreadMessage.values(strUserId + UNREAD_MESSAGE + strRoomId);
-        opsHashUnreadMessage.delete(strUserId + UNREAD_MESSAGE + strRoomId);
+        opsHashUnreadMessage.entries(strUserId + UNREAD_MESSAGE + strRoomId).keySet()
+                .forEach(
+                        haskKey -> opsHashUnreadMessage.delete(strUserId + UNREAD_MESSAGE + strRoomId, haskKey)
+                );
         return unreadMessageDtos;
     }
 

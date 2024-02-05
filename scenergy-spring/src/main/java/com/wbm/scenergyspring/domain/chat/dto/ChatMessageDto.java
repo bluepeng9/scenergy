@@ -25,6 +25,7 @@ public class ChatMessageDto {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime createdAt;
+    private int operationCode;
 
     public static ChatMessageDto from(ChatMessage chatMessage) {
         return ChatMessageDto.builder()
@@ -35,5 +36,18 @@ public class ChatMessageDto {
                 .chatRoomId(chatMessage.getChatRoom().getId())
                 .createdAt(chatMessage.getCreatedAt())
                 .build();
+    }
+
+    public void updateUnreadCount() {
+        unreadCount--;
+    }
+
+    /**
+     * ws을 통한 system 동작을 위한 code
+     *
+     * @param code 1: need chatroom message update
+     */
+    public void putOperationCode(int code) {
+        operationCode = code;
     }
 }
