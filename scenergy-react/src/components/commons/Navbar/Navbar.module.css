@@ -69,6 +69,7 @@
 }
 
 .NavBarDropdownGlobal.dropdownOpen .NavBarDropMenu {
+  margin-top: 3px;
   display: block;
   opacity: 1;
   transform: translateY(0);

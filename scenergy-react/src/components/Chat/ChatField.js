@@ -7,6 +7,7 @@ import axios from "axios";
 import ChatRoomCreate from "./ChatRoomCreate";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatRoomReal from "./ChatRoomReal";
+import {useChatRoom} from "../../contexts/ChatRoomContext";
 
 const ChatField = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,7 +16,8 @@ const ChatField = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
   const { roomId } = useParams();
-
+  const realRoomId = parseInt(roomId, 10)
+  const {addChatRoom, chatRooms}=useChatRoom()
   const navigate = useNavigate();
   const users = [
     { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
@@ -50,10 +52,15 @@ const ChatField = () => {
     setIsModalOpen(true);
   };
 
-  const handleRoomCreate = (roomId) => {
+  const handleRoomCreate = async (realRoomId) => {
     setIsCreated(true);
     setIsModalOpen(false);
-    navigate(`/chat/${roomId}`);
+
+    const newRoom = chatRooms.find((room) => room.id === realRoomId);
+    if(newRoom){
+      addChatRoom(newRoom);
+    }
+    navigate(`/chat/${realRoomId}`);
   };
 
   const handleCancel = (userId) => {
@@ -134,7 +141,7 @@ const ChatField = () => {
               </Dialog>
           )}
         </div>
-        {isCreated && <ChatRoomReal roomId={roomId} />}
+        {isCreated && <ChatRoomReal roomId={realRoomId} />}
       </>
   );
 };
