@@ -1,26 +1,25 @@
 package com.wbm.scenergyspring.domain.chat.dto;
 
-import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
-import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.UnreadMessage;
-import com.wbm.scenergyspring.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
 @Builder
-public class UnreadMessageDto {
+public class UnreadMessageDto implements Serializable {
     private Long id;
-    private ChatRoom chatRoom;
-    private User user;
-    private ChatMessage chatMessage;
+    private Long chatRoomId;
+    private Long userId;
+    private Long chatMessageId;
 
     public static UnreadMessageDto from(UnreadMessage unreadMessage) {
         return UnreadMessageDto.builder()
                 .id(unreadMessage.getId())
-                .chatRoom(unreadMessage.getChatRoom())
-                .user(unreadMessage.getUser())
-                .chatMessage(unreadMessage.getChatMessage())
+                .chatRoomId(unreadMessage.getChatRoom().getId())
+                .userId(unreadMessage.getUser().getId())
+                .chatMessageId(unreadMessage.getChatMessage().getId())
                 .build();
     }
 }

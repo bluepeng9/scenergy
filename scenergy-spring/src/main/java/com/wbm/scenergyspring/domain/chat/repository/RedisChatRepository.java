@@ -2,6 +2,10 @@ package com.wbm.scenergyspring.domain.chat.repository;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
+import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
+import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -25,10 +29,13 @@ public class RedisChatRepository {
     private final RedisSubscriber redisSubscriber;
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
+    private static final String UNREAD_MESSAGE = "UNREAD_MESSAGE";
     private final RedisTemplate<String, ChatMessageDto> redisTemplateMessage;
     //operators
     @Resource(name = "redisTemplate")
     private HashOperations<String, String, RedisChatRoomDto> opsHashChatRoom;
+    @Resource(name = "redisTemplateUnreadMessage")
+    private HashOperations<String, String, UnreadMessageDto> opsHashUnreadMessage;
     @Resource(name = "redisTemplateMessage")
     private ListOperations<String, ChatMessageDto> opsListChatMessage;
     @Resource(name = "redisTemplateMessageIndex")
@@ -117,5 +124,36 @@ public class RedisChatRepository {
         List<ChatMessageDto> messageList = opsListChatMessage.range(strRoomId, searchStart, index);
         Collections.reverse(messageList);
         return messageList;
+    }
+    /**
+     * 메시지 전송 요청이 들어왔을때 미접속 유저에게 unreadMessage 추가
+     *
+     * @param unreadMessageDto: 추가할 message
+     */
+    public void addUnreadMessage(UnreadMessageDto unreadMessageDto) {
+        String strRoomId = Long.toString(unreadMessageDto.getChatRoomId());
+        String strChatId = Long.toString(unreadMessageDto.getChatMessageId());
+        //offline member search
+        List<ChatOnlineInfoDto> onlineInfoDtos = opsHashOnlineMember.values(ROOM_ONLINE_MEMBER + strRoomId);
+        for (ChatOnlineInfoDto onlineInfoDto : onlineInfoDtos) {
+            if (!onlineInfoDto.getOnlineStatus()) {
+                String strUserId = Long.toString(onlineInfoDto.getUserId());
+                opsHashUnreadMessage.put(strUserId + UNREAD_MESSAGE + strRoomId, strChatId, unreadMessageDto);
+            }
+        }
+    }
+
+    public List<UnreadMessageDto> deleteUnreadMessage(Long roomId, Long userId) {
+        String strRoomId = Long.toString(roomId);
+        String strUserId = Long.toString(userId);
+        List<UnreadMessageDto> unreadMessageDtos = opsHashUnreadMessage.values(strUserId + UNREAD_MESSAGE + strRoomId);
+        opsHashUnreadMessage.delete(strUserId + UNREAD_MESSAGE + strRoomId);
+        return unreadMessageDtos;
+    }
+
+    public int getUnreadMessageCount(Long roomId, Long userId) {
+        String strRoomId = Long.toString(roomId);
+        String strUserId = Long.toString(userId);
+        return opsHashUnreadMessage.values(strUserId + UNREAD_MESSAGE + strRoomId).size();
     }
 }

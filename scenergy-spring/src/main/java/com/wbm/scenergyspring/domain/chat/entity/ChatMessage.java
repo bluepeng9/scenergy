@@ -30,12 +30,18 @@ public class ChatMessage extends BaseEntity {
     public static ChatMessage createChatMessage(
             Long userId,
             String messageText,
-            ChatRoom chatRoom
+            ChatRoom chatRoom,
+            int unreadCount
     ) {
         ChatMessage chatMessage = new ChatMessage();
         chatMessage.senderId = userId;
         chatMessage.messageText = messageText;
         chatMessage.chatRoom = chatRoom;
+        chatMessage.unreadCount = unreadCount;
         return chatMessage;
+    }
+
+    public void updateUnreadCount() {
+        unreadCount--;
     }
 }

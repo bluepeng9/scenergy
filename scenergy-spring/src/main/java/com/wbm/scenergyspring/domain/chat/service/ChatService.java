@@ -1,15 +1,15 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.ListChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
+import com.wbm.scenergyspring.domain.chat.entity.UnreadMessage;
 import com.wbm.scenergyspring.domain.chat.redis.RedisPublisher;
-import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
-import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
-import com.wbm.scenergyspring.domain.chat.repository.ChatUserRepository;
-import com.wbm.scenergyspring.domain.chat.repository.RedisChatRepository;
+import com.wbm.scenergyspring.domain.chat.repository.*;
 import com.wbm.scenergyspring.domain.chat.service.command.*;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
@@ -30,6 +30,7 @@ public class ChatService {
     final ChatMessageRepository chatMessageRepository;
     final ChatUserRepository chatUserRepository;
     final UserRepository userRepository;
+    final UnreadMessageRepository unreadMessageRepository;
     final RedisChatRepository redisChatRepository;
     final RedisPublisher redisPublisher;
 
@@ -61,21 +62,37 @@ public class ChatService {
         } else if (messageType.equals("ENTER")) {
             command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
         }
+        //TODO: 현재 접속 중 맴버 조회후 redaCount 계산
+        List<Long> offlineMembers = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        int unreadCount = offlineMembers.size();
+
         //메시지 entity 생성
         ChatMessage chatMessage = ChatMessage.createChatMessage(
                 command.getUserId(),
                 command.getMessageText(),
-                chatRoom
+                chatRoom,
+                unreadCount
         );
         //RDB 저장
         chatMessage = chatMessageRepository.save(chatMessage);
-        //메시지 dto 생성
-        ChatMessageDto chatMessageDto = ChatMessageDto.from(chatMessage);
         //redis 저장
-        redisChatRepository.chatMessageSave(chatMessageDto);
+        redisChatRepository.chatMessageSave(ChatMessageDto.from(chatMessage));
         //메시지 전송
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
-        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessageDto);
+        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), ChatMessageDto.from(chatMessage));
+        //접속하지 않은 유저 unread message 추가하기
+        for (Long offlineMemberId : offlineMembers) {
+            User offlineUser = userRepository.findById(offlineMemberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));
+            UnreadMessage unreadMessage = UnreadMessage.createUnreadMessage(
+                    chatRoom,
+                    offlineUser,
+                    chatMessage
+            );
+            //mysql 저장
+            offlineUser.getUnreadMessages().add(unreadMessage);
+            //redis 저장
+            redisChatRepository.addUnreadMessage(UnreadMessageDto.from(unreadMessage));
+        }
         return chatMessage.getId();
     }
 
@@ -168,16 +185,22 @@ public class ChatService {
      * @param command userId
      * @return List<ChatRoom>
      */
-    public List<ChatRoomDto> listMyChatRoom(ListMyChatRoomCommand command) {
-        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
-        List<ChatRoom> myChatRoom = chatRoomRepository.findMyChatRoom(command.getUserId());
-        for (ChatRoom chatRoom : myChatRoom) {
-            ChatRoomDto chatRoomDto = ChatRoomDto.from(chatRoom);
-            List<User> chatUsers = chatUserRepository.findAllByChatRoom(chatRoom);
+    public List<ListChatRoomDto> listMyChatRoom(ListMyChatRoomCommand command) {
+        List<ListChatRoomDto> chatRoomDtoList = new ArrayList<>();
+        List<ChatRoom> myChatRooms = chatRoomRepository.findMyChatRoomByUserId(command.getUserId());
+        for (ChatRoom chatRoom : myChatRooms) {
+            //채팅 참여한 유저 정보 할당
+            List<User> chatUsers = chatUserRepository.findAllByChatRoom(chatRoom); //TODO: 이미 들어있는지 확인하고 있으면 빼버리기
+            //last 채팅메시지 할당
             ChatMessage firstChatMessage = chatMessageRepository.findTop1ByChatRoomOrderByCreatedAtDesc(chatRoom).orElseThrow(() -> new EntityNotFoundException("채팅방에 message가 존재하지 않음"));
             ChatMessageDto firstChatMessageDto = ChatMessageDto.from(firstChatMessage);
-            chatRoomDto.setFirstChatMessage(firstChatMessageDto);
+            // unreadMessageCount 할당
+            int unreadMessageCount = redisChatRepository.getUnreadMessageCount(chatRoom.getId(), command.getUserId());
+            //dto 삽입
+            ListChatRoomDto chatRoomDto = ListChatRoomDto.from(chatRoom);
             chatRoomDto.setChatUsers(chatUsers);
+            chatRoomDto.setFirstChatMessage(firstChatMessageDto);
+            chatRoomDto.setUnreadMessageCount(unreadMessageCount);
             chatRoomDtoList.add(chatRoomDto);
         }
         return chatRoomDtoList;

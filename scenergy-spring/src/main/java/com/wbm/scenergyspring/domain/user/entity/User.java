@@ -1,10 +1,15 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.wbm.scenergyspring.domain.chat.entity.UnreadMessage;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 //user 는 예약어이므로 테이블 이름을 변경해야 함
@@ -26,6 +31,9 @@ public class User extends BaseEntity {
 	Gender gender;
 	@Enumerated(EnumType.STRING)
 	Role role;
+	@JsonManagedReference(value = "user-unread_messages")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	List<UnreadMessage> unreadMessages;
 
 	public static User createNewUser(
 		String email,
@@ -41,6 +49,7 @@ public class User extends BaseEntity {
 		user.gender = gender;
 		user.nickname = nickname;
 		user.role = Role.user;
+		user.unreadMessages = new ArrayList<>();
 		return user;
 	}
 }
