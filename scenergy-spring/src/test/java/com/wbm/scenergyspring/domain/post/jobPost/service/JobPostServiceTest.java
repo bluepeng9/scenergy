@@ -76,17 +76,11 @@ class JobPostServiceTest {
 	InstrumentTag saveInstrumentTag(String name) {
 		InstrumentTag tag = instrumentTagRepository.save(InstrumentTag.createInstrumentTag(name));
 		return tag;
-		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("기타"));
-		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("드럼"));
-		// instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
 	}
 
 	LocationTag saveLocationTag(String name) {
 		LocationTag tag = locationTagRepository.save(LocationTag.createLocationTag(name));
 		return tag;
-		// locationTagRepository.save(LocationTag.createLocationTag("서울"));
-		// locationTagRepository.save(LocationTag.createLocationTag("인천"));
-		// locationTagRepository.save(LocationTag.createLocationTag("대전"));
 	}
 
 	@Test
