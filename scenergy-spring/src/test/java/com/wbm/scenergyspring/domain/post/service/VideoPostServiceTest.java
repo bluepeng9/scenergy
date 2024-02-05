@@ -293,15 +293,11 @@ class VideoPostServiceTest {
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
         VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost.getId());
-//        videoPostGenreTagRepository.flush();
-//        videoPostInstrumentTagRepository.flush();
-        System.out.println("*****************");
-        System.out.println(videoPost.getVideoPostGenreTags().size());
         //when
         List<Long> changedGenreTags = new ArrayList<>();
-        changedGenreTags.add(1L);
+        changedGenreTags.add(genreTagIds.get(0));
         List<Long> changedInstrumentTags = new ArrayList<>();
-        changedInstrumentTags.add(1L);
+        changedInstrumentTags.add(instrumentTagIds.get(0));
         UpdateVideoPostRequest request = new UpdateVideoPostRequest();
         request.setPostVideoId(videoPost.getId());
         request.setPostTitle("changedPostTitle");
