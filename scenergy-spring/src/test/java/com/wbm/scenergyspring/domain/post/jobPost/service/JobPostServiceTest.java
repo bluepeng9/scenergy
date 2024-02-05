@@ -19,7 +19,11 @@ import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.JobBookMarkRepository;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostApplyRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.ApplyJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.BookMarkCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
@@ -30,7 +34,6 @@ import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 
 @SpringBootTest
-@Transactional
 class JobPostServiceTest {
 
 	@Autowired
@@ -42,8 +45,16 @@ class JobPostServiceTest {
 	@Autowired
 	JobPostRepository jobPostRepository;
 
+	@Autowired
+	JobPostApplyRepository jobPostApplyRepository;
+
+	@Autowired
+	JobBookMarkRepository jobBookMarkRepository;
+
+
 	@Test
 	@DisplayName("게시글 추가")
+	@Transactional
 	void createJobPost() {
 
 		// given
@@ -109,6 +120,7 @@ class JobPostServiceTest {
 
 	@Test
 	@DisplayName("게시글 수정")
+	@Transactional
 	void updateJobPost() {
 		// given
 		User user = User.createNewUser(
@@ -195,6 +207,7 @@ class JobPostServiceTest {
 
 	@Test
 	@DisplayName("게시글 삭제")
+	@Transactional
 	void deleteJobPost() {
 
 		long now = jobPostRepository.count();
@@ -250,35 +263,208 @@ class JobPostServiceTest {
 
 	@Test
 	@DisplayName("상세 게시글 조회")
+	@Transactional
 	void getJobPost() {
+
 		// given
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+
+		User saveUser = userRepository.save(user);
+		JobPost newJobPost = JobPost.createNewJobPost(
+			saveUser,
+			"aaa",
+			"aaaa",
+			LocalDateTime.parse("2024-02-01T10:00:00"),
+			4L,
+			0L,
+			IsActive.active
+		);
+		jobPostRepository.save(newJobPost);
 		GetJobPostCommand command = new GetJobPostCommand();
-		command.setJobPostId(3L);
+		long id = newJobPost.getId();;
+		command.setJobPostId(id);
 		GetJobPostCommandResponse response = jobPostService.getJobPost(command);
 
 		// when
-		JobPost findJob = jobPostRepository.findById(3L)
+		JobPost findJob = jobPostRepository.findById(id)
 			.orElseThrow(() -> new EntityNotFoundException("없는 게시글"));
 
 		// then
 		Assertions.assertThat(response.getTitle()).isEqualTo(findJob.getTitle());
+		jobPostRepository.deleteById(id);
 	}
 
 	@Test
 	@DisplayName("특정 유저의 게시글 조회")
+	@Transactional
 	void getMyJobPost() {
-		List<GetJobPostCommandResponse> result = jobPostService.getMyJobPost(1L);
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+		User saveUser = userRepository.save(user);
+		long id = saveUser.getId();
+		List<GetJobPostCommandResponse> result = jobPostService.getMyJobPost(id);
 		int resultSize = result.size();
 		System.out.println(resultSize);
-		Assertions.assertThat(resultSize).isEqualTo(jobPostRepository.findAllByPost(1L).size());
+		Assertions.assertThat(resultSize).isEqualTo(jobPostRepository.findAllByPost(id).size());
+		userRepository.deleteById(id);
+	}
+
+	@Test
+	@DisplayName("북마크한 공고보기")
+	@Transactional
+	void getBookMarkJobPost() {
+
+		// given
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+		userRepository.save(user);
+		long id = user.getId();
+
+		// when
+		List<GetJobPostCommandResponse> result = jobPostService.getBookMarkJobPost(id);
+
+		//then
+		Assertions.assertThat(result.size()).isEqualTo(jobPostRepository.findAllBookMark(id).size());
+		userRepository.deleteById(id);
 
 	}
 
 	@Test
+	@DisplayName("내 지원공고 보기")
+	@Transactional
+	void getAllMyApply() {
+
+		// given
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+		userRepository.save(user);
+		long id = user.getId();
+
+		// when
+		List<GetJobPostCommandResponse> result = jobPostService.getAllMyApply(id);
+
+		//then
+		Assertions.assertThat(result.size()).isEqualTo(jobPostRepository.findAllByPost(id).size());
+		userRepository.deleteById(id);
+	}
+
+
+
+
+	@Test
 	@DisplayName("전체 게시글 조회")
+	@Transactional
 	void getAllJobPostList() {
 		List<GetJobPostCommandResponse> result = jobPostService.getAllJobPostList();
 		int resultSize = result.size();
 		Assertions.assertThat(resultSize).isEqualTo(jobPostRepository.count());
 	}
+
+	@Test
+	@DisplayName("공고 지원하기")
+	@Transactional
+	void ApplyJobPost() {
+		// given
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+
+		User saveUser = userRepository.save(user);
+		JobPost newJobPost = JobPost.createNewJobPost(
+			saveUser,
+			"aaa",
+			"aaaa",
+			LocalDateTime.parse("2024-02-01T10:00:00"),
+			4L,
+			0L,
+			IsActive.active
+		);
+		jobPostRepository.save(newJobPost);
+
+		// when
+		ApplyJobPostCommand command = ApplyJobPostCommand.builder()
+			.jobPostId(newJobPost.getId())
+			.userName(saveUser.getUsername())
+			.build();
+
+		String result = jobPostService.ApplyJobPost(command);
+
+		// then
+		Assertions.assertThat("지원완료").isEqualTo(result);
+		Assertions.assertThat(1).isEqualTo(jobPostApplyRepository.count());
+
+		userRepository.deleteById(saveUser.getId());
+		jobPostRepository.deleteById(newJobPost.getId());
+	}
+
+	@Test
+	@DisplayName("북마크")
+	@Transactional
+	void BookMarkJobPost() {
+
+		long cnt = jobBookMarkRepository.count();
+
+		// given
+		User user = User.createNewUser(
+			"aaa@naver.com",
+			"aaaaa",
+			"aaaa",
+			Gender.FEMALE,
+			"aaa"
+		);
+
+		User saveUser = userRepository.save(user);
+		JobPost newJobPost = JobPost.createNewJobPost(
+			saveUser,
+			"aaa",
+			"aaaa",
+			LocalDateTime.parse("2024-02-01T10:00:00"),
+			4L,
+			0L,
+			IsActive.active
+		);
+		jobPostRepository.save(newJobPost);
+
+		// when
+		BookMarkCommand bookMarkCommand = BookMarkCommand.builder()
+			.jobPostId(newJobPost.getId())
+			.userName(saveUser.getUsername())
+			.build();
+
+		// then
+		String result = jobPostService.BookMarkJobPost(bookMarkCommand);
+
+		Assertions.assertThat(result).isEqualTo("북마크");
+		Assertions.assertThat(cnt + 1).isEqualTo(jobBookMarkRepository.count());
+
+		userRepository.deleteById(saveUser.getId());
+		jobPostRepository.deleteById(newJobPost.getId());
+	}
+
+
 }
