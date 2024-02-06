@@ -3,6 +3,8 @@ package com.wbm.scenergyspring.domain.chat.service.command;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class CreatePubMessageCommand {
@@ -10,4 +12,5 @@ public class CreatePubMessageCommand {
     Long roomId;
     String messageText;
     String messageType;
+    LocalDateTime createAt;
 }
