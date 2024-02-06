@@ -21,8 +21,10 @@ ext {
 }
 
 dependencies {
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.mysql:mysql-connector-j'
     runtimeOnly 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -39,6 +41,29 @@ dependencies {
 
     //sql 로그
     implementation "com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.1"
+
+    // mysql 연결
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // mustache
+    implementation 'org.springframework.boot:spring-boot-starter-mustache'
+
+    // oauth 설정
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    // jwt 설정
+    implementation group: 'com.auth0', name: 'java-jwt', version: '4.3.0'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //chat
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
+
+    //json 직렬화 역직렬화
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
 }
 
 tasks.named('test') {

@@ -1,12 +1,7 @@
 package com.wbm.scenergyspring.domain.user.entity;
 
 import com.wbm.scenergyspring.global.entity.BaseEntity;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,16 +16,31 @@ public class User extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	Long id;
+	@Column(unique = true)
 	String email;
 	String password;
+	@Column(unique = true)
+	String nickname;
+	String username;
+	@Enumerated(EnumType.STRING)
+	Gender gender;
+	@Enumerated(EnumType.STRING)
+	Role role;
 
 	public static User createNewUser(
 		String email,
-		String password
+		String password,
+		String username,
+		Gender gender,
+		String nickname
 	) {
 		User user = new User();
 		user.email = email;
 		user.password = password;
+		user.username = username;
+		user.gender = gender;
+		user.nickname = nickname;
+		user.role = Role.user;
 		return user;
 	}
 }

@@ -1,27 +1,26 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const NaverLoginBtn = styled.img`
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+`;
 
 const NaverLoginButton = () => {
-    const hanleNaverLogin = () => {
-        //네이버 로그인 로직
-        const clientId = process.env.React_APP_NAVER_CLIENT_ID;
-        // const redirectUri = encodeURIComponent(window.location.origin);
-        const callbackUrl = "http://localhost:8002/daebbang/naver/redirect";
+    const navigate = useNavigate();
 
-        //클라이언트 ID, 리다이렉트 URI 등 네이버 개발자 센터서 발급받은 정보 사용
-
-        // 네이버 로그인 API를 호출해 소셜 로그인 기능 구현
-        // window.location.href = 'https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}';
-        window.location.href = 'http://localhost:8002/daebbang/naver/redirect';
-
-
-        // https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=UEFBSKaIlZzXBi31korg&state=1234&redirect_uri=http://localhost:3000/successNaverLogin
+    const handleNaverLogin = () => {
+        // 토큰을 받을 URL에 현재 페이지 주소를 붙여 전달
+        const redirectUri = encodeURIComponent(window.location.href);
+        console.log("토큰 받아지나");
+        window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect_uri=${redirectUri}`;
     };
 
     return (
-        <button onClick={hanleNaverLogin}>
-            Naver 로그인
-        </button>
+        <NaverLoginBtn onClick={handleNaverLogin} src={"/naverlogin.png"} alt="naverlogin" />
     );
-}
+};
 
 export default NaverLoginButton;

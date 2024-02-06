@@ -1,19 +1,16 @@
 spring:
-  jpa:
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
-logging:
-  level:
-    org:
-      hibernate:
-        type:
-          descriptor:
-            sql: trace
-
-decorator:
-  datasource:
-    p6spy:
-      enable-logging=true:
+  profiles:
+    group:
+      default: dev, test
+  config:
+    import:
+      - classpath:/aws.yml
+      - classpath:/redis.yml
+      - classpath:/jpa.yml
+      - classpath:/security.yml
+      - classpath:/logging.yml
+      - classpath:/application-secret.yml
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
