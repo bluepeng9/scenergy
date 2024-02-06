@@ -8,8 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Entity
 @Getter
 public class Video {
@@ -36,7 +34,7 @@ public class Video {
         Video video = new Video();
         video.videoUrlPath = command.getVideoUrlPath();
         video.thumbnailUrlPath = command.getThumbnailUrlPath();
-        video.musicTitle = UUID.randomUUID().toString().replace("-", "") + command.getVideoTitle();
+        video.musicTitle = command.getVideoTitle();
         video.artist = command.getArtist();
 
         return video;
@@ -51,7 +49,7 @@ public class Video {
 		Video video = new Video();
 		video.videoUrlPath = videoUrlPath;
 		video.thumbnailUrlPath = thumbnailUrlPath;
-        video.musicTitle = UUID.randomUUID().toString() + videoTitle;
+        video.musicTitle = videoTitle;
 		video.artist = artist;
 
 		return video;

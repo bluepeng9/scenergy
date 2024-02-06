@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -124,7 +125,7 @@ public class VideoPostService {
     @Transactional(readOnly = false)
     public String uploadJustVideoS3(MultipartFile justVideo) {
         try {
-            String justVideoName = StringUtils.cleanPath(justVideo.getOriginalFilename());
+            String justVideoName = UUID.randomUUID().toString().replace("-", "") + StringUtils.cleanPath(justVideo.getOriginalFilename());
             System.out.println("video/" + justVideoName);
 
             ObjectMetadata metadata = new ObjectMetadata();
@@ -142,7 +143,7 @@ public class VideoPostService {
     @Transactional(readOnly = false)
     public String uploadThumbnailS3(MultipartFile thumbnail) {
         try {
-            String thumbnailName = StringUtils.cleanPath(thumbnail.getOriginalFilename());
+            String thumbnailName = UUID.randomUUID().toString().replace("-", "") + StringUtils.cleanPath(thumbnail.getOriginalFilename());
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(thumbnail.getContentType());
