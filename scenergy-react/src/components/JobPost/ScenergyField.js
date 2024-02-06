@@ -4,12 +4,9 @@ import ScenergyList from "./ScenergyList";
 import Dialog from "../commons/Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFeather } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch, useSelector } from "react-redux";
-import { closeModal, openModal } from "../../actions/actions";
 import { useState } from "react";
 const ScenergyField = () => {
-  const isModalOpen = useSelector((state) => state.isModalOpen);
-  const dispatch = useDispatch();
+    const [isModalOpen, setIsModalOpen] = useState(false)
   const [modalContent, setModalContent] = useState(null);
   const handleOpenChange = () => {
       setModalContent({
@@ -31,7 +28,6 @@ const ScenergyField = () => {
               </div>
           )
       })
-    dispatch(openModal());
     console.log("글쓰끼");
   };
 
@@ -52,7 +48,6 @@ const ScenergyField = () => {
           {isModalOpen && (
             <Dialog
               title={modalContent.title}
-              onClose={() => dispatch(closeModal())}
             >
                 {modalContent.children}
             </Dialog>

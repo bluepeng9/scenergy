@@ -2,6 +2,7 @@ import ScenergyListItem from "../commons/ScenergyList/ScenergyListItem";
 import styles from "./ScenergyList.module.css";
 const ScenergyList = () => {
     //나중에 back api랑 연결해서 map때려서 받아오면 된다
+    const userId = 2;
   return (
     <div className={styles.ListGlobal}>
       <ScenergyListItem

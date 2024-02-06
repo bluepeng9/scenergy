@@ -103,23 +103,6 @@ const ChatConnect = ({ lastMessageId }) => {
     console.log("pubpub");
   };
   const disconnect = () => {
-    if (client.current.connected) {
-      const disconnectMessage = {
-        userId: userId,
-        roomId: realRoomId,
-      };
-      console.log(userId, realRoomId)
-      client.current.publish({
-        destination: "/pub/chat",
-        body: JSON.stringify(disconnectMessage),
-        headers: { roomId: realRoomId.toString(), userId: userId.toString() },
-      });
-
-      setTimeout(() => {
-        client.current.deactivate();
-      }, 5000);
-    }
-
     client.current.deactivate();
   };
   const handleChange = (event) => {
@@ -136,6 +119,7 @@ const ChatConnect = ({ lastMessageId }) => {
 
   useEffect(() => {
     connect();
+    console.log(realRoomId);
     return () => disconnect();
   }, [connect, roomId]);
 
