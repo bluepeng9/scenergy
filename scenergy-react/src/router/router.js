@@ -14,7 +14,7 @@ import BookMark from "../pages/BookMark";
 import EnterPage from "../pages/EnterPage";
 import Portfolio from "../components/Portfolio/Portfolio";
 import ChatRoomReal from "../components/Chat/ChatRoomReal";
-
+import RedirectPage from "../components/User/RedirectPage";
 export const routes = [
   // { path: "*", element: <App /> },
   { path: "/", element: <EnterPage /> },
@@ -30,6 +30,7 @@ export const routes = [
   { path: "/scenergy/bookmark", element: <BookMark /> },
   { path: "/search", element: <SearchPage /> },
   { path: "/videoupload", element: <VideoUploadPage /> },
+  {path: "/oauth2/redirect", element: <RedirectPage/>},
 ];
 
 const router = createBrowserRouter(routes);
