@@ -11,6 +11,7 @@ const ChatPage = () => {
   const location = useLocation();
   const toggleInfoMenu = () => {
     setIsOpenInfo(!isOpenInfo);
+    console.log(isOpenInfo);
   };
 
   return (
@@ -23,9 +24,14 @@ const ChatPage = () => {
         {location.pathname === "/chat" || location.pathname === "/chat/" ? (
           <ChatField />
         ) : (
-          <ChatRoomReal toggleInfoMenu={toggleInfoMenu} />
+          <ChatRoomReal
+            toggleInfoMenu={toggleInfoMenu}
+            className={isOpenInfo ? styles.chatContentWithSidebar : ""}
+          />
         )}
-        {isOpenInfo && <ChatInfo toggleInfoMenu={toggleInfoMenu} />}
+        {isOpenInfo && (
+          <ChatInfo toggleInfoMenu={toggleInfoMenu} isOpenInfo={isOpenInfo} />
+        )}
       </div>
     </>
   );

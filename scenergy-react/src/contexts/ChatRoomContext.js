@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import ChatInfo from "../components/Chat/ChatInfo";
 
 const ChatRoomContext = createContext();
 
@@ -11,7 +12,7 @@ export const ChatRoomProvider = ({ children }) => {
     setSelectedRoomId,
     chatRooms,
     addChatRoom: (newRoom) => {
-      setChatRooms((prevChatRooms) => [...prevChatRooms, newRoom]);
+      setChatRooms((prevChatRooms) => [newRoom, ...prevChatRooms]);
     },
   };
   return (
