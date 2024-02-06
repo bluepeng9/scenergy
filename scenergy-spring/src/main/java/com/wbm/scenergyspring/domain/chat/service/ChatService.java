@@ -15,9 +15,13 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,7 +80,7 @@ public class ChatService {
         } else if (messageType.equals("ENTER")) {
             command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
         }
-        List<Long> offlineMembers = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        List<Long> offlineMembers = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         int unreadCount = offlineMembers.size();
 
         //메시지 entity 생성
@@ -102,17 +106,16 @@ public class ChatService {
                     chatMessage
             );
             //mysql 저장
-//            offlineUser.getUnreadMessages().add(unreadMessage);
             UnreadMessage savedUnreadMessage = unreadMessageRepository.save(unreadMessage);
             //redis 저장
             redisChatRepository.addUnreadMessage(UnreadMessageDto.from(savedUnreadMessage));
+            kafkaTemplate.send("unreadChat", UnreadMessageDto.from(savedUnreadMessage));
         }
         return chatMessage.getId();
     }
 
     /**
      * 채팅방 생성 서비스 method
-     *
      * @param command roomName, status, users
      * @return roomId
      */
@@ -134,7 +137,6 @@ public class ChatService {
 
         //redis 등록
         redisChatRepository.createChatRoom(savedChatRoom);
-        redisChatRepository.enterChatRoom(roomId);
         //생성메시지 발행
         CreatePubMessageCommand pubCreateMessageCommand = CreatePubMessageCommand.builder()
                 .messageType("TALK")
@@ -204,8 +206,8 @@ public class ChatService {
      * @param command userId
      * @return List<ChatRoom>
      */
-    public List<ListChatRoomDto> listMyChatRoom(ListMyChatRoomCommand command) {
-        List<ListChatRoomDto> chatRoomDtoList = new ArrayList<>();
+    public List<ChatRoomDto> listMyChatRoom(ListMyChatRoomCommand command) {
+        List<ChatRoomDto> chatRoomDtoList = new ArrayList<>();
         List<ChatRoom> myChatRooms = chatRoomRepository.findMyChatRoomByUserId(command.getUserId());
         for (ChatRoom chatRoom : myChatRooms) {
             //채팅 참여한 유저 정보 할당
@@ -216,9 +218,9 @@ public class ChatService {
             // unreadMessageCount 할당
             int unreadMessageCount = redisChatRepository.getUnreadMessageCount(chatRoom.getId(), command.getUserId());
             //dto 삽입
-            ListChatRoomDto chatRoomDto = ListChatRoomDto.from(chatRoom);
+            ChatRoomDto chatRoomDto = ChatRoomDto.from(chatRoom);
             chatRoomDto.setChatUsers(chatUsers);
-            chatRoomDto.setFirstChatMessage(firstChatMessageDto);
+            chatRoomDto.setRecentChatMessage(firstChatMessageDto);
             chatRoomDto.setUnreadMessageCount(unreadMessageCount);
             chatRoomDtoList.add(chatRoomDto);
         }
@@ -273,6 +275,9 @@ public class ChatService {
             ChatMessage chatMessage = chatMessageRepository.findById(unreadMessageDto.getChatMessageId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 메시지"));
             chatMessage.updateUnreadCount();
             redisChatRepository.updateChatMessageUnreadCount(unreadMessageDto);
+            //TODO: unreadMessage 중 가장 오래된 메시지의 시간을 계산해 sendmessage에 넣어줘야만 한다.
+            LocalDateTime lastTime;
+
         }
         //다른 채팅방 유저에게 채팅 목록 최신화 요청
         CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()
@@ -288,5 +293,15 @@ public class ChatService {
         chatUser.disconnectRoom();
         //redis 접속해제상태 등록
         redisChatRepository.disconnectRoom(roomId, chatUser.getId());
+    }
+
+    public ChatMessageDto getMessageInfo(GetMessageInfoCommand getMessageInfoCommand) {
+        ChatMessage chatMessage = chatMessageRepository.findById(getMessageInfoCommand.getMessageId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅메시지"));
+        return ChatMessageDto.from(chatMessage);
+    }
+
+    public ChatRoomDto getRoomInfo(GetRoomInfoCommand getRoomInfoCommand) {
+        ChatRoom chatRoom = chatRoomRepository.findById(getRoomInfoCommand.getRoomId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅방"));
+        return ChatRoomDto.from(chatRoom);
     }
 }
