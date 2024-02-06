@@ -12,24 +12,24 @@ import java.util.List;
 
 @Data
 @Builder
-public class ListChatRoomDto implements Serializable {
+public class ChatRoomDto implements Serializable {
     private Long id;
     private String name;
     private int status;
-    private ChatMessageDto firstChatMessage;
+    private ChatMessageDto recentChatMessage;
     private List<UserDto> users;
     private int unreadMessageCount;
 
-    public static ListChatRoomDto from(ChatRoom chatRoom) {
-        return ListChatRoomDto.builder()
+    public static ChatRoomDto from(ChatRoom chatRoom) {
+        return ChatRoomDto.builder()
                 .id(chatRoom.getId())
                 .name(chatRoom.getName())
                 .status(chatRoom.getStatus())
                 .build();
     }
 
-    public void setFirstChatMessage(ChatMessageDto firstChatMessage) {
-        this.firstChatMessage = firstChatMessage;
+    public void setRecentChatMessage(ChatMessageDto recentChatMessage) {
+        this.recentChatMessage = recentChatMessage;
     }
 
     public void setChatUsers(List<User> chatUsers) {

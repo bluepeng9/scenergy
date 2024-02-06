@@ -3,7 +3,7 @@ package com.wbm.scenergyspring.domain.chat.controller;
 import com.wbm.scenergyspring.domain.chat.controller.request.*;
 import com.wbm.scenergyspring.domain.chat.controller.response.*;
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ListChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public class ChatRoomController {
     @GetMapping("/list-mychatroom")
     public ResponseEntity<ApiResponse<ListMyChatRoomResponse>> listMyChatRoom(ListMyChatRoomRequest request) {
         log.info("ListMyChatRoomRequest: " + request);
-        List<ListChatRoomDto> list = chatService.listMyChatRoom(request.toListMyChatRoomCommand());
+        List<ChatRoomDto> list = chatService.listMyChatRoom(request.toListMyChatRoomCommand());
         ListMyChatRoomResponse response = ListMyChatRoomResponse.builder()
                 .myChatRoomList(list)
                 .build();

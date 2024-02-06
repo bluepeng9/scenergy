@@ -1,7 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ListChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;

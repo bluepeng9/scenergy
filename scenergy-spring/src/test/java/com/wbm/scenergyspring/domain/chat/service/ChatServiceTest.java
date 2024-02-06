@@ -1,7 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ListChatRoomDto;
+import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
@@ -188,11 +188,11 @@ class ChatServiceTest {
             lastCommand = command;
             chatService.sendMessage(command);
         }
-        List<ListChatRoomDto> myChatRooms = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(0).getId()).build());
-        ListChatRoomDto myChatRoom = myChatRooms.get(0);
+        List<ChatRoomDto> myChatRooms = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(0).getId()).build());
+        ChatRoomDto myChatRoom = myChatRooms.get(0);
 
         LoadChatMessageCommand LoadCommand1 = LoadChatMessageCommand.builder()
-                .chatMessageId(myChatRoom.getFirstChatMessage().getId())
+                .chatMessageId(myChatRoom.getRecentChatMessage().getId())
                 .build();
 
         //when
@@ -225,11 +225,11 @@ class ChatServiceTest {
         Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
         //when
-        List<Long> offlineMember1 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        List<Long> offlineMember1 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         chatService.connectRoom(chatRoomId, saveUsers.get(1).getId());
-        List<Long> offlineMember2 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        List<Long> offlineMember2 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         chatService.disconnectRoom(chatRoomId, saveUsers.get(0).getId());
-        List<Long> offlineMember3 = redisChatRepository.findOfflineMember(RedisChatRoomDto.from(chatRoom));
+        List<Long> offlineMember3 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         //then
         Assertions.assertThat(offlineMember1.size()).isEqualTo(saveUsers.size() - 1);
         Assertions.assertThat(offlineMember2.size()).isEqualTo(saveUsers.size() - 2);
