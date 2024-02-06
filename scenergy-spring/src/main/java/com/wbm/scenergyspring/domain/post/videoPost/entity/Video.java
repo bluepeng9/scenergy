@@ -2,12 +2,13 @@ package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -35,7 +36,7 @@ public class Video {
         Video video = new Video();
         video.videoUrlPath = command.getVideoUrlPath();
         video.thumbnailUrlPath = command.getThumbnailUrlPath();
-        video.musicTitle = command.getVideoTitle();
+        video.musicTitle = UUID.randomUUID().toString().replace("-", "") + command.getVideoTitle();
         video.artist = command.getArtist();
 
         return video;
@@ -50,7 +51,7 @@ public class Video {
 		Video video = new Video();
 		video.videoUrlPath = videoUrlPath;
 		video.thumbnailUrlPath = thumbnailUrlPath;
-		video.musicTitle = videoTitle;
+        video.musicTitle = UUID.randomUUID().toString() + videoTitle;
 		video.artist = artist;
 
 		return video;

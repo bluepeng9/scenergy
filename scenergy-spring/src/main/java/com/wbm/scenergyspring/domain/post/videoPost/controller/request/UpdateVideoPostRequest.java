@@ -6,6 +6,7 @@ import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoC
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 public class UpdateVideoPostRequest {
@@ -34,7 +35,7 @@ public class UpdateVideoPostRequest {
         UpdateVideoCommand command = UpdateVideoCommand.builder()
                 .videoUrlPath(videoUrlPath)
                 .thumbnailUrlPath(thumbnailUrlPath)
-                .videoTitle(videoTitle)
+                .videoTitle(UUID.randomUUID().toString().replace("-", "") + videoTitle)
                 .videoArtist(videoArtist)
                 .build();
         return command;
