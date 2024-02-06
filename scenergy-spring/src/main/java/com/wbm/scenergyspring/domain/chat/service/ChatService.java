@@ -33,6 +33,10 @@ public class ChatService {
     final UnreadMessageRepository unreadMessageRepository;
     final RedisChatRepository redisChatRepository;
     final RedisPublisher redisPublisher;
+    final RedisTemplate redisTemplate;
+
+    final ChannelTopic channelTopic;
+    final KafkaTemplate<String, Object> kafkaTemplate;
 
     /**
      * 메시지 전송 서비스 method
@@ -59,7 +63,7 @@ public class ChatService {
                     .senderId(0L)
                     .operationCode(1)
                     .build();
-            redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), chatMessageDto);
+            redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageDto);
             return 0L;
         } else if (messageType.equals("EXIT")) {
             command.setMessageText(user.getNickname() + "님이 퇴장하셨습니다.");
@@ -88,7 +92,7 @@ public class ChatService {
         redisChatRepository.chatMessageSave(ChatMessageDto.from(chatMessage));
         //메시지 전송
         // TODO: roomId로 방 주소를 구분하면 주소만 가지고 다른방에 채팅을 할 수 있음. 따라서 암호화 필요 (UUID?)
-        redisPublisher.publish(redisChatRepository.getTopic(command.getRoomId()), ChatMessageDto.from(chatMessage));
+        redisTemplate.convertAndSend(channelTopic.getTopic(), ChatMessageDto.from(chatMessage));
         //접속하지 않은 유저 unread message 추가하기
         for (Long offlineMemberId : offlineMembers) {
             User offlineUser = userRepository.findById(offlineMemberId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));

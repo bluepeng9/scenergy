@@ -4,6 +4,7 @@ import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.dto.ChatOnlineInfoDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,9 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
@@ -27,13 +30,37 @@ public class RedisConfig {
     public RedisConnectionFactory redisConnectionFactory() {
         return new LettuceConnectionFactory(host, port);
     }
+
+    /**
+     * 단일 Topic 사용을 위한 bean 설정
+     * 메시지를 보낼 채팅방 url을 사용하여 전송하기에 topic을 각각 생성하고 listener를 만들어줄 필요가 없음
+     */
+    @Bean
+    public ChannelTopic channelTopic() {
+        return new ChannelTopic("chatroom");
+    }
+
+    /**
+     * 메시지를 구독자에게 보내는 역할
+     */
+    @Bean
+    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+        return new MessageListenerAdapter(subscriber, "sendMessage");
+    }
+
+
     /**
      * redis pub/sub message 처리 listener 설정
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
+    public RedisMessageListenerContainer redisMessageListener(
+            RedisConnectionFactory connectionFactory,
+            MessageListenerAdapter listenerAdapter,
+            ChannelTopic channelTopic
+    ) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(listenerAdapter, channelTopic);
         return container;
     }
 

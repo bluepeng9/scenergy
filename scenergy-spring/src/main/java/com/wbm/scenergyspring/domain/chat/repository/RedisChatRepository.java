@@ -7,7 +7,6 @@ import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
-import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
@@ -15,20 +14,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
 public class RedisChatRepository {
-    //채팅방에 발행되는 메시지를 처리할 listener
-    private final RedisMessageListenerContainer redisMessageListenerContainer;
-    //구독 처리
-    private final RedisSubscriber redisSubscriber;
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private static final String CHAT_MESSAGE = "CHAT_MESSAGE";
@@ -47,12 +42,8 @@ public class RedisChatRepository {
     @Resource(name = "redisTemplateMessageIndex")
     private HashOperations<String, Object, Object> opsHashChatMessageIndex;
 
-    //채팅방에 대화메시지를 발행하기 위한 redis topic 정보. 서버별로 채팅방에 매치되는 topic 정보를 map에 넣어 roomId로 찾을 수 있도록 한다.
-    private Map<String, ChannelTopic> topics;
-
     @PostConstruct
     private void init() {
-        topics = new HashMap<>();
     }
 
     public List<RedisChatRoomDto> findAllRoom() {
@@ -108,21 +99,6 @@ public class RedisChatRepository {
             ChatOnlineInfo chatOnlineInfo = chatUser.getChatOnlineInfo();
             opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, ChatOnlineInfoDto.from(chatOnlineInfo));
         }
-    }
-
-    //topic을 만들고 listener 설정
-    public void enterChatRoom(Long roomId) {
-        String strRoomId = Long.toString(roomId);
-        ChannelTopic topic = topics.get(strRoomId);
-        if (topic == null) {
-            topic = new ChannelTopic(strRoomId);
-            redisMessageListenerContainer.addMessageListener(redisSubscriber, topic);
-            topics.put(strRoomId, topic);
-        }
-    }
-
-    public ChannelTopic getTopic(Long roomId) {
-        return topics.get(Long.toString(roomId));
     }
 
     public void chatMessageSave(ChatMessageDto chatMessage) {
@@ -182,7 +158,7 @@ public class RedisChatRepository {
         }
     }
 
-    public List<Long> findOfflineMember(RedisChatRoomDto chatRoomDto) {
+    public List<Long> getOfflineMembers(RedisChatRoomDto chatRoomDto) {
         String strRoomId = Long.toString(chatRoomDto.getId());
         List<ChatOnlineInfoDto> onlineInfoDtos = opsHashOnlineMember.values(ROOM_ONLINE_MEMBER + strRoomId);
         List<Long> offlineMembers = new ArrayList<>();
@@ -192,6 +168,18 @@ public class RedisChatRepository {
             }
         }
         return offlineMembers;
+    }
+
+    public List<Long> getOnlineMembers(RedisChatRoomDto chatRoomDto) {
+        String strRoomId = Long.toString(chatRoomDto.getId());
+        List<ChatOnlineInfoDto> onlineInfoDtos = opsHashOnlineMember.values(ROOM_ONLINE_MEMBER + strRoomId);
+        List<Long> onlineMembers = new ArrayList<>();
+        for (ChatOnlineInfoDto onlineInfoDto : onlineInfoDtos) {
+            if (onlineInfoDto.getOnlineStatus()) {
+                onlineMembers.add(onlineInfoDto.getUserId());
+            }
+        }
+        return onlineMembers;
     }
 
     /**
