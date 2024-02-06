@@ -1,19 +1,24 @@
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import { faCircleInfo, faPlus } from "@fortawesome/free-solid-svg-icons";
-import { faVideo } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCircleInfo,
+  faPlus,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import Dialog from "../commons/Dialog/Dialog";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
-const ChatRoomReal = ({roomId}) => {
+const ChatRoomReal = ({ toggleInfoMenu }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   // 나중에 user까지 다 받아오면
   const location = useLocation();
   const lastMessageId = location.state?.lastMessageId;
+  const { roomId } = useParams();
+  const realRoomId = parseInt(roomId, 10);
 
   const users = [
     {
@@ -97,7 +102,7 @@ const ChatRoomReal = ({roomId}) => {
             <div className={styles.doRtc}>
               <FontAwesomeIcon icon={faVideo} />
             </div>
-            <div>
+            <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
               <FontAwesomeIcon icon={faCircleInfo} />
             </div>
           </div>

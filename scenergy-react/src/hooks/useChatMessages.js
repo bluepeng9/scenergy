@@ -13,11 +13,7 @@ export const useChatMessages = (lastMessageId) => {
             params: { chatMessage_id: lastMessageId },
           },
         );
-        console.log(data);
-        console.log(data.data);
-        console.log(data.data.messageList);
-        console.log(lastMessageId);
-        return data.data.messageList;
+        return data.data.messageList.reverse();
       } catch (error) {
         throw error.response.data; //백에서 온 오류
       }

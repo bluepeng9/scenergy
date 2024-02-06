@@ -5,14 +5,18 @@ import styles from "./ChatConnect.module.css";
 import ChatInput from "./ChatInput";
 import { useChatMessages } from "../../hooks/useChatMessages";
 import { ChatList } from "./ChatMessageList";
+import { useChatMessageContext } from "../../contexts/ChatMessageContext";
 
-const ChatConnect = ({roomId, lastMessageId}) => {
+const ChatConnect = ({ roomId, lastMessageId }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
+  const [nowLastMessageId, setNowLastMessageId] = useState(lastMessageId);
   const client = useRef({});
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
   const userId = 1;
+
+  const { addChatMessage, setFirstChatMessage, firstChatMessage } =
+    useChatMessageContext();
 
   const {
     data: chatMessage,
@@ -20,6 +24,7 @@ const ChatConnect = ({roomId, lastMessageId}) => {
     isError,
     error,
   } = useChatMessages(lastMessageId);
+
   useEffect(() => {
     if (!isLoading) {
       setChatMessages(chatMessage);
@@ -30,26 +35,32 @@ const ChatConnect = ({roomId, lastMessageId}) => {
     client.current.subscribe("/sub/chat/room/" + roomId, (body) => {
       const messageBody = JSON.parse(body.body);
       setChatMessages((prevMessages) => {
-        if (Array.isArray(prevMessages)) {
-          return [...prevMessages, messageBody];
-        } else {
-          return [messageBody];
-        }
+        const updatedMessages = Array.isArray(prevMessages)
+          ? [...prevMessages, messageBody]
+          : [messageBody];
+        console.log(messageBody);
+        console.log(updatedMessages);
+        return updatedMessages;
       });
-      console.log("subsub");
+      console.log("subsub하네요");
+      console.log(chatMessages);
+      setNowLastMessageId(messageBody.id);
+      setFirstChatMessage(messageBody);
       console.log(messageBody.id);
     });
-  }, [roomId]);
+  }, [roomId, firstChatMessage, setFirstChatMessage]);
 
   const connect = useCallback(() => {
     client.current = new StompJs.Client({
       brokerURL: "ws://localhost:8080/ws",
       reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      heartbeatIncoming: 2000,
+      heartbeatOutgoing: 2000,
       onConnect: () => {
         console.log("yesyes");
         console.log(lastMessageId); //null
+        console.log(roomId);
+        console.log(chatMessages);
         subscribe();
       },
       onError: (error) => {
@@ -100,10 +111,6 @@ const ChatConnect = ({roomId, lastMessageId}) => {
     connect();
     return () => disconnect();
   }, [connect, roomId]);
-
-  useEffect(() => {
-    console.log(chatMessages);
-  }, [chatMessages]);
 
   if (isLoading) return <div>Loading messages...</div>;
   if (isError) return <div>Error loading messages: {error.message}</div>;

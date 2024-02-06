@@ -141,7 +141,7 @@ const ChatField = () => {
               </Dialog>
           )}
         </div>
-        {isCreated && <ChatRoomReal roomId={realRoomId} />}
+        {isCreated && <ChatRoomReal />}
       </>
   );
 };

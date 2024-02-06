@@ -14,7 +14,7 @@ const ChatList = ({ chatList, userId }) => {
   return (
     <div className={styles.chatMsgField} ref={chatMsgFieldRef}>
       <div className={styles.chatMsg}>
-        {chatList.slice().reverse().map((chatMessage) => (
+        {chatList.map((chatMessage) => (
           <ChatMessage
             key={chatMessage.id}
             message={chatMessage}

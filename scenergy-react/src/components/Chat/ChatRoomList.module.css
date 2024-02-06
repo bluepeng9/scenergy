@@ -1,4 +1,3 @@
-
 .roomListGlobal {
   padding: 10px;
   width: 500px;
@@ -12,6 +11,11 @@
   display: flex;
   flex-direction: column;
 }
+.roomUserContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .message {
   margin: 0 10px;
@@ -24,6 +28,56 @@
   align-items: center;
 }
 
+.dialogSearchGlobal {
+  z-index: 1;
+  padding: 10px;
+}
+
+.dialogSearchGlobal span {
+  font-weight: bold;
+}
+
+.dialogSearchInput {
+  padding: 5px;
+  width: 300px;
+  border: none;
+  margin-left: 10px;
+  background-color: transparent;
+}
+
+.dialogSearchInput:focus {
+  border: none;
+  outline: none;
+}
+
+.dialogUserList {
+  margin: 10px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 30px;
+}
+
+.dialogUserNick {
+  font-weight: bold;
+}
+
+.searchResultTrue,
+.searchResultFalse {
+  margin-top: auto;
+}
+
+.chatFieldInfo {
+  display: flex;
+}
+
+.createBtn {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
 .roomListContainer {
   margin: 10px;
   display: flex;

@@ -1,7 +1,6 @@
 import styles from "./ChatConnect.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
-
 const ChatInput = ({ chat, handleChange, handleSubmit }) => {
   return (
     <form onSubmit={(event) => handleSubmit(event, chat)}>

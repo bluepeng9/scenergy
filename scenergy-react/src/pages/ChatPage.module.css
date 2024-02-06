@@ -1,4 +1,9 @@
 .chatPageGlobal{
     display: flex;
     height: 100vh;
+    transition: transform 0.5s ease;
+}
+
+.slideLeft{
+    transform: translateX(-200px);
 }
