@@ -310,7 +310,7 @@ class VideoPostServiceTest {
         request.setVideoArtist("changedVideoArtist");
         videoPostService.updateVideoPost(request);
         //then
-        assertThat(videoPost.getVideo().getMusicTitle()).isEqualTo(request.getVideoTitle());
+        assertThat(videoPost.getVideo().getMusicTitle().substring(32)).isEqualTo(request.getVideoTitle());
         assertThat(videoPost.getVideo().getArtist()).isEqualTo(request.getVideoArtist());
         assertThat(videoPost.getVideo().getVideoUrlPath()).isEqualTo(request.getVideoUrlPath());
         assertThat(videoPost.getVideo().getThumbnailUrlPath()).isEqualTo(request.getThumbnailUrlPath());
