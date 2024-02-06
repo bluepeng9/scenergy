@@ -1,16 +1,23 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+
+import java.io.IOException;
+import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +26,29 @@ public class UserService {
 
 	final BCryptPasswordEncoder bCryptPasswordEncoder;
 	final UserRepository userRepository;
+	final AmazonS3Client amazonS3Client;
+
+	@Value("${cloud.aws.s3.bucket}")
+	private String bucket;
+
+	@Transactional(readOnly = false)
+	public String uploadProfileS3(UploadProfileCommand command) {
+		try {
+			String profileName = UUID.randomUUID().toString().replace("-", "") + StringUtils.cleanPath(Objects.requireNonNull(command.getMultipartFile().getOriginalFilename()));
+
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentType(command.getMultipartFile().getContentType());
+			metadata.setContentLength(command.getMultipartFile().getSize());
+			amazonS3Client.putObject(bucket, "profile/" + profileName, command.getMultipartFile().getInputStream(), metadata);
+
+			String profileUrlPath = amazonS3Client.getUrl(bucket, "profile/" + profileName).toString();
+			userRepository.findById(command.getUserId()).get().updateUrl(profileUrlPath);
+			return profileUrlPath;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	@Transactional(readOnly = false)
 	public Long createUser(CreateUserCommand command) {
