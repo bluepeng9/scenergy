@@ -10,7 +10,7 @@ import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 
 //userId나중에 {userId}로 넣어줘야됨
-const userId = 2;
+const userId = 3;
 const ChatRoomList = () => {
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -158,8 +158,8 @@ const ChatRoomList = () => {
             <Link
               state={
                 ({
-                  lastMessageId: room.firstChatMessage
-                    ? room.firstChatMessage.id
+                  lastMessageId: room.recentChatMessage
+                    ? room.recentChatMessage.id
                     : null,
                 },
                 { RoomDetail: room })
@@ -178,8 +178,8 @@ const ChatRoomList = () => {
                 </div>
                 <div className={styles.listChatLatestContent}>
                   <p className={styles.chatLastMsg}>
-                    {room.firstChatMessage
-                      ? room.firstChatMessage.messageText
+                    {room.recentChatMessage
+                      ? room.recentChatMessage.messageText
                       : "No messages"}
                   </p>
                 </div>

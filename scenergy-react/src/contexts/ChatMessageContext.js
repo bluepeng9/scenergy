@@ -6,7 +6,7 @@ export const useChatMessageContext = () => useContext(ChatMessageContext);
 
 export const ChatMessageProvider = ({ children }) => {
   const [chatMessages, setChatMessages] = useState([]);
-  const [firstChatMessage, setFirstChatMessage] = useState("null");
+  const [recentChatMessage, setRecentChatMessage] = useState("null");
 
   const addChatMessage = (newMessage) => {
     setChatMessages((prevMessages) => {
@@ -23,8 +23,8 @@ export const ChatMessageProvider = ({ children }) => {
       console.log(updatedMessages);
       return updatedMessages;
     });
-    if (!firstChatMessage) {
-      setFirstChatMessage(newMessage);
+    if (!recentChatMessage) {
+      setRecentChatMessage(newMessage);
     }
   };
 
@@ -33,8 +33,8 @@ export const ChatMessageProvider = ({ children }) => {
       value={{
         chatMessages,
         addChatMessage,
-        firstChatMessage,
-        setFirstChatMessage,
+        recentChatMessage: recentChatMessage,
+        setRecentChatMessage: setRecentChatMessage,
       }}
     >
       {children}

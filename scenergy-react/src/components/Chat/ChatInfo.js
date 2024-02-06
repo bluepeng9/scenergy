@@ -9,7 +9,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
   const realRoomId = parseInt(roomId, 10);
   setSelectedRoomId(realRoomId);
   const selectedChatRoom = chatRooms.find((room) => room.id === realRoomId);
-
+  console.log(selectedChatRoom);
   return (
     <>
       <div

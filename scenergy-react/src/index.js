@@ -17,13 +17,11 @@ root.render(
   <Provider store={store}>
     <ChatRoomProvider>
       <ChatMessageProvider>
-        <ChatMessageProvider>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router}>
-              <App />
-            </RouterProvider>
-          </QueryClientProvider>
-        </ChatMessageProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router}>
+            <App />
+          </RouterProvider>
+        </QueryClientProvider>
       </ChatMessageProvider>
     </ChatRoomProvider>
   </Provider>,

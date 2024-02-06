@@ -7,16 +7,21 @@ import { useChatMessages } from "../../hooks/useChatMessages";
 import { ChatList } from "./ChatMessageList";
 import { useChatMessageContext } from "../../contexts/ChatMessageContext";
 
-const ChatConnect = ({ roomId, lastMessageId }) => {
+const ChatConnect = ({ lastMessageId }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [nowLastMessageId, setNowLastMessageId] = useState(lastMessageId);
   const client = useRef({});
   const location = useLocation();
-  const userId = 1;
+  const userId = 3;
+  const { roomId } = useParams();
+  const realRoomId = parseInt(roomId, 10);
 
-  const { addChatMessage, setFirstChatMessage, firstChatMessage } =
-    useChatMessageContext();
+  const {
+    addChatMessage,
+    setRecentChatMessage: setRecentChatMessage,
+    recentChatMessage: recentChatMessage,
+  } = useChatMessageContext();
 
   const {
     data: chatMessage,
@@ -32,7 +37,7 @@ const ChatConnect = ({ roomId, lastMessageId }) => {
   }, [chatMessage, isLoading]);
 
   const subscribe = useCallback(() => {
-    client.current.subscribe("/sub/chat/room/" + roomId, (body) => {
+    client.current.subscribe("/sub/chat/room/" + realRoomId, (body) => {
       const messageBody = JSON.parse(body.body);
       setChatMessages((prevMessages) => {
         const updatedMessages = Array.isArray(prevMessages)
@@ -45,10 +50,10 @@ const ChatConnect = ({ roomId, lastMessageId }) => {
       console.log("subsub하네요");
       console.log(chatMessages);
       setNowLastMessageId(messageBody.id);
-      setFirstChatMessage(messageBody);
+      setRecentChatMessage(messageBody);
       console.log(messageBody.id);
     });
-  }, [roomId, firstChatMessage, setFirstChatMessage]);
+  }, [realRoomId, recentChatMessage, setRecentChatMessage]);
 
   const connect = useCallback(() => {
     client.current = new StompJs.Client({
@@ -66,6 +71,11 @@ const ChatConnect = ({ roomId, lastMessageId }) => {
       onError: (error) => {
         console.log(error);
       },
+
+      connectHeaders: {
+        roomId: realRoomId.toString(),
+        userId: userId.toString(),
+      },
     });
     client.current.activate();
   }, [subscribe]);
@@ -78,7 +88,7 @@ const ChatConnect = ({ roomId, lastMessageId }) => {
     const message = {
       //TODO:나중에 header로 user정보 담아왔을때 user_id 받자받자
       user_id: 2,
-      room_id: roomId,
+      room_id: realRoomId,
       message: chat,
       messageType: "TALK",
     };
