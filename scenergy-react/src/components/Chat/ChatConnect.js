@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import styles from "./ChatConnect.module.css";
 import ChatInput from "./ChatInput";
@@ -12,8 +12,7 @@ const ChatConnect = ({ lastMessageId }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [nowLastMessageId, setNowLastMessageId] = useState(lastMessageId);
   const client = useRef({});
-  const location = useLocation();
-  const userId = 3;
+  const userId = 2;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
 
@@ -28,7 +27,15 @@ const ChatConnect = ({ lastMessageId }) => {
     isLoading,
     isError,
     error,
-  } = useChatMessages(lastMessageId);
+  } = useChatMessages(nowLastMessageId); //현재 마지막 메세지 id 바뀔때마다
+
+  useEffect(() => {
+    if (chatMessage) {
+      addChatMessage(chatMessage);
+      setNowLastMessageId(chatMessage.id);
+      setRecentChatMessage(chatMessage);
+    }
+  }, [chatMessage, addChatMessage, setRecentChatMessage]);
 
   useEffect(() => {
     if (!isLoading) {
