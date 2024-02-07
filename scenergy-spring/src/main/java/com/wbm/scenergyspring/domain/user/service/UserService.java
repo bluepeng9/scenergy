@@ -14,6 +14,7 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;

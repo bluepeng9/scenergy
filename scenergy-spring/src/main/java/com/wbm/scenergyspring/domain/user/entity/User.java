@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.wbm.scenergyspring.domain.chat.entity.UnreadMessage;
 import com.wbm.scenergyspring.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -60,7 +61,7 @@ public class User extends BaseEntity {
 		this.url = url;
 	}
 
-	public void updateUserLocationTag(List<UserLocationTag> userLocationTags) {
+	public void updateUserLocationTags(List<UserLocationTag> userLocationTags) {
 		this.userLocationTags = userLocationTags;
 	}
 }
