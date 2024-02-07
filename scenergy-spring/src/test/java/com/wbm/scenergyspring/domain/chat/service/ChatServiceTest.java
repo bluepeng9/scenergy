@@ -232,11 +232,15 @@ class ChatServiceTest extends IntegrationTest {
         List<User> saveUsers = createSaveUsers(3);
         Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
+        String sessionIdUser1 = "session1-c";
+        String sessionIdUser2 = "session2-c";
+        String sessionIdUser3 = "session3-c";
         //when
+        chatService.connectRoom(chatRoomId, saveUsers.get(0).getId(), sessionIdUser1);
         List<Long> offlineMember1 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
-        chatService.connectRoom(chatRoomId, saveUsers.get(1).getId());
+        chatService.connectRoom(chatRoomId, saveUsers.get(1).getId(), sessionIdUser2);
         List<Long> offlineMember2 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
-        chatService.disconnectRoom(chatRoomId, saveUsers.get(0).getId());
+        chatService.disconnectRoom(sessionIdUser1);
         List<Long> offlineMember3 = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         //then
         Assertions.assertThat(offlineMember1.size()).isEqualTo(saveUsers.size() - 1);
@@ -257,13 +261,19 @@ class ChatServiceTest extends IntegrationTest {
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
 
         int sendCount = 5;
+
+        String sessionIdUser1 = "session1-u";
+        String sessionIdUser2 = "session2-u";
+        String sessionIdUser3 = "session3-u";
+        chatService.connectRoom(chatRoomId, user1.getId(), sessionIdUser1);
         //when
         sendMessage(user1, chatRoomId, sendCount);
         int unreadMessageCount1 = redisChatRepository.getUnreadMessageCount(chatRoomId, user1.getId());
         int unreadMessageCount2 = redisChatRepository.getUnreadMessageCount(chatRoomId, user2.getId());
         int unreadMessageCount3 = redisChatRepository.getUnreadMessageCount(chatRoomId, user3.getId());
 
-        chatService.connectRoom(chatRoomId, user2.getId());
+        chatService.connectRoom(chatRoomId, user2.getId(), sessionIdUser2);
+
         sendMessage(user2, chatRoomId, sendCount);
         int unreadMessageCount4 = redisChatRepository.getUnreadMessageCount(chatRoomId, user1.getId());
         int unreadMessageCount5 = redisChatRepository.getUnreadMessageCount(chatRoomId, user2.getId());
@@ -278,6 +288,18 @@ class ChatServiceTest extends IntegrationTest {
         Assertions.assertThat(unreadMessageCount6).isEqualTo(sendCount * 2 + 4);
     }
 
+    @Test
+    @Transactional
+    void 유저세션_저장_테스트() {
+        List<User> saveUsers = createSaveUsers(3);
+        User user1 = saveUsers.get(0);
+        User user2 = saveUsers.get(1);
+        User user3 = saveUsers.get(2);
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        String sessionId = "sessionId";
+        chatService.connectRoom(chatRoomId, user1.getId(), sessionId);
+        chatService.disconnectRoom(sessionId);
+    }
 
     private void sendMessage(User user, Long chatRoomId, int user1SendCount) {
         for (int i = 0; i < user1SendCount; i++) {
@@ -290,6 +312,7 @@ class ChatServiceTest extends IntegrationTest {
             Long chatMessageId = chatService.sendMessage(command);
         }
     }
+
 
     List<User> createSaveUsers(int count) {
         List<User> users = new ArrayList<>();
@@ -310,4 +333,5 @@ class ChatServiceTest extends IntegrationTest {
                 .build();
         return command;
     }
+
 }
