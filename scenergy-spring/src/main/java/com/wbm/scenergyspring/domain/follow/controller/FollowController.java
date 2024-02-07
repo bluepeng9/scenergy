@@ -60,21 +60,15 @@ public class FollowController {
 	}
 
 	@GetMapping("/followers")
-	public ResponseEntity<ApiResponse<List<FindAllResponse>>> getAllFollowers(
+	public ResponseEntity<ApiResponse<FindAllResponse>> getAllFollowers(
 		@RequestBody FindAllFollowersRequest request
 	) {
 		List<Follow> followers = followService.findAllFollowers(request.getAllFollowers());
-		List<FindAllResponse> followersResponseList = new ArrayList<>();
+		FindAllResponse followersResponse = FindAllResponse.builder()
+			.findAllResponseList(FindAllResponse.fromList(followers))
+			.build();
 
-		for (Follow follow : followers) {
-			FindAllResponse followersResponse = FindAllResponse.builder()
-				.from(follow.getFrom())
-				.to(follow.getTo())
-				.build();
-			followersResponseList.add(followersResponse);
-		}
-
-		return ResponseEntity.ok(ApiResponse.createSuccess(followersResponseList));
+		return ResponseEntity.ok(ApiResponse.createSuccess(followersResponse));
 	}
 
 	@GetMapping("/followings")
