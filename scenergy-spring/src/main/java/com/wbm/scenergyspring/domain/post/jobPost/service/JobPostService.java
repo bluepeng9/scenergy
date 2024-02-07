@@ -1,32 +1,12 @@
 package com.wbm.scenergyspring.domain.post.jobPost.service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobBookMark;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostApply;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobBookMarkRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostApplyRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostGenreTagRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostInstrumentRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostLocationRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.ApplyJobPostCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.BookMarkCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.UpdateJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.*;
+import com.wbm.scenergyspring.domain.post.jobPost.repository.*;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.*;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
@@ -36,8 +16,12 @@ import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -236,6 +220,32 @@ public class JobPostService {
 			jobPostLocationTags.add(jobPostLocationTag);
 		}
 		jobPost.updateJobPostLocationTags(jobPostLocationTags);
+	}
+
+	public List<SearchAllJobPostResponse> searchAllJobPost(SearchAllJobPostCommand command) {
+		List<JobPost> jobPosts = jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt());
+		List<SearchAllJobPostResponse> result = new ArrayList<>();
+		System.out.println("************");
+		System.out.println(jobPosts.size());
+		System.out.println("************");
+		for (JobPost post : jobPosts) {
+			SearchAllJobPostResponse response = SearchAllJobPostResponse.builder()
+					.jobPostId(post.getId())
+					.userId(post.getUserId().getId())
+					.title(post.getTitle())
+					.content(post.getContent())
+					.expirationDate(post.getExpirationDate())
+					.peopleRecruited(post.getPeopleRecruited())
+					.bookMark(post.getBookMark())
+					.totalApplicant(post.getTotalApplicant())
+					.isActive(post.getIsActive())
+					.jgt(JobPostGenreTagCommand.createJobPostGenreTagCommand(post.getJobPostGenreTags()))
+					.jit(JobPostInstrumentCommand.createJobPostInstrumentTagCommand(post.getJobPostInstrumentTags()))
+					.jlt(JobPostLocationCommand.createJobPostLocationTagCommand(post.getJobPostLocationTags()))
+					.build();
+			result.add(response);
+		}
+		return result;
 	}
 
 }

@@ -1,33 +1,16 @@
 package com.wbm.scenergyspring.domain.post.jobPost.controller;
 
-import java.util.List;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.ApplyJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.JobPostBookMarkRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.ApplyJobPostReponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.*;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.*;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -124,5 +107,15 @@ public class JobPostController {
 		deleteJobPostResponse.setJobPostId(jobPostId);
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteJobPostResponse));
+	}
+
+	@PostMapping("/search")
+	public ResponseEntity<ApiResponse<List<SearchAllJobPostResponse>>> searchJobPost(
+			@RequestBody SearchAllJobPostRequest request
+	) {
+		SearchAllJobPostCommand command = request.toSearchAllJobPostCommand();
+		List<SearchAllJobPostResponse> list = jobPostService.searchAllJobPost(command);
+
+		return ResponseEntity.ok(ApiResponse.createSuccess(list));
 	}
 }
