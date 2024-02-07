@@ -1,7 +1,14 @@
 import styles from "./ScenergyListItem.module.css";
 import { useDispatch } from "react-redux";
 import { openModal } from "../../../actions/actions";
-const ScenergyListItem = ({ jobstate, nickname, title, content }) => {
+const ScenergyListItem = ({
+  jobstate,
+  nickname,
+  title,
+  content,
+  peopleRecruited,
+  totalCount,
+}) => {
   const dispatch = useDispatch();
   const handleItemClick = () => {
     dispatch(openModal());
@@ -23,10 +30,10 @@ const ScenergyListItem = ({ jobstate, nickname, title, content }) => {
             <p>{content}</p>
           </div>
         </div>
-        <hr className={styles.hrline}/>
+        <hr className={styles.hrline} />
         <div className={styles.ItemFooter}>
           <div>
-            <p>지원자 수</p>
+            <p>{totalCount}</p>
           </div>
           <div>
             <p>마감 날짜</p>
