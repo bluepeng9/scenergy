@@ -5,31 +5,40 @@ import { useChatRoom } from "../contexts/ChatRoomContext";
 export const useChatRooms = (userId) => {
   const { addChatRoom } = useChatRoom();
 
-  return useQuery(["chatRooms", userId], async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:8080/chatroom/list-mychatroom",
-        {
-          params: { user_id: userId },
-        },
-      );
+  return useQuery(
+    ["chatRooms", userId],
+    async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8080/chatroom/list-mychatroom",
+          {
+            params: { user_id: userId },
+          },
+        );
 
-      const myChatRoomList = response.data.data.myChatRoomList;
-      console.log(myChatRoomList);
-      myChatRoomList.forEach((roomData) => {
-        addChatRoom({
-          id: roomData.id,
-          name: roomData.name,
-          users: roomData.users, //배열
+        const myChatRoomList = response.data.data.myChatRoomList;
+        console.log(myChatRoomList);
+        myChatRoomList.forEach((roomData) => {
+          addChatRoom({
+            id: roomData.id,
+            name: roomData.name,
+            users: roomData.users, //배열
+            recentChatMessage: roomData.recentChatMessage,
+          });
+
+          console.log(roomData);
         });
-      });
-      console.log(response.data);
-      console.log(response.data.data);
-      console.log(myChatRoomList);
-      return myChatRoomList;
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  });
+        console.log(response.data);
+        console.log(response.data.data);
+        console.log(myChatRoomList);
+        return myChatRoomList;
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
+    },
+    {
+      refetchOnWindowFocus: true, //다시 여기로 접속했을때 최신 데이터 보게 해줌
+    },
+  );
 };

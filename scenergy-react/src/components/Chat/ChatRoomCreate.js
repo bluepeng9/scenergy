@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
+import { useChatRooms } from "../../hooks/useChatRooms";
 import { useState } from "react";
+
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
   const { addChatRoom } = useChatRoom();
   const [isCreating, setIsCreating] = useState(false);
@@ -27,11 +29,11 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
         },
       );
       console.log(response.data.data);
-      const chatRoomNumber = response.data.data.chatRoomId;
 
       const newRoom = response.data.data;
       addChatRoom(newRoom);
-
+      console.log(newRoom);
+      console.log(newRoom.id);
       setIsCreating(false);
       setIsModalOpen(false);
     } catch (error) {

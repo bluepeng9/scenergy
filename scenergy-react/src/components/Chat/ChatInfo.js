@@ -2,14 +2,49 @@ import styles from "./ChatInfo.module.css";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect } from "react";
+import { useQueryClient } from "react-query";
+
 const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
-  const { chatRooms, setSelectedRoomId } = useChatRoom();
+  const { chatRooms, setSelectedRoomId, removeChatRoom } = useChatRoom();
   const { roomId } = useParams();
+  useEffect(() => {
+    const realRoomId = parseInt(roomId, 10);
+    setSelectedRoomId(realRoomId);
+  }, [roomId, setSelectedRoomId]);
+
   const realRoomId = parseInt(roomId, 10);
-  setSelectedRoomId(realRoomId);
   const selectedChatRoom = chatRooms.find((room) => room.id === realRoomId);
-  console.log(selectedChatRoom);
+  const userId = 2;
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const handleExit = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/chatroom/exit-room",
+        {
+          params: {
+            room_id: realRoomId,
+            user_id: userId,
+          },
+        },
+      );
+      console.log(response.data);
+      console.log(chatRooms);
+      removeChatRoom(realRoomId);
+      setSelectedRoomId(null);
+      toggleInfoMenu();
+      navigate("/chat");
+      console.log(chatRooms);
+      console.log("안녕히계세요 여러분 저는 속세 굴레 어쩌구....");
+    } catch (error) {
+      console.error("응 못나감", error);
+    }
+  };
+
+  console.log(userId, " ", realRoomId);
   return (
     <>
       <div
@@ -25,7 +60,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
           </div>
         </header>
       </div>
-      <body>
+      <div>
         <div className={styles.chatUsersListContainer}>
           <div className={styles.chatUsersList}>
             <ul>
@@ -35,9 +70,9 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
             </ul>
           </div>
         </div>
-      </body>
+      </div>
       <section>
-        <button>나가기</button>
+        <button onClick={handleExit}>나가기</button>
       </section>
     </>
   );

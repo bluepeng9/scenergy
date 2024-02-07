@@ -1,16 +1,16 @@
 import styles from "./ChatRoomList.module.css";
 import { Link, useNavigate } from "react-router-dom";
-import { useChatRooms } from "../../hooks/useChatRooms";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dialog from "../commons/Dialog/Dialog";
 import ChatRoomCreate from "./ChatRoomCreate";
 import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
+import { useChatRooms } from "../../hooks/useChatRooms";
 
 //userId나중에 {userId}로 넣어줘야됨
-const userId = 3;
+const userId = 2;
 const ChatRoomList = () => {
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,6 +63,10 @@ const ChatRoomList = () => {
     }
     navigate(`/chat/${realRoomId}`);
   };
+
+  useEffect(() => {
+    console.log("채팅방 목록 업데이트", chatRooms);
+  }, [chatRooms]);
 
   // const userId = 2;
   if (isLoading) return <div>로딩중..</div>;
@@ -153,7 +157,7 @@ const ChatRoomList = () => {
         </div>
       </div>
       <div className={styles.roomListContainer}>
-        {chatRooms.map((room) => (
+        {contextChatRooms.map((room) => (
           <li key={room.id} className={styles.listContainer}>
             <Link
               state={
