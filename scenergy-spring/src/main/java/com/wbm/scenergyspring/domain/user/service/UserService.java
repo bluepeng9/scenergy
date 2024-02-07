@@ -2,12 +2,6 @@ package com.wbm.scenergyspring.domain.user.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import java.util.List;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
@@ -15,6 +9,8 @@ import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingAll
 import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingResponse;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchUserResponse;
 import com.wbm.scenergyspring.domain.user.entity.User;
+import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
+import com.wbm.scenergyspring.domain.user.repository.UserLocationRepository;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
@@ -22,9 +18,14 @@ import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandRe
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,6 +38,8 @@ public class UserService {
 	final UserRepository userRepository;
 	final LocationTagRepository locationTagRepository;
 	final AmazonS3Client amazonS3Client;
+	final UserLocationRepository userLocationRepository;
+
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
@@ -136,9 +139,8 @@ public class UserService {
 			.build();
 	}
 
-	private void createUserLocationTags(List<Long> locationTagIds, User user) {
-		List<UserLocationTag> userLocationTags = user.getUserLocationTags();
-		userLocationTags.clear();
+	public void createUserLocationTags(List<Long> locationTagIds, User user) {
+		user.getUserLocationTags().clear();
 
 		for (Long locationTagId : locationTagIds) {
 			LocationTag locationTag = locationTagRepository.findById(locationTagId)
@@ -148,8 +150,8 @@ public class UserService {
 			userLocationTag.updateUser(user);
 			userLocationTag.updateLocationTag(locationTag);
 
-			userLocationTags.add(userLocationTag);
+			userLocationRepository.save(userLocationTag);
+			user.getUserLocationTags().add(userLocationTag);
 		}
-		user.updateUserLocationTags(userLocationTags);;
 	}
 }
