@@ -17,13 +17,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     /**
      * 연결 endpoint 지정
      * 현재 ws://localhost:8080/chat
-     *
      * @param registry
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/ws")
-                .setAllowedOrigins("*");
+                .setAllowedOriginPatterns("*");
     }
 
     /**

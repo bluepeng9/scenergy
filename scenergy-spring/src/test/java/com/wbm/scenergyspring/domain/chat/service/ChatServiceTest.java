@@ -301,6 +301,42 @@ class ChatServiceTest extends IntegrationTest {
         chatService.disconnectRoom(sessionId);
     }
 
+    @Test
+    @Transactional
+    void 채팅창_최신순_정렬_테스트() {
+        //given
+        List<User> saveUsers = createSaveUsers(4);
+        User user1 = saveUsers.get(0);
+        User user2 = saveUsers.get(1);
+        User user3 = saveUsers.get(2);
+        User user4 = saveUsers.get(3);
+        Long chatRoomId1 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(0, 1)));
+        Long chatRoomId2 = chatService.createChatRoom(createChatRoomCommand("testroom2", saveUsers.subList(0, 3)));
+        Long chatRoomId3 = chatService.createChatRoom(createChatRoomCommand("testroom3", saveUsers.subList(0, 3)));
+        Long chatRoomId4 = chatService.createChatRoom(createChatRoomCommand("testroom4", saveUsers.subList(0, 3)));
+
+        //when
+        sendMessage(user1, chatRoomId4, 1);
+        sendMessage(user1, chatRoomId3, 1);
+        sendMessage(user1, chatRoomId2, 1);
+        sendMessage(user1, chatRoomId1, 1);
+        List<ChatRoomDto> chatRoomDtos1 = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(user1.getId()).build());
+        Long loadRoomId1 = chatRoomDtos1.get(0).getId();
+        Long loadRoomId2 = chatRoomDtos1.get(1).getId();
+
+        sendMessage(user1, chatRoomId4, 1);
+        sendMessage(user1, chatRoomId3, 1);
+        List<ChatRoomDto> chatRoomDtos2 = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(user1.getId()).build());
+        Long loadRoomId3 = chatRoomDtos2.get(0).getId();
+        Long loadRoomId4 = chatRoomDtos2.get(1).getId();
+
+        //then
+        Assertions.assertThat(loadRoomId1).isEqualTo(chatRoomId1);
+        Assertions.assertThat(loadRoomId2).isEqualTo(chatRoomId2);
+        Assertions.assertThat(loadRoomId3).isEqualTo(chatRoomId3);
+        Assertions.assertThat(loadRoomId4).isEqualTo(chatRoomId4);
+    }
+
     private void sendMessage(User user, Long chatRoomId, int user1SendCount) {
         for (int i = 0; i < user1SendCount; i++) {
             CreatePubMessageCommand command = CreatePubMessageCommand.builder()
@@ -309,7 +345,7 @@ class ChatServiceTest extends IntegrationTest {
                     .messageText(user.getUsername() + (i + 1))
                     .messageType("TALK")
                     .build();
-            Long chatMessageId = chatService.sendMessage(command);
+            chatService.sendMessage(command);
         }
     }
 
