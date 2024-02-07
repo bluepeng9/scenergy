@@ -46,9 +46,6 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
     }
   }, [loadedMessages, messagesLoading, messagesError, recentChatMessage]);
 
-  useEffect(() => {}, [chatMessages, recentChatMessage]);
-
-  //구독 설정
   const subscribe = useCallback(() => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
