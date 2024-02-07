@@ -73,7 +73,6 @@ public class UserService {
 			command.getNickname()
 		);
 		User result = userRepository.save(newUser);
-		createUserLocationTags(command.getLocationTagIds(), result);
 		return result.getId();
 	}
 
@@ -140,7 +139,6 @@ public class UserService {
 	}
 
 	public void createUserLocationTags(List<Long> locationTagIds, User user) {
-		user.getUserLocationTags().clear();
 
 		for (Long locationTagId : locationTagIds) {
 			LocationTag locationTag = locationTagRepository.findById(locationTagId)
@@ -151,7 +149,6 @@ public class UserService {
 			userLocationTag.updateLocationTag(locationTag);
 
 			userLocationRepository.save(userLocationTag);
-			user.getUserLocationTags().add(userLocationTag);
 		}
 	}
 }
