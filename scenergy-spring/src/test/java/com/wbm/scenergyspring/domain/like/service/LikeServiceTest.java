@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.like.entity.Like;
 import com.wbm.scenergyspring.domain.like.repository.LikeRepository;
+import com.wbm.scenergyspring.domain.like.service.command.GetLikeCountCommand;
+import com.wbm.scenergyspring.domain.like.service.command.GetLikeListCommand;
+import com.wbm.scenergyspring.domain.like.service.command.GetLikeCountCommand;
+import com.wbm.scenergyspring.domain.like.service.command.GetLikeListCommand;
 import com.wbm.scenergyspring.domain.like.service.command.LikePostCommand;
 import com.wbm.scenergyspring.domain.like.service.command.UnlikePostCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
@@ -24,9 +27,10 @@ import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.util.RandomValueGenerator;
+import com.wbm.scenergyspring.util.UserGenerator;
 
 @SpringBootTest
-class LikeServiceTest extends IntegrationTest {
+class LikeServiceTest {
 
 	@Autowired
 	UserRepository userRepository;
@@ -141,7 +145,6 @@ class LikeServiceTest extends IntegrationTest {
 	void findLikeListByPostId() {
 
 		//given
-
 		Long savedUser = saveUser();
 		Long savedUser2 = saveUser();
 
@@ -161,8 +164,10 @@ class LikeServiceTest extends IntegrationTest {
 		likeService.likePost(command);
 		likeService.likePost(command2);
 
+		GetLikeListCommand command3 = GetLikeListCommand.builder().postId(savedVideoPost).build();
+
 		//when
-		List<Like> likeList = likeService.findLikeListByPostId(savedVideoPost);
+		List<Like> likeList = likeService.findLikeListByPostId(command3);
 
 		//then
 		Assertions.assertThat(likeList.size()).isEqualTo(2);
@@ -192,8 +197,9 @@ class LikeServiceTest extends IntegrationTest {
 		likeService.likePost(command);
 		likeService.likePost(command2);
 
+		GetLikeCountCommand command3 = GetLikeCountCommand.builder().postId(savedVideoPost).build();
 		//when
-		int count = likeService.countLikeByPostId(savedVideoPost);
+		int count = likeService.countLikeByPostId(command3);
 
 		//then
 		Assertions.assertThat(count).isEqualTo(2);

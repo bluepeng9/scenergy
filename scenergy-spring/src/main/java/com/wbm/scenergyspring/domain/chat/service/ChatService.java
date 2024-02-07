@@ -72,6 +72,7 @@ public class ChatService {
         } else if (messageType.equals("EXIT")) {
             command.setMessageText(user.getNickname() + "님이 퇴장하셨습니다.");
             int remainingMembersCount = chatUser.leaveRoom();
+            chatUserRepository.delete(chatUser);
             int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
             if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
                 chatRoomRepository.delete(chatRoom);
