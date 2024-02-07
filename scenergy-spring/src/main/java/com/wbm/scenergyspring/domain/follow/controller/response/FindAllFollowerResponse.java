@@ -11,13 +11,13 @@ import lombok.Data;
 
 @Data
 @Builder
-public class FindAllResponse {
-	List<FollowDto> findAllResponseList;
+public class FindAllFollowerResponse {
+	List<FollowingDto> findAllResponseList;
 
-	public static List<FollowDto> fromList(List<Follow> followList) {
-		List<FollowDto> followDtoList = new ArrayList<>();
+	public static List<FollowingDto> fromList(List<Follow> followList) {
+		List<FollowingDto> followDtoList = new ArrayList<>();
 		for (Follow follow : followList) {
-			FollowDto from = FollowDto.from(follow);
+			FollowingDto from = FollowingDto.from(follow);
 			followDtoList.add(from);
 		}
 		return followDtoList;
@@ -30,8 +30,8 @@ public class FindAllResponse {
 		User from;
 		User to;
 
-		static FollowDto from(Follow follow) {
-			return FollowDto.builder()
+		static FollowingDto from(Follow follow) {
+			return FollowingDto.builder()
 				.id(follow.getId())
 				.from(follow.getFrom())
 				.to(follow.getTo())
