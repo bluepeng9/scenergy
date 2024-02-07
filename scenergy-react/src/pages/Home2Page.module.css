@@ -1,0 +1,11 @@
+.home2-div {
+    display: flex;
+    justify-content: space-between; /* 자식 요소를 양쪽 끝으로 배치 */
+}
+
+.logout-div button{
+    border: none;
+    margin-right: 10px;
+    margin-top: 10px;
+    cursor:pointer;
+}

@@ -1,10 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import naverLoginIcon from "./naverlogin4.png";
 
 const NaverLoginBtn = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 120px;
+    margin-top: 25px;
+    margin-bottom: 20px;
   cursor: pointer;
 `;
 
@@ -19,7 +21,7 @@ const NaverLoginButton = () => {
     };
 
     return (
-        <NaverLoginBtn onClick={handleNaverLogin} src={"/naverlogin.png"} alt="naverlogin" />
+        <NaverLoginBtn onClick={handleNaverLogin} src={naverLoginIcon} alt="Naver Login Button" />
     );
 };
 

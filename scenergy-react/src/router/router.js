@@ -15,6 +15,7 @@ import EnterPage from "../pages/EnterPage";
 import Portfolio from "../components/Portfolio/Portfolio";
 import ChatRoomReal from "../components/Chat/ChatRoomReal";
 import RedirectPage from "../components/User/RedirectPage";
+import Home2Page from "../pages/Home2Page"
 export const routes = [
   // { path: "*", element: <App /> },
   { path: "/", element: <EnterPage /> },
@@ -31,6 +32,7 @@ export const routes = [
   { path: "/search", element: <SearchPage /> },
   { path: "/videoupload", element: <VideoUploadPage /> },
   {path: "/oauth2/redirect", element: <RedirectPage/>},
+  {path: "/home2", element: <Home2Page/>},
 ];
 
 const router = createBrowserRouter(routes);
