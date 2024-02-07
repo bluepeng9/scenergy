@@ -3,6 +3,7 @@ package com.wbm.scenergyspring.domain.post.videoPost.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.response.SearchVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPostGenreTag;
@@ -246,6 +247,29 @@ public class VideoPostService {
             return false;
         videoPostRepository.deleteAll();
         return true;
+    }
+
+    @Transactional(readOnly = true)
+    public List<SearchVideoPostResponse> searchVideoPostsByCondition(SearchVideoPostCommand command) {
+        List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition(command.getWord(), command.getGt(), command.getIt(), command.getLt());
+        List<SearchVideoPostResponse> result = new ArrayList<>();
+        for (VideoPost vp : list) {
+            SearchVideoPostResponse response = SearchVideoPostResponse.builder()
+                    .title(vp.getTitle())
+                    .content(vp.getContent())
+                    .writer(vp.getWriter())
+                    .video(VideoCommand.builder()
+                            .musicTitle(vp.getVideo().getMusicTitle())
+                            .artist(vp.getVideo().getArtist())
+                            .videoUrlPath(vp.getVideo().getVideoUrlPath())
+                            .thumbnailUrlPath(vp.getVideo().getThumbnailUrlPath())
+                            .build())
+                    .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(vp.getVideoPostGenreTags()))
+                    .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(vp.getVideoPostInstrumentTags()))
+                    .build();
+            result.add(response);
+        }
+        return result;
     }
 
 }
