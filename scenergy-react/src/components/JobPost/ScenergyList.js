@@ -1,10 +1,8 @@
 import ScenergyListItem from "../commons/ScenergyList/ScenergyListItem";
 import styles from "./ScenergyList.module.css";
-import scenergy from "../../apis/ScenergyApi";
+import { getAllJobPost } from "../../apis/ScenergyApi";
 import { useState } from "react";
 const ScenergyList = () => {
-  //나중에 back api랑 연결해서 map때려서 받아오면 된다
-  const userId = 2;
   const [jobPosts, setJobPosts] = useState([]);
   //나중에 back api랑 연결해서 map때려서 받아오면 된다
   getAllJobPost()
