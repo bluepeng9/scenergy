@@ -12,5 +12,5 @@ public class CreatePubMessageCommand {
     Long roomId;
     String messageText;
     String messageType;
-    LocalDateTime createAt;
+    LocalDateTime indexTime;
 }

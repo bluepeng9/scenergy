@@ -278,15 +278,15 @@ public class ChatService {
             ChatMessage chatMessage = chatMessageRepository.findById(unreadMessageDto.getChatMessageId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 메시지"));
             chatMessage.updateUnreadCount();
             redisChatRepository.updateChatMessageUnreadCount(unreadMessageDto);
-            //TODO: unreadMessage 중 가장 오래된 메시지의 시간을 계산해 sendmessage에 넣어줘야만 한다.
-            LocalDateTime lastTime;
-
+            //unreadMessage 중 가장 오래된 메시지 시간 계산
+            unreadlastTime = chatMessage.getCreatedAt().isBefore(unreadlastTime) ? chatMessage.getCreatedAt() : unreadlastTime;
         }
         //다른 채팅방 유저에게 채팅 목록 최신화 요청
         CreatePubMessageCommand pubMessageCommand = CreatePubMessageCommand.builder()
                 .messageType("OPER")
                 .roomId(roomId)
                 .userId(userId)
+                .indexTime(unreadlastTime) //최신화 기준 시간
                 .build();
         sendMessage(pubMessageCommand);
     }
