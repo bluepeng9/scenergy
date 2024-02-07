@@ -1,9 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.config;
 
-import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatOnlineInfoDto;
-import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.redis.RedisSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -114,11 +111,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplateUnreadMessage(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplateUnreadMessage = new RedisTemplate<>();
+    public RedisTemplate<String, UnreadMessageDto> redisTemplateUnreadMessage(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, UnreadMessageDto> redisTemplateUnreadMessage = new RedisTemplate<>();
         redisTemplateUnreadMessage.setConnectionFactory(redisConnectionFactory);
         redisTemplateUnreadMessage.setKeySerializer(new StringRedisSerializer());
         redisTemplateUnreadMessage.setValueSerializer(new Jackson2JsonRedisSerializer<>(UnreadMessageDto.class));
         return redisTemplateUnreadMessage;
+    }
+
+    @Bean
+    public RedisTemplate<String, Object> redisTemplateSessionChatUser(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, Object> redisTemplateSessionChatUser = new RedisTemplate<>();
+        redisTemplateSessionChatUser.setConnectionFactory(redisConnectionFactory);
+        redisTemplateSessionChatUser.setKeySerializer(new StringRedisSerializer());
+        redisTemplateSessionChatUser.setValueSerializer(new Jackson2JsonRedisSerializer<>(ChatUserDto.class));
+        return redisTemplateSessionChatUser;
     }
 }

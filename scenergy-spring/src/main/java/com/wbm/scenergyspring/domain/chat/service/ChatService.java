@@ -1,9 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
-import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
@@ -15,6 +12,7 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -25,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -264,12 +263,16 @@ public class ChatService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅룸"));
     }
 
-    public void connectRoom(Long roomId, Long userId) {
+    public void connectRoom(Long roomId, Long userId, String simpSessionId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));
         ChatUser chatUser = chatRoomRepository.findChatUserByIdAndUser(roomId, userId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅유저"));
         chatUser.connectRoom();
         //redis 접속상태 등록
         redisChatRepository.connectRoom(roomId, chatUser.getId());
+        //sessionId - chatuser 등록
+        redisChatRepository.saveChatUserBySessionId(simpSessionId, ChatUserDto.from(chatUser));
+
+        LocalDateTime unreadlastTime = LocalDateTime.now();
         //unreadmessage 제거
         List<UnreadMessageDto> deletedUnreadMessages = redisChatRepository.deleteUnreadMessage(roomId, userId); //redis
         for (UnreadMessageDto unreadMessageDto : deletedUnreadMessages) { //mysql
@@ -291,11 +294,12 @@ public class ChatService {
         sendMessage(pubMessageCommand);
     }
 
-    public void disconnectRoom(Long roomId, Long userId) {
-        ChatUser chatUser = chatRoomRepository.findChatUserByIdAndUser(roomId, userId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅유저"));
+    public void disconnectRoom(String simpSessionId) {
+        ChatUserDto chatUserDto = redisChatRepository.findChatUserBySessionId(simpSessionId);
+        ChatUser chatUser = chatRoomRepository.findChatUserByIdAndUser(chatUserDto.getChatRoomId(), chatUserDto.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅유저"));
         chatUser.disconnectRoom();
         //redis 접속해제상태 등록
-        redisChatRepository.disconnectRoom(roomId, chatUser.getId());
+        redisChatRepository.disconnectRoom(chatUserDto.getChatRoomId(), chatUser.getId());
     }
 
     public ChatMessageDto getMessageInfo(GetMessageInfoCommand getMessageInfoCommand) {

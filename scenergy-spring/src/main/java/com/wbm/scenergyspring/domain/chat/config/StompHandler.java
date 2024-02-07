@@ -20,21 +20,23 @@ public class StompHandler implements ChannelInterceptor {
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
-        handlerMessage(accessor.getCommand(), accessor);
+        handlerMessage(accessor.getCommand(), accessor, (String) message.getHeaders().get("simpSessionId"));
         return message;
     }
 
-    private void handlerMessage(StompCommand command, StompHeaderAccessor accessor) {
-        long roomId = Long.parseLong(accessor.getFirstNativeHeader("roomId"));
-        long userId = Long.parseLong(accessor.getFirstNativeHeader("userId"));
+    private void handlerMessage(StompCommand command, StompHeaderAccessor accessor, String simpSessionId) {
+        long roomId;
+        long userId;
         switch (command) {
             case CONNECT:
                 log.info("WS CONNECT");
-                chatService.connectRoom(roomId, userId);
+                roomId = Long.parseLong(accessor.getFirstNativeHeader("roomId"));
+                userId = Long.parseLong(accessor.getFirstNativeHeader("userId"));
+                chatService.connectRoom(roomId, userId, simpSessionId);
                 break;
             case DISCONNECT:
                 log.info("WS DISCONNECT");
-                chatService.disconnectRoom(roomId, userId);
+                chatService.disconnectRoom(simpSessionId);
                 break;
         }
     }

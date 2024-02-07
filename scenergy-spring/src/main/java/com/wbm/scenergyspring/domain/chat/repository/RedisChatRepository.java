@@ -1,9 +1,6 @@
 package com.wbm.scenergyspring.domain.chat.repository;
 
-import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatOnlineInfoDto;
-import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
@@ -11,6 +8,7 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -23,14 +21,18 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class RedisChatRepository {
     //redis
     private static final String CHAT_ROOMS = "CHAT_ROOM";
     private static final String CHAT_MESSAGE = "CHAT_MESSAGE";
     private static final String ROOM_ONLINE_MEMBER = "ROOM_ONLINE_MEMBER";
     private static final String UNREAD_MESSAGE = "UNREAD_MESSAGE";
-    private final RedisTemplate<String, ChatMessageDto> redisTemplateMessage;
+    private static final String SESSION_CHATUSER = "SESSION_CHATUSER";
     //operators
+    private final RedisTemplate<String, ChatMessageDto> redisTemplateMessage;
+    @Resource(name = "redisTemplateSessionChatUser")
+    private HashOperations<String, String, ChatUserDto> opsHashSessionChatUser;
     @Resource(name = "redisTemplateChatRoom")
     private HashOperations<String, String, RedisChatRoomDto> opsHashChatRoom;
     @Resource(name = "redisTemplateUnreadMessage")
@@ -215,5 +217,23 @@ public class RedisChatRepository {
         String strRoomId = Long.toString(roomId);
         String strUserId = Long.toString(userId);
         return opsHashUnreadMessage.values(strUserId + UNREAD_MESSAGE + strRoomId).size();
+    }
+
+    public void saveChatUserBySessionId(String simpSessionId, ChatUserDto chatUser) {
+        opsHashSessionChatUser.put(SESSION_CHATUSER, simpSessionId, chatUser);
+        log.info("saveChatUserBySessionId");
+        log.info("simpSessionId: " + simpSessionId + " chatUser: " + chatUser);
+        List<ChatUserDto> values = opsHashSessionChatUser.values(SESSION_CHATUSER);
+        for (ChatUserDto value : values) {
+            log.info("value: " + value);
+        }
+    }
+
+
+    public ChatUserDto findChatUserBySessionId(String simpSessionId) {
+        ChatUserDto chatUserDto = opsHashSessionChatUser.get(SESSION_CHATUSER, simpSessionId);
+        log.info("findChatUserBySessionId");
+        log.info("simpSessionId: " + simpSessionId + " chatUser: " + chatUserDto);
+        return chatUserDto;
     }
 }
