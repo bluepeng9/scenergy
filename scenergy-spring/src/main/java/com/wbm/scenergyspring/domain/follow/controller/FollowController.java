@@ -1,6 +1,5 @@
 package com.wbm.scenergyspring.domain.follow.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -15,9 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.wbm.scenergyspring.domain.follow.controller.request.DeleteFollowRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowersRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowingRequest;
-import com.wbm.scenergyspring.domain.follow.controller.response.CreateFollowResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.DeleteFollowResponse;
-import com.wbm.scenergyspring.domain.follow.controller.response.FindAllResponse;
+import com.wbm.scenergyspring.domain.follow.controller.response.FindAllFollowerResponse;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.service.FollowService;
 import com.wbm.scenergyspring.domain.follow.controller.request.CreateFollowRequest;
@@ -60,31 +58,26 @@ public class FollowController {
 	}
 
 	@GetMapping("/followers")
-	public ResponseEntity<ApiResponse<FindAllResponse>> getAllFollowers(
+	public ResponseEntity<ApiResponse<FindAllFollowerResponse>> getAllFollowers(
 		@RequestBody FindAllFollowersRequest request
 	) {
 		List<Follow> followers = followService.findAllFollowers(request.getAllFollowers());
-		FindAllResponse followersResponse = FindAllResponse.builder()
-			.findAllResponseList(FindAllResponse.fromList(followers))
+		FindAllFollowerResponse followersResponse = FindAllFollowerResponse.builder()
+			.findAllResponseList(FindAllFollowerResponse.fromList(followers))
 			.build();
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(followersResponse));
 	}
 
 	@GetMapping("/followings")
-	public ResponseEntity<ApiResponse<List<FindAllResponse>>> getAllFollowing(
+	public ResponseEntity<ApiResponse<FindAllFollowerResponse>> getAllFollowing(
 		@RequestBody FindAllFollowingRequest request
 	) {
 		List<Follow> followings = followService.findAllFollowing(request.getAllFollowing());
-		List<FindAllResponse> followingResponseList = new ArrayList<>();
-		for (Follow following : followings) {
-			FindAllResponse followingResponse = FindAllResponse.builder()
-				.from(following.getFrom())
-				.to(following.getTo())
-				.build();
-			followingResponseList.add(followingResponse);
-		}
-		return ResponseEntity.ok(ApiResponse.createSuccess(followingResponseList));
+		FindAllFollowerResponse followingResponse = FindAllFollowerResponse.builder()
+			.findAllResponseList(FindAllFollowerResponse.fromList(followings))
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(followingResponse));
 	}
 
 }
