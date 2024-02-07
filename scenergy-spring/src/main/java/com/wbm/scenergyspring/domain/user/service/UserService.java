@@ -10,8 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
+import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
+import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingAllResponse;
+import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingResponse;
+import com.wbm.scenergyspring.domain.user.controller.response.SearchUserResponse;
 import com.wbm.scenergyspring.domain.user.entity.User;
-import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
@@ -79,6 +82,48 @@ public class UserService {
 			userRepository.delete(user);
 		}
 		return 1L;
+	}
+
+	public List<SearchUserResponse> searchUser(String word) {
+		List<User> list = userRepository.searchUsers(word);
+		List<SearchUserResponse> result = new ArrayList<>();
+		for (User user : list) {
+			SearchUserResponse response = SearchUserResponse.builder()
+					.userId(user.getId())
+					.nickName(user.getNickname())
+					.url(user.getUrl())
+					.build();
+			result.add(response);
+		}
+		return result;
+	}
+
+	public List<SearchFollowingAllResponse> searchFollowingAll(Long userId) {
+		List<User> list = userRepository.searchFollowingAll(userId);
+		List<SearchFollowingAllResponse> result = new ArrayList<>();
+		for (User user : list) {
+			SearchFollowingAllResponse response = SearchFollowingAllResponse.builder()
+					.userId(user.getId())
+					.nickName(user.getNickname())
+					.url(user.getUrl())
+					.build();
+			result.add(response);
+		}
+		return result;
+	}
+
+	public List<SearchFollowingResponse> searchFollowing(SearchFollowingRequest request) {
+		List<User> list = userRepository.searchFollowing(request.getUserId(), request.getWord());
+		List<SearchFollowingResponse> result = new ArrayList<>();
+		for (User user : list) {
+			SearchFollowingResponse response = SearchFollowingResponse.builder()
+					.userId(user.getId())
+					.nickName(user.getNickname())
+					.url(user.getUrl())
+					.build();
+			result.add(response);
+		}
+		return result;
 	}
 
 	public FindUserCommandResult findUser(Long userId) {
