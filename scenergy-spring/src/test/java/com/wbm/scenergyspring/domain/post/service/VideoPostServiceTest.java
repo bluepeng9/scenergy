@@ -15,11 +15,15 @@ import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCom
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommandResponse;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
+import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.UserLocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,6 +57,12 @@ class VideoPostServiceTest {
     private VideoPostGenreTagRepository videoPostGenreTagRepository;
     @Autowired
     private VideoPostInstrumentTagRepository videoPostInstrumentTagRepository;
+    @Autowired
+    private LocationTagRepository locationTagRepository;
+    @Autowired
+    private UserLocationTagRepository userLocationTagRepository;
+    @Autowired
+    private UserService userService;
 
     @Test
     @Transactional
@@ -378,6 +388,90 @@ class VideoPostServiceTest {
         assertThat(videoPostRepository.count()).isEqualTo(0);
     }
 
+    @Test
+    @Transactional
+    @DisplayName("VideoPost 검색 테스트")
+    void searchVideoPost() {
+        //given
+        User user1 = User.createNewUser(
+                "email1",
+                "password1",
+                "username1",
+                Gender.MALE,
+                "nickname1"
+        );
+        User user2 = User.createNewUser(
+                "email2",
+                "password2",
+                "username2",
+                Gender.MALE,
+                "nickname2"
+        );
+        User user3 = User.createNewUser(
+                "email3",
+                "password3",
+                "username3",
+                Gender.MALE,
+                "nickname3"
+        );
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        Follow follow12 = Follow.createFollow(user1, user2);
+        Follow follow13 = Follow.createFollow(user1, user3);
+
+        followRepository.save(follow12);
+        followRepository.save(follow13);
+
+        CreateVideoCommand command = createVideoCommand();
+        Video video1 = Video.createVideo(command);
+        Video video2 = Video.createVideo(command);
+        Video video3 = Video.createVideo(command);
+        Video video4 = Video.createVideo(command);
+        videoRepository.save(video1);
+        videoRepository.save(video2);
+        videoRepository.save(video3);
+        videoRepository.save(video4);
+        createGenreTags();
+        createInstrumentTags();
+        List<Long> genreTagIds = createGenreTagIds();
+        List<Long> instrumentsTagIds = createInstrumentsTagIds();
+        List<Long> genreTagIds2 = new ArrayList<>();
+        List<Long> instrumentsTagIds2 = new ArrayList<>();
+        VideoPostCommand command1 = createVideoPostCommand(user2, video1, genreTagIds, instrumentsTagIds);
+        VideoPostCommand command2 = createVideoPostCommand(user2, video2, genreTagIds, instrumentsTagIds);
+        VideoPostCommand command3 = createVideoPostCommand(user3, video3, genreTagIds2, instrumentsTagIds2);
+        VideoPostCommand command4 = createVideoPostCommand(user1, video4, genreTagIds2, instrumentsTagIds2);
+
+        VideoPost videoPost1 = videoPostService.createVideoPost(command1);
+        VideoPost videoPost2 = videoPostService.createVideoPost(command2);
+        VideoPost videoPost3 = videoPostService.createVideoPost(command3);
+        VideoPost videoPost4 = videoPostService.createVideoPost(command4);
+        Long locationTagId1 = createLocationTags("서울");
+        Long locationTagId2 = createLocationTags("대전");
+        Long locationTagId3 = createLocationTags("부산");
+        List<Long> gt = new ArrayList<>();
+        gt.add(genreTagIds.get(0));
+        gt.add(genreTagIds.get(1));
+        List<Long> it = new ArrayList<>();
+        it.add(instrumentsTagIds.get(0));
+        it.add(instrumentsTagIds.get(1));
+        List<Long> lt = new ArrayList<>();
+        List<Long> lt2 = new ArrayList<>();
+        lt.add(locationTagId1);
+        lt.add(locationTagId2);
+        lt.add(locationTagId3);
+        userService.createUserLocationTags(lt, user1);
+
+        //when
+        List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition("nickname2", gt, it, lt);
+        List<VideoPost> list2 = videoPostRepository.searchVideoPostsByCondition(null, gt, it, lt);
+        //then
+        assertThat(list.size()).isEqualTo(2);
+        assertThat(list2.size()).isEqualTo(2);
+    }
+
     public User createTestUser() {
         User testUser = User.createNewUser(
                 "testEmail",
@@ -413,6 +507,10 @@ class VideoPostServiceTest {
         instrumentTagRepository.save(InstrumentTag.createInstrumentTag("베이스"));
     }
 
+    public Long createLocationTags(String str) {
+        return locationTagRepository.save(LocationTag.createLocationTag(str)).getId();
+    }
+
     public VideoPostCommand createVideoPostCommand(User user, Video video, List<Long> genreTagIds, List<Long> instrumentTagIds) {
         VideoPostCommand command = VideoPostCommand.builder()
                 .userId(user.getId())
@@ -442,4 +540,5 @@ class VideoPostServiceTest {
 
         return instrumentsTagIds;
     }
+
 }
