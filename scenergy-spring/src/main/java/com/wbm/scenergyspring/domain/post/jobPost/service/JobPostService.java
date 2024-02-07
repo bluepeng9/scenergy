@@ -225,9 +225,6 @@ public class JobPostService {
 	public List<SearchAllJobPostResponse> searchAllJobPost(SearchAllJobPostCommand command) {
 		List<JobPost> jobPosts = jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt());
 		List<SearchAllJobPostResponse> result = new ArrayList<>();
-		System.out.println("************");
-		System.out.println(jobPosts.size());
-		System.out.println("************");
 		for (JobPost post : jobPosts) {
 			SearchAllJobPostResponse response = SearchAllJobPostResponse.builder()
 					.jobPostId(post.getId())
