@@ -225,6 +225,8 @@ public class ChatService {
             chatRoomDto.setUnreadMessageCount(unreadMessageCount);
             chatRoomDtoList.add(chatRoomDto);
         }
+        //최근 메시지 순 오름차순 정렬
+        chatRoomDtoList.sort((room1, room2) -> room2.getRecentChatMessage().getChatRoomId().compareTo(room1.getRecentChatMessage().getChatRoomId()));
         return chatRoomDtoList;
     }
 
