@@ -1,12 +1,16 @@
 import axios from "axios";
+import api from "./api";
 
-const apiClient = axios.create({
-  baseURL: "http://localhost:8080",
-  headers: {
-    "Content-Type": "application/json",
+export const scenergy = {
+  getAll: (data) => {
+    return {
+      IsActive: "active",
+      nickname: "허허",
+      title: "허허허허",
+      content: "드럼 1명 구합니다",
+      expirationDate: "2024-03-01",
+      totalCount: "34",
+    };
+    return api.get("jobPost/getAll");
   },
-});
-
-export const getAllJobPost = () => {
-  return apiClient.get("/getAll");
 };
