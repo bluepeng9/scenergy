@@ -57,8 +57,9 @@ public class ChatService {
                 .orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저"));
         ChatUser chatUser = chatUserRepository.findByChatRoomAndUser(chatRoom, user)
                 .orElse(ChatUser.createChatUser(chatRoom, user));
-        //메시지 타입 ENTER, EXIT, TALK 분기
+        //메시지 타입 OPER, ENTER, EXIT, TALK 분기
         String messageType = command.getMessageType();
+
         //시스템 알림
         if (messageType.equals("OPER")) {
             //operation 생성
@@ -66,10 +67,11 @@ public class ChatService {
                     .chatRoomId(command.getRoomId())
                     .senderId(0L)
                     .operationCode(1)
+                    .createdAt(command.getIndexTime())
                     .build();
             redisTemplate.convertAndSend(channelTopic.getTopic(), chatMessageDto);
             return 0L;
-        } else if (messageType.equals("EXIT")) {
+        } else if (messageType.equals("EXIT")) {//채팅방 삭제
             command.setMessageText(user.getNickname() + "님이 퇴장하셨습니다.");
             int remainingMembersCount = chatUser.leaveRoom();
             chatUserRepository.delete(chatUser);
@@ -106,11 +108,9 @@ public class ChatService {
                     offlineUser,
                     chatMessage
             );
-            //mysql 저장
-            UnreadMessage savedUnreadMessage = unreadMessageRepository.save(unreadMessage);
-            //redis 저장
-            redisChatRepository.addUnreadMessage(UnreadMessageDto.from(savedUnreadMessage));
-            kafkaTemplate.send("unreadChat", UnreadMessageDto.from(savedUnreadMessage));
+            UnreadMessage savedUnreadMessage = unreadMessageRepository.save(unreadMessage);         //mysql 저장
+            redisChatRepository.addUnreadMessage(UnreadMessageDto.from(savedUnreadMessage));        //redis 저장
+            kafkaTemplate.send("unreadChat", UnreadMessageDto.from(savedUnreadMessage));      //kafka 알림 발송
         }
         return chatMessage.getId();
     }
@@ -304,5 +304,16 @@ public class ChatService {
     public ChatRoomDto getRoomInfo(GetRoomInfoCommand getRoomInfoCommand) {
         ChatRoom chatRoom = chatRoomRepository.findById(getRoomInfoCommand.getRoomId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅방"));
         return ChatRoomDto.from(chatRoom);
+    }
+
+    public Long exitChatRoom(ExitChatRoomCommand command) {
+        //생성메시지 발행
+        CreatePubMessageCommand pubCreateMessageCommand = CreatePubMessageCommand.builder()
+                .messageType("EXIT")
+                .roomId(command.getRoomId())
+                .userId(command.getUserId())
+                .build();
+        sendMessage(pubCreateMessageCommand);
+        return command.getRoomId();
     }
 }

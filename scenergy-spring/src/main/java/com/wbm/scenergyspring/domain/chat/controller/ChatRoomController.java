@@ -71,4 +71,14 @@ public class ChatRoomController {
                 .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
+
+    @GetMapping("/exit-room")
+    public ResponseEntity<ApiResponse<ExitChatRoomResponse>> exitChatRoom(ExitChatRoomRequest request) {
+        log.info("ExitChatRoomRequest: " + request);
+        Long roomId = chatService.exitChatRoom(request.toExitChatRoomCommand());
+        ExitChatRoomResponse response = ExitChatRoomResponse.builder()
+                .chatRoomId(roomId)
+                .build();
+        return ResponseEntity.ok(ApiResponse.createSuccess(response));
+    }
 }
