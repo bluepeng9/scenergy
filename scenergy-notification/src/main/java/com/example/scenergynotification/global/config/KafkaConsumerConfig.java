@@ -28,8 +28,17 @@ public class KafkaConsumerConfig {
 	@Bean
 	ConcurrentKafkaListenerContainerFactory<String, OnFollowEvent> followEventKafkaListenerContainerFactory() {
 		ConcurrentKafkaListenerContainerFactory<String, OnFollowEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(followEventConsumerFactory());
+		factory.setConsumerFactory(consumerFactory(OnFollowEvent.class));
 		return factory;
+	}
+
+	@Bean
+	public <V> ConsumerFactory<String, V> consumerFactory(
+		Class<V> valueType
+	) {
+		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(),
+			new ErrorHandlingDeserializer<>(new StringDeserializer()),
+			new JsonDeserializer<V>(valueType, false));
 	}
 
 	@Bean
