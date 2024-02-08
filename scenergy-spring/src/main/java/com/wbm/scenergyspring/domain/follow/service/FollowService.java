@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowersCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowingCommand;
@@ -42,12 +43,12 @@ public class FollowService {
 			throw new EntityAlreadyExistException("이미 팔로우 중인 사용자 입니다.");
 		}
 
-		com.wbm.scenergyspring.domain.follow.entity.Follow follow = com.wbm.scenergyspring.domain.follow.entity.Follow.createFollow(
+		Follow follow = Follow.createFollow(
 			fromUser,
 			toUser
 		);
 
-		com.wbm.scenergyspring.domain.follow.entity.Follow save = followRepository.save(follow);
+		Follow save = followRepository.save(follow);
 		return FollowCommandResult.builder()
 			.followId(save.getId())
 			.fromUserId(save.getFrom().getId())
@@ -76,9 +77,9 @@ public class FollowService {
 	 * @param command
 	 * @return
 	 */
-	public List<com.wbm.scenergyspring.domain.follow.entity.Follow> findAllFollowers(FindAllFollowersCommand command) {
+	public List<Follow> findAllFollowers(FindAllFollowersCommand command) {
 		User toUser = userRepository.getReferenceById(command.getToUserId());
-		List<com.wbm.scenergyspring.domain.follow.entity.Follow> followers = followRepository.findAllByTo(toUser);
+		List<Follow> followers = followRepository.findAllByTo(toUser);
 		return followers;
 	}
 
@@ -87,9 +88,9 @@ public class FollowService {
 	 * @param command
 	 * @return
 	 */
-	public List<com.wbm.scenergyspring.domain.follow.entity.Follow> findAllFollowing(FindAllFollowingCommand command) {
+	public List<Follow> findAllFollowing(FindAllFollowingCommand command) {
 		User fromUser = userRepository.getReferenceById(command.getFromUserId());
-		List<com.wbm.scenergyspring.domain.follow.entity.Follow> following = followRepository.findAllByFrom(fromUser);
+		List<Follow> following = followRepository.findAllByFrom(fromUser);
 		return following;
 	}
 }
