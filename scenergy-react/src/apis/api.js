@@ -9,3 +9,9 @@ const api = axios.create({
 });
 
 export default api;
+
+//리덕스로 상태관리하자
+//api를 레퍼클래스로 만들기
+//getPost할 때 토큰 있으면 넣고, 아니면 넣지 말기
+//authrization header에
+//대충 이런식으로 api.get

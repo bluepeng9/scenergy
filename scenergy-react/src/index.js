@@ -9,7 +9,7 @@ import { routes } from "./router/router";
 import { ChatRoomProvider } from "./contexts/ChatRoomContext";
 import { ChatMessageProvider } from "./contexts/ChatMessageContext";
 import { QueryClient, QueryClientProvider } from "react-query";
-import axios from "axios"; //danny 추가 (네이버 유저 정보 가져올때)
+import axios from "axios";
 
 /*danny 추가 (네이버 유저정보 가져올떄)*/
 axios.defaults.baseURL = "http://localhost:3000/";
