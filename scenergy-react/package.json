@@ -18,6 +18,7 @@
     "emoji-picker-react": "^4.7.12",
     "gsap": "^3.12.5",
     "http-proxy-middleware": "^2.0.6",
+    "openvidu-react": "2.20",
     "react": "^18.2.0",
     "react-cookie": "^7.0.2",
     "react-datepicker": "^6.1.0",

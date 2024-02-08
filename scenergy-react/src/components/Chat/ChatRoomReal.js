@@ -1,3 +1,8 @@
+import React, { useState } from "react";
+import axios from "axios";
+import Dialog from "../commons/Dialog/Dialog";
+import { useLocation, useParams } from "react-router-dom";
+import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
 import {
@@ -6,13 +11,10 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import Dialog from "../commons/Dialog/Dialog";
-import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
 
 const ChatRoomReal = ({ toggleInfoMenu }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   // 나중에 user까지 다 받아오면
   const location = useLocation();
@@ -20,6 +22,7 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
 
+  const usernickname = "사용자2";
   const users = [
     {
       id: 1,
@@ -80,6 +83,10 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
     }
   };
 
+  const handleConnectRtc = () => {
+    setIsRtcConnect(!isRtcConnect);
+  };
+
   return (
     <div className={styles.chatRoomContainer}>
       <div className={styles.chatRoomHeader}>
@@ -99,8 +106,16 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
             <div className={styles.userInvite} onClick={handleModalOpen}>
               <FontAwesomeIcon icon={faPlus} />
             </div>
-            <div className={styles.doRtc}>
+            <div className={styles.doRtc} onClick={handleConnectRtc}>
               <FontAwesomeIcon icon={faVideo} />
+              {isRtcConnect && (
+                <div>
+                  <VideoConference
+                    mySessionId={roomId}
+                    myUserName={usernickname}
+                  />
+                </div>
+              )}
             </div>
             <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
               <FontAwesomeIcon icon={faCircleInfo} />
