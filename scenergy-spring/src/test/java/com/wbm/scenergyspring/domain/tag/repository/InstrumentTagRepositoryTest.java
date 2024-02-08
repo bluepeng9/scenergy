@@ -1,9 +1,7 @@
 package com.wbm.scenergyspring.domain.tag.repository;
 
-import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
-import com.wbm.scenergyspring.domain.tag.service.TagService;
-import com.wbm.scenergyspring.global.exception.BusinessException;
-import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
+import static org.assertj.core.api.Assertions.*;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import com.wbm.scenergyspring.IntegrationTest;
+import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
+import com.wbm.scenergyspring.domain.tag.service.TagService;
+import com.wbm.scenergyspring.global.exception.BusinessException;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 
 @SpringBootTest
 @Transactional
-class InstrumentTagRepositoryTest {
+class InstrumentTagRepositoryTest extends IntegrationTest {
 
     @Autowired
     private InstrumentTagRepository instrumentTagRepository;

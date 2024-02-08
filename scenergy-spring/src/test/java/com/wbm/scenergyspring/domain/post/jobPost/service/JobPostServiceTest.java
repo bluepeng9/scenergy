@@ -1,14 +1,36 @@
 package com.wbm.scenergyspring.domain.post.jobPost.service;
 
+import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.entity.*;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.IsActive;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPost;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostGenreTag;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostInstrumentTag;
+import com.wbm.scenergyspring.domain.post.jobPost.entity.JobPostLocationTag;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobBookMarkRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostApplyRepository;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.JobPostRepository;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.*;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.ApplyJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.BookMarkCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CreateJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
@@ -18,22 +40,11 @@ import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+
 import jakarta.persistence.EntityNotFoundException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class JobPostServiceTest {
+class JobPostServiceTest extends IntegrationTest {
 
 	@Autowired
 	JobPostService jobPostService;

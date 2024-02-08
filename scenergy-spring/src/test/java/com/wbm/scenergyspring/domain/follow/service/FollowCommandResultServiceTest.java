@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowersCommand;
@@ -21,7 +22,7 @@ import com.wbm.scenergyspring.util.UserGenerator;
 
 @SpringBootTest
 @Transactional
-class FollowCommandResultServiceTest {
+class FollowCommandResultServiceTest extends IntegrationTest {
 
 	@Autowired
 	FollowService followService;

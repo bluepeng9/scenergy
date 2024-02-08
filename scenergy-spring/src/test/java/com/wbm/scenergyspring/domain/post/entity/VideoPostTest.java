@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
@@ -24,7 +25,7 @@ import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 
 @SpringBootTest
 @Transactional
-class VideoPostTest {
+class VideoPostTest extends IntegrationTest {
 
 	@Autowired
 	public VideoPostRepository videoPostRepository;

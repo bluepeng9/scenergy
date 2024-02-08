@@ -1,5 +1,15 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
@@ -9,24 +19,22 @@ import com.wbm.scenergyspring.domain.chat.repository.ChatMessageRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatRoomRepository;
 import com.wbm.scenergyspring.domain.chat.repository.ChatUserRepository;
 import com.wbm.scenergyspring.domain.chat.repository.RedisChatRepository;
-import com.wbm.scenergyspring.domain.chat.service.command.*;
+import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.CreatePubMessageCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.InviteChatRoomCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.ListMyChatRoomCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.LoadChatMessageCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.RenameChatRoomCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.util.UserGenerator;
-import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
 @SpringBootTest
-class ChatServiceTest {
+class ChatServiceTest extends IntegrationTest {
 
     @Autowired
     ChatService chatService;

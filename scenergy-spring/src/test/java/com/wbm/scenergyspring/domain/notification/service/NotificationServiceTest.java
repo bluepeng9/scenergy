@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.notification.entity.NotificationStatus;
 import com.wbm.scenergyspring.domain.notification.repository.NotificationRepository;
 import com.wbm.scenergyspring.domain.notification.service.command.SendFollowNotificationCommand;
@@ -14,7 +15,7 @@ import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.util.RandomValueGenerator;
 
 @SpringBootTest
-class NotificationServiceTest {
+class NotificationServiceTest extends IntegrationTest {
 
 	@Autowired
 	UserService userService;

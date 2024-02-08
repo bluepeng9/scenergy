@@ -1,22 +1,24 @@
 package com.wbm.scenergyspring.domain.post.entity;
 
-import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
-import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
-import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import com.wbm.scenergyspring.IntegrationTest;
+import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
+import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
+import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
 
 @SpringBootTest
 @Transactional
-class VideoTest {
+class VideoTest extends IntegrationTest {
 
     @Autowired
     public VideoRepository videoRepository;

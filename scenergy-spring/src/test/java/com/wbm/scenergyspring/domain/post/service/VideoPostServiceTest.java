@@ -1,5 +1,17 @@
 package com.wbm.scenergyspring.domain.post.service;
 
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
@@ -25,19 +37,9 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class VideoPostServiceTest {
+class VideoPostServiceTest extends IntegrationTest {
 
     @Autowired
     private VideoPostService videoPostService;
