@@ -2,12 +2,19 @@ package com.wbm.scenergyspring.domain.user.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import java.util.List;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingAllResponse;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingResponse;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchUserResponse;
+import com.wbm.scenergyspring.domain.tag.repository.UserLocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
 import com.wbm.scenergyspring.domain.user.repository.UserLocationRepository;
@@ -38,7 +45,7 @@ public class UserService {
 	final UserRepository userRepository;
 	final LocationTagRepository locationTagRepository;
 	final AmazonS3Client amazonS3Client;
-	final UserLocationRepository userLocationRepository;
+	final UserLocationTagRepository userLocationRepository;
 
 
 	@Value("${cloud.aws.s3.bucket}")

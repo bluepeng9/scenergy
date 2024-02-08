@@ -44,8 +44,6 @@ public class JobPost extends Post {
 	@OneToMany(mappedBy = "jobPost", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<JobPostApply> jobApplicant = new ArrayList<>();
 
-
-
 	public static JobPost createNewJobPost(
 		User userId,
 		String title,
