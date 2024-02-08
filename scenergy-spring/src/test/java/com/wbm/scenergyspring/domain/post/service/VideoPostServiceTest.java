@@ -22,9 +22,10 @@ import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostInstrume
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.AllVideoPostsCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.FollowingVideoPostsCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommandResponse;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
@@ -92,7 +93,7 @@ class VideoPostServiceTest extends IntegrationTest {
         VideoPost videoPost1 = videoPostService.createVideoPost(command1);
         VideoPost videoPost2 = videoPostService.createVideoPost(command2);
         //when
-        List<VideoPostCommandResponse> allVideoPost = videoPostService.getAllVideoPost();
+        List<AllVideoPostsCommand> allVideoPost = videoPostService.getAllVideoPost();
         //then
         assertThat(allVideoPost.size()).isEqualTo(2);
         assertThat(allVideoPost.get(0).getVideo().getVideoUrlPath()).isEqualTo(videoPost1.getVideo().getVideoUrlPath());
@@ -126,7 +127,7 @@ class VideoPostServiceTest extends IntegrationTest {
 
         VideoPost videoPost1 = videoPostService.createVideoPost(command1);
         //when
-        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost1.getId());
+        AllVideoPostsCommand testVideoPost = videoPostService.getVideoPost(videoPost1.getId());
         //then
         assertThat(videoPost1.getVideo().getVideoUrlPath()).isEqualTo(testVideoPost.getVideo().getVideoUrlPath());
         assertThat(videoPost1.getVideo().getThumbnailUrlPath()).isEqualTo(testVideoPost.getVideo().getThumbnailUrlPath());
@@ -200,7 +201,7 @@ class VideoPostServiceTest extends IntegrationTest {
         VideoPost videoPost4 = videoPostService.createVideoPost(command4);
 
         //when
-        List<VideoPostCommandResponse> resultList = videoPostService.getFollowingVideoPost(user1.getId());
+        List<FollowingVideoPostsCommand> resultList = videoPostService.getFollowingVideoPost(user1.getId());
         //then
         assertThat(resultList.size()).isEqualTo(3);
         assertThat(resultList.get(0).getUserId()).isEqualTo(videoPost1.getUser().getId());
@@ -304,7 +305,7 @@ class VideoPostServiceTest extends IntegrationTest {
         VideoPostCommand testCommand = createVideoPostCommand(user, video, genreTagIds, instrumentTagIds);
 
         VideoPost videoPost = videoPostService.createVideoPost(testCommand);
-        VideoPostCommandResponse testVideoPost = videoPostService.getVideoPost(videoPost.getId());
+        AllVideoPostsCommand testVideoPost = videoPostService.getVideoPost(videoPost.getId());
         //when
         List<Long> changedGenreTags = new ArrayList<>();
         changedGenreTags.add(genreTagIds.get(0));

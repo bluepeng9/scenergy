@@ -7,9 +7,8 @@ import java.util.List;
 
 @Data
 @Builder
-public class VideoPostCommandResponse {
+public class SearchVideoPostResponseCommand {
 
-    private Long userId;
     private VideoCommand video;
     private String title;
     private String content;

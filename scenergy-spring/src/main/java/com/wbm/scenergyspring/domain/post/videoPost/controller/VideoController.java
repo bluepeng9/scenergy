@@ -3,12 +3,12 @@ package com.wbm.scenergyspring.domain.post.videoPost.controller;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.SearchVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UploadVideoPostRequest;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.response.AllVideoPostsResponse;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.response.FollowingVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.response.SearchVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.SearchVideoPostCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.*;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,20 +30,26 @@ public class VideoController {
     private String bucket;
 
     @GetMapping("/list")
-    public ResponseEntity<ApiResponse<List<VideoPostCommandResponse>>> getAllVideoPosts() {
+    public ResponseEntity<ApiResponse<AllVideoPostsResponse>> getAllVideoPosts() {
 
-        return new ResponseEntity<>(ApiResponse.createSuccess(videoPostService.getAllVideoPost()), HttpStatus.OK);
+        List<AllVideoPostsCommand> list = videoPostService.getAllVideoPost();
+
+        AllVideoPostsResponse response = AllVideoPostsResponse.toCreateResponse(list);
+
+        return new ResponseEntity<>(ApiResponse.createSuccess(response), HttpStatus.OK);
     }
 
     @GetMapping("")
-    public ResponseEntity<ApiResponse<VideoPostCommandResponse>> getVideoPost(Long id) {
-        VideoPostCommandResponse videoPost = videoPostService.getVideoPost(id);
+    public ResponseEntity<ApiResponse<AllVideoPostsCommand>> getVideoPost(Long id) {
+        AllVideoPostsCommand videoPost = videoPostService.getVideoPost(id);
         return new ResponseEntity<>(ApiResponse.createSuccess(videoPost), HttpStatus.OK);
     }
 
     @GetMapping("/list/following")
-    public ResponseEntity<ApiResponse<List<VideoPostCommandResponse>>> getAllFollowingVideoPosts(Long id) {
-        return new ResponseEntity<>(ApiResponse.createSuccess(videoPostService.getFollowingVideoPost(id)), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<FollowingVideoPostResponse>> getAllFollowingVideoPosts(Long id) {
+        List<FollowingVideoPostsCommand> list = videoPostService.getFollowingVideoPost(id);
+        FollowingVideoPostResponse result = FollowingVideoPostResponse.toCreateResponse(list);
+        return new ResponseEntity<>(ApiResponse.createSuccess(result), HttpStatus.OK);
     }
 
     @PostMapping("/upload/video")
@@ -89,13 +95,18 @@ public class VideoController {
     }
 
     @PostMapping("/search")
-    public ResponseEntity<ApiResponse<List<SearchVideoPostResponse>>> searchVideoPost(@RequestBody SearchVideoPostRequest request) {
+    public ResponseEntity<ApiResponse<SearchVideoPostResponse>> searchVideoPost(@RequestBody SearchVideoPostRequest request) {
         SearchVideoPostCommand command = SearchVideoPostCommand.builder()
                 .word(request.getWord())
                 .gt(request.getGt())
                 .it(request.getIt())
                 .build();
-        return new ResponseEntity<>(ApiResponse.createSuccess(videoPostService.searchVideoPostsByCondition(command)), HttpStatus.OK);
+
+        List<SearchVideoPostResponseCommand> list = videoPostService.searchVideoPostsByCondition(command);
+
+        SearchVideoPostResponse response = SearchVideoPostResponse.toCreateResponse(list);
+
+        return new ResponseEntity<>(ApiResponse.createSuccess(response), HttpStatus.OK);
     }
 
 }

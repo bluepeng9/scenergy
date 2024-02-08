@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.domain.post.videoPost.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
-import com.wbm.scenergyspring.domain.post.videoPost.controller.response.SearchVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPostGenreTag;
@@ -53,10 +52,10 @@ public class VideoPostService {
     private String bucket;
 
     @Transactional(readOnly = true)
-    public List<VideoPostCommandResponse> getAllVideoPost() {
-        List<VideoPostCommandResponse> list = new ArrayList<>();
+    public List<AllVideoPostsCommand> getAllVideoPost() {
+        List<AllVideoPostsCommand> list = new ArrayList<>();
         for (VideoPost videoPost : videoPostRepository.findAll()) {
-            VideoPostCommandResponse command = VideoPostCommandResponse.builder()
+            AllVideoPostsCommand command = AllVideoPostsCommand.builder()
                     .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
@@ -78,9 +77,9 @@ public class VideoPostService {
     }
 
     @Transactional(readOnly = true)
-    public VideoPostCommandResponse getVideoPost(Long id) {
+    public AllVideoPostsCommand getVideoPost(Long id) {
         VideoPost videoPost = videoPostRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id + "은(는) 존재하지 않는 VideoPost Id입니다."));
-        VideoPostCommandResponse videoPostCommandResponse = VideoPostCommandResponse.builder()
+        AllVideoPostsCommand videoPostCommandResponse = AllVideoPostsCommand.builder()
                 .userId(videoPost.getUser().getId())
                 .title(videoPost.getTitle())
                 .content(videoPost.getContent())
@@ -99,10 +98,10 @@ public class VideoPostService {
     }
 
     @Transactional(readOnly = true)
-    public List<VideoPostCommandResponse> getFollowingVideoPost(Long id) {
-        List<VideoPostCommandResponse> list = new ArrayList<>();
+    public List<FollowingVideoPostsCommand> getFollowingVideoPost(Long id) {
+        List<FollowingVideoPostsCommand> list = new ArrayList<>();
         for (VideoPost videoPost : videoPostRepository.findAllByFollowing(id)) {
-            VideoPostCommandResponse command = VideoPostCommandResponse.builder()
+            FollowingVideoPostsCommand command = FollowingVideoPostsCommand.builder()
                     .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
@@ -250,11 +249,11 @@ public class VideoPostService {
     }
 
     @Transactional(readOnly = true)
-    public List<SearchVideoPostResponse> searchVideoPostsByCondition(SearchVideoPostCommand command) {
+    public List<SearchVideoPostResponseCommand> searchVideoPostsByCondition(SearchVideoPostCommand command) {
         List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition(command.getWord(), command.getGt(), command.getIt(), command.getLt());
-        List<SearchVideoPostResponse> result = new ArrayList<>();
+        List<SearchVideoPostResponseCommand> result = new ArrayList<>();
         for (VideoPost vp : list) {
-            SearchVideoPostResponse response = SearchVideoPostResponse.builder()
+            SearchVideoPostResponseCommand response = SearchVideoPostResponseCommand.builder()
                     .title(vp.getTitle())
                     .content(vp.getContent())
                     .writer(vp.getWriter())
