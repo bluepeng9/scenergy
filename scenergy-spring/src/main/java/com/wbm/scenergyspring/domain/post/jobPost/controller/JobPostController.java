@@ -1,7 +1,32 @@
 package com.wbm.scenergyspring.domain.post.jobPost.controller;
 
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.*;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.*;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.ApplyJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.JobPostBookMarkRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.SearchAllJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.ApplyJobPostReponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostControllerResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -21,8 +46,14 @@ public class JobPostController {
 	final JobPostService jobPostService;
 
 	@GetMapping("/getAll")
-	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllJobPost() {
-		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getAllJobPostList()), HttpStatus.OK);
+	public ResponseEntity<ApiResponse<List<GetJobPostControllerResponse>>> getAllJobPost() {
+		List<GetJobPostCommandResponse> getJobPostCommandResponsesList = jobPostService.getAllJobPostList();
+		List<GetJobPostControllerResponse> responses = new ArrayList<>();
+		for (GetJobPostCommandResponse getJobPostCommandResponse: getJobPostCommandResponsesList) {
+			GetJobPostControllerResponse tmpResponse = GetJobPostControllerResponse.from(getJobPostCommandResponse);
+			responses.add(tmpResponse);
+		}
+		return new ResponseEntity<>(ApiResponse.createSuccess(responses),HttpStatus.OK);
 	}
 
 	@GetMapping("get/apply/{id}")
