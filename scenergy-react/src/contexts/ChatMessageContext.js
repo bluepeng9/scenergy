@@ -6,22 +6,15 @@ export const useChatMessageContext = () => useContext(ChatMessageContext);
 
 export const ChatMessageProvider = ({ children }) => {
   const [chatMessages, setChatMessages] = useState([]);
-  const [recentChatMessage, setRecentChatMessage] = useState("null");
+  const [recentChatMessage, setRecentChatMessage] = useState(null);
 
   const addChatMessage = (newMessage) => {
     setChatMessages((prevMessages) => {
-      // if (Array.isArray(prevMessages)) {
-      //   return [...prevMessages, newMessage];
-      // } else {
-      //   console.error("prev는 배열이 아니었습니다");
-      //   return [newMessage];
-      // }
-      const updatedMessages = Array.isArray(prevMessages)
-        ? [...prevMessages, newMessage]
-        : [newMessage];
-      console.log(newMessage);
-      console.log(updatedMessages);
-      return updatedMessages;
+      const isDuplicate = prevMessages.some((msg) => msg.id === newMessage.id);
+      if (!isDuplicate) {
+        return [...prevMessages, newMessage];
+      }
+      return prevMessages; // 중복 메시지인 경우 이전 상태 반환
     });
     if (!recentChatMessage) {
       setRecentChatMessage(newMessage);

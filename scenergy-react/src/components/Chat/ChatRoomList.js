@@ -71,6 +71,7 @@ const ChatRoomList = () => {
   // const userId = 2;
   if (isLoading) return <div>로딩중..</div>;
   if (isError) return <div>Error:{error?.message}</div>;
+
   return (
     <div className={styles.roomListGlobal}>
       <div className={styles.roomListHeader}>

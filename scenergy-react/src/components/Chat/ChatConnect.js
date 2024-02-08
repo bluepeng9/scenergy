@@ -27,42 +27,55 @@ const ChatConnect = ({ lastMessageId }) => {
     isLoading,
     isError,
     error,
-  } = useChatMessages(nowLastMessageId); //현재 마지막 메세지 id 바뀔때마다
+  } = useChatMessages(realRoomId); //현재 마지막 메세지 id 바뀔때마다
 
   useEffect(() => {
-    if (chatMessage) {
-      addChatMessage(chatMessage);
-      setNowLastMessageId(chatMessage.id);
-      setRecentChatMessage(chatMessage);
+    if (Array.isArray(chatMessage)) {
+      chatMessage.forEach((message) => {
+        console.log("Message ID: ", message.id);
+        console.log("message", message);
+        addChatMessage(message);
+        setNowLastMessageId(message.id);
+        setRecentChatMessage(message);
+      });
     }
-  }, [chatMessage, addChatMessage, setRecentChatMessage]);
+  }, [chatMessages, chatMessage, addChatMessage, setRecentChatMessage]);
 
   useEffect(() => {
     if (!isLoading) {
       setChatMessages(chatMessage);
+      if (chatMessage.length > 0) {
+        setRecentChatMessage(chatMessage[chatMessage.length - 1]);
+      }
     }
   }, [chatMessage, isLoading]);
 
   const subscribe = useCallback(() => {
-    client.current.subscribe("/sub/chat/room/" + realRoomId, (body) => {
-      const messageBody = JSON.parse(body.body);
+    client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
+      const messageBody = JSON.parse(message.body);
+      addChatMessage(messageBody);
       setChatMessages((prevMessages) => {
         const updatedMessages = Array.isArray(prevMessages)
           ? [...prevMessages, messageBody]
           : [messageBody];
         console.log(messageBody);
         console.log(updatedMessages);
+        console.log(messageBody.id);
         return updatedMessages;
       });
       console.log("subsub하네요");
-      console.log(chatMessages);
       setNowLastMessageId(messageBody.id);
       setRecentChatMessage(messageBody);
       console.log(messageBody.id);
     });
-  }, [realRoomId, recentChatMessage, setRecentChatMessage]);
+    // }, [realRoomId, recentChatMessage, setRecentChatMessage]);
+  }, [addChatMessage, realRoomId, setRecentChatMessage]);
 
-  const connect = useCallback(() => {
+  const connect = () => {
+    if (client.current.connected) {
+      client.current.deactivate();
+    }
+
     client.current = new StompJs.Client({
       brokerURL: "ws://localhost:8080/ws",
       reconnectDelay: 5000,
@@ -70,9 +83,8 @@ const ChatConnect = ({ lastMessageId }) => {
       heartbeatOutgoing: 2000,
       onConnect: () => {
         console.log("yesyes");
-        console.log(lastMessageId); //null
-        console.log(roomId);
-        console.log(chatMessages);
+        console.log(nowLastMessageId); //null
+        console.log(realRoomId);
         subscribe();
       },
       onError: (error) => {
@@ -85,7 +97,8 @@ const ChatConnect = ({ lastMessageId }) => {
       },
     });
     client.current.activate();
-  }, [subscribe]);
+    // }, [subscribe, lastMessageId, realRoomId, userId]);
+  };
 
   const publish = (chat) => {
     //연결 끊어지면 끝
@@ -110,7 +123,9 @@ const ChatConnect = ({ lastMessageId }) => {
     console.log("pubpub");
   };
   const disconnect = () => {
-    client.current.deactivate();
+    if (client.current && client.current.connected) {
+      client.current.deactivate();
+    }
   };
   const handleChange = (event) => {
     //입력값 state로 변경해주기
@@ -120,6 +135,7 @@ const ChatConnect = ({ lastMessageId }) => {
   const handleSubmit = (event, chat) => {
     //보내기 누르면 publish되도록
     event.preventDefault();
+    if (!chat.trim()) return;
     console.log("보내기");
     publish(chat);
   };
@@ -127,8 +143,12 @@ const ChatConnect = ({ lastMessageId }) => {
   useEffect(() => {
     connect();
     console.log(realRoomId);
-    return () => disconnect();
-  }, [connect, roomId]);
+    return () => {
+      if (client.current && client.current.connected) {
+        client.current.deactivate();
+      }
+    };
+  }, [realRoomId]);
 
   if (isLoading) return <div>Loading messages...</div>;
   if (isError) return <div>Error loading messages: {error.message}</div>;
