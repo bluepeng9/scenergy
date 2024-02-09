@@ -10,11 +10,9 @@ public class CreateFollowRequest {
 	Long toUserId;
 
 	public FollowUserCommand toCreateFollow() {
-		FollowUserCommand command = FollowUserCommand.builder()
+		return FollowUserCommand.builder()
 			.fromUserId(getFromUserId())
 			.toUserId(getToUserId())
 			.build();
-
-		return command;
 	}
 }
