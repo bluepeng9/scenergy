@@ -8,6 +8,10 @@ class FollowApi {
         })
     }
 
+    unFollowUser = async (followId) => {
+        return await ApiUtil.delete(`/follow/${followId}`)
+    }
+
 }
 
 let followApi = new FollowApi();

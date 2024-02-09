@@ -9,7 +9,7 @@ class ApiUtil {
         return token;
     }
 
-    static getHeader = () => {
+    static #getHeader = () => {
         let token = this.getToken();
         let header = {
             "Content-Type": "application/json",
@@ -23,13 +23,19 @@ class ApiUtil {
     static get = async (url, params) => {
         return await axios.get(ApiUtil.BASE_URL + url, {
             params: params,
-            headers: this.getHeader()
+            headers: this.#getHeader()
         });
     }
 
     static post = async (url, data) => {
         return await axios.post(ApiUtil.BASE_URL + url, data, {
-            headers: this.getHeader()
+            headers: this.#getHeader()
+        });
+    };
+
+    static delete = async (url) => {
+        return await axios.delete(ApiUtil.BASE_URL + url, {
+            headers: this.#getHeader()
         });
     };
 
