@@ -5,7 +5,7 @@ import com.wbm.scenergyspring.domain.follow.service.command.UnFollowUserCommand;
 import lombok.Data;
 
 @Data
-public class DeleteFollowRequest {
+public class unFollowRequest {
 	Long fromUserId;
 	Long toUserId;
 

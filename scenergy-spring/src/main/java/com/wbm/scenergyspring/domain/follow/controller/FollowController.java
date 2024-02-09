@@ -7,6 +7,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wbm.scenergyspring.config.auth.PrincipalDetails;
 import com.wbm.scenergyspring.domain.follow.controller.request.CreateFollowRequest;
-import com.wbm.scenergyspring.domain.follow.controller.request.DeleteFollowRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowersRequest;
 import com.wbm.scenergyspring.domain.follow.controller.request.FindAllFollowingRequest;
 import com.wbm.scenergyspring.domain.follow.controller.response.DeleteFollowResponse;
 import com.wbm.scenergyspring.domain.follow.controller.response.FindAllFollowerResponse;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.service.FollowService;
+import com.wbm.scenergyspring.domain.follow.service.command.UnFollowUserCommand;
 import com.wbm.scenergyspring.domain.follow.service.commandresult.FollowCommandResult;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 
@@ -46,13 +47,19 @@ public class FollowController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(commandResult));
 	}
 
-
-	@DeleteMapping
-	public ResponseEntity<ApiResponse<DeleteFollowResponse>> deleteFollow(
-		@RequestBody DeleteFollowRequest request
+	@DeleteMapping("/{followId}")
+	public ResponseEntity<ApiResponse<DeleteFollowResponse>> unFollow(
+		@PathVariable Long followId,
+		@AuthenticationPrincipal PrincipalDetails principalDetails
 	) {
 
-		Long success = followService.unFollowUser(request.toDeleteFollow());
+		UnFollowUserCommand unFollowUserCommand = UnFollowUserCommand.builder()
+			.fromUserId(principalDetails.getUser().getId())
+			.toUserId(followId)
+			.build();
+
+		long success = followService.unFollowUser(unFollowUserCommand);
+
 		boolean isSuccess;
 		isSuccess = success == 1;
 		DeleteFollowResponse deleteFollowResponse = DeleteFollowResponse.builder()
