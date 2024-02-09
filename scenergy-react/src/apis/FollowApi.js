@@ -1,5 +1,15 @@
-import axios from "axios";
+import ApiUtil from "./ApiUtil";
 
-export const fetchMyFollowings = (fromUserId) => {
-  return apiClient.get("/follow/followings", { params: fromUserId });
-};
+class FollowApi {
+
+    followUser = async (toUserId) => {
+        return await ApiUtil.post("/follow", {
+            toUserId: toUserId
+        })
+    }
+
+}
+
+let followApi = new FollowApi();
+
+export default followApi;
