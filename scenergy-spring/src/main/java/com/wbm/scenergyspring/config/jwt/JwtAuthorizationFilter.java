@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.auth0.jwt.JWT;
@@ -64,7 +65,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 			log.debug("authentication=====" + authentication);
 
 			// 강제로 시큐릴티 세션에 접근해서 Authentication 객체 저장
-			// SecurityContextHolder.getContext().setAuthentication(authentication);
+			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		}
 		chain.doFilter(request, response);
