@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Dialog from "../commons/Dialog/Dialog";
 import { useLocation, useParams } from "react-router-dom";
-import VideoConference from "./VideoConference";
+// import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
 import {
@@ -108,14 +108,14 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
             </div>
             <div className={styles.doRtc} onClick={handleConnectRtc}>
               <FontAwesomeIcon icon={faVideo} />
-              {isRtcConnect && (
-                <div>
-                  <VideoConference
-                    mySessionId={roomId}
-                    myUserName={usernickname}
-                  />
-                </div>
-              )}
+              {/*{isRtcConnect && (*/}
+              {/*  <div>*/}
+              {/*    <VideoConference*/}
+              {/*      mySessionId={roomId}*/}
+              {/*      myUserName={usernickname}*/}
+              {/*    />*/}
+              {/*  </div>*/}
+              {/*)}*/}
             </div>
             <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
               <FontAwesomeIcon icon={faCircleInfo} />
@@ -162,7 +162,7 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
         </div>
       </div>
       <div className={styles.connectContainer}>
-        <ChatConnect lastMessageId={lastMessageId} roomId={roomId} />
+        <ChatConnect lastMessageId={lastMessageId} />
       </div>
     </div>
   );

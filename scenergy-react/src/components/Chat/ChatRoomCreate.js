@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
-import { useChatRooms } from "../../hooks/useChatRooms";
 import { useState } from "react";
 
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {

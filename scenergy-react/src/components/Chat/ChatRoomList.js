@@ -161,14 +161,11 @@ const ChatRoomList = () => {
         {contextChatRooms.map((room) => (
           <li key={room.id} className={styles.listContainer}>
             <Link
-              state={
-                ({
-                  lastMessageId: room.recentChatMessage
-                    ? room.recentChatMessage.id
-                    : null,
-                },
-                { RoomDetail: room })
-              }
+              state={{
+                lastMessageId: room.recentChatMessage
+                  ? room.recentChatMessage.id
+                  : null,
+              }}
               to={`/chat/${room.id}`}
               className={styles.listItemContainer}
             >
