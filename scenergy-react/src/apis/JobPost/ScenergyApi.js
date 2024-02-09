@@ -18,6 +18,8 @@ const createJobPost = async (postData) => {
     expirationDate: "2024.03.01 이런식으로 나오게 해주세요",
     isActive:true,//이거 default값
     peopleRecruited: 0,
+    
+    //아직 태그 id별로 정해진게 확정이 아니라고 해서 일단 놔둘게
     genreTags: [],
     instrumentTags: [],
     locationTags: [],
