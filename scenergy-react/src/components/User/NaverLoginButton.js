@@ -16,6 +16,11 @@ const NaverLoginButton = () => {
   const handleNaverLogin = () => {
     // 토큰을 받을 URL에 현재 페이지 주소를 붙여 전달
     const redirectUri = encodeURIComponent(window.location.href);
+
+    console.log("토큰값 : ", redirectUri);
+
+    // localStorage.setItem("token", redirectUri);
+
     console.log("토큰 받아지나");
 
     window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect_uri=${redirectUri}`;

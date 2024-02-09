@@ -4,7 +4,7 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 
 import onLogin from "./onLogin";
-import { useUserToken, UserTokenProvider } from "../../contexts/UserToken";
+import { useUserToken, UserTokenProvider } from "../../contexts/UserToken2";
 
 const RedirectPage = () => {
   const token = new URL(window.location.href).searchParams.get("token");
@@ -19,7 +19,9 @@ const RedirectPage = () => {
       try {
         if (token) {
           console.log("accessToken 쿠키 저장");
-          console.log(globalToken);
+          console.log("토큰: " + `${token}`);
+          localStorage.setItem("token", `${token}`);
+          localStorage.getItem("token");
           setCookie("accessToken", `Bearer ${token}`);
 
           // Perform API call or any other necessary actions
