@@ -49,21 +49,19 @@ public class FollowController {
 
 	@DeleteMapping("/{followId}")
 	public ResponseEntity<ApiResponse<DeleteFollowResponse>> unFollow(
-		@PathVariable Long followId,
+		@PathVariable("followId") Long followId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails
 	) {
 
 		UnFollowUserCommand unFollowUserCommand = UnFollowUserCommand.builder()
+			.followId(followId)
 			.fromUserId(principalDetails.getUser().getId())
-			.toUserId(followId)
 			.build();
 
-		long success = followService.unFollowUser(unFollowUserCommand);
+		followService.unFollowUser(unFollowUserCommand);
 
-		boolean isSuccess;
-		isSuccess = success == 1;
 		DeleteFollowResponse deleteFollowResponse = DeleteFollowResponse.builder()
-			.isSuccess(isSuccess)
+			.isSuccess(true)
 			.build();
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteFollowResponse));

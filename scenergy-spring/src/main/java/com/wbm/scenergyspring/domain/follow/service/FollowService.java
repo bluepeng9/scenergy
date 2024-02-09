@@ -15,6 +15,7 @@ import com.wbm.scenergyspring.domain.follow.service.commandresult.FollowCommandR
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -57,19 +58,19 @@ public class FollowService {
 	}
 
 	/**
-	 *
+	 * 언팔로우
 	 * @param command
-	 * @return 삭제에 성공했으면 1 아니면 0
 	 */
 	@Transactional
-	public long unFollowUser(UnFollowUserCommand command) {
+	public void unFollowUser(UnFollowUserCommand command) {
+		Follow follow = followRepository.findById(command.getFollowId())
+			.orElseThrow(() -> new EntityNotFoundException("팔로우 정보가 없습니다."));
 
-		User fromUser = userRepository.getReferenceById(command.getFromUserId());
-		User toUser = userRepository.getReferenceById(command.getToUserId());
+		if (!follow.getFrom().getId().equals(command.getFromUserId())) {
+			throw new EntityNotFoundException("팔로우 정보가 없습니다.");
+		}
 
-		long deletedRowCount = followRepository.deleteByFromAndTo(fromUser, toUser);
-
-		return deletedRowCount;
+		followRepository.delete(follow);
 	}
 
 	/**
