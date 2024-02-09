@@ -8,10 +8,10 @@ const ScenergyListItem = ({
   content,
   peopleRecruited,
   totalCount,
+  onOpenModal,
 }) => {
-  const dispatch = useDispatch();
   const handleItemClick = () => {
-    dispatch(openModal());
+    onOpenModal();
   };
   /*나중에 백이랑 연결해서 받아올것*/
   /*내맘대로*/
