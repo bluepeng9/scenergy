@@ -33,6 +33,12 @@ class ApiUtil {
         });
     };
 
+    static put = async (url, data) => {
+        return await axios.put(ApiUtil.BASE_URL + url, data, {
+            headers: this.#getHeader()
+        });
+    };
+
     static delete = async (url) => {
         return await axios.delete(ApiUtil.BASE_URL + url, {
             headers: this.#getHeader()
