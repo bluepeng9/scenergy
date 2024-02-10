@@ -25,13 +25,11 @@ public class StompHandler implements ChannelInterceptor {
     }
 
     private void handlerMessage(StompCommand command, StompHeaderAccessor accessor, String simpSessionId) {
-        long roomId;
-        long userId;
         switch (command) {
             case CONNECT:
                 log.info("WS CONNECT");
-                roomId = Long.parseLong(accessor.getFirstNativeHeader("roomId"));
-                userId = Long.parseLong(accessor.getFirstNativeHeader("userId"));
+                Long roomId = Long.parseLong(accessor.getFirstNativeHeader("roomId"));
+                Long userId = Long.parseLong(accessor.getFirstNativeHeader("userId"));
                 chatService.connectRoom(roomId, userId, simpSessionId);
                 break;
             case DISCONNECT:
