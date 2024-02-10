@@ -8,23 +8,41 @@ import ChatRoomCreate from "./ChatRoomCreate";
 import { useNavigate, useParams } from "react-router-dom";
 import ChatRoomReal from "./ChatRoomReal";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
+import ChatRoomList from "./ChatRoomList";
+import followApi from "../../apis/FollowApi";
 
 const ChatField = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [followingList, setFollowingList] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { addChatRoom, chatRooms } = useChatRoom();
   const navigate = useNavigate();
+  const fromUserId = 2;
   const users = [
     { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
     { id: 2, email: "김준표", password: "이태경", name: "사용자2" },
     { id: 3, email: "홍준표", password: "이태경", name: "사용자3" },
   ];
 
+  useEffect(() => {
+    const loadFollowingList = async () => {
+      try {
+        const response = await followApi.getAllFollowing(fromUserId);
+        setFollowingList(response.data.data.findAllResponseList);
+        console.log(response.data.data);
+        console.log(response.data.data.findAllResponseList);
+      } catch (error) {
+        console.error("팔로우 목록 불러오기 실패", error);
+      }
+    };
+    loadFollowingList();
+    console.log(followingList);
+  }, []);
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
   };
@@ -69,6 +87,7 @@ const ChatField = () => {
 
   return (
     <>
+      <ChatRoomList sytle={{ width: "30%", flex: "1" }} />
       <div className={styles.fieldGlobal}>
         <div className={styles.fieldBody} onClick={handleOpenModal}>
           <FontAwesomeIcon className={styles.fieldBodyIcon} icon={faComments} />
@@ -92,9 +111,19 @@ const ChatField = () => {
                 </div>
               </div>
               <hr className={styles.hrLine} />
-              {searchInput === "" ? null : (
-                <div className={styles.dialogUserListContainer}>
-                  {users.map((user) => (
+              <div className={styles.dialogUserListContainer}>
+                {searchInput === "" ? (
+                  <>
+                    <ul>
+                      {followingList.map((followingUser) => (
+                        <li key={followingUser.id}>{followingUser.name}</li>
+                      ))}
+                    </ul>
+                  </>
+                ) : searchResults.length === 0 ? (
+                  <p>일치하는 뮤지션이 없습니다.</p>
+                ) : (
+                  searchResults.map((user) => (
                     <div
                       className={styles.dialogUserList}
                       key={user.id}
@@ -107,10 +136,25 @@ const ChatField = () => {
                         <p>{user.name}</p>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-              {searchInput && selectedUsers.length !== 0 ? (
+                  ))
+                )}
+                {/*{users.map((user) => (*/}
+                {/*  <div*/}
+                {/*    className={styles.dialogUserList}*/}
+                {/*    key={user.id}*/}
+                {/*    onClick={() => handleUserSelect(user)}*/}
+                {/*  >*/}
+                {/*    <div className={styles.dialogUserImg}>*/}
+                {/*      <p>유저프로필</p>*/}
+                {/*    </div>*/}
+                {/*    <div className={styles.dialogUserNick}>*/}
+                {/*      <p>{user.name}</p>*/}
+                {/*    </div>*/}
+                {/*  </div>*/}
+                {/*))}*/}
+              </div>
+
+              {selectedUsers.length !== 0 && (
                 <div className={styles.searchResultTrue}>
                   <div>
                     {selectedUsers.map((user) => (
@@ -119,12 +163,6 @@ const ChatField = () => {
                         <p>{user.name}</p>
                       </div>
                     ))}
-                  </div>
-                </div>
-              ) : (
-                <div className={styles.searchResultFalse}>
-                  <div>
-                    <p>일치하는 뮤지션이 없습니다.</p>
                   </div>
                 </div>
               )}

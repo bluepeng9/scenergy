@@ -20,7 +20,6 @@ const ChatPage = () => {
         className={`${styles.chatPageGlobal} ${isOpenInfo ? styles.slideLeft : ""}`}
       >
         <Navbar />
-        <ChatRoomList sytle={{ width: "30%", flex: "1" }} />
         {location.pathname === "/chat" || location.pathname === "/chat/" ? (
           <ChatField />
         ) : (

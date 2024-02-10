@@ -11,6 +11,7 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ChatRoomList from "./ChatRoomList";
 
 const ChatRoomReal = ({ toggleInfoMenu }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,83 +89,86 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
   };
 
   return (
-    <div className={styles.chatRoomContainer}>
-      <div className={styles.chatRoomHeader}>
-        <div className={styles.chatRoomInfo}>
-          <div className={styles.chatRoomProfileContainer}>
-            <div className={styles.chatRoomProfile}>
-              {/*상대방 프로필 사진*/}
-              <p>프로필</p>
+    <>
+      <ChatRoomList />
+      <div className={styles.chatRoomContainer}>
+        <div className={styles.chatRoomHeader}>
+          <div className={styles.chatRoomInfo}>
+            <div className={styles.chatRoomProfileContainer}>
+              <div className={styles.chatRoomProfile}>
+                {/*상대방 프로필 사진*/}
+                <p>프로필</p>
+              </div>
+              <div className={styles.chatRoomUserName}>
+                {/*상대방 닉네임*/}
+                <p>상대방 닉네임</p>
+              </div>
             </div>
-            <div className={styles.chatRoomUserName}>
-              {/*상대방 닉네임*/}
-              <p>상대방 닉네임</p>
+            <div className={styles.chatRoomIcon}>
+              {/*누르면 회원 초대*/}
+              <div className={styles.userInvite} onClick={handleModalOpen}>
+                <FontAwesomeIcon icon={faPlus} />
+              </div>
+              <div className={styles.doRtc} onClick={handleConnectRtc}>
+                <FontAwesomeIcon icon={faVideo} />
+                {/*{isRtcConnect && (*/}
+                {/*  <div>*/}
+                {/*    <VideoConference*/}
+                {/*      mySessionId={roomId}*/}
+                {/*      myUserName={usernickname}*/}
+                {/*    />*/}
+                {/*  </div>*/}
+                {/*)}*/}
+              </div>
+              <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
+                <FontAwesomeIcon icon={faCircleInfo} />
+              </div>
             </div>
-          </div>
-          <div className={styles.chatRoomIcon}>
-            {/*누르면 회원 초대*/}
-            <div className={styles.userInvite} onClick={handleModalOpen}>
-              <FontAwesomeIcon icon={faPlus} />
-            </div>
-            <div className={styles.doRtc} onClick={handleConnectRtc}>
-              <FontAwesomeIcon icon={faVideo} />
-              {/*{isRtcConnect && (*/}
-              {/*  <div>*/}
-              {/*    <VideoConference*/}
-              {/*      mySessionId={roomId}*/}
-              {/*      myUserName={usernickname}*/}
-              {/*    />*/}
-              {/*  </div>*/}
-              {/*)}*/}
-            </div>
-            <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
-              <FontAwesomeIcon icon={faCircleInfo} />
-            </div>
-          </div>
-          {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
-          {isModalOpen && (
-            <div className={styles.dialogContainer}>
-              <form onSubmit={handleInvite}>
-                <Dialog
-                  isModalOpen={isModalOpen}
-                  onClose={() => setIsModalOpen(false)}
-                  title="초대하기"
-                >
-                  <div>
-                    <div className={styles.roomInviteContainer}>
-                      <span>받는 사람</span>
-                      <input type="text" />
-                    </div>
-                    <div className={styles.roomInviteGlobal}>
-                      <div className={styles.inviteListContainer}>
-                        {users.map((user) => (
-                          <div
-                            key={user.id}
-                            className={styles.inviteList}
-                            onClick={() => handleUserSelect(user)}
-                          >
-                            <div className={styles.inviteImg}>이미지</div>
-                            <div className={styles.inviteUserName}>
-                              <p>{user.nickname}</p>
+            {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
+            {isModalOpen && (
+              <div className={styles.dialogContainer}>
+                <form onSubmit={handleInvite}>
+                  <Dialog
+                    isModalOpen={isModalOpen}
+                    onClose={() => setIsModalOpen(false)}
+                    title="초대하기"
+                  >
+                    <div>
+                      <div className={styles.roomInviteContainer}>
+                        <span>받는 사람</span>
+                        <input type="text" />
+                      </div>
+                      <div className={styles.roomInviteGlobal}>
+                        <div className={styles.inviteListContainer}>
+                          {users.map((user) => (
+                            <div
+                              key={user.id}
+                              className={styles.inviteList}
+                              onClick={() => handleUserSelect(user)}
+                            >
+                              <div className={styles.inviteImg}>이미지</div>
+                              <div className={styles.inviteUserName}>
+                                <p>{user.nickname}</p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className={styles.inviteBtn}>
-                        <button>초대하기</button>
+                          ))}
+                        </div>
+                        <div className={styles.inviteBtn}>
+                          <button>초대하기</button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Dialog>
-              </form>
-            </div>
-          )}
+                  </Dialog>
+                </form>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className={styles.connectContainer}>
+          <ChatConnect lastMessageId={lastMessageId} />
         </div>
       </div>
-      <div className={styles.connectContainer}>
-        <ChatConnect lastMessageId={lastMessageId} />
-      </div>
-    </div>
+    </>
   );
 };
 export default ChatRoomReal;

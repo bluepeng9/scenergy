@@ -6,6 +6,8 @@ import ChatInput from "./ChatInput";
 import { useChatMessages } from "../../hooks/useChatMessages";
 import { ChatList } from "./ChatMessageList";
 import { useChatMessageContext } from "../../contexts/ChatMessageContext";
+import { useChatRoom } from "../../contexts/ChatRoomContext";
+import axios from "axios";
 
 const ChatConnect = ({ lastMessageId }) => {
   const [chat, setChat] = useState("");
@@ -15,7 +17,7 @@ const ChatConnect = ({ lastMessageId }) => {
   const userId = 2;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
-
+  const { updateRecentMessage, updateLastMessageId } = useChatRoom();
   const {
     addChatMessage,
     setRecentChatMessage: setRecentChatMessage,
@@ -27,10 +29,10 @@ const ChatConnect = ({ lastMessageId }) => {
     isLoading,
     isError,
     error,
-  } = useChatMessages(realRoomId); //현재 마지막 메세지 id 바뀔때마다
+  } = useChatMessages(realRoomId);
 
   useEffect(() => {
-    if (Array.isArray(chatMessage)) {
+    if (Array.isArray(chatMessage) && chatMessage.length > 0) {
       chatMessage.forEach((message) => {
         console.log("Message ID: ", message.id);
         console.log("message", message);
@@ -44,6 +46,7 @@ const ChatConnect = ({ lastMessageId }) => {
   useEffect(() => {
     if (!isLoading) {
       setChatMessages(chatMessage);
+      console.log(chatMessages);
       if (chatMessage.length > 0) {
         setRecentChatMessage(chatMessage[chatMessage.length - 1]);
       }
@@ -58,18 +61,22 @@ const ChatConnect = ({ lastMessageId }) => {
         const updatedMessages = Array.isArray(prevMessages)
           ? [...prevMessages, messageBody]
           : [messageBody];
-        console.log(messageBody);
-        console.log(updatedMessages);
-        console.log(messageBody.id);
         return updatedMessages;
       });
       console.log("subsub하네요");
+      updateRecentMessage(realRoomId, messageBody);
+      updateLastMessageId(realRoomId, messageBody.id);
       setNowLastMessageId(messageBody.id);
-      setRecentChatMessage(messageBody);
       console.log(messageBody.id);
+      console.log(nowLastMessageId);
     });
-    // }, [realRoomId, recentChatMessage, setRecentChatMessage]);
-  }, [addChatMessage, realRoomId, setRecentChatMessage]);
+  }, [
+    lastMessageId,
+    addChatMessage,
+    realRoomId,
+    updateRecentMessage,
+    updateLastMessageId,
+  ]);
 
   const connect = () => {
     if (client.current.connected) {
@@ -83,8 +90,6 @@ const ChatConnect = ({ lastMessageId }) => {
       heartbeatOutgoing: 2000,
       onConnect: () => {
         console.log("yesyes");
-        console.log(nowLastMessageId); //null
-        console.log(realRoomId);
         subscribe();
       },
       onError: (error) => {
@@ -97,7 +102,6 @@ const ChatConnect = ({ lastMessageId }) => {
       },
     });
     client.current.activate();
-    // }, [subscribe, lastMessageId, realRoomId, userId]);
   };
 
   const publish = (chat) => {
@@ -149,6 +153,15 @@ const ChatConnect = ({ lastMessageId }) => {
       }
     };
   }, [realRoomId]);
+
+  //roomId 변경될 때마다 구독 재설정
+  useEffect(() => {
+    return () => {
+      if (client.current) {
+        client.current.unsubscribe();
+      }
+    };
+  }, [roomId]);
 
   if (isLoading) return <div>Loading messages...</div>;
   if (isError) return <div>Error loading messages: {error.message}</div>;

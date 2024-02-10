@@ -18,7 +18,11 @@ const ChatRoomList = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
-  const { addChatRoom, chatRooms: contextChatRooms } = useChatRoom();
+  const {
+    addChatRoom,
+    chatRooms: contextChatRooms,
+    setChatRooms,
+  } = useChatRoom();
   const navigate = useNavigate();
   const userNickname = "uniquenickname2";
   const users = [
@@ -65,8 +69,10 @@ const ChatRoomList = () => {
   };
 
   useEffect(() => {
-    console.log("채팅방 목록 업데이트", chatRooms);
-  }, [chatRooms]);
+    if (chatRooms) {
+      setChatRooms(chatRooms);
+    }
+  }, [chatRooms, setChatRooms]);
 
   // const userId = 2;
   if (isLoading) return <div>로딩중..</div>;
@@ -158,7 +164,7 @@ const ChatRoomList = () => {
         </div>
       </div>
       <div className={styles.roomListContainer}>
-        {contextChatRooms.map((room) => (
+        {chatRooms.map((room) => (
           <li key={room.id} className={styles.listContainer}>
             <Link
               state={{

@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
   const { addChatRoom } = useChatRoom();
   const [isCreating, setIsCreating] = useState(false);
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     //나중에 user 상태 받아와서 room member에 한명 자동을 넣어주고 수식 바꿔주기
@@ -32,9 +34,10 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
       const newRoom = response.data.data;
       addChatRoom(newRoom);
       console.log(newRoom);
-      console.log(newRoom.id);
+      console.log(newRoom.chatRoomId);
       setIsCreating(false);
       setIsModalOpen(false);
+      navigate(`/chat/${newRoom.chatRoomId}`);
     } catch (error) {
       console.error("에러", error);
       setIsCreating(false);

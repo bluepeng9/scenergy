@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { useChatRoom } from "../contexts/ChatRoomContext";
 
 export const useChatRooms = (userId) => {
-  const { addChatRoom } = useChatRoom();
+  // const { addChatRoom } = useChatRoom();
 
   return useQuery(
     ["chatRooms", userId],
@@ -18,19 +18,16 @@ export const useChatRooms = (userId) => {
 
         const myChatRoomList = response.data.data.myChatRoomList;
         console.log(myChatRoomList);
-        myChatRoomList.forEach((roomData) => {
-          addChatRoom({
-            id: roomData.id,
-            name: roomData.name,
-            users: roomData.users, //배열
-            recentChatMessage: roomData.recentChatMessage,
-          });
-
-          console.log(roomData);
-        });
-        console.log(response.data);
-        console.log(response.data.data);
-        console.log(myChatRoomList);
+        // myChatRoomList.forEach((roomData) => {
+        //   addChatRoom({
+        //     id: roomData.id,
+        //     name: roomData.name,
+        //     users: roomData.users, //배열
+        //     recentChatMessage: roomData.recentChatMessage,
+        //   });
+        //
+        //   console.log(roomData);
+        // });
         return myChatRoomList;
       } catch (error) {
         console.error(error);

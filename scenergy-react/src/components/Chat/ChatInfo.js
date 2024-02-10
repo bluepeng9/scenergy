@@ -10,16 +10,17 @@ import { useQueryClient } from "react-query";
 const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
   const { chatRooms, setSelectedRoomId, removeChatRoom } = useChatRoom();
   const { roomId } = useParams();
-  useEffect(() => {
-    const realRoomId = parseInt(roomId, 10);
-    setSelectedRoomId(realRoomId);
-  }, [roomId, setSelectedRoomId]);
+  const queryClient = useQueryClient();
 
   const realRoomId = parseInt(roomId, 10);
   const selectedChatRoom = chatRooms.find((room) => room.id === realRoomId);
   const userId = 2;
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const realRoomId = parseInt(roomId, 10);
+    setSelectedRoomId(realRoomId);
+  }, [roomId, setSelectedRoomId]);
   const handleExit = async () => {
     try {
       const response = await axios.get(
@@ -34,6 +35,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
       console.log(response.data);
       console.log(chatRooms);
       removeChatRoom(realRoomId);
+      queryClient.invalidateQueries("chatRooms");
       setSelectedRoomId(null);
       toggleInfoMenu();
       navigate("/chat");
