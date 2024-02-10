@@ -8,6 +8,23 @@ class SearchApi {
       word: word,
     });
   };
+
+  searchUser = async (word) => {
+    try {
+      const response = await ApiUtil.get("/search", {
+        word: word,
+      });
+      const searchData = response.data;
+      if (searchData.success) {
+        return searchData.data;
+      } else {
+        throw new Error(searchData.message);
+      }
+    } catch (error) {
+      console.error("Error while searching user:", error);
+      throw error;
+    }
+  };
 }
 
 export default SearchApi;
