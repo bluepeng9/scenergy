@@ -25,9 +25,10 @@ public class ChatRoomController {
     @PostMapping("/create-room")
     public ResponseEntity<ApiResponse<CreateChatRoomResponse>> createChatRoom(@RequestBody CreateChatRoomRequest request) {
         log.info("CreateChatRoomRequest: " + request);
-        Long chatRoomId = chatService.createChatRoom(request.toCreateChatRoomCommand());
+        ChatRoomDto chatRoomDto = chatService.createChatRoom(request.toCreateChatRoomCommand());
         CreateChatRoomResponse response = CreateChatRoomResponse.builder()
-                .chatRoomId(chatRoomId)
+                .chatRoomId(chatRoomDto.getId())
+                .roomName(chatRoomDto.getName())
                 .build();
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }

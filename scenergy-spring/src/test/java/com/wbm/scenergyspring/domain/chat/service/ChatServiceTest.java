@@ -28,7 +28,6 @@ import com.wbm.scenergyspring.domain.chat.service.command.RenameChatRoomCommand;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.util.UserGenerator;
-
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -55,7 +54,7 @@ class ChatServiceTest extends IntegrationTest {
         //given
         CreateChatRoomCommand command = createChatRoomCommand("room1", createSaveUsers(2));
         //when
-        Long chatRoomId = chatService.createChatRoom(command);
+        Long chatRoomId = chatService.createChatRoom(command).getId();
         //then
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
         Assertions.assertThat(chatRoom.getChatUsers().get(0).getChatRoom()).isEqualTo(chatRoom.getChatUsers().get(1).getChatRoom());
@@ -67,7 +66,7 @@ class ChatServiceTest extends IntegrationTest {
     void 채팅룸_이름변경_테스트() {
         //given
         CreateChatRoomCommand command = createChatRoomCommand("room1", createSaveUsers(2));
-        Long createChatRoomId = chatService.createChatRoom(command);
+        Long createChatRoomId = chatService.createChatRoom(command).getId();
         //when
         RenameChatRoomCommand renameCommand = RenameChatRoomCommand.builder()
                 .roomId(createChatRoomId)
@@ -85,7 +84,7 @@ class ChatServiceTest extends IntegrationTest {
     void 채팅룸_초대_테스트() {
         //given
         CreateChatRoomCommand createCommand = createChatRoomCommand("roomtest", createSaveUsers(2));
-        Long createChatRoomId = chatService.createChatRoom(createCommand);
+        Long createChatRoomId = chatService.createChatRoom(createCommand).getId();
         ChatRoom createChatRoom = chatRoomRepository.findById(createChatRoomId).get();
         int beforeSize = createChatRoom.getChatUsers().size();
 
@@ -134,7 +133,7 @@ class ChatServiceTest extends IntegrationTest {
     void 채팅_전송조회_테스트() {
         //given
         List<User> saveUsers = createSaveUsers(2);
-        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers)).getId();
         CreatePubMessageCommand command1 = CreatePubMessageCommand.builder()
                 .userId(saveUsers.get(0).getId())
                 .roomId(chatRoomId)
@@ -169,7 +168,7 @@ class ChatServiceTest extends IntegrationTest {
     void 채팅_100건이상에서_조회테스트() {
         //given
         List<User> saveUsers = createSaveUsers(2);
-        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers)).getId();
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
         CreatePubMessageCommand lastCommand = null;
         List<ChatMessageDto> firstchatMessageDtoList = new ArrayList<>();
@@ -230,7 +229,7 @@ class ChatServiceTest extends IntegrationTest {
         //given
         //room making
         List<User> saveUsers = createSaveUsers(3);
-        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers)).getId();
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
         String sessionIdUser1 = "session1-c";
         String sessionIdUser2 = "session2-c";
@@ -257,7 +256,7 @@ class ChatServiceTest extends IntegrationTest {
         User user1 = saveUsers.get(0);
         User user2 = saveUsers.get(1);
         User user3 = saveUsers.get(2);
-        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers)).getId();
         ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).get();
 
         int sendCount = 5;
@@ -295,7 +294,7 @@ class ChatServiceTest extends IntegrationTest {
         User user1 = saveUsers.get(0);
         User user2 = saveUsers.get(1);
         User user3 = saveUsers.get(2);
-        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers));
+        Long chatRoomId = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers)).getId();
         String sessionId = "sessionId";
         chatService.connectRoom(chatRoomId, user1.getId(), sessionId);
         chatService.disconnectRoom(sessionId);
@@ -310,10 +309,10 @@ class ChatServiceTest extends IntegrationTest {
         User user2 = saveUsers.get(1);
         User user3 = saveUsers.get(2);
         User user4 = saveUsers.get(3);
-        Long chatRoomId1 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(0, 1)));
-        Long chatRoomId2 = chatService.createChatRoom(createChatRoomCommand("testroom2", saveUsers.subList(0, 3)));
-        Long chatRoomId3 = chatService.createChatRoom(createChatRoomCommand("testroom3", saveUsers.subList(0, 3)));
-        Long chatRoomId4 = chatService.createChatRoom(createChatRoomCommand("testroom4", saveUsers.subList(0, 3)));
+        Long chatRoomId1 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(0, 1))).getId();
+        Long chatRoomId2 = chatService.createChatRoom(createChatRoomCommand("testroom2", saveUsers.subList(0, 3))).getId();
+        Long chatRoomId3 = chatService.createChatRoom(createChatRoomCommand("testroom3", saveUsers.subList(0, 3))).getId();
+        Long chatRoomId4 = chatService.createChatRoom(createChatRoomCommand("testroom4", saveUsers.subList(0, 3))).getId();
 
         //when
         sendMessage(user1, chatRoomId4, 1);
@@ -335,6 +334,45 @@ class ChatServiceTest extends IntegrationTest {
         Assertions.assertThat(loadRoomId2).isEqualTo(chatRoomId2);
         Assertions.assertThat(loadRoomId3).isEqualTo(chatRoomId3);
         Assertions.assertThat(loadRoomId4).isEqualTo(chatRoomId4);
+    }
+
+    @Test
+    @Transactional
+    public void 채팅방_나가기_테스트() {
+        //given
+        List<User> saveUsers = createSaveUsers(5);
+        Long chatRoomId1 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(0, 3))).getId(); //012
+        Long chatRoomId2 = chatService.createChatRoom(createChatRoomCommand("testroom2", saveUsers.subList(1, 4))).getId(); //123
+        Long chatRoomId3 = chatService.createChatRoom(createChatRoomCommand("testroom3", saveUsers.subList(2, 5))).getId(); //234
+        //when
+        List<ChatRoomDto> chatRoomOf1 = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(0).getId()).build());
+        List<ChatRoomDto> chatRoomOf3 = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(2).getId()).build());
+
+        int beforeSize = chatService.findChatRoom(chatRoomId1).getChatUsers().size();
+        chatService.exitChatRoom(ExitChatRoomCommand.builder().userId(saveUsers.get(2).getId()).roomId(chatRoomId1).build());
+        List<ChatRoomDto> AfterChatRoomOf3 = chatService.listMyChatRoom(ListMyChatRoomCommand.builder().userId(saveUsers.get(2).getId()).build());
+        int afterSize = chatService.findChatRoom(chatRoomId1).getChatUsers().size();
+
+        //then
+        Assertions.assertThat(afterSize).isEqualTo(beforeSize - 1);
+    }
+
+    @Test
+    @Transactional
+    public void 일대일채팅방_중복체크_테스트() {
+        //given
+        List<User> saveUsers = createSaveUsers(3);
+        User user1 = saveUsers.get(0);
+        User user2 = saveUsers.get(1);
+        User user3 = saveUsers.get(2);
+        Long chatRoomId1 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(0, 2))).getId();//12
+        Long chatRoomId2 = chatService.createChatRoom(createChatRoomCommand("testroom1", saveUsers.subList(1, 3))).getId();//23
+        //when
+        Optional<ChatRoom> commonChatRoom1 = chatRoomRepository.findCommonChatRoom(user1.getId(), user2.getId());
+        Optional<ChatRoom> commonChatRoom2 = chatRoomRepository.findCommonChatRoom(user1.getId(), user3.getId());
+        //then
+        Assertions.assertThat(commonChatRoom1.isPresent()).isTrue();
+        Assertions.assertThat(commonChatRoom2.isEmpty()).isTrue();
     }
 
     private void sendMessage(User user, Long chatRoomId, int user1SendCount) {
@@ -364,7 +402,7 @@ class ChatServiceTest extends IntegrationTest {
         CreateChatRoomCommand command = CreateChatRoomCommand
                 .builder()
                 .roomName(roomName)
-                .status(0)
+                .status(users.size() == 2 ? 0 : 1)
                 .users(users)
                 .build();
         return command;

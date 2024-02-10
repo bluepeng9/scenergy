@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.util;
 
+import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
@@ -70,8 +71,8 @@ public class DummyGenerator {
                 .roomName("room" + chatRoomCount)
                 .status(userList.size() < 3 ? 0 : 1)
                 .build();
-        Long chatRoomId = chatService.createChatRoom(command);
+        ChatRoomDto chatRoom = chatService.createChatRoom(command);
         chatRoomCount += 1;
-        return chatService.findChatRoom(chatRoomId);
+        return chatService.findChatRoom(chatRoom.getId());
     }
 }
