@@ -1,4 +1,5 @@
 import ApiUtil from "./ApiUtil";
+import apiUtil from "./ApiUtil";
 
 class SearchApi {
   // 팔로잉하는 사용자들 중 검색
@@ -22,6 +23,23 @@ class SearchApi {
       }
     } catch (error) {
       console.error("Error while searching user:", error);
+      throw error;
+    }
+  };
+
+  searchFollowingAll = async (userId) => {
+    try {
+      const response = ApiUtil.get("/search-following", {
+        userId: userId,
+      });
+      const searchData = (await response).data;
+      if (searchData.success) {
+        return searchData.data;
+      } else {
+        throw new Error(searchData.message);
+      }
+    } catch (error) {
+      console.error("Error while searching following user", error);
       throw error;
     }
   };
