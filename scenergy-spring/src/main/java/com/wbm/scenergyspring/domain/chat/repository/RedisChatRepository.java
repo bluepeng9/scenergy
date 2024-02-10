@@ -4,7 +4,6 @@ import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.entity.ChatOnlineInfo;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
-import com.wbm.scenergyspring.domain.user.entity.User;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.RequiredArgsConstructor;
@@ -76,17 +75,38 @@ public class RedisChatRepository {
         return chatRoomDto.getChatUsersCount();
     }
 
-    public void inviteChatUsers(ChatRoom chatRoom, List<User> users) {
+    public void inviteChatUsers(ChatRoom chatRoom, int inviteCount) {
         String strRoomId = Long.toString(chatRoom.getId());
         RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
         if (redisChatRoomDto != null) {
             //redis room update
             opsHashChatRoom.put(CHAT_ROOMS, strRoomId, RedisChatRoomDto.from(chatRoom));
             //redis onlineMember update
-            for (int i = chatRoom.getChatUsers().size() - users.size(); i < chatRoom.getChatUsers().size(); i++) {
+            for (int i = chatRoom.getChatUsers().size() - inviteCount; i < chatRoom.getChatUsers().size(); i++) {
                 ChatUser invitedChatUser = chatRoom.getChatUsers().get(i);
                 String strChatUserId = Long.toString(invitedChatUser.getId());
                 opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, ChatOnlineInfoDto.from(invitedChatUser.getChatOnlineInfo()));
+            }
+        }
+    }
+
+    /**
+     * redis 내 chatuser 정보 삭제
+     *
+     * @param chatUser: 삭제할 chat user
+     */
+    public void exitChatRoom(ChatUser chatUser) {
+        String strRoomId = Long.toString(chatUser.getChatRoom().getId());
+        String strChatUserId = Long.toString(chatUser.getId());
+        RedisChatRoomDto redisChatRoomDto = opsHashChatRoom.get(CHAT_ROOMS, strRoomId);
+        //redis 정보 순회 후 수정
+        for (int i = 0; i < redisChatRoomDto.getChatUserIds().size(); i++) {
+            Long savedChatUserId = redisChatRoomDto.getChatUserIds().get(i);
+            if (savedChatUserId == chatUser.getId()) {
+                redisChatRoomDto.getChatUserIds().remove(i);
+                redisChatRoomDto.updateMemberCount(-1);
+                opsHashOnlineMember.delete(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId); // 온오프라인 정보 저장 삭제
+                break;
             }
         }
     }
@@ -102,6 +122,12 @@ public class RedisChatRepository {
             opsHashOnlineMember.put(ROOM_ONLINE_MEMBER + strRoomId, strChatUserId, ChatOnlineInfoDto.from(chatOnlineInfo));
         }
     }
+
+    public void deleteChatRoom(ChatRoom chatRoom) {
+        String strRoomId = Long.toString(chatRoom.getId());
+        opsHashChatRoom.delete(CHAT_ROOMS, strRoomId);
+    }
+
 
     public void chatMessageSave(ChatMessageDto chatMessage) {
         String strRoomId = Long.toString(chatMessage.getChatRoomId());
