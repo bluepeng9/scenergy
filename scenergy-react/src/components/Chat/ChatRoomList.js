@@ -8,10 +8,11 @@ import ChatRoomCreate from "./ChatRoomCreate";
 import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import { useChatRooms } from "../../hooks/useChatRooms";
+import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 //userId나중에 {userId}로 넣어줘야됨
-const userId = 2;
 const ChatRoomList = () => {
+  const userId = 2;
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -30,6 +31,10 @@ const ChatRoomList = () => {
     { id: 2, email: "김준표", password: "이태경", name: "사용자2" },
     { id: 3, email: "홍준표", password: "이태경", name: "사용자3" },
   ];
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
@@ -74,11 +79,6 @@ const ChatRoomList = () => {
     }
   }, [chatRooms, setChatRooms]);
 
-  // useEffect(() => {
-  //   console.log(contextChatRooms);
-  // }, [contextChatRooms]);
-
-  // const userId = 2;
   if (isLoading) return <div>로딩중..</div>;
   if (isError) return <div>Error:{error?.message}</div>;
 
@@ -95,72 +95,12 @@ const ChatRoomList = () => {
             </p>
           </div>
           {isModalOpen && (
-            <Dialog title="뮤지션 검색" onClose={() => setIsModalOpen(false)}>
-              <form onSubmit={handleSubmit}>
-                <div className={styles.dialogSearchGlobal}>
-                  <div className={styles.dialogSearchContainer}>
-                    <span>받는 사람 : </span>
-                    <input
-                      className={styles.dialogSearchInput}
-                      placeholder="닉네임/아이디를 입력해주세요"
-                      type="text"
-                      value={searchInput}
-                      onChange={handleInputChange}
-                    />
-                    <button onClick={handleSearch}>검색</button>
-                  </div>
-                </div>
-                <hr className={styles.hrLine} />
-                {searchInput === "" ? null : (
-                  <div className={styles.dialogUserListContainer}>
-                    {users.map((user) => (
-                      <div
-                        className={styles.dialogUserList}
-                        key={user.id}
-                        onClick={() => handleUserSelect(user)}
-                      >
-                        <div className={styles.dialogUserImg}>
-                          <p>유저프로필</p>
-                        </div>
-                        <div className={styles.dialogUserNick}>
-                          <p>{user.name}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {searchInput && selectedUsers.length !== 0 ? (
-                  <div className={styles.searchResultTrue}>
-                    <div>
-                      {selectedUsers.map((user) => (
-                        <div
-                          key={user.id}
-                          onClick={() => handleUserSelect(user)}
-                        >
-                          <p>이미지</p>
-                          <p>{user.name}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className={styles.searchResultFalse}>
-                    <div>
-                      <p>일치하는 뮤지션이 없습니다.</p>
-                    </div>
-                  </div>
-                )}
-                <div className={styles.createBtn}>
-                  {!isCreated ? (
-                    <ChatRoomCreate
-                      selectedUsers={selectedUsers}
-                      isRoomCreated={handleRoomCreate}
-                      setIsModalOpen={setIsModalOpen}
-                    />
-                  ) : null}
-                </div>
-              </form>
-            </Dialog>
+            <ChatUserSearch
+              isOpen={isModalOpen}
+              onClose={handleCloseModal}
+              onUserSelect={handleUserSelect}
+              fromUserId={userId}
+            />
           )}
         </div>
         <div className={styles.message}>

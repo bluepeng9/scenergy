@@ -9,7 +9,7 @@ import { useChatMessageContext } from "../../contexts/ChatMessageContext";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import axios from "axios";
 
-const ChatConnect = ({ lastMessageId }) => {
+const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const client = useRef({});
@@ -93,10 +93,10 @@ const ChatConnect = ({ lastMessageId }) => {
         if (error) {
           console.error("메시지 전송 실패", error);
         } else {
-          // 서버로부터 받은 응답 내의 메시지 객체 사용
           const receivedMessage = JSON.parse(messageResponse.body);
           addChatMessage(receivedMessage); // 실제 서버에서 생성된 ID를 포함한 메시지 객체
           updateRecentMessage(realRoomId, receivedMessage);
+          refetchChatRooms();
         }
       },
     });

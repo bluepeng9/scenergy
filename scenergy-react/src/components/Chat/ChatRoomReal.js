@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
+import { useChatRooms } from "../../hooks/useChatRooms";
 
 const ChatRoomReal = ({ toggleInfoMenu }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +23,8 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
   const lastMessageId = location.state?.lastMessageId;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
-
+  const userId = 2;
+  const { refetch } = useChatRooms(userId);
   const usernickname = "사용자2";
   const users = [
     {
@@ -88,6 +90,7 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
     setIsRtcConnect(!isRtcConnect);
   };
   console.log(lastMessageId);
+
   useEffect(() => {
     console.log(lastMessageId);
   }, [lastMessageId]);
@@ -169,7 +172,10 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
           </div>
         </div>
         <div className={styles.connectContainer}>
-          <ChatConnect lastMessageId={lastMessageId} />
+          <ChatConnect
+            lastMessageId={lastMessageId}
+            refetchChatRooms={refetch}
+          />
         </div>
       </div>
     </>
