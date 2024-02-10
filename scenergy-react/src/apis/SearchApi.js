@@ -10,6 +10,15 @@ class SearchApi {
     });
   };
 
+  searchJobPost = async (data) => {
+    return await ApiUtil.post("/jobPost/search", {
+      name: data.name,
+      gt: data.gt,
+      it: data.it,
+      lt: data.lt,
+    });
+  };
+
   searchUser = async (word) => {
     try {
       const response = await ApiUtil.get("/search", {
