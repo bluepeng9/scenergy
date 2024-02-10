@@ -64,6 +64,14 @@ services:
     depends_on:
         - mysql-scenergy
         - redis
+  scenergy-notification:
+    container_name: scenergy-notification
+    build:
+      context: scenergy-notification/.
+    ports:
+      - "9001:9001"
+    depends_on:
+      - mysql-notification
   scenergy-react:
     container_name: scenergy-react
     build:
@@ -72,3 +80,4 @@ services:
       - "3000:3000"
     depends_on:
       - scenergy-spring
+      - scenergy-notification
