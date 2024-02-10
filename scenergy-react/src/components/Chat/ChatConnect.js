@@ -12,12 +12,11 @@ import axios from "axios";
 const ChatConnect = ({ lastMessageId }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
-  const [nowLastMessageId, setNowLastMessageId] = useState(lastMessageId);
   const client = useRef({});
   const userId = 2;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
-  const { updateRecentMessage, updateLastMessageId } = useChatRoom();
+  const { updateRecentMessage } = useChatRoom();
   const {
     addChatMessage,
     setRecentChatMessage: setRecentChatMessage,
@@ -25,69 +24,39 @@ const ChatConnect = ({ lastMessageId }) => {
   } = useChatMessageContext();
 
   const {
-    data: chatMessage,
-    isLoading,
-    isError,
-    error,
-  } = useChatMessages(realRoomId);
+    data: loadedMessages,
+    isLoading: messagesLoading,
+    isError: messagesError,
+  } = useChatMessages(lastMessageId);
 
   useEffect(() => {
-    if (Array.isArray(chatMessage) && chatMessage.length > 0) {
-      chatMessage.forEach((message) => {
-        console.log("Message ID: ", message.id);
-        console.log("message", message);
-        addChatMessage(message);
-        setNowLastMessageId(message.id);
-        setRecentChatMessage(message);
-      });
+    if (!messagesLoading && loadedMessages && !messagesError) {
+      setChatMessages(loadedMessages);
     }
-  }, [chatMessages, chatMessage, addChatMessage, setRecentChatMessage]);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setChatMessages(chatMessage);
-      console.log(chatMessages);
-      if (chatMessage.length > 0) {
-        setRecentChatMessage(chatMessage[chatMessage.length - 1]);
-      }
-    }
-  }, [chatMessage, isLoading]);
+  }, [loadedMessages, messagesLoading, messagesError]);
 
   const subscribe = useCallback(() => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
-      addChatMessage(messageBody);
-      setChatMessages((prevMessages) => {
-        const updatedMessages = Array.isArray(prevMessages)
-          ? [...prevMessages, messageBody]
-          : [messageBody];
-        return updatedMessages;
-      });
+      setChatMessages((prevMessages) => [...prevMessages, messageBody]);
       console.log("subsub하네요");
       updateRecentMessage(realRoomId, messageBody);
-      updateLastMessageId(realRoomId, messageBody.id);
-      setNowLastMessageId(messageBody.id);
       console.log(messageBody.id);
-      console.log(nowLastMessageId);
+      console.log("메세지 받음:", messageBody);
+      console.log(recentChatMessage);
     });
-  }, [
-    lastMessageId,
-    addChatMessage,
-    realRoomId,
-    updateRecentMessage,
-    updateLastMessageId,
-  ]);
+  }, [realRoomId, addChatMessage, updateRecentMessage]);
 
-  const connect = () => {
+  const connect = useCallback(() => {
     if (client.current.connected) {
-      client.current.deactivate();
+      return;
     }
 
     client.current = new StompJs.Client({
       brokerURL: "ws://localhost:8080/ws",
       reconnectDelay: 5000,
-      heartbeatIncoming: 2000,
-      heartbeatOutgoing: 2000,
+      heartbeatIncoming: 4000,
+      heartbeatOutgoing: 4000,
       onConnect: () => {
         console.log("yesyes");
         subscribe();
@@ -102,7 +71,7 @@ const ChatConnect = ({ lastMessageId }) => {
       },
     });
     client.current.activate();
-  };
+  }, [realRoomId]);
 
   const publish = (chat) => {
     //연결 끊어지면 끝
@@ -120,17 +89,26 @@ const ChatConnect = ({ lastMessageId }) => {
     client.current.publish({
       destination: "/pub/chat",
       body: JSON.stringify(message),
+      callback: function (error, messageResponse) {
+        if (error) {
+          console.error("메시지 전송 실패", error);
+        } else {
+          // 서버로부터 받은 응답 내의 메시지 객체 사용
+          const receivedMessage = JSON.parse(messageResponse.body);
+          addChatMessage(receivedMessage); // 실제 서버에서 생성된 ID를 포함한 메시지 객체
+          updateRecentMessage(realRoomId, receivedMessage);
+        }
+      },
     });
-
-    console.log(chat);
     setChat("");
-    console.log("pubpub");
   };
-  const disconnect = () => {
-    if (client.current && client.current.connected) {
-      client.current.deactivate();
-    }
-  };
+  useEffect(() => {
+    return () => {
+      if (client.current && client.current.connected) {
+        client.current.deactivate();
+      }
+    };
+  }, []);
   const handleChange = (event) => {
     //입력값 state로 변경해주기
     setChat(event.target.value);
@@ -147,28 +125,16 @@ const ChatConnect = ({ lastMessageId }) => {
   useEffect(() => {
     connect();
     console.log(realRoomId);
-    return () => {
-      if (client.current && client.current.connected) {
-        client.current.deactivate();
-      }
-    };
-  }, [realRoomId]);
+    return () => client.current.deactivate();
+  }, [realRoomId, connect]);
 
-  //roomId 변경될 때마다 구독 재설정
-  useEffect(() => {
-    return () => {
-      if (client.current) {
-        client.current.unsubscribe();
-      }
-    };
-  }, [roomId]);
-
-  if (isLoading) return <div>Loading messages...</div>;
-  if (isError) return <div>Error loading messages: {error.message}</div>;
+  if (messagesLoading) return <div>로딩중...</div>;
+  if (messagesError)
+    return <div>Error loading messages: {messagesError.message}</div>;
 
   return (
     <div className={styles.chatMsgFieldGlobal}>
-      <ChatList chatList={chatMessages || []} userId={userId} />
+      <ChatList chatList={chatMessages} userId={userId} />
       <ChatInput
         chat={chat}
         setChat={setChat}

@@ -26,13 +26,14 @@ export const ChatRoomProvider = ({ children }) => {
   //채팅방 최근 메세지 추가
   const updateRecentMessage = (roomId, newMessage) => {
     setChatRooms((prevRooms) =>
-      prevRooms.map((room) => {
-        if (room.id === roomId) {
-          return { ...room, recentChatMessage: newMessage };
-        }
-        return room;
-      }),
+      prevRooms.map((room) =>
+        room.id === roomId ? { ...room, recentChatMessage: newMessage } : room,
+      ),
     );
+
+    console.log(newMessage);
+    console.log(newMessage.id);
+    console.log(chatRooms);
   };
 
   const updateLastMessageId = (roomId, newLastMessageId) => {

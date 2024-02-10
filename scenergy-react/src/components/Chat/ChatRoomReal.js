@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Dialog from "../commons/Dialog/Dialog";
 import { useLocation, useParams } from "react-router-dom";
@@ -87,6 +87,10 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
   const handleConnectRtc = () => {
     setIsRtcConnect(!isRtcConnect);
   };
+  console.log(lastMessageId);
+  useEffect(() => {
+    console.log(lastMessageId);
+  }, [lastMessageId]);
 
   return (
     <>

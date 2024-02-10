@@ -5,7 +5,3 @@
   transition: transform 0.5s ease;
   /*overflow-x: hidden;*/
 }
-
-.slideLeft {
-  transform: translateX(-200px);
-}

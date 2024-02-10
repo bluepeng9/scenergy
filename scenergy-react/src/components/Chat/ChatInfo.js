@@ -52,7 +52,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
       <div
         className={`${styles.infoMenuContainer} ${isOpenInfo ? styles.show : ""}`}
       >
-        <header
+        <div
           className={styles.infoMenuHeaderContainer}
           onClick={toggleInfoMenu}
         >
@@ -60,22 +60,22 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
             <p>{selectedChatRoom.name}</p>
             <FontAwesomeIcon icon={faTimes} />
           </div>
-        </header>
-      </div>
-      <div>
-        <div className={styles.chatUsersListContainer}>
-          <div className={styles.chatUsersList}>
-            <ul>
-              {selectedChatRoom.users.map((user) => (
-                <li key={user.id}>{user.nickname}</li>
-              ))}
-            </ul>
+        </div>
+        <div>
+          <div className={styles.chatUsersListContainer}>
+            <div className={styles.chatUsersList}>
+              <ul>
+                {selectedChatRoom.users.map((user) => (
+                  <li key={user.id}>{user.nickname}</li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
+        <div>
+          <button onClick={handleExit}>나가기</button>
+        </div>
       </div>
-      <section>
-        <button onClick={handleExit}>나가기</button>
-      </section>
     </>
   );
 };

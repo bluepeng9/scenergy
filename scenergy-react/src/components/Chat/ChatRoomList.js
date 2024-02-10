@@ -74,6 +74,10 @@ const ChatRoomList = () => {
     }
   }, [chatRooms, setChatRooms]);
 
+  // useEffect(() => {
+  //   console.log(contextChatRooms);
+  // }, [contextChatRooms]);
+
   // const userId = 2;
   if (isLoading) return <div>로딩중..</div>;
   if (isError) return <div>Error:{error?.message}</div>;
@@ -164,7 +168,7 @@ const ChatRoomList = () => {
         </div>
       </div>
       <div className={styles.roomListContainer}>
-        {chatRooms.map((room) => (
+        {contextChatRooms.map((room) => (
           <li key={room.id} className={styles.listContainer}>
             <Link
               state={{
