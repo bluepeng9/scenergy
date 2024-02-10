@@ -68,7 +68,7 @@ public class FollowController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteFollowResponse));
 	}
 
-	@GetMapping("/followers")
+	@GetMapping("/followers/{toUserId}")
 	public ResponseEntity<ApiResponse<FindAllFollowerResponse>> getAllFollowers(
 		@PathVariable Long toUserId
 	) {
@@ -83,7 +83,7 @@ public class FollowController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(followersResponse));
 	}
 
-	@GetMapping("/followings")
+	@GetMapping("/followings/{fromUserId}")
 	public ResponseEntity<ApiResponse<FindAllFollowingResponse>> getAllFollowing(
 		@PathVariable Long fromUserId
 	) {
