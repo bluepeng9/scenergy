@@ -13,7 +13,6 @@ public class CreateUserRequest {
 	Gender gender;
 	String username;
 	String nickname;
-	List<Long> locationTags;
 
 	public CreateUserCommand toCreateUserCommand() {
 		return CreateUserCommand.builder()
@@ -22,7 +21,6 @@ public class CreateUserRequest {
 			.gender(gender)
 			.username(username)
 			.nickname(nickname)
-			.locationTagIds(locationTags)
 			.build();
 	}
 }

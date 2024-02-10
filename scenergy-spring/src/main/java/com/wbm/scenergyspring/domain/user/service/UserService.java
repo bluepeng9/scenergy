@@ -88,9 +88,11 @@ public class UserService {
 	public Long deleteUser(String password, String username) {
 		User user = userRepository.findByUsername(username);
 		if (bCryptPasswordEncoder.matches(password, user.getPassword())) {
+			Long tmpId = user.getId();
 			userRepository.delete(user);
+			return tmpId;
 		}
-		return 1L;
+		return user.getId();
 	}
 
 	public List<SearchUserResponse> searchUser(String word) {
@@ -146,16 +148,17 @@ public class UserService {
 	}
 
 	public void createUserLocationTags(List<Long> locationTagIds, User user) {
+		if (locationTagIds != null) {
+			for (Long locationTagId : locationTagIds) {
+				LocationTag locationTag = locationTagRepository.findById(locationTagId)
+					.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역태그 입니다."));
 
-		for (Long locationTagId : locationTagIds) {
-			LocationTag locationTag = locationTagRepository.findById(locationTagId)
-				.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역태그 입니다."));
+				UserLocationTag userLocationTag = new UserLocationTag();
+				userLocationTag.updateUser(user);
+				userLocationTag.updateLocationTag(locationTag);
 
-			UserLocationTag userLocationTag = new UserLocationTag();
-			userLocationTag.updateUser(user);
-			userLocationTag.updateLocationTag(locationTag);
-
-			userLocationRepository.save(userLocationTag);
+				userLocationRepository.save(userLocationTag);
+			}
 		}
 	}
 }
