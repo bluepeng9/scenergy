@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -73,10 +74,13 @@ public class ChatService {
         } else if (messageType.equals("EXIT")) {//채팅방 삭제
             command.setMessageText(user.getNickname() + "님이 퇴장하셨습니다.");
             int remainingMembersCount = chatUser.leaveRoom();
-            chatUserRepository.delete(chatUser);
+            chatUserRepository.deleteById(chatUser.getId()); // mysql update
+            chatUserRepository.flush();
+            redisChatRepository.exitChatRoom(chatUser); // redis update
             int redisRemainingMembersCount = redisChatRepository.updateMemberCount(command.getRoomId(), -1);
             if (redisRemainingMembersCount <= 0 || remainingMembersCount <= 0) { // 채팅방 삭제
                 chatRoomRepository.delete(chatRoom);
+                redisChatRepository.deleteChatRoom(chatRoom);
                 return 0L;
             }
         } else if (messageType.equals("ENTER")) {
@@ -120,9 +124,18 @@ public class ChatService {
      * @return roomId
      */
     @Transactional(readOnly = false)
-    public Long createChatRoom(CreateChatRoomCommand command) {
+    public ChatRoomDto createChatRoom(CreateChatRoomCommand command) {
         if (command.getStatus() == 0) {
-            //TODO: 같은 스테이터스를 가지고 챗 맴버도 동일한 방을 찾아봐야함 존재한다면 그 룸 id return
+            Optional<ChatRoom> commonChatRoom = chatRoomRepository.findCommonChatRoom(
+                    command.getUsers().get(0).getId(),
+                    command.getUsers().get(1).getId()
+            );
+            if (commonChatRoom.isPresent()) { //이미 1:1 채팅방 존재할 시 그 방으로 이동
+                return ChatRoomDto.builder()
+                        .id(commonChatRoom.get().getId())
+                        .name(commonChatRoom.get().getName())
+                        .build();
+            }
         }
         ChatRoom newChatRoom = ChatRoom.createNewRoom(
                 command.getRoomName(),
@@ -154,7 +167,7 @@ public class ChatService {
                     .build();
             sendMessage(pubInviteMessageCommand);
         }
-        return roomId;
+        return ChatRoomDto.builder().id(roomId).build();
     }
 
     /**
@@ -187,7 +200,7 @@ public class ChatService {
         chatRoom.inviteChatUsers(command.getUsers());
         ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
         //redis 저장
-        redisChatRepository.inviteChatUsers(savedChatRoom, command.getUsers());
+        redisChatRepository.inviteChatUsers(savedChatRoom, command.getUsers().size());
 //        redisChatRepository.updateMemberCount(command.getRoomId(), command.getUsers().size());
         //초대됨 메시지 발행
         for (User user : command.getUsers()) {
@@ -296,10 +309,12 @@ public class ChatService {
 
     public void disconnectRoom(String simpSessionId) {
         ChatUserDto chatUserDto = redisChatRepository.findChatUserBySessionId(simpSessionId);
-        ChatUser chatUser = chatRoomRepository.findChatUserByIdAndUser(chatUserDto.getChatRoomId(), chatUserDto.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 채팅유저"));
-        chatUser.disconnectRoom();
+        //TODO: 중복 disconnect로 오류 발생( jwt 로 수정 필요)
+        if (chatUserDto == null) return;
+        Optional<ChatUser> chatUserOptional = chatUserRepository.findById(chatUserDto.getId());
+        if (chatUserOptional.isEmpty()) return; //채팅방 나간 유저
         //redis 접속해제상태 등록
-        redisChatRepository.disconnectRoom(chatUserDto.getChatRoomId(), chatUser.getId());
+        redisChatRepository.disconnectRoom(chatUserDto.getChatRoomId(), chatUserOptional.get().getId());
     }
 
     public ChatMessageDto getMessageInfo(GetMessageInfoCommand getMessageInfoCommand) {

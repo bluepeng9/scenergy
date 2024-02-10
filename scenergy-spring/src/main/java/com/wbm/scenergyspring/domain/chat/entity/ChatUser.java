@@ -48,7 +48,7 @@ public class ChatUser extends BaseEntity {
 
     public int leaveRoom() {
         chatRoom.getChatUsers().remove(this);
-        return chatRoom.getChatMessages().size();
+        return chatRoom.getChatUsers().size();
     }
 
     /**

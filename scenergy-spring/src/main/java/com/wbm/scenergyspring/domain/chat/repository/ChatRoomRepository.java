@@ -30,4 +30,15 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                 and cr.id = :roomId        
             """)
     Optional<ChatUser> findChatUserByIdAndUser(@Param("roomId") Long roomId, @Param("userId") Long userId);
+
+    @Query("""
+            select cr from ChatRoom cr
+            join cr.chatUsers cu
+            where true 
+                and cr.status = 0
+                and (cu.user.id = :user1Id or cu.user.id = :user2Id)
+            group by cr.id, cr.status, cr.createdAt, cr.updatedAt, cr.name
+            having count(cr.status) > 1
+            """)
+    Optional<ChatRoom> findCommonChatRoom(@Param("user1Id") Long user1, @Param("user2Id") Long user2);
 }
