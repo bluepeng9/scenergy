@@ -15,7 +15,7 @@ public class IntegrationTest {
 	@Container
 	static final KafkaContainer kafka = new KafkaContainer(
 		DockerImageName.parse("confluentinc/cp-kafka:7.3.3")
-	);
+	).withReuse(true);
 
 	@DynamicPropertySource
 	static void overrideProperties(DynamicPropertyRegistry registry) {
