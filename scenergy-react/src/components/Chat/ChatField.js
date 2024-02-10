@@ -10,7 +10,7 @@ import ChatRoomReal from "./ChatRoomReal";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import ChatRoomList from "./ChatRoomList";
 import followApi from "../../apis/FollowApi";
-
+import searchApi from "../../apis/SearchApi";
 const ChatField = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -48,11 +48,22 @@ const ChatField = () => {
   };
 
   const handleSearch = async () => {
+    if (!searchInput.trim()) {
+      setSearchResults([]);
+      return;
+    } // 검색어가 비어있는 경우 검색하지 않음
     try {
-      const response = await axios.get(`/api/search?query=${searchInput}`);
-      setSearchResults(response.data);
+      // SearchApi를 사용하여 검색 실행
+      const response = await searchApi.searchFollowing(fromUserId, searchInput);
+      if (response.data.data && response.data.data.length > 0) {
+        setSearchResults(response.data.data); // 검색 결과를 searchResults 상태에 저장
+        setSearchInput("");
+      } else {
+        setSearchResults(null);
+      }
     } catch (error) {
-      console.error("에러", error);
+      console.error("검색 중 오류 발생:", error);
+      // 오류 처리 로직
     }
   };
 
@@ -120,7 +131,7 @@ const ChatField = () => {
                       ))}
                     </ul>
                   </>
-                ) : searchResults.length === 0 ? (
+                ) : searchResults === null ? (
                   <p>일치하는 뮤지션이 없습니다.</p>
                 ) : (
                   searchResults.map((user) => (
@@ -133,7 +144,7 @@ const ChatField = () => {
                         <p>유저프로필</p>
                       </div>
                       <div className={styles.dialogUserNick}>
-                        <p>{user.name}</p>
+                        <p>{user.nickname}</p>
                       </div>
                     </div>
                   ))
@@ -154,18 +165,18 @@ const ChatField = () => {
                 {/*))}*/}
               </div>
 
-              {selectedUsers.length !== 0 && (
-                <div className={styles.searchResultTrue}>
-                  <div>
-                    {selectedUsers.map((user) => (
-                      <div key={user.id} onClick={() => handleUserSelect(user)}>
-                        <p>이미지</p>
-                        <p>{user.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/*{selectedUsers.length !== 0 && (*/}
+              {/*  <div className={styles.searchResultTrue}>*/}
+              {/*    <div>*/}
+              {/*      {selectedUsers.map((user) => (*/}
+              {/*        <div key={user.id} onClick={() => handleUserSelect(user)}>*/}
+              {/*          <p>이미지</p>*/}
+              {/*          <p>{user.name}</p>*/}
+              {/*        </div>*/}
+              {/*      ))}*/}
+              {/*    </div>*/}
+              {/*  </div>*/}
+              {/*)}*/}
               <div className={styles.createBtn}>
                 {!isCreated ? (
                   <ChatRoomCreate
