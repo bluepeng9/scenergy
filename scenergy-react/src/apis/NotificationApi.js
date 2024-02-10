@@ -8,7 +8,7 @@ class NotificationApi {
         if (this.#sse !== undefined) {
             return;
         }
-        this.#sse = new EventSource(`${this.notificationUrl}/${userId}`);
+        this.#sse = new EventSource(`${this.notificationUrl}/connect/${userId}`);
 
         this.#sse.addEventListener("notification", (event) => {
             onNotification(JSON.parse(event.data));
