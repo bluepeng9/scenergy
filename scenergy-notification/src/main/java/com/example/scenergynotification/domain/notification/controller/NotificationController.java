@@ -17,11 +17,6 @@ import com.example.scenergynotification.domain.notification.service.commandresul
 import com.example.scenergynotification.domain.user.entity.User;
 import com.example.scenergynotification.domain.user.service.UserService;
 import com.example.scenergynotification.global.SseEmitters;
-import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.stereotype.Controller;
-
-import com.example.scenergynotification.domain.notification.controller.request.OnFollowRequest;
-import com.example.scenergynotification.domain.notification.service.NotificationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,11 +25,6 @@ import lombok.RequiredArgsConstructor;
 public class NotificationController {
 
 	final NotificationService notificationService;
-
-	@KafkaListener(topics = "follow", groupId = "follow-group")
-	public void onFollowEvent(OnFollowRequest request) {
-		System.out.println(request.getFollowId());
-	}
 	final UserService userService;
 	final SseEmitters sseEmitters;
 
@@ -49,16 +39,19 @@ public class NotificationController {
 				.build()
 		);
 
-		sseEmitters.emit(event.getToUserId(), SseNotificationResponse.builder()
-			.notificationId(sendFollowNotificationCommandResult.getNotificationId())
-			.senderNickname(fromUserInfo.getNickname())
-			.notificationTypeResponse(NotificationTypeResponse.FOLLOW)
-			.build()
+		sseEmitters.emit(
+			event.getToUserId(),
+			SseNotificationResponse.builder()
+				.notificationId(sendFollowNotificationCommandResult.getNotificationId())
+				.senderNickname(fromUserInfo.getNickname())
+				.notificationTypeResponse(NotificationTypeResponse.FOLLOW)
+				.build(),
+			"notification"
 		);
 	}
 
 	@GetMapping(path = "/connect/{userId}")
-	public ResponseEntity<SseEmitter> connect(@PathVariable Long userId) {
+	public ResponseEntity<SseEmitter> connect(@PathVariable("userId") Long userId) {
 		SseEmitter emitter = sseEmitters.subscribe(userId);
 		return ResponseEntity.ok(emitter);
 	}

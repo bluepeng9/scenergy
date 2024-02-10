@@ -26,31 +26,19 @@ public class SseEmitters {
 			emitter.complete();
 		});
 
-		emitter.onCompletion(() -> {
-		});
-
 		emitterMap.put(id, emitter);
 
-		try {
-			SseEmitter.SseEventBuilder event = SseEmitter.event()
-				.name("event example")
-				.id(String.valueOf("id-1"))
-				.data("SSE connected")
-				.reconnectTime(RECONNECTION_TIMEOUT);
-			emitter.send(event);
-		} catch (IOException e) {
-			log.error("failure send media position data, id={}, {}", id, e.getMessage());
-		}
+		emit(id, "SSE connected", "connect");
 		return emitter;
 	}
 
 	//emit
-	public void emit(Long id, Object eventPayload) {
+	public void emit(Long id, Object eventPayload, String eventType) {
 		SseEmitter emitter = emitterMap.get(id);
 		if (emitter != null) {
 			try {
 				emitter.send(SseEmitter.event()
-					.name("event example")
+					.name(eventType)
 					.id(String.valueOf("id-1"))
 					.data(eventPayload, MediaType.APPLICATION_JSON));
 			} catch (IOException e) {
