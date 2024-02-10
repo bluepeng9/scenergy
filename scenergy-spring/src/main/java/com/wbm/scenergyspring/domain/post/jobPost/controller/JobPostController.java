@@ -32,11 +32,6 @@ import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPo
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -71,17 +66,20 @@ public class JobPostController {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getBookMarkJobPost(id)),HttpStatus.OK);
 	}
 
-	@GetMapping("/get/{id}")
+	@GetMapping("/get/myJobPost/{id}")
 	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllMyJobPost(
 		@PathVariable Long id
 	) {
 		return new ResponseEntity<>(ApiResponse.createSuccess(jobPostService.getMyJobPost(id)),HttpStatus.OK);
 	}
 
-	@GetMapping("/get")
+	@GetMapping("/get/{id}")
 	public ResponseEntity<ApiResponse<GetJobPostCommandResponse>> getJobPost(
-		@RequestBody GetJobPostRequest request
+		@PathVariable Long id
 	) {
+		GetJobPostRequest request = GetJobPostRequest.builder()
+			.jobPostId(id)
+			.build();
 		GetJobPostCommandResponse getJobPostCommandResponse = jobPostService.getJobPost(request.toGetJobPost());
 		return ResponseEntity.ok(ApiResponse.createSuccess(getJobPostCommandResponse));
 	}
@@ -129,14 +127,17 @@ public class JobPostController {
 		return new ResponseEntity<>(ApiResponse.createSuccess("success"), HttpStatus.OK);
 	}
 
-	@DeleteMapping
+	@DeleteMapping("{id}")
 	public ResponseEntity<ApiResponse<DeleteJobPostResponse>> deleteJobPost(
-		@RequestBody DeleteJobPostRequest request
+		@PathVariable Long id
 	) {
-		Long jobPostId = jobPostService.deleteJobPost(request.toDeleteJobPost());
+		DeleteJobPostRequest request = DeleteJobPostRequest.builder()
+			.jobPostId(id)
+			.build();
+		Long jobPostId1 = jobPostService.deleteJobPost(request.toDeleteJobPost());
 
 		DeleteJobPostResponse deleteJobPostResponse = new DeleteJobPostResponse();
-		deleteJobPostResponse.setJobPostId(jobPostId);
+		deleteJobPostResponse.setJobPostId(jobPostId1);
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteJobPostResponse));
 	}
