@@ -13,7 +13,7 @@ spring:
     activate:
       on-profile: prod
   kafka:
-    bootstrap-servers: kafka-1:10092
+    bootstrap-servers: kafka-1:10001
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

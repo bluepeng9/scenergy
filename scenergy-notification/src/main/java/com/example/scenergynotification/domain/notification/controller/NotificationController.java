@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.scenergynotification.domain.notification.controller.request.OnFollowEvent;
-import com.example.scenergynotification.domain.notification.controller.request.OnLikeEvent;
 import com.example.scenergynotification.domain.notification.controller.response.NotificationTypeResponse;
 import com.example.scenergynotification.domain.notification.controller.response.SseNotificationResponse;
 import com.example.scenergynotification.domain.notification.service.NotificationService;
@@ -56,9 +55,9 @@ public class NotificationController {
 		return ResponseEntity.ok(emitter);
 	}
 
-	@KafkaListener(topics = "like", groupId = "like-group", containerFactory = "likeEventKafkaListenerContainerFactory")
-	public void onLikeEvent(OnLikeEvent event) {
-		System.out.println(event);
-	}
+	// @KafkaListener(topics = "like", groupId = "like-group")
+	// public void onLikeEvent(OnLikeEvent event) {
+	// 	System.out.println(event);
+	// }
 
 }

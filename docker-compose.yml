@@ -15,7 +15,7 @@ services:
       KAFKA_ADVERTISED_HOST_NAME: kafka-1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://kafka-1:10001
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://localhost:10001
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-1:9092,EXTERNAL://kafka-1:10001
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -71,6 +71,7 @@ services:
     ports:
       - "9001:9001"
     depends_on:
+      - kafka-1
       - mysql-notification
   scenergy-react:
     container_name: scenergy-react

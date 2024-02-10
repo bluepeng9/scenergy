@@ -1,2 +1,21 @@
 server:
   port: 9001
+
+spring:
+  config:
+    activate:
+      on-profile: dev, default
+  kafka:
+    bootstrap-servers: localhost:10001
+  user-service:
+    url: http://localhost:8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  kafka:
+    bootstrap-servers: kafka-1:10001
+  user-service:
+    url: http://scenergy-spring:8080

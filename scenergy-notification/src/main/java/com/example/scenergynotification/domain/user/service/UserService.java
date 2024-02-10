@@ -1,5 +1,6 @@
 package com.example.scenergynotification.domain.user.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,10 +12,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+	@Value("${spring.user-service.url}")
+	private String userServiceUrl;
+
 	public User findUser(Long userId) {
 
 		FindUserDto findUser = new RestTemplate().getForObject(
-			"http://localhost:8080/users/" + userId,
+			userServiceUrl + "/users/" + userId,
 			FindUserDto.class
 		);
 
