@@ -1,6 +1,6 @@
 import ScenergyListItem from "../commons/ScenergyList/ScenergyListItem";
 import styles from "./ScenergyList.module.css";
-import { getAllJobPost } from "../../apis/JobPost/ScenergyApi";
+import { getAllJobPost } from "../../apis/JobPost/JobPostApi";
 import { useEffect, useState } from "react";
 const ScenergyList = ({ onOpenModal }) => {
   const [jobPosts, setJobPosts] = useState([]);

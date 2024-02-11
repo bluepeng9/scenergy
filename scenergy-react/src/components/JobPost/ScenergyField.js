@@ -5,7 +5,7 @@ import Dialog from "../commons/Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFeather } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { createJobPost } from "../../apis/JobPost/ScenergyApi";
+import { createJobPost } from "../../apis/JobPost/JobPostApi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
