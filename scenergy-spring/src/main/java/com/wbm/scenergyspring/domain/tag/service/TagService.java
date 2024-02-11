@@ -2,8 +2,10 @@ package com.wbm.scenergyspring.domain.tag.service;
 
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
+import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.tag.service.command.GenreTagCommand;
 import com.wbm.scenergyspring.domain.tag.service.command.InstrumentTagCommand;
 import com.wbm.scenergyspring.global.exception.BusinessException;
@@ -22,6 +24,7 @@ public class TagService {
 
     private final GenreTagRepository genreTagRepository;
     private final InstrumentTagRepository instrumentTagRepository;
+    private final LocationTagRepository locationTagRepository;
 
     @Transactional(readOnly = false)
     public String createGenreTag(String genreName) {
@@ -84,6 +87,18 @@ public class TagService {
         InstrumentTag instrumentTag = instrumentTagRepository.findByInstrumentName(instrumentName).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 악기입니다."));
         instrumentTagRepository.delete(instrumentTag);
         return instrumentName;
+    }
+
+
+    @Transactional(readOnly = false)
+    public String createLocationTag(String locationName) {
+        if(!StringUtils.hasText(locationName))
+            throw new BusinessException("지역이 입력되지 않았습니다.");
+        String str = StringUtils.trimWhitespace(locationName);
+        if(locationTagRepository.existsByLocationName(str))
+            throw new BusinessException("이미 입력된 지역입니다.");
+        locationTagRepository.save(LocationTag.createLocationTag(str));
+        return locationName;
     }
 
 

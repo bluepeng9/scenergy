@@ -71,6 +71,12 @@ public class TagController {
         return new ResponseEntity<>(ApiResponse.createError("악기를 재확인 부탁드립니다."), HttpStatus.BAD_REQUEST);
     }
 
-
+    @PostMapping("/tag/location/create")
+    public ResponseEntity<ApiResponse<String>> createLocationTag(String locationName) {
+        String msg = tagService.createLocationTag(locationName);
+        if(msg.equals(locationName))
+            return new ResponseEntity<>(ApiResponse.createSuccess(locationName), HttpStatus.OK);
+        return new ResponseEntity<>(ApiResponse.createSuccess(msg), HttpStatus.BAD_REQUEST);
+    }
 
 }
