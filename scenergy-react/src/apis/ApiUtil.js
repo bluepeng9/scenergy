@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class ApiUtil {
-  static BASE_URL = "http://localhost:8080";
+  static BASE_URL = process.env.REACT_APP_API_URL;
 
   static getToken = () => {
     let token =
