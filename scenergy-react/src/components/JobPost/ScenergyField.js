@@ -8,7 +8,8 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
-
+import searchApi from "../../apis/SearchApi";
+import { useScenergyPost } from "../../contexts/ScenergyPostContext";
 const ScenergyField = ({ onOpenModal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [endDate, setEndDate] = useState(new Date());
