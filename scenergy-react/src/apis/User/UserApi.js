@@ -1,6 +1,6 @@
 // connect to User
 
-import api from "../api";
+import api from "../ChatUserApi";
 
 // data
 // {
@@ -13,7 +13,7 @@ import api from "../api";
 // };
 // data
 
-const getPost = function () {};
+// const getPost = function () {};
 
 //토큰 사용
 const getUser = () => {

@@ -6,9 +6,11 @@ import ChatRoomReal from "../components/Chat/ChatRoomReal";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import ChatInfo from "../components/Chat/ChatInfo";
+import ApiUtil from "../apis/ApiUtil";
 const ChatPage = () => {
   const [isOpenInfo, setIsOpenInfo] = useState(false);
   const location = useLocation();
+  const userId = ApiUtil.getUserIdFromToken();
   const toggleInfoMenu = () => {
     setIsOpenInfo(!isOpenInfo);
     console.log(isOpenInfo);
@@ -21,11 +23,12 @@ const ChatPage = () => {
       >
         <Navbar />
         {location.pathname === "/chat" || location.pathname === "/chat/" ? (
-          <ChatField />
+          <ChatField userId={userId} />
         ) : (
           <ChatRoomReal
             toggleInfoMenu={toggleInfoMenu}
             className={isOpenInfo ? styles.chatContentWithSidebar : ""}
+            userId={userId}
           />
         )}
         {isOpenInfo && (

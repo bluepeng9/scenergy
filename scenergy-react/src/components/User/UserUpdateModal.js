@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./UserUpdateModal.module.css";
-import api from "../../apis/api";
+import api from "../../apis/ChatUserApi";
 import { getUser } from "../../apis/User/UserApi";
 
 const UserUpdateModal = ({ onClose, onUpdateUser }) => {

@@ -6,6 +6,7 @@ import {
   faFileLines,
 } from "@fortawesome/free-regular-svg-icons";
 const ScenergyListItem = ({
+  jobPostId,
   jobstate,
   nickname,
   title,
@@ -18,7 +19,6 @@ const ScenergyListItem = ({
   const handleItemClick = () => {
     onOpenModal();
   };
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const year = date.getFullYear();

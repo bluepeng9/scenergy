@@ -1,5 +1,4 @@
 import styles from "./Dialog.module.css";
-import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTimes,
@@ -7,15 +6,47 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-icons";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import jobPostApi from "../../../apis/JobPost/JobPostApi";
+import { useScenergyPost } from "../../../contexts/ScenergyPostContext";
 
-const Dialog = ({ title, onClose, children, showBookmarkButton }) => {
+const Dialog = ({
+  title,
+  onClose,
+  children,
+  showBookmarkButton,
+  jobPostId,
+  userId,
+  nickname,
+}) => {
   const [isSolid, setIsSolid] = useState(false);
+  const { bookmarkedPosts, addBookmark, removeBookmark } = useScenergyPost();
   // const isModalOpen = useSelector((state) => state.isModalOpen);
+  const userName = "사용자2";
 
-  const handleMarkChange = () => {
-    /*나중에 back에서 코드 짜면 bookmark api랑 연결시키기*/
-    setIsSolid(!isSolid);
+  useEffect(() => {
+    // 컴포넌트가 마운트되면 bookmarkedPosts 확인하여 isSolid 상태 업데이트
+    setIsSolid(bookmarkedPosts.has(jobPostId));
+  }, [bookmarkedPosts, jobPostId]);
+  const handleMarkChange = async () => {
+    try {
+      const data = {
+        jobPostId: jobPostId,
+        userName: nickname,
+      };
+      await jobPostApi.bookMarkJobPost(data);
+      console.log("북마크 성공", data);
+      if (bookmarkedPosts.has(jobPostId)) {
+        removeBookmark(jobPostId);
+        setIsSolid(false);
+      } else {
+        addBookmark(jobPostId);
+        setIsSolid(true);
+      }
+      setIsSolid(!isSolid);
+    } catch (error) {
+      console.error("북마크 처리 실패", error);
+    }
   };
 
   return (

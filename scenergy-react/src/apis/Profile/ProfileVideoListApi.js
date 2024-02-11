@@ -1,5 +1,5 @@
 // connect to User
-import { api } from "../api";
+import { api } from "../ChatUserApi";
 import { useState } from "react";
 
 export const User = {

@@ -1,5 +1,17 @@
-.ListGlobal {
-  margin-left: 100px;
+.ListGlobal{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 30px;
+}
+.ListGlobalContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5vi;
+  height: 100%;
+}
+
+.ListContainer {
   display: grid;
   justify-items: center;
   grid-template-columns: repeat(2, 1fr);
@@ -8,14 +20,49 @@
 }
 
 @media (max-width: 1000px) {
-  .ListGlobal {
+  .ListContainer {
     grid-template-columns: repeat(1, 1fr); /* 화면이 작을 때 1열로 변경 */
     margin-left: 10px;
     column-gap: 20px;
   }
 }
 @media (min-width: 1001px) {
-  .ListGlobal {
-    column-gap: 30px; /* 1000px 이상에서 column-gap을 20px로 유지 */
+  .ListContainer {
+    column-gap: 30px;
   }
+}
+
+.paginationBttns {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+}
+
+.paginationBttns li {
+  margin: 0 5px;
+}
+
+.paginationBttns li a {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+.previousBttn,
+.nextBttn {
+  background-color: #ffffff;
+}
+
+.paginationDisabled {
+  color: #dcdcdc;
+  cursor: not-allowed;
+}
+
+.paginationActive a {
+  background-color: rgba(207, 158, 171, 0.8);
+  color: #fff;
+  border-color: rgba(207, 158, 171, 0.8);
 }

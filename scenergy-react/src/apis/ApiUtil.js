@@ -1,4 +1,5 @@
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 class ApiUtil {
   static BASE_URL = process.env.REACT_APP_API_URL;
@@ -7,6 +8,19 @@ class ApiUtil {
     let token =
       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzEwMDU5MDU0fQ.9DvhTbdKprZKQCTpWdCPLTPpba-f9T10SFtNjDgROovcpHoOB-V9EKixBFjpuVej4ulZvixuNTyfKvqIr4JHKA";
     return token;
+  };
+  static getUserIdFromToken = () => {
+    const token = this.getToken().split(" ")[1]; //Bearer 제거
+    if (!token) return null;
+
+    try {
+      const decode = jwtDecode(token);
+      console.log(decode);
+      return decode.sub;
+    } catch (error) {
+      console.error("토큰 티코드 안댐", error);
+      return null;
+    }
   };
 
   static #getHeader = () => {

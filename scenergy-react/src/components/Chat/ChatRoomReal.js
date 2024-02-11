@@ -14,7 +14,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
 import { useChatRooms } from "../../hooks/useChatRooms";
 
-const ChatRoomReal = ({ toggleInfoMenu }) => {
+const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -23,7 +23,6 @@ const ChatRoomReal = ({ toggleInfoMenu }) => {
   const lastMessageId = location.state?.lastMessageId;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
-  const userId = 2;
   const { refetch } = useChatRooms(userId);
   const usernickname = "사용자2";
   const users = [

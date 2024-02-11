@@ -3,13 +3,15 @@ import SearchCategory from "../commons/Search/SearchCategory";
 import ScenergyList from "./ScenergyList";
 import Dialog from "../commons/Dialog/Dialog";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeather } from "@fortawesome/free-solid-svg-icons";
+import { faFeather, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
-import searchApi from "../../apis/SearchApi";
 import { useScenergyPost } from "../../contexts/ScenergyPostContext";
+import searchApi from "../../apis/SearchApi";
+import ApiUtil from "../../apis/ApiUtil";
+
 const ScenergyField = ({ onOpenModal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [endDate, setEndDate] = useState(new Date());
@@ -22,6 +24,8 @@ const ScenergyField = ({ onOpenModal }) => {
   const [refreshList, setRefreshList] = useState(false);
   const [selectedExp, setSelectedExp] = useState("전체");
   const { addScenergyPost } = useScenergyPost();
+  const userId = ApiUtil.getUserIdFromToken();
+
   const handleOpenChange = () => {
     setIsModalOpen(true);
   };
@@ -154,7 +158,11 @@ const ScenergyField = ({ onOpenModal }) => {
             <p>글쓰기</p>
           </button>
           {isModalOpen && (
-            <Dialog title="글 작성하기" onClose={handleCloseModal}>
+            <Dialog
+              title="글 작성하기"
+              onClose={handleCloseModal}
+              userId={userId}
+            >
               <div className={styles.scenergyModalGlobal}>
                 <div className={styles.scenergyPostHeader}>
                   <p>제목</p>
@@ -166,44 +174,36 @@ const ScenergyField = ({ onOpenModal }) => {
                 </div>
                 <div className={styles.scenergyPostSelect}>
                   <div className={styles.scenergyPostItem}>
-                    <div className={styles.scenergyPostRegion}>
-                      <p>지역</p>
-                      <select onChange={handleLocationChange}>
-                        {locations.map((location) => (
-                          <option key={location.id} value={location.id}>
-                            {location.name}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  <div className={styles.scenergyPostItem}>
-                    <div className={styles.scenergyPostGenre}>
-                      <p>장르</p>
-                      <select onChange={handleGenreChange}>
-                        {genres.map((genre) => (
-                          <option key={genre.id} value={genre.id}>
-                            {genre.name}
-                          </option>
-                        ))}
-                      </select>
-                      <div className="selectedItems">
-                        {selectedGenre.map((id) => {
-                          const genre = genres.find((genre) => genre.id === id);
+                    <div className={styles.scenergyPost}>
+                      <div className={styles.scenergyOption}>
+                        <p>지역</p>
+                        <select onChange={handleLocationChange}>
+                          {locations.map((location) => (
+                            <option key={location.id} value={location.id}>
+                              {location.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className={styles.selectedItem}>
+                        {selectedLocation.map((id) => {
+                          const location = locations.find(
+                            (location) => location.id === id,
+                          );
                           return (
-                            <div key={id} className="selectedTag">
-                              {genre.name}
-                              <button
-                                onClick={() =>
-                                  setSelectedGenre(
-                                    selectedGenre.filter(
-                                      (selectedId) => selectedId !== id,
-                                    ),
-                                  )
-                                }
-                              >
-                                X
-                              </button>
+                            <div
+                              key={id}
+                              className={styles.selectedTag}
+                              onClick={() =>
+                                setSelectedLocation(
+                                  selectedLocation.filter(
+                                    (selectedId) => selectedId !== id,
+                                  ),
+                                )
+                              }
+                            >
+                              {location.name}&nbsp;
+                              <FontAwesomeIcon icon={faTimes} />
                             </div>
                           );
                         })}
@@ -211,15 +211,75 @@ const ScenergyField = ({ onOpenModal }) => {
                     </div>
                   </div>
                   <div className={styles.scenergyPostItem}>
-                    <div className={styles.scenergyPostInst}>
-                      <p>악기</p>
-                      <select onChange={handleInstChange}>
-                        {instruments.map((instrument) => (
-                          <option key={instrument.id} value={instrument.id}>
-                            {instrument.name}
-                          </option>
-                        ))}
-                      </select>
+                    <div className={styles.scenergyPost}>
+                      <div className={styles.scenergyOption}>
+                        <p>장르</p>
+                        <select onChange={handleGenreChange}>
+                          {genres.map((genre) => (
+                            <option key={genre.id} value={genre.id}>
+                              {genre.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className={styles.selectedItem}>
+                        {selectedGenre.map((id) => {
+                          const genre = genres.find((genre) => genre.id === id);
+                          return (
+                            <div
+                              key={id}
+                              className={styles.selectedTag}
+                              onClick={() =>
+                                setSelectedGenre(
+                                  selectedGenre.filter(
+                                    (selectedId) => selectedId !== id,
+                                  ),
+                                )
+                              }
+                            >
+                              {genre.name}
+                              <FontAwesomeIcon icon={faTimes} />
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                  <div className={styles.scenergyPostItem}>
+                    <div className={styles.scenergyPost}>
+                      <div className={styles.scenergyOption}>
+                        <p>악기</p>
+                        <select onChange={handleInstChange}>
+                          {instruments.map((instrument) => (
+                            <option key={instrument.id} value={instrument.id}>
+                              {instrument.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className={styles.selectedItem}>
+                        {selectedInstrument.map((id) => {
+                          const instrument = instruments.find(
+                            (instrument) => instrument.id === id,
+                          );
+                          return (
+                            <div
+                              key={id}
+                              className={styles.selectedTag}
+                              onClick={() =>
+                                setSelectedInstrument(
+                                  selectedInstrument.filter(
+                                    (selectedId) => selectedId !== id,
+                                  ),
+                                )
+                              }
+                            >
+                              {instrument.name}
+                              <FontAwesomeIcon icon={faTimes} />
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>

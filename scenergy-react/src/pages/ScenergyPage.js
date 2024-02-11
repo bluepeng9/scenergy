@@ -11,6 +11,7 @@ const ScenergyPage = () => {
   });
   const handleOpenModal = (data) => {
     setModalState({ isOpen: true, type: "view", data });
+    console.log(data);
   };
 
   const handleCloseModal = () => {
@@ -38,24 +39,38 @@ const ScenergyPage = () => {
           title={modalState.data.title}
           showBookmarkButton={true}
           onClose={handleCloseModal}
+          jobPostId={modalState.data.jobPostId}
+          nickname={modalState.data.userDto.nickname}
         >
           <div className={styles.ScenergyModalHeader}>
             <p>작성자</p>
-            <p>{modalState.data.nickname}</p>
+            <p>{modalState.data.userDto.nickname}</p>
           </div>
           <hr />
           <div className={styles.ScenergyContainer}>
             <div className={`${styles.Category} local`}>
               <p>지역</p>
-              <p>대전</p>
+              <p>
+                {modalState.data.jobPostLocationTags
+                  .map((tag) => tag.locationName)
+                  .join(", ")}
+              </p>
             </div>
             <div className={`${styles.Category} genre`}>
               <p>장르</p>
-              <p>재즈</p>
+              <p>
+                {modalState.data.jobPostGenreTags
+                  .map((tag) => tag.genreName)
+                  .join(", ")}
+              </p>
             </div>
             <div className={`${styles.Category} inst`}>
               <p>악기</p>
-              <p>키보드</p>
+              <p>
+                {modalState.data.jobPostInstrumentTags
+                  .map((tag) => tag.instrumentName)
+                  .join(", ")}
+              </p>
             </div>
           </div>
           <hr />
