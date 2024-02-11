@@ -1,16 +1,16 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import styles from "./Navbar.module.css";
-import { useState } from "react";
+import {useState} from "react";
 import notificationApi from "../../../apis/NotificationApi";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // notificationApi.connectToNotificationServer(2, (data) => {
-  //     console.log(data);
-  // }, (data) => {
-  //     console.log(data);
-  // });
+  notificationApi.connectToNotificationServer(2, (data) => {
+    console.log(data);
+  }, (data) => {
+    console.log(data);
+  });
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
