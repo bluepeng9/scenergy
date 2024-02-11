@@ -28,6 +28,7 @@ import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPost
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostControllerResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -42,14 +43,15 @@ public class JobPostController {
 	final JobPostService jobPostService;
 
 	@GetMapping("/getAll")
-	public ResponseEntity<ApiResponse<List<GetJobPostControllerResponse>>> getAllJobPost() {
+	public ResponseEntity<ApiResponse<List<GetJobPostCommandResponse>>> getAllJobPost() {
 		List<GetJobPostCommandResponse> getJobPostCommandResponsesList = jobPostService.getAllJobPostList();
-		List<GetJobPostControllerResponse> responses = new ArrayList<>();
-		for (GetJobPostCommandResponse getJobPostCommandResponse: getJobPostCommandResponsesList) {
-			GetJobPostControllerResponse tmpResponse = GetJobPostControllerResponse.from(getJobPostCommandResponse);
-			responses.add(tmpResponse);
-		}
-		return new ResponseEntity<>(ApiResponse.createSuccess(responses),HttpStatus.OK);
+		// List<GetJobPostControllerResponse> responses = new ArrayList<>();
+		// for (GetJobPostCommandResponse getJobPostCommandResponse: getJobPostCommandResponsesList) {
+		// 	GetJobPostControllerResponse tmpResponse = GetJobPostControllerResponse.from(getJobPostCommandResponse);
+		// 	responses.add(tmpResponse);
+		// }
+		// return new ResponseEntity<>(ApiResponse.createSuccess(responses),HttpStatus.OK);
+		return new ResponseEntity<>(ApiResponse.createSuccess(getJobPostCommandResponsesList),HttpStatus.OK);
 	}
 
 	@GetMapping("get/apply/{id}")
