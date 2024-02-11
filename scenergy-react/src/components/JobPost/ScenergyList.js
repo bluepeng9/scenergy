@@ -1,12 +1,13 @@
 import ScenergyListItem from "../commons/ScenergyList/ScenergyListItem";
 import styles from "./ScenergyList.module.css";
-import { getAllJobPost } from "../../apis/JobPost/JobPostApi";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
+import jobPostApi from "../../apis/JobPost/JobPostApi";
+
 const ScenergyList = ({ onOpenModal }) => {
   const [jobPosts, setJobPosts] = useState([]);
   //나중에 back api랑 연결해서 map때려서 받아오면 된다
   useEffect(() => {
-    getAllJobPost()
+    jobPostApi.getAllJobPost()
       .then((response) => {
         console.log("게시글 목록", response);
         setJobPosts(response); // API 호출 결과로 상태 업데이트

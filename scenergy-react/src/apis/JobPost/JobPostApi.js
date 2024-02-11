@@ -1,6 +1,5 @@
 import api from "../api";
 import ApiUtil from "../ApiUtil";
-import { post } from "axios";
 
 class JobPostApi {
   getAllJobPost = async (data) => {
@@ -92,4 +91,6 @@ class JobPostApi {
   //    */
   // };
 }
-export default JobPostApi;
+
+const jobPostApi = new JobPostApi();
+export default jobPostApi;
