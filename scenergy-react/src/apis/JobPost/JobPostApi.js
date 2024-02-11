@@ -1,10 +1,9 @@
-import api from "../api";
 import ApiUtil from "../ApiUtil";
 
 class JobPostApi {
   getAllJobPost = async (data) => {
     console.log(data);
-    const result = await api.get("/jobPost/getAll");
+    const result = await ApiUtil.get("/jobPost/getAll");
     console.log(result);
     return result.data;
   };
