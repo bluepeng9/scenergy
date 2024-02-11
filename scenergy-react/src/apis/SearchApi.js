@@ -21,7 +21,7 @@ class SearchApi {
 
   searchUser = async (word) => {
     try {
-      const response = await ApiUtil.get("/search", {
+      const response = await ApiUtil.get("/users/search", {
         word: word,
       });
       const searchData = response.data;
@@ -38,7 +38,7 @@ class SearchApi {
 
   searchFollowingAll = async (userId) => {
     try {
-      const response = ApiUtil.get("/search-following", {
+      const response = ApiUtil.get("/users/search-following", {
         userId: userId,
       });
       const searchData = (await response).data;
