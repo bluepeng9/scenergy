@@ -24,6 +24,7 @@ import lombok.Data;
 @Builder
 public class GetJobPostCommandResponse {
     UserDto userDto;
+    Long jobPostId;
 
     String title;
     String content;
@@ -76,6 +77,7 @@ public class GetJobPostCommandResponse {
         }
 
         return GetJobPostCommandResponse.builder()
+            .jobPostId(jobPost.getId())
             .jobPostInstrumentTags(instrumentTags)
             .jobPostGenreTags(genreTags)
             .jobPostLocationTags(locationTags)
