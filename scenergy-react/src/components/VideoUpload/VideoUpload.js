@@ -4,7 +4,6 @@ import videoUploadImage from "../../assets/VideoUpload/VideoUpload.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import videoPostApi from "../../apis/VideoPostApi";
-import axios from "axios";
 
 const VideoUpload = () => {
   // 장르와 악기 카테고리 목록
@@ -69,7 +68,7 @@ const VideoUpload = () => {
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
 
   // 파일 입력(input) 엘리먼트에 접근하기 위한 ref
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef(null); //동영상
   const thumbnailInputRef = useRef(null); // 썸네일 파일 입력(input) 엘리먼트에 접근하기 위한 ref
 
   const handleIconClick = () => {
@@ -107,18 +106,6 @@ const VideoUpload = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  // const fetchVideoList = async () => {
-  //   try {
-  //     const response = await axios.get(""); //api주소 넣기
-  //
-  //     const videoList = response.data;
-  //
-  //     console.log("비디오리스트:", videoList);
-  //   } catch (error) {
-  //     console.error("에러", error);
-  //   }
-  // };
-
   const handleUpload = async () => {
     // Handle video upload, details
     console.log("Video uploaded:", selectedVideo); //동영상
@@ -126,15 +113,6 @@ const VideoUpload = () => {
     console.log("Video details:", videoDetails); //세부정보
     console.log("Video category genres:", selectedGenres); //검색 카테고리 (장르)
     console.log("Video category instruments:", selectedInstruments); //검색 카테고리 (악기)
-    // 서버와 통신하고, 동영상 업로드 및 세부 정보 저장하는 로직 추가하기
-
-    // 업로드 성공 여부에 따라 모달 표시
-    // if (1) {
-    //   /*업로드 성공시*/
-    //   setShowSuccessModal(true);
-    // } else {
-    //   setShowErrorModal(true);
-    // }
 
     /**🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞여기입니다!!!!!!!🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞 */
     try {
@@ -175,24 +153,21 @@ const VideoUpload = () => {
       const response = await videoPostApi.uploadVideoPost(formData);
       // const response = await videoPostApi.uploadVideo(formData);
 
-      // 업로드 성공시
-      setShowSuccessModal(true);
-
-      // 사용자의 영상 목록 다시 불러오기
-      // fetchVideoList();
-
       // 업로드된 비디오의 URL과 썸네일 URL을 가져와서 설정
       const uploadedVideoUrl = response.data.videoUrlPath;
       console.log("uploadedVideoUrl" + uploadedVideoUrl);
       const uploadedThumbnailUrl = response.data.thumbnailUrlPath;
       console.log("uploadedThumbnailUrl" + uploadedVideoUrl);
 
-      // videoUrlPath와 thumbnailUrlPath를 설정
+      // videoUrlPath와 thumbnailUrlPath 설정
       setVideoDetails((prevDetails) => ({
         ...prevDetails,
         videoUrlPath: uploadedVideoUrl,
         thumbnailUrlPath: uploadedThumbnailUrl,
       }));
+
+      // 업로드 성공시
+      setShowSuccessModal(true);
     } catch (error) {
       // 업로드 실패시
       setShowErrorModal(true);
