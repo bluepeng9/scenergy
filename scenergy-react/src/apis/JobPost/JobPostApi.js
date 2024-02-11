@@ -4,14 +4,14 @@ import ApiUtil from "../ApiUtil";
 class JobPostApi {
   getAllJobPost = async (data) => {
     console.log(data);
-    const result = await api.get("jobPost/getAll");
+    const result = await api.get("/jobPost/getAll");
     console.log(result);
     return result.data;
   };
 
   createJobPost = async (postData) => {
     console.log(postData);
-    return await ApiUtil.post("jobPost", {
+    return await ApiUtil.post("/jobPost", {
       userId: postData.userId,
       title: postData.title,
       content: postData.content,
@@ -32,29 +32,29 @@ class JobPostApi {
   };
 
   getAllMyJobPost = async (id) => {
-    return await ApiUtil.get(`jobPost/get/myJobPost/${id}`);
+    return await ApiUtil.get(`/jobPost/get/myJobPost/${id}`);
   };
 
   getJobPost = async (id) => {
-    return await ApiUtil.get(`jobPost/get/${id}`);
+    return await ApiUtil.get(`/jobPost/get/${id}`);
   };
 
   applyJobPost = async (data) => {
-    return await ApiUtil.post(`jobPost/apply`, {
+    return await ApiUtil.post(`/jobPost/apply`, {
       jobPostId: data.jobPostId,
       userName: data.userName,
     });
   };
 
   bookMarkJobPost = async (data) => {
-    return await ApiUtil.post(`jobPost/bookmark`, {
+    return await ApiUtil.post(`/jobPost/bookmark`, {
       jobPostId: data.jobPostId,
       userName: data.userName,
     });
   };
 
   updateJobPost = async (id, postData) => {
-    return await ApiUtil.post(`jobPost/${id}`, {
+    return await ApiUtil.post(`/jobPost/${id}`, {
       title: postData.title,
       content: postData.content,
       expirationDate: postData.expirationDate,
@@ -68,7 +68,7 @@ class JobPostApi {
   };
 
   deleteJobPost = async (id) => {
-    return await ApiUtil.delete(`jobPost/${id}`);
+    return await ApiUtil.delete(`/jobPost/${id}`);
   };
 
   //create 만들어주세요 ScenergyField에서 사용중
