@@ -123,59 +123,39 @@ const VideoUpload = () => {
 
     /**🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞여기입니다!!!!!!!🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞🍞 */
     try {
+      const thumbnailFormData = new FormData();
+      thumbnailFormData.append("file", thumbnail);
+      console.log(thumbnailFormData.get("file"));
+      const postThumbNailRes =
+        await videoPostApi.uploadThumnail(thumbnailFormData);
+      console.log(postThumbNailRes);
+
+      const justVideoFormData = new FormData();
+      justVideoFormData.append("file", selectedVideo);
+      const postJustVideoRes =
+        await videoPostApi.uploadVideo(justVideoFormData);
+      console.log(postJustVideoRes);
+
       const formData = new FormData();
-
-      // const uploadData = {
-      //   userId: "eodms4334@naver.com", // 사용자 ID에 맞게 수정
-      //   postTitle: videoDetails.title,
-      //   postContent: videoDetails.description,
-      //   genreTags: selectedGenres,
-      //   instrumentTags: selectedInstruments,
-      //   // videoUrlPath: "", //여기🍞
-      //   // thumbnailUrlPath: "", //여기🍞
-      //   videoTitle: videoDetails.musicTitle,
-      //   videoArtist: videoDetails.artist,
-      // };
-
-      // 비디오 업로드 API 호출
-      // await videoPostApi.uploadVideoPost(uploadData);
-
-      // 비디오 업로드 API 호출
-      // const response = await videoPostApi.uploadVideoPost(uploadData);
-
       // 멀티파트 파일 형식으로 데이터 추가
-      formData.append("video", selectedVideo);
-      formData.append("thumbnail", thumbnail);
+      formData.append("videoUrlPath", postJustVideoRes.data.data);
+      formData.append("thumbnailUrlPath", postThumbNailRes.data.data);
 
       // 나머지 필요한 데이터 추가
-      formData.append("userId", "eodms4334@naver.com");
+      formData.append("userId", 2);
       formData.append("postTitle", videoDetails.title);
       formData.append("postContent", videoDetails.description);
       selectedGenres.forEach((genre) => formData.append("genreTags", genre.id));
       selectedInstruments.forEach((instrument) =>
         formData.append("instrumentTags", instrument.id),
       );
-      // formData.append("genreTags", JSON.stringify(selectedGenres));
-      // formData.append("instrumentTags", JSON.stringify(selectedInstruments));
       formData.append("videoTitle", videoDetails.musicTitle);
       formData.append("videoArtist", videoDetails.artist);
-
+      console.log("비디오 업로드 할거야!");
       // 비디오 업로드 API 호출
       const response = await videoPostApi.uploadVideoPost(formData);
+      console.log(response);
       // const response = await videoPostApi.uploadVideo(formData);
-
-      // 업로드된 비디오의 URL과 썸네일 URL을 가져와서 설정
-      const uploadedVideoUrl = response.data.videoUrlPath;
-      console.log("uploadedVideoUrl" + uploadedVideoUrl);
-      const uploadedThumbnailUrl = response.data.thumbnailUrlPath;
-      console.log("uploadedThumbnailUrl" + uploadedVideoUrl);
-
-      // videoUrlPath와 thumbnailUrlPath 설정
-      setVideoDetails((prevDetails) => ({
-        ...prevDetails,
-        videoUrlPath: uploadedVideoUrl,
-        thumbnailUrlPath: uploadedThumbnailUrl,
-      }));
 
       // 업로드 성공시
       setShowSuccessModal(true);

@@ -20,6 +20,17 @@ class ApiUtil {
     return header;
   };
 
+  static #getFormDataHeader = () => {
+    let token = this.getToken();
+    let header = {
+      "Content-Type": "mutipart/form-data",
+    };
+    if (token !== "") {
+      header["Authorization"] = "Bearer " + token;
+    }
+    return header;
+  };
+
   static get = async (url, params) => {
     return await axios.get(ApiUtil.BASE_URL + url, {
       params: params,
@@ -30,6 +41,11 @@ class ApiUtil {
   static post = async (url, data) => {
     return await axios.post(ApiUtil.BASE_URL + url, data, {
       headers: this.#getHeader(),
+    });
+  };
+  static formDataPost = async (url, data) => {
+    return await axios.post(ApiUtil.BASE_URL + url, data, {
+      headers: this.#getFormDataHeader(),
     });
   };
 

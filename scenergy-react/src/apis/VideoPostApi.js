@@ -1,24 +1,15 @@
 import ApiUtil from "./ApiUtil";
+import apiUtil from "./ApiUtil";
 
 class VideoPostApi {
-  baseUrl = "/video-post";
+  baseUrl = "";
   /**
    * 비디오 포스트 업로드
    * @param data
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadVideoPost = async (data) => {
-    return await ApiUtil.post(`${this.baseUrl}/upload/video-post`, {
-      userId: data.userId,
-      postTitle: data.postTitle,
-      postContent: data.postContent,
-      genreTags: data.genreTags,
-      instrumentTags: data.instrumentTags,
-      videoUrlPath: data.videoUrlPath,
-      thumbnailUrlPath: data.thumbnailUrlPath,
-      videoTitle: data.videoTitle,
-      videoArtist: data.videoArtist,
-    });
+    return await ApiUtil.post(`${this.baseUrl}/upload/video-post`, data);
   };
   /**
    * 비디오 포스트 섬네일 업로드 TODO: multifile 업로드에서 오류가 발생할 가능성 있음. header의 type을             "Content-Type": "application/json", 을 사용 가능할지
@@ -27,14 +18,13 @@ class VideoPostApi {
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadThumnail = async (data) => {
-    const formData = new FormData();
-    formData.append("thumbnail", data.thumbnail);
-    return await ApiUtil.post(`${this.baseUrl}/upload/thumbnail`, formData);
+    return await ApiUtil.formDataPost(`${this.baseUrl}/upload/thumbnail`, data);
   };
   uploadVideo = async (data) => {
-    const formData = new FormData();
-    formData.append("justVideo", data.video);
-    return await ApiUtil.post(`${this.baseUrl}/upload/video`, formData);
+    return await ApiUtil.formDataPost(
+      `${this.baseUrl}/upload/just-video`,
+      data,
+    );
   };
 
   searchVideoPost = async (data) => {
