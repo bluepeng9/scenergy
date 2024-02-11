@@ -1,13 +1,15 @@
 // ProfileHeaderApi.js
 import styles from "./ProfileHeader.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getUser } from "../../apis/User/UserApi";
 import { Link } from "react-router-dom";
 import UserUpdateModal from "../User/UserUpdateModal";
 
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
   const [profileImage, setProfileImage] = useState(null); // 동그란 프로필 이미지
-  const [nickname, setNickname] = useState(""); // 닉네임
+  const [user_nickname, setUser_nickname] = useState(""); //닉네임
+  // const [nickname, setNickname] = useState(""); // 닉네임
   const [bio, setBio] = useState(""); // 한줄소개 입력
   const [videoCount, setVideoCount] = useState(0); // 영상 총 개수
   const [followersCount, setFollowersCount] = useState(0); // 팔로워 수
@@ -15,6 +17,16 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 여부
   const [isUserUpdateModalOpen, setIsUserUpdateModalOpen] = useState(false); // 회원수정
+
+  useEffect(() => {
+    getUser2();
+  }, []); // 빈 배열을 넣어 컴포넌트가 마운트될 때 한 번만 호출되도록 함
+
+  const getUser2 = async () => {
+    const user_nickname = getUser().userNickname;
+    console.log(user_nickname);
+    setUser_nickname(user_nickname);
+  };
 
   // 프로필 이미지 업로드 이벤트 핸들러
   const handleImageUpload = (event) => {
@@ -85,21 +97,12 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
         <div className={styles.profileNickname}>
           {/* 닉네임, 한줄소개 */}
-          <h2>
-            {isEditing ? (
-              <input
-                value={nickname}
-                onChange={(e) => setNickname(e.target.value)}
-              />
-            ) : (
-              nickname
-            )}
-          </h2>
+          <h2>{user_nickname}</h2>
           <p>
             {isEditing ? (
               <input value={bio} onChange={(e) => setBio(e.target.value)} />
             ) : (
-              bio
+              bio || "한줄소개를 입력해주세요."
             )}
           </p>
         </div>

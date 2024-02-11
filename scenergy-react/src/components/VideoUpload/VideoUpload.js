@@ -8,17 +8,24 @@ import videoPostApi from "../../apis/VideoPostApi";
 const VideoUpload = () => {
   // 장르와 악기 카테고리 목록
   const genres = [
-    "팝",
-    "발라드",
-    "인디",
-    "힙합",
-    "락",
-    "R&B",
-    "재즈",
-    "클래식",
-    "그 외",
+    { id: 1, name: "팝" },
+    { id: 2, name: "발라드" },
+    { id: 3, name: "인디" },
+    { id: 4, name: "힙합" },
+    { id: 5, name: "락" },
+    { id: 6, name: "R&B" },
+    { id: 7, name: "재즈" },
+    { id: 8, name: "클래식" },
+    { id: 9, name: "그 외" },
   ];
-  const instruments = ["기타", "베이스", "드럼", "키보드", "보컬", "그 외"];
+  const instruments = [
+    { id: 1, name: "기타" },
+    { id: 2, name: "베이스" },
+    { id: 3, name: "드럼" },
+    { id: 4, name: "키보드" },
+    { id: 5, name: "보컬" },
+    { id: 6, name: "그 외" },
+  ];
 
   // 선택 장르와 악기 상태
   const [selectedGenres, setSelectedGenres] = useState([]);
@@ -144,8 +151,12 @@ const VideoUpload = () => {
       formData.append("userId", "eodms4334@naver.com");
       formData.append("postTitle", videoDetails.title);
       formData.append("postContent", videoDetails.description);
-      formData.append("genreTags", JSON.stringify(selectedGenres));
-      formData.append("instrumentTags", JSON.stringify(selectedInstruments));
+      selectedGenres.forEach((genre) => formData.append("genreTags", genre.id));
+      selectedInstruments.forEach((instrument) =>
+        formData.append("instrumentTags", instrument.id),
+      );
+      // formData.append("genreTags", JSON.stringify(selectedGenres));
+      // formData.append("instrumentTags", JSON.stringify(selectedInstruments));
       formData.append("videoTitle", videoDetails.musicTitle);
       formData.append("videoArtist", videoDetails.artist);
 
@@ -324,15 +335,18 @@ const VideoUpload = () => {
                 <h4>장르</h4>
                 <div className={styles.categoryCheckboxContainer}>
                   {genres.map((genre) => (
-                    <label key={genre}>
+                    <label key={genre.id}>
                       <input
                         className={styles.categoryGenre}
                         type="checkbox"
-                        value={genre}
-                        checked={selectedGenres.includes(genre)}
+                        value={genre.id}
+                        // checked={selectedGenres.includes(genre)}
+                        checked={selectedGenres.some(
+                          (selectedGenre) => selectedGenre.id === genre.id,
+                        )}
                         onChange={() => handleGenreSelect(genre)}
                       />
-                      {genre}
+                      {genre.name}
                     </label>
                   ))}
                 </div>
@@ -341,14 +355,18 @@ const VideoUpload = () => {
                 <h4>악기</h4>
                 <div className={styles.categoryCheckboxContainer}>
                   {instruments.map((instrument) => (
-                    <label key={instrument}>
+                    <label key={instrument.id}>
                       <input
                         type="checkbox"
-                        value={instrument}
-                        checked={selectedInstruments.includes(instrument)}
+                        value={instrument.id}
+                        checked={selectedInstruments.some(
+                          (selectedInstrument) =>
+                            selectedInstrument.id === instrument.id,
+                        )}
+                        // checked={selectedInstruments.includes(instrument)}
                         onChange={() => handleInstrumentSelect(instrument)}
                       />
-                      {instrument}
+                      {instrument.name}
                     </label>
                   ))}
                 </div>
