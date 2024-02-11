@@ -9,16 +9,9 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 
 import { useState } from "react";
 
-const Dialog = ({
-  title,
-  onClose,
-  children,
-  showBookmarkButton,
-  isModalOpen,
-}) => {
+const Dialog = ({ title, onClose, children, showBookmarkButton }) => {
   const [isSolid, setIsSolid] = useState(false);
   // const isModalOpen = useSelector((state) => state.isModalOpen);
-  const dispatch = useDispatch();
 
   const handleMarkChange = () => {
     /*나중에 back에서 코드 짜면 bookmark api랑 연결시키기*/

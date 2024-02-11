@@ -1,6 +1,10 @@
 import styles from "./ScenergyListItem.module.css";
-import { useDispatch } from "react-redux";
-import { openModal } from "../../../actions/actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBookmark,
+  faCalendar,
+  faFileLines,
+} from "@fortawesome/free-regular-svg-icons";
 const ScenergyListItem = ({
   jobstate,
   nickname,
@@ -9,12 +13,22 @@ const ScenergyListItem = ({
   peopleRecruited,
   totalCount,
   onOpenModal,
+  expirationDate,
 }) => {
   const handleItemClick = () => {
     onOpenModal();
   };
-  /*나중에 백이랑 연결해서 받아올것*/
-  /*내맘대로*/
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = ("0" + (date.getMonth() + 1)).slice(-2);
+    const day = ("0" + date.getDate()).slice(-2);
+    return `${year}.${month}.${day}`;
+  };
+
+  const formattedExpirationDate = formatDate(expirationDate);
+
   return (
     <div onClick={handleItemClick} className={styles.ItemGlobalContainer}>
       <div className={styles.ItemGlobal}>
@@ -32,11 +46,16 @@ const ScenergyListItem = ({
         </div>
         <hr className={styles.hrline} />
         <div className={styles.ItemFooter}>
-          <div>
+          <div className={styles.scenergyApply}>
+            <FontAwesomeIcon icon={faFileLines} />
             <p>{totalCount}</p>
           </div>
-          <div>
-            <p>마감 날짜</p>
+          <div className={styles.scenergyExp}>
+            <FontAwesomeIcon icon={faCalendar} />
+            <p>{formattedExpirationDate}</p>
+          </div>
+          <div className={styles.scenergyBookmark}>
+            <FontAwesomeIcon icon={faBookmark} />
           </div>
         </div>
       </div>

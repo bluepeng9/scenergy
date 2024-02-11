@@ -1,7 +1,7 @@
 .chatRoomContainer {
   display: flex;
   text-align: center;
-  width: 100%;
+  width: 70vi;
   flex-direction: column;
   position: relative;
 }

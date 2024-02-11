@@ -4,7 +4,7 @@
   flex-direction: column;
 }
 .chatMsgField {
-  max-height: 500px;
+  max-height: calc(100vh - 150px);
   overflow: auto;
   transition: 0.3s ease;
   padding: 5px;

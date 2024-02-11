@@ -31,12 +31,14 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
     loadFollowingList();
     console.log(followingList);
   }, []);
+
   const handleInputChange = (event) => {
     setSearchInput(event.target.value);
   };
 
   const handleClose = () => {
     onClose();
+    setSearchInput("");
   };
 
   const handleCloseProp = (user) => {

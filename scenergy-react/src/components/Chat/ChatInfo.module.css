@@ -1,17 +1,16 @@
 .infoMenuContainer {
-  width: 300px;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  right: -300px; /* 초기 상태는 화면 바깥으로 설정 */
-  background-color: #fff;
+  width: 35vb;
+  height: 40vb;
+  position: absolute;
+  top: 5vb;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-radius: 10px;
   box-shadow: -2px 0 4px rgba(0, 0, 0, 0.2);
   transition: all 0.5s ease-in-out;
   z-index: 100;
 }
-
 .show{
-  right: 0px;
+  right: 3vb;
   transition: all 0.5s ease-in-out;
 }
 

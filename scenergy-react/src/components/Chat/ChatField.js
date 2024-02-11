@@ -21,6 +21,7 @@ const ChatField = () => {
   const { addChatRoom, chatRooms } = useChatRoom();
   const navigate = useNavigate();
   const fromUserId = 2;
+
   const users = [
     { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
     { id: 2, email: "김준표", password: "이태경", name: "사용자2" },
@@ -51,7 +52,7 @@ const ChatField = () => {
 
   return (
     <>
-      <ChatRoomList sytle={{ width: "30%", flex: "1" }} />
+      <ChatRoomList />
       <div className={styles.fieldGlobal}>
         <div className={styles.fieldBody} onClick={handleOpenModal}>
           <FontAwesomeIcon className={styles.fieldBodyIcon} icon={faComments} />

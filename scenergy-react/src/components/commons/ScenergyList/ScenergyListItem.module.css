@@ -1,7 +1,7 @@
 .ItemGlobalContainer {
   width: 100%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 .ItemGlobal {
   margin-top: 20px;
@@ -11,11 +11,14 @@
   display: flex;
   height: 200px;
   flex-direction: column;
-  width: 450px;
+  width: 30vi;
 }
 @media (max-width: 800px) {
   .ItemGlobal {
-    width: 300px;
+    width: 40vi;
+  }
+  .ItemGlobalContainer{
+    justify-content: center;
   }
 }
 .ItemHeader {
@@ -35,7 +38,6 @@
   font-weight: 600;
 }
 .ItemName {
-  margin-right: 20px;
   font-weight: 600;
 }
 .ItemBody {
@@ -50,11 +52,24 @@
 .hrline {
   border: 1px solid black;
 }
+
+.scenergyExp, .scenergyApply{
+  margin-left: 5px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.scenergyBookmark{
+  margin-left: auto;
+  margin-right: 5px;
+}
 .ItemFooter {
   padding: 5px;
   margin-left: 3px;
-  font-size: 15px;
-  height: 45px;
+  font-size: 1rem;
+  height: 50px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

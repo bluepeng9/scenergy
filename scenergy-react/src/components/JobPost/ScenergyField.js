@@ -9,21 +9,103 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
 
-const ScenergyField = () => {
+const ScenergyField = ({ onOpenModal }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState(null);
   const [endDate, setEndDate] = useState(new Date());
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [peopleRecruited, setPeopleRecruited] = useState(0);
-
+  const [peopleRecruited, setPeopleRecruited] = useState(1);
+  const [selectedGenre, setSelectedGenre] = useState([]);
+  const [selectedInstrument, setSelectedInstrument] = useState([]);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+  const [refreshList, setRefreshList] = useState(false);
+  const [selectedExp, setSelectedExp] = useState("전체");
+  const { addScenergyPost } = useScenergyPost();
   const handleOpenChange = () => {
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setEndDate(new Date()); // 모달이 닫힐 때 endDate를 초기화합니다.
+    setSelectedInstrument([]);
+    setSelectedGenre([]);
+    setSelectedLocation([]);
+    setPeopleRecruited(1);
+    setContent("");
+    setTitle("");
+    setEndDate(new Date());
+  };
+
+  const handleSearch = async (searchTerm) => {
+    try {
+      const data = { name: searchTerm, gt: [], it: [], lt: [] };
+      const response = await searchApi.searchJobPost(data);
+      console.log("시너지 검색 완", response);
+    } catch (error) {
+      console.error("시너지 검색 실패", error);
+    }
+  };
+
+  const genres = [
+    { id: 1, name: "팝" },
+    { id: 2, name: "발라드" },
+    { id: 3, name: "인디" },
+    { id: 4, name: "힙합" },
+    { id: 5, name: "락" },
+    { id: 6, name: "R&B" },
+    { id: 7, name: "재즈" },
+    { id: 8, name: "클래식" },
+    { id: 9, name: "그 외" },
+  ];
+  const instruments = [
+    { id: 1, name: "기타" },
+    { id: 2, name: "베이스" },
+    { id: 3, name: "드럼" },
+    { id: 4, name: "키보드" },
+    { id: 5, name: "보컬" },
+    { id: 6, name: "그 외" },
+  ];
+
+  const locations = [
+    { id: 1, name: "서울" },
+    { id: 2, name: "인천" },
+    { id: 3, name: "대전" },
+    { id: 4, name: "부산" },
+    { id: 5, name: "울산" },
+    { id: 6, name: "대구" },
+    { id: 7, name: "광주" },
+    { id: 8, name: "경기" },
+    { id: 9, name: "강원" },
+    { id: 10, name: "충북" },
+    { id: 11, name: "충남" },
+    { id: 12, name: "전북" },
+    { id: 13, name: "전남" },
+    { id: 14, name: "경북" },
+    { id: 15, name: "경남" },
+    { id: 16, name: "세종" },
+    { id: 17, name: "제주" },
+  ];
+
+  const handleGenreChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!selectedGenre.includes(value)) {
+      setSelectedGenre([...selectedGenre, value]);
+    }
+    console.log(selectedGenre);
+  };
+  const handleInstChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!selectedInstrument.includes(value)) {
+      setSelectedInstrument([...selectedInstrument, value]);
+    }
+    console.log(selectedInstrument);
+  };
+  const handleLocationChange = (e) => {
+    const value = parseInt(e.target.value, 10);
+    if (!selectedLocation.includes(value)) {
+      setSelectedLocation([...selectedLocation, value]);
+    }
+    console.log(selectedLocation);
   };
 
   const handleSubmit = () => {
@@ -32,22 +114,28 @@ const ScenergyField = () => {
       title,
       content,
       expirationDate: endDate,
-      isActive: true,
       peopleRecruited,
-      genreTags: [],
-      instrumentTags: [],
-      locationTags: [],
+      bookmark: 0,
+      isActive: "active",
+      genreTags: selectedGenre,
+      instrumentTags: selectedInstrument,
+      // locationTags: selectedLocation,
+      locationTags: selectedLocation,
     };
 
     jobPostApi.createJobPost(postData)
       .then((response) => {
         console.log("글작성 성공", response);
+        addScenergyPost(response);
         handleCloseModal();
+        setRefreshList((prev) => !prev);
       })
       .catch((error) => {
         console.error("글 작성 실패", error);
       });
+    console.log(postData);
   };
+
   return (
     <div className={styles.FieldGlobal}>
       <div className={styles.FieldHeader}>
@@ -55,12 +143,14 @@ const ScenergyField = () => {
           <h2>시너지</h2>
         </div>
       </div>
-      <SearchCategory />
+      <div className={styles.FieldSearch}>
+        <SearchCategory onSearch={handleSearch} />
+      </div>
       <div className={styles.FieldItemsGlobal}>
         <div className={styles.FieldWrite}>
           <button className={styles.FieldWriteBtn} onClick={handleOpenChange}>
             <FontAwesomeIcon icon={faFeather} />
-            글쓰기
+            <p>글쓰기</p>
           </button>
           {isModalOpen && (
             <Dialog title="글 작성하기" onClose={handleCloseModal}>
@@ -77,24 +167,57 @@ const ScenergyField = () => {
                   <div className={styles.scenergyPostItem}>
                     <div className={styles.scenergyPostRegion}>
                       <p>지역</p>
-                      <select>
-                        <option>서울</option>
+                      <select onChange={handleLocationChange}>
+                        {locations.map((location) => (
+                          <option key={location.id} value={location.id}>
+                            {location.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
                   <div className={styles.scenergyPostItem}>
                     <div className={styles.scenergyPostGenre}>
                       <p>장르</p>
-                      <select>
-                        <option>재즈</option>
+                      <select onChange={handleGenreChange}>
+                        {genres.map((genre) => (
+                          <option key={genre.id} value={genre.id}>
+                            {genre.name}
+                          </option>
+                        ))}
                       </select>
+                      <div className="selectedItems">
+                        {selectedGenre.map((id) => {
+                          const genre = genres.find((genre) => genre.id === id);
+                          return (
+                            <div key={id} className="selectedTag">
+                              {genre.name}
+                              <button
+                                onClick={() =>
+                                  setSelectedGenre(
+                                    selectedGenre.filter(
+                                      (selectedId) => selectedId !== id,
+                                    ),
+                                  )
+                                }
+                              >
+                                X
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                   <div className={styles.scenergyPostItem}>
                     <div className={styles.scenergyPostInst}>
                       <p>악기</p>
-                      <select>
-                        <option>피아노</option>
+                      <select onChange={handleInstChange}>
+                        {instruments.map((instrument) => (
+                          <option key={instrument.id} value={instrument.id}>
+                            {instrument.name}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -156,7 +279,7 @@ const ScenergyField = () => {
         </div>
       </div>
       <div className={styles.FieldList}>
-        <ScenergyList onOpenModal={handleOpenChange} />
+        <ScenergyList onOpenModal={onOpenModal} refresh={refreshList} />
       </div>
     </div>
   );

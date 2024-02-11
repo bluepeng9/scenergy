@@ -5,32 +5,32 @@ import jobPostApi from "../../apis/JobPost/JobPostApi";
 
 const ScenergyList = ({ onOpenModal }) => {
   const [jobPosts, setJobPosts] = useState([]);
-  //나중에 back api랑 연결해서 map때려서 받아오면 된다
+
   useEffect(() => {
     jobPostApi.getAllJobPost()
       .then((response) => {
-        console.log("게시글 목록", response);
-        setJobPosts(response); // API 호출 결과로 상태 업데이트
+        // console.log("게시글 목록", response.data);
+        setJobPosts(response.data); // API 호출 결과로 상태 업데이트
       })
       .catch((error) => {
         console.error("API 에러 호출 에러", error);
       });
-  }, []);
+  }, [refresh]);
 
   return (
     <div className={styles.ListGlobal}>
       {jobPosts.length > 0 ? (
         jobPosts.map((post) => (
           <ScenergyListItem
-            key={post.userDto.id}
-            onOpenModal={onOpenModal}
+            key={post.id}
             jobstate={post.isActive}
-            nickname={post.userDto.nickname}
+            nickname={post.nickname}
             title={post.title}
             content={post.content}
             peopleRecruited={post.peopleRecruited}
             totalCount={post.totalCount}
-            expirtaionDate={post.expirationDate}
+            expirationDate={post.expirationDate}
+            onOpenModal={() => onOpenModal(post)}
           />
         ))
       ) : (

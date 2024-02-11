@@ -4,13 +4,25 @@ import ScenergyField from "../components/JobPost/ScenergyField";
 import Dialog from "../components/commons/Dialog/Dialog";
 import { useState } from "react";
 const ScenergyPage = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    type: null, // create, view
+    data: null,
+  });
+  const handleOpenModal = (data) => {
+    setModalState({ isOpen: true, type: "view", data });
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
+    setModalState({ isOpen: false, type: null, data: null });
+  };
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    return `${year}.${month}.${day}`;
   };
 
   return (
@@ -21,15 +33,15 @@ const ScenergyPage = () => {
       <div className={styles.ScenergyField}>
         <ScenergyField onOpenModal={handleOpenModal} />
       </div>
-      {isModalOpen && (
+      {modalState.isOpen && modalState.type === "view" && (
         <Dialog
-          title="팀 구합니다"
+          title={modalState.data.title}
           showBookmarkButton={true}
           onClose={handleCloseModal}
         >
           <div className={styles.ScenergyModalHeader}>
             <p>작성자</p>
-            <p>nickname</p>
+            <p>{modalState.data.nickname}</p>
           </div>
           <hr />
           <div className={styles.ScenergyContainer}>
@@ -50,7 +62,7 @@ const ScenergyPage = () => {
           <div className={styles.ScenergyContainer}>
             <div className={`${styles.Category} day`}>
               <p>모집 기간</p>
-              <p>날짜</p>
+              <p>~{formatDate(modalState.data.expirationDate)}</p>
             </div>
             <div className={`${styles.Category} person`}>
               <p>모집 인원</p>
@@ -63,7 +75,7 @@ const ScenergyPage = () => {
               <p>내용</p>
             </div>
             <div className={styles.ScenergyContent}>
-              <p>내용내용내용내용내용내용냉용</p>
+              <p>{modalState.data.content}</p>
             </div>
           </div>
           {/*내가 쓴 글이 아닐때만 보여야함*/}

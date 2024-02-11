@@ -1,7 +1,5 @@
-/* ChatField.module.css */
-
 .fieldGlobal {
-  width: calc(100vw - 700px);
+  width: 70vi;
   display: flex;
   justify-content: center;
   align-items: center;
