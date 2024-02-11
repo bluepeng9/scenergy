@@ -1,3 +1,7 @@
+.content {
+    display: flex;
+}
+
 .home2-div {
     display: flex;
     justify-content: space-between; /* 자식 요소를 양쪽 끝으로 배치 */
