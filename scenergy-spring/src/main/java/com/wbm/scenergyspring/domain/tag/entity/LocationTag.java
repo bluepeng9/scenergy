@@ -26,4 +26,14 @@ public class LocationTag {
         return locationTag;
     }
 
+    public void updateLocationTag(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public static LocationTag createlocationTag(String LocationName){
+        LocationTag locationTag = new LocationTag();
+        locationTag.locationName = LocationName;
+        return locationTag;
+    }
+
 }

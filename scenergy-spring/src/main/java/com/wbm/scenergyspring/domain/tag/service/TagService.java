@@ -8,6 +8,7 @@ import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
 import com.wbm.scenergyspring.domain.tag.service.command.GenreTagCommand;
 import com.wbm.scenergyspring.domain.tag.service.command.InstrumentTagCommand;
+import com.wbm.scenergyspring.domain.tag.service.command.LocationTagCommand;
 import com.wbm.scenergyspring.global.exception.BusinessException;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -98,6 +99,26 @@ public class TagService {
         if(locationTagRepository.existsByLocationName(str))
             throw new BusinessException("이미 입력된 지역입니다.");
         locationTagRepository.save(LocationTag.createLocationTag(str));
+        return locationName;
+    }
+
+    public List<LocationTag> getAllLocationTags() {
+        return locationTagRepository.findAll();
+    }
+
+    @Transactional(readOnly = false)
+    public String updateLocationTag(LocationTagCommand command) {
+        LocationTag locationTag = locationTagRepository.findByLocationName(command.getLocationTagName()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역입니다."));
+        locationTag.updateLocationTag(command.getChangeLocationTagName());
+        return locationTag.getLocationName();
+    }
+
+    @Transactional(readOnly = false)
+    public String deleteLocationTag(String locationName) {
+        if(!StringUtils.hasText(locationName))
+            throw new BusinessException("장소가 입력되지 않았습니다.");
+        LocationTag locationTag = locationTagRepository.findByLocationName(locationName).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 지역입니다."));
+        locationTagRepository.delete(locationTag);
         return locationName;
     }
 

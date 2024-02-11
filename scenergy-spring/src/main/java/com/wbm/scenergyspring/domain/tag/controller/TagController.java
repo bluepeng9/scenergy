@@ -2,8 +2,10 @@ package com.wbm.scenergyspring.domain.tag.controller;
 
 import com.wbm.scenergyspring.domain.tag.controller.request.UpdateGenreTagRequest;
 import com.wbm.scenergyspring.domain.tag.controller.request.UpdateInstrumentTagRequest;
+import com.wbm.scenergyspring.domain.tag.controller.request.UpdateLocationTagRequest;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
+import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.service.TagService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
@@ -79,4 +81,21 @@ public class TagController {
         return new ResponseEntity<>(ApiResponse.createSuccess(msg), HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/tag/locations")
+    public ResponseEntity<ApiResponse<List<LocationTag>>> getAllLocationTags() {
+        return new ResponseEntity<>(ApiResponse.createSuccess(tagService.getAllLocationTags()), HttpStatus.OK);
+    }
+
+    @PutMapping("/tag/location/update")
+    public ResponseEntity<ApiResponse<String>> updateLocationTag(UpdateLocationTagRequest request) {
+        return ResponseEntity.ok(ApiResponse.createSuccess(tagService.updateLocationTag(request.toLocationTag())));
+    }
+
+    @DeleteMapping("/tag/location/delete")
+    public ResponseEntity<ApiResponse<String>> deleteLocationTag(String locationName) {
+        String msg = tagService.deleteLocationTag(locationName);
+        if(msg.equals(locationName))
+            return ResponseEntity.ok(ApiResponse.createSuccess(locationName+" 지역이 삭제되었습니다."));
+        return new ResponseEntity<>(ApiResponse.createError("지역을 재확인 부탁드립니다."), HttpStatus.BAD_REQUEST);
+    }
 }
