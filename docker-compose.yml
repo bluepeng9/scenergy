@@ -69,7 +69,7 @@ services:
     build:
       context: scenergy-notification/.
     ports:
-      - "9002:8080"
+      - "9003:8080"
     depends_on:
       - kafka-1
       - mysql-notification
