@@ -11,7 +11,7 @@ class JobPostApi {
 
   createJobPost = async (postData) => {
     console.log(postData);
-    return await ApiUtil.post("/jobPost", {
+    return await ApiUtil.post("/jobPost/create", {
       userId: postData.userId,
       title: postData.title,
       content: postData.content,
@@ -70,26 +70,6 @@ class JobPostApi {
   deleteJobPost = async (id) => {
     return await ApiUtil.delete(`/jobPost/${id}`);
   };
-
-  //create 만들어주세요 ScenergyField에서 사용중
-  //postData 들어올거임!
-  // const createJobPost = async (postData) => {
-  //   /*
-  //     //북마크 글작성할때 필요없음!
-  //   *  userId:2,
-  //     title: "",
-  //     content: "",
-  //     expirationDate: "2024.03.01 이런식으로 나오게 해주세요",
-  //     isActive:true,//이거 default값
-  //     peopleRecruited: 0,
-  //
-  //     //아직 태그 id별로 정해진게 확정이 아니라고 해서 일단 놔둘게
-  //     genreTags: [],
-  //     instrumentTags: [],
-  //     locationTags: [],
-  //
-  //    */
-  // };
 }
 
 const jobPostApi = new JobPostApi();

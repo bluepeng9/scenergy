@@ -2,9 +2,9 @@ import styles from "./ScenergyField.module.css";
 import SearchCategory from "../commons/Search/SearchCategory";
 import ScenergyList from "./ScenergyList";
 import Dialog from "../commons/Dialog/Dialog";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faFeather} from "@fortawesome/free-solid-svg-icons";
-import {useState} from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFeather } from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
@@ -119,11 +119,11 @@ const ScenergyField = ({ onOpenModal }) => {
       isActive: "active",
       genreTags: selectedGenre,
       instrumentTags: selectedInstrument,
-      // locationTags: selectedLocation,
       locationTags: selectedLocation,
     };
 
-    jobPostApi.createJobPost(postData)
+    jobPostApi
+      .createJobPost(postData)
       .then((response) => {
         console.log("글작성 성공", response);
         addScenergyPost(response);
