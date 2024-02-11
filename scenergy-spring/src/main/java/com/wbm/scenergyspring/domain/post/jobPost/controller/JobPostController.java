@@ -108,7 +108,7 @@ public class JobPostController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(bookMarkResponse));
 	}
 
-	@PostMapping
+	@PostMapping("/create")
 	public ResponseEntity<ApiResponse<CreateJobPostResponse>> createJobPost(
 		@RequestBody CreateJobPostRequest request
 		) {
