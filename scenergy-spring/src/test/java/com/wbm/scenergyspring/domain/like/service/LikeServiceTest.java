@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.like.entity.Like;
 import com.wbm.scenergyspring.domain.like.repository.LikeRepository;
-import com.wbm.scenergyspring.domain.like.service.command.GetLikeCountCommand;
-import com.wbm.scenergyspring.domain.like.service.command.GetLikeListCommand;
 import com.wbm.scenergyspring.domain.like.service.command.GetLikeCountCommand;
 import com.wbm.scenergyspring.domain.like.service.command.GetLikeListCommand;
 import com.wbm.scenergyspring.domain.like.service.command.LikePostCommand;
@@ -27,10 +26,9 @@ import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.util.RandomValueGenerator;
-import com.wbm.scenergyspring.util.UserGenerator;
 
 @SpringBootTest
-class LikeServiceTest {
+class LikeServiceTest extends IntegrationTest {
 
 	@Autowired
 	UserRepository userRepository;
