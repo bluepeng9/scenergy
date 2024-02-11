@@ -41,6 +41,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: scenergy
+      MYSQL_ROOT_HOST: '%'
   mysql-notification:
     image: mysql:latest
     container_name: mysql-notification
@@ -49,6 +50,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: notification
+      MYSQL_ROOT_HOST: '%'
   redis:
     image: redis:latest
     container_name: redis
