@@ -41,4 +41,12 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
             having count(cr.status) > 1
             """)
     Optional<ChatRoom> findCommonChatRoom(@Param("user1Id") Long user1, @Param("user2Id") Long user2);
+
+    @Query("""
+            select cu from ChatRoom cr
+            join fetch cr.chatUsers cu
+            where cr = :chatRoomId
+            """)
+    Optional<List<ChatUser>> findChatRoomUsers(@Param("chatRoomId") Long roomId);
+
 }
