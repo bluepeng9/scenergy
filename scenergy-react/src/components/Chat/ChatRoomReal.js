@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import Dialog from "../commons/Dialog/Dialog";
-import { useLocation, useParams } from "react-router-dom";
-// import VideoConference from "./VideoConference";
+import {useLocation, useParams} from "react-router-dom";
+import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import {
-  faCircleInfo,
-  faPlus,
-  faVideo,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
 import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
+  const [chatRoomUsers, setChatRoomUsers] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -58,6 +55,25 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
       setSelectedUsers((prevUsers) => [...prevUsers, user]);
     console.log(selectedUsers);
   };
+
+  const getChatUsers = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await axios.get(
+          "http://localhost:8080/charoom/list-char-users",
+          {
+            chatRoomId: realRoomId
+          }
+      );
+      if (response.data) {
+        console.log("charRoom에 포함된 유저", response.data.data)
+        setChatRoomUsers([...chatRoomUsers, ...response.data.data])
+      }
+    } catch (error) {
+      console.error("chatRoomUsers 오류", error)
+    }
+  }
 
   const handleInvite = async (event) => {
     event.preventDefault();
@@ -110,21 +126,22 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 <p>상대방 닉네임</p>
               </div>
             </div>
+            <div>
+              <VideoConference chatRoomId={realRoomId} chatRoomUsers={getChatUsers}/>
+            </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
               <div className={styles.userInvite} onClick={handleModalOpen}>
                 <FontAwesomeIcon icon={faPlus} />
               </div>
+
               <div className={styles.doRtc} onClick={handleConnectRtc}>
-                <FontAwesomeIcon icon={faVideo} />
-                {/*{isRtcConnect && (*/}
-                {/*  <div>*/}
-                {/*    <VideoConference*/}
-                {/*      mySessionId={roomId}*/}
-                {/*      myUserName={usernickname}*/}
-                {/*    />*/}
-                {/*  </div>*/}
-                {/*)}*/}
+                <FontAwesomeIcon icon={faVideo}/>
+                {isRtcConnect && (
+                    <div>
+
+                    </div>
+                )}
               </div>
               <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
                 <FontAwesomeIcon icon={faCircleInfo} />

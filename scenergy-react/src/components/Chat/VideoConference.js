@@ -1,136 +1,83 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import OpenViduSession from "openvidu-react";
+import {useEffect, useRef, useState} from 'react';
+import Peer from 'peerjs';
 
-const VideoConference = ({ mySessionId, myUserName }) => {
-  const [token, setToken] = useState(undefined);
 
-  useEffect(() => {
-    joinSession();
-  }, [mySessionId, myUserName]);
+const VideoConference = ({chatRoomId, chatRoomUsers}) => {
+    const [peerId, setPeerId] = useState('');
+    const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
+    const remoteVideoRef = useRef(null);
+    const currentUserVideoRef = useRef(null);
+    const peerInstance = useRef(null);
 
-  const joinSession = () => {
-    if (mySessionId && myUserName) {
-      getToken().then((token) => {
-        setToken(token);
-      });
-    }
-  };
+    useEffect(() => {
+        const peer = new Peer(testId);
 
-  const getToken = () => {
-    return createSession(mySessionId)
-      .then((sessionId) => createToken(sessionId))
-      .catch((Err) => console.error(Err));
-  };
-
-  const createSession = (sessionId) => {
-    return new Promise((resolve, reject) => {
-      var data = JSON.stringify({ customSessionId: sessionId });
-      axios
-        .post(
-          "https://" + window.location.hostname + ":4443/openvidu/api/sessions",
-          data,
-          {
-            headers: {
-              Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
-              "Content-Type": "application/json",
-            },
-          },
-        )
-        .then((response) => {
-          console.log("CREATE SESION", response);
-          resolve(response.data.id);
-        })
-        .catch((response) => {
-          var error = Object.assign({}, response);
-          if (error.response && error.response.status === 409) {
-            resolve(sessionId);
-          } else {
-            console.log(error);
-            console.warn(
-              "No connection to OpenVidu Server. This may be a certificate error at " +
-                "https://" +
-                window.location.hostname +
-                ":4443",
-            );
-            if (
-              window.confirm(
-                'No connection to OpenVidu Server. This may be a certificate error at "' +
-                  "https://" +
-                  window.location.hostname +
-                  ":4443" +
-                  '"\n\nClick OK to navigate and accept it. ' +
-                  'If no certificate warning is shown, then check that your OpenVidu Server is up and running at "' +
-                  "https://" +
-                  window.location.hostname +
-                  ":4443" +
-                  '"',
-              )
-            ) {
-              window.location.assign(
-                "https://" +
-                  window.location.hostname +
-                  ":4443" +
-                  "/accept-certificate",
-              );
-            }
-          }
+        peer.on('open', (peerId) => {
+            setPeerId(peerId)
         });
-    });
-  };
 
-  const createToken = (sessionId) => {
-    return new Promise((resolve, reject) => {
-      var data = JSON.stringify({});
-      axios
-        .post(
-          "https://" +
-            window.location.hostname +
-            ":4443/openvidu/api/sessions/" +
-            sessionId +
-            "/connection",
-          data,
-          {
-            headers: {
-              Authorization: "Basic " + btoa("OPENVIDUAPP:MY_SECRET"),
-              "Content-Type": "application/json",
-            },
-          },
-        )
-        .then((response) => {
-          console.log("TOKEN", response);
-          resolve(response.data.token);
+        peer.on('call', (call) => {
+            var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+            getUserMedia({video: true, audio: true}, (mediaStream) => {
+                currentUserVideoRef.current.srcObject = mediaStream;
+                currentUserVideoRef.current.play();
+                call.answer(mediaStream)
+                call.on('stream', function (remoteStream) {
+                    remoteVideoRef.current.srcObject = remoteStream
+                    var playPromise = remoteVideoRef.current.play();
+
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                        })
+                            .catch(error => {
+                            });
+                    }
+                });
+            });
         })
-        .catch((error) => reject(error));
-    });
-  };
 
-  const handlerJoinSessionEvent = () => {
-    console.log("Join session");
-  };
+        peerInstance.current = peer;
+    }, [])
 
-  const handlerLeaveSessionEvent = () => {
-    console.log("Leave session");
-    setToken(undefined);
-  };
+    const call = (remotePeerId) => {
+        var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-  const handlerErrorEvent = () => {
-    console.log("Leave session");
-  };
+        getUserMedia({video: true, audio: true}, (mediaStream) => {
 
-  return (
-    <div>
-      <OpenViduSession
-        id="opv-session"
-        sessionName={mySessionId}
-        user={myUserName}
-        token={token}
-        joinSession={handlerJoinSessionEvent}
-        leaveSession={handlerLeaveSessionEvent}
-        error={handlerErrorEvent}
-      />
-    </div>
-  );
-};
+            currentUserVideoRef.current.srcObject = mediaStream;
+            currentUserVideoRef.current.play();
+
+            const call = peerInstance.current.call(remotePeerId, mediaStream)
+
+            call.on('stream', (remoteStream) => {
+                remoteVideoRef.current.srcObject = remoteStream
+                var playPromise = remoteVideoRef.current.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                    })
+                        .catch(error => {
+                        });
+                }
+
+            });
+        });
+    }
+
+    return (
+        <div>
+            <h1>Current user id is {peerId}</h1>
+            <input type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)}/>
+            <button onClick={() => call(remotePeerIdValue)}>Call</button>
+            <div>
+                <video ref={currentUserVideoRef}/>
+            </div>
+            <div>
+                <video ref={remoteVideoRef}/>
+            </div>
+        </div>
+    );
+}
 
 export default VideoConference;
