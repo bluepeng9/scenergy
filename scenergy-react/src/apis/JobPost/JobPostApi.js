@@ -54,10 +54,9 @@ class JobPostApi {
   };
 
   deleteBookMarkJobPost = async (data) => {
-    return await ApiUtil.delete(`/jobPost/bookmark/delete`, {
-      jobPosId: data.jobPostId,
-      userId: data.userId,
-    });
+    return await ApiUtil.delete(
+      `/jobPost/bookmark/delete?jobPostId=${data.jobPostId}&userId=${data.userId}`,
+    );
   };
 
   updateJobPost = async (id, postData) => {
