@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.amazonaws.Response;
@@ -31,6 +32,7 @@ import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPost
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostDeleteBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteBookMarkCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
@@ -113,9 +115,14 @@ public class JobPostController {
 
 	@DeleteMapping("/bookmark/delete")
 	public ResponseEntity<ApiResponse<JobPostDeleteBookMarkResponse>> deleteBookMarkJobPost(
-		@RequestBody DeleteJobPostBookMarkRequest request
+		@RequestParam Long jobPostId,
+		@RequestParam Long userId
 	) {
-		jobPostService.deleteBookMarkJobPost(request.deleteBookmark());
+		DeleteBookMarkCommand command = DeleteBookMarkCommand.builder()
+			.jobPostId(jobPostId)
+			.userId(userId)
+			.build();
+		jobPostService.deleteBookMarkJobPost(command);
 		JobPostDeleteBookMarkResponse deleteBookMarkResponse = JobPostDeleteBookMarkResponse.builder()
 			.isSuccess(true)
 			.build();
