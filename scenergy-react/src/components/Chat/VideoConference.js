@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import Peer from 'peerjs';
 
 
-const VideoConference = ({chatRoomId, chatRoomUsers}) => {
+const VideoConference = ({chatRoomId, chatRoomUsers, userId}) => {
     const [peerId, setPeerId] = useState('');
     const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
     const remoteVideoRef = useRef(null);
@@ -10,7 +10,7 @@ const VideoConference = ({chatRoomId, chatRoomUsers}) => {
     const peerInstance = useRef(null);
 
     useEffect(() => {
-        const peer = new Peer(testId);
+        const peer = new Peer(chatRoomId + userId);
 
         peer.on('open', (peerId) => {
             setPeerId(peerId)

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
-import Dialog from "../commons/Dialog/Dialog";
 import {useLocation, useParams} from "react-router-dom";
 import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
@@ -8,7 +7,7 @@ import ChatConnect from "./ChatConnect";
 import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
-import { useChatRooms } from "../../hooks/useChatRooms";
+import {useChatRooms} from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
@@ -127,7 +126,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
               </div>
             </div>
             <div>
-              <VideoConference chatRoomId={realRoomId} chatRoomUsers={getChatUsers}/>
+              <VideoConference chatRoomId={realRoomId} chatRoomUsers={getChatUsers} userId={userId}/>
             </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
