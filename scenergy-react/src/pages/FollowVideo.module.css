@@ -1,6 +1,17 @@
-.video-contain {
+/* FollowVideo.module.css */
+.followVideoContainer {
+    width: 100vw;
+    height: 100vh; /* 뷰포트 높이와 동일 */
+    overflow-y: scroll; /* 수직 스크롤 활성화 */
+    scroll-snap-type: y mandatory; /* 수직 방향으로 스크롤 스냅 적용 */
+}
+
+.videoContain {
+    height: 100vh; /* 각 게시물이 뷰포트 높이와 동일하게 설정 */
+    scroll-snap-align: start; /* 스크롤 스냅 포인트를 요소의 시작 부분으로 설정 */
     display: flex;
-    width: 300px;
-    height: 300px;
+    justify-content: center;
+    align-items: center;
     background-color: #22232f;
+    color: white; /* 텍스트 색상 변경 */
 }
