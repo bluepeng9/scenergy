@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 public class ApplyJobPostRequest {
 	Long jobPostId;
-	String userName;
+	Long userId;
 
 	public ApplyJobPostCommand toApplyJobPost() {
 		ApplyJobPostCommand command = ApplyJobPostCommand.builder()
 			.jobPostId(getJobPostId())
-			.userName(getUserName())
+			.userId(getUserId())
 			.build();
 
 		return command;
