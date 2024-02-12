@@ -18,4 +18,10 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
             "left join p.etcs " +
             "where p.id = :pid")
     Optional<Portfolio> findByIdJoin(@Param("pid") Long pid);
+
+    @Query("""
+            select p from Portfolio p
+            where p.userId = :userId
+            """)
+    Optional<Portfolio> findByUserId(@Param("userId") Long userId);
 }

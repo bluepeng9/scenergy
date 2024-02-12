@@ -59,7 +59,7 @@ public class PortfolioController {
 
     @GetMapping("/read")
     public ResponseEntity<ApiResponse<GetPortfolioResponse>> getPortfolio(
-            @RequestBody GetPortfolioRequest request
+            GetPortfolioRequest request
     ) {
         Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
         GetPortfolioResponse getPortfolioResponse = GetPortfolioResponse.builder()
