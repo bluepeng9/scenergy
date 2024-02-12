@@ -9,6 +9,8 @@ class ApiUtil {
       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzEwMDU5MDU0fQ.9DvhTbdKprZKQCTpWdCPLTPpba-f9T10SFtNjDgROovcpHoOB-V9EKixBFjpuVej4ulZvixuNTyfKvqIr4JHKA";
     return token;
   };
+
+  //토큰에서 userId 가져오기
   static getUserIdFromToken = () => {
     const token = this.getToken().split(" ")[1]; //Bearer 제거
     if (!token) return null;
@@ -16,7 +18,7 @@ class ApiUtil {
     try {
       const decode = jwtDecode(token);
       console.log(decode);
-      return decode.sub;
+      return decode.sub; //id
     } catch (error) {
       console.error("토큰 티코드 안댐", error);
       return null;

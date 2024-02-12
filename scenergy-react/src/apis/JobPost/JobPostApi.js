@@ -15,6 +15,7 @@ class JobPostApi {
       bookmark: postData.bookmark,
       title: postData.title,
       content: postData.content,
+      bookmark: postData.bookmark,
       expirationDate: postData.expirationDate,
       isActive: postData.isActive,
       peopleRecruited: postData.peopleRecruited,

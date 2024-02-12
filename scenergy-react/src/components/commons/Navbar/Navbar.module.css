@@ -1,6 +1,6 @@
 .NavBarContainer {
     width: 200px;
-    height: 100vh;
+    height: 100%;
     background-color: black;
     padding: 1.5rem;
     border-top-right-radius: 10px;

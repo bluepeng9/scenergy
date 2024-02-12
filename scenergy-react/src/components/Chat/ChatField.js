@@ -12,7 +12,7 @@ import ChatRoomList from "./ChatRoomList";
 import followApi from "../../apis/FollowApi";
 import searchApi from "../../apis/SearchApi";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
-const ChatField = () => {
+const ChatField = ({ userId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
@@ -20,7 +20,6 @@ const ChatField = () => {
   const realRoomId = parseInt(roomId, 10);
   const { addChatRoom, chatRooms } = useChatRoom();
   const navigate = useNavigate();
-  const fromUserId = 2;
 
   const users = [
     { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
@@ -64,11 +63,11 @@ const ChatField = () => {
             isOpen={isModalOpen}
             onClose={handleCloseModal}
             onUserSelect={handleUserSelect}
-            fromUserId={fromUserId}
+            fromUserId={userId}
           />
         )}
       </div>
-      {isCreated && <ChatRoomReal />}
+      {isCreated && <ChatRoomReal userId={userId} />}
     </>
   );
 };

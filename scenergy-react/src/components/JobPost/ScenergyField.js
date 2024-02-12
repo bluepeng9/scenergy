@@ -158,11 +158,7 @@ const ScenergyField = ({ onOpenModal }) => {
             <p>글쓰기</p>
           </button>
           {isModalOpen && (
-            <Dialog
-              title="글 작성하기"
-              onClose={handleCloseModal}
-              userId={userId}
-            >
+            <Dialog title="글 작성하기" onClose={handleCloseModal}>
               <div className={styles.scenergyModalGlobal}>
                 <div className={styles.scenergyPostHeader}>
                   <p>제목</p>

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
 import ReactPaginate from "react-paginate";
 
-const ScenergyList = ({ onOpenModal, refresh }) => {
+const ScenergyList = ({ onOpenModal, refresh, userId }) => {
   const [jobPosts, setJobPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -12,16 +12,28 @@ const ScenergyList = ({ onOpenModal, refresh }) => {
   const pagesVisited = pageNumber * postsPerPage;
 
   useEffect(() => {
-    jobPostApi
-      .getAllJobPost()
-      .then((response) => {
-        console.log("게시글 목록", response.data);
-        setJobPosts(response.data); // API 호출 결과로 상태 업데이트
-      })
-      .catch((error) => {
-        console.error("API 에러 호출 에러", error);
-      });
-  }, [refresh]);
+    if (!userId) {
+      jobPostApi
+        .getAllJobPost()
+        .then((response) => {
+          console.log("게시글 목록", response.data);
+          setJobPosts(response.data); // API 호출 결과로 상태 업데이트
+        })
+        .catch((error) => {
+          console.error("API 에러 호출 에러", error);
+        });
+    } else {
+      jobPostApi
+        .getAllMyJobPost(userId)
+        .then((response) => {
+          setJobPosts(response.data.data);
+          console.log("내 글 받아옴", response.data);
+        })
+        .catch((error) => {
+          console.error("내 글 못읽어옴", error);
+        });
+    }
+  }, [refresh, userId]);
 
   const displayPosts = jobPosts
     .slice(pagesVisited, pagesVisited + postsPerPage)

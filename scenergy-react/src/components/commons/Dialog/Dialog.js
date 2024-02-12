@@ -9,6 +9,8 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { useEffect, useState } from "react";
 import jobPostApi from "../../../apis/JobPost/JobPostApi";
 import { useScenergyPost } from "../../../contexts/ScenergyPostContext";
+import apiUtil from "../../../apis/ApiUtil";
+import ApiUtil from "../../../apis/ApiUtil";
 
 const Dialog = ({
   title,
@@ -16,13 +18,12 @@ const Dialog = ({
   children,
   showBookmarkButton,
   jobPostId,
-  userId,
   nickname,
 }) => {
   const [isSolid, setIsSolid] = useState(false);
   const { bookmarkedPosts, addBookmark, removeBookmark } = useScenergyPost();
   // const isModalOpen = useSelector((state) => state.isModalOpen);
-  const userName = "사용자2";
+  const userId = ApiUtil.getUserIdFromToken();
 
   useEffect(() => {
     // 컴포넌트가 마운트되면 bookmarkedPosts 확인하여 isSolid 상태 업데이트
@@ -32,8 +33,9 @@ const Dialog = ({
     try {
       const data = {
         jobPostId: jobPostId,
-        userName: nickname,
+        userId: userId,
       };
+      console.log(data);
       await jobPostApi.bookMarkJobPost(data);
       console.log("북마크 성공", data);
       if (bookmarkedPosts.has(jobPostId)) {

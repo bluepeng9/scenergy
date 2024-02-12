@@ -1,6 +1,5 @@
 import styles from "./ChatPage.module.css";
 import Navbar from "../components/commons/Navbar/Navbar";
-import ChatRoomList from "../components/Chat/ChatRoomList";
 import ChatField from "../components/Chat/ChatField";
 import ChatRoomReal from "../components/Chat/ChatRoomReal";
 import { useLocation } from "react-router-dom";
@@ -21,7 +20,7 @@ const ChatPage = () => {
       <div
         className={`${styles.chatPageGlobal} ${isOpenInfo ? styles.slideLeft : ""}`}
       >
-        <Navbar />
+        <Navbar className={styles.chatPageNavbar} />
         {location.pathname === "/chat" || location.pathname === "/chat/" ? (
           <ChatField userId={userId} />
         ) : (
