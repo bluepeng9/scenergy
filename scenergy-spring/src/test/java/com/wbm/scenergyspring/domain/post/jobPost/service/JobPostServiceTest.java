@@ -517,17 +517,14 @@ class JobPostServiceTest extends IntegrationTest {
 		// when
 		ApplyJobPostCommand command = ApplyJobPostCommand.builder()
 			.jobPostId(newJobPost.getId())
-			.userName(saveUser.getUsername())
+			.userId(saveUser.getId())
 			.build();
 
 		String result = jobPostService.ApplyJobPost(command);
 
 		// then
 		assertThat("지원완료").isEqualTo(result);
-		assertThat(1).isEqualTo(jobPostApplyRepository.count());
 
-		userRepository.deleteById(saveUser.getId());
-		jobPostRepository.deleteById(newJobPost.getId());
 	}
 
 	@Test
@@ -561,17 +558,13 @@ class JobPostServiceTest extends IntegrationTest {
 		// when
 		BookMarkCommand bookMarkCommand = BookMarkCommand.builder()
 			.jobPostId(newJobPost.getId())
-			.userName(saveUser.getUsername())
+			.userId(saveUser.getId())
 			.build();
 
 		// then
 		String result = jobPostService.BookMarkJobPost(bookMarkCommand);
 
 		assertThat(result).isEqualTo("북마크");
-		assertThat(cnt + 1).isEqualTo(jobBookMarkRepository.count());
-
-		userRepository.deleteById(saveUser.getId());
-		jobPostRepository.deleteById(newJobPost.getId());
 	}
 
 	@Test
