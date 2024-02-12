@@ -2,16 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import store from "./store/store";
-import { Provider } from "react-redux";
+import {Provider} from "react-redux";
 import App from "./App";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { routes } from "./router/router";
-import { ChatRoomProvider } from "./contexts/ChatRoomContext";
-import { ChatMessageProvider } from "./contexts/ChatMessageContext";
-import { QueryClient, QueryClientProvider } from "react-query";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {routes} from "./router/router";
+import {ChatRoomProvider} from "./contexts/ChatRoomContext";
+import {ChatMessageProvider} from "./contexts/ChatMessageContext";
+import {QueryClient, QueryClientProvider} from "react-query";
 import axios from "axios";
-import registerServiceWorker from "./components/Chat/registerServiceWorker";
-import { ScenergyPostProvider } from "./contexts/ScenergyPostContext";
+import {ScenergyPostProvider} from "./contexts/ScenergyPostContext";
 /*danny 추가 (네이버 유저정보 가져올떄)*/
 axios.defaults.baseURL = "http://localhost:3000/";
 axios.defaults.withCredentials = true;
@@ -19,7 +18,6 @@ axios.defaults.withCredentials = true;
 const router = createBrowserRouter(routes);
 const queryClient = new QueryClient();
 const root = ReactDOM.createRoot(document.getElementById("root"));
-registerServiceWorker();
 root.render(
   <Provider store={store}>
     <ScenergyPostProvider>
