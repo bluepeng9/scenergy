@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class BookMarkCommand {
 	Long jobPostId;
-	String userName;
+	Long userId;
 }

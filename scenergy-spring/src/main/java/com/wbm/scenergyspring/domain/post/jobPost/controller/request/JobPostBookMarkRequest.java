@@ -7,12 +7,12 @@ import lombok.Data;
 @Data
 public class JobPostBookMarkRequest {
 	Long jobPostId;
-	String userName;
+	Long userId;
 
 	public BookMarkCommand bookMarkJobPost() {
 		BookMarkCommand command = BookMarkCommand.builder()
 			.jobPostId(getJobPostId())
-			.userName(getUserName())
+			.userId(getUserId())
 			.build();
 		return command;
 	}
