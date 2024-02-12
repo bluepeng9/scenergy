@@ -81,18 +81,25 @@ public class JobPostService {
 	public String BookMarkJobPost(BookMarkCommand command) {
 		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
 			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
-		User user = userRepository.findByUsername(command.getUserName());
+		User user = userRepository.findById(command.getUserId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 		if (jobBookMarkRepository.findByJobPostAndUser(jobPost, user) == null) {
 			JobBookMark jobBookMark = new JobBookMark(jobPost, user);
 			jobPost.plusBookMark();
 			jobBookMarkRepository.save(jobBookMark);
 			return "북마크";
-		} else {
-			JobBookMark jobBookMark = jobBookMarkRepository.findBookMarkByJobPost(jobPost);
-			jobBookMarkRepository.delete(jobBookMark);
-			jobPost.minusBookMark();
-			return "북마크 취소";
 		}
+		return "이미 북마크 되어있는 게시글";
+	}
+
+	@Transactional(readOnly = false)
+	public String deleteBookMarkJobPost(DeleteBookMarkCommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
+		JobBookMark jobBookMark = jobBookMarkRepository.findBookMarkByJobPost(jobPost);
+		jobBookMarkRepository.delete(jobBookMark);
+		jobPost.minusBookMark();
+		return "북마크 취소";
 	}
 
 

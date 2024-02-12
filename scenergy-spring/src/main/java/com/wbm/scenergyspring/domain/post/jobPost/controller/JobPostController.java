@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.amazonaws.Response;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.ApplyJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostBookMarkRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.JobPostBookMarkRequest;
@@ -27,6 +29,7 @@ import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobP
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostControllerResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostDeleteBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
@@ -108,11 +111,21 @@ public class JobPostController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(bookMarkResponse));
 	}
 
+	@DeleteMapping("/bookmark/delete")
+	public ResponseEntity<ApiResponse<JobPostDeleteBookMarkResponse>> deleteBookMarkJobPost(
+		@RequestBody DeleteJobPostBookMarkRequest request
+	) {
+		jobPostService.deleteBookMarkJobPost(request.deleteBookmark());
+		JobPostDeleteBookMarkResponse deleteBookMarkResponse = JobPostDeleteBookMarkResponse.builder()
+			.isSuccess(true)
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(deleteBookMarkResponse));
+	}
+
 	@PostMapping("/create")
 	public ResponseEntity<ApiResponse<CreateJobPostResponse>> createJobPost(
 		@RequestBody CreateJobPostRequest request
 		) {
-
 			Long jobPostId = jobPostService.createJobPost(request.toCreateJobPost());
 
 			CreateJobPostResponse createJobPostResponse = new CreateJobPostResponse();
