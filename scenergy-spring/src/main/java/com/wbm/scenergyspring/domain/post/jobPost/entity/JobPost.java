@@ -28,7 +28,7 @@ public class JobPost extends Post {
 
 	Long peopleRecruited;
 
-	Long bookMark;
+	Long bookMark = 0L;
 
 	Long totalApplicant = 0L;
 
