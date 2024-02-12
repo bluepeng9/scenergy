@@ -79,9 +79,8 @@ public class FollowService {
 	 * @return
 	 */
 	public List<Follow> findAllFollowers(FindAllFollowersCommand command) {
-		User toUser = userRepository.getReferenceById(command.getToUserId());
-		List<Follow> followers = followRepository.findAllByTo(toUser);
-		return followers;
+		User toUser = userRepository.getReferenceById(command.getUserId());
+		return followRepository.findAllByTo(toUser);
 	}
 
 	/**
@@ -90,8 +89,7 @@ public class FollowService {
 	 * @return
 	 */
 	public List<Follow> findAllFollowing(FindAllFollowingCommand command) {
-		User fromUser = userRepository.getReferenceById(command.getFromUserId());
-		List<Follow> following = followRepository.findAllByFrom(fromUser);
-		return following;
+		User userId = userRepository.getReferenceById(command.getUserId());
+		return followRepository.findAllByFrom(userId);
 	}
 }

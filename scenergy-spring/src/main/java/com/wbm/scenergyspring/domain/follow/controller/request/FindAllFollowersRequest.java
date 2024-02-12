@@ -12,7 +12,7 @@ public class FindAllFollowersRequest {
 
 	public FindAllFollowersCommand getAllFollowers() {
 		FindAllFollowersCommand command  = FindAllFollowersCommand.builder()
-			.toUserId(getToUserId())
+			.userId(getToUserId())
 			.build();
 		return command;
 	}

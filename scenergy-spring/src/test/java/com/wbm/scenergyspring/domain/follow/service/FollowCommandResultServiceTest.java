@@ -134,7 +134,7 @@ class FollowCommandResultServiceTest extends IntegrationTest {
 
 		List<Follow> allFollowers = followService.findAllFollowers(
 			FindAllFollowersCommand.builder()
-				.toUserId(toUserId)
+				.userId(toUserId)
 				.build()
 		);
 
@@ -170,7 +170,7 @@ class FollowCommandResultServiceTest extends IntegrationTest {
 		//when
 		List<Follow> allFollowing = followService.findAllFollowing(
 			FindAllFollowingCommand.builder()
-				.fromUserId(childId)
+				.userId(childId)
 				.build()
 		);
 

@@ -12,7 +12,7 @@ public class FindAllFollowingRequest {
 
 	public FindAllFollowingCommand getAllFollowing() {
 		FindAllFollowingCommand command = FindAllFollowingCommand.builder()
-			.fromUserId(getFromUserId())
+			.userId(getFromUserId())
 			.build();
 		return command;
 	}

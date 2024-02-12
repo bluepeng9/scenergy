@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class FindAllFollowingCommand {
-	Long fromUserId;
+	Long userId;
 }

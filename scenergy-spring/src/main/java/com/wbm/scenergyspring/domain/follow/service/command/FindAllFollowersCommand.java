@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class FindAllFollowersCommand {
-	Long toUserId;
+	Long userId;
 }

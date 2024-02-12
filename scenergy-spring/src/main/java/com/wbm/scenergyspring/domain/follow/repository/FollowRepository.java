@@ -20,12 +20,14 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 	@Query("""
 		select f from Follow f
 		join fetch f.to
+		where  f.to = :to
 		""")
 	List<Follow> findAllByTo(@Param("to") User to);
 
 	@Query("""
 		select f from Follow f
 		join fetch f.from
+		where f.from = :user
 		""")
-	List<Follow> findAllByFrom(@Param("from") User from);
+	List<Follow> findAllByFrom(@Param("user") User user);
 }
