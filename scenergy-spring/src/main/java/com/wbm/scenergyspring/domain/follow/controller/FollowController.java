@@ -91,9 +91,7 @@ public class FollowController {
 			.fromUserId(fromUserId)
 			.build();
 		List<Follow> followings = followService.findAllFollowing(request.getAllFollowing());
-		FindAllFollowingResponse followingResponse = FindAllFollowingResponse.builder()
-			.findAllResponseList(FindAllFollowingResponse.fromList(followings))
-			.build();
+		FindAllFollowingResponse followingResponse = FindAllFollowingResponse.fromList(followings);
 		return ResponseEntity.ok(ApiResponse.createSuccess(followingResponse));
 	}
 
