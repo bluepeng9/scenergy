@@ -63,24 +63,32 @@ public class JobPostService {
 	public String ApplyJobPost(ApplyJobPostCommand command) {
 		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
 			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
-		User user = userRepository.findByUsername(command.getUserName());
+		User user = userRepository.findById(command.getUserId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 		if (jobPostApplyRepository.findByJobPostAndUser(jobPost, user) == null) {
 			jobPost.plusApplicant();
 			JobPostApply jobPostApply = new JobPostApply(jobPost, user);
 			jobPostApplyRepository.save(jobPostApply);
 			return "지원완료";
-		} else {
-			JobPostApply jobPostApply = jobPostApplyRepository.findApplyByJobPost(jobPost);
-			jobPost.minusApplicant();
-			jobPostApplyRepository.delete(jobPostApply);
-			return "지원취소";
 		}
+		return "이미 지원한 공고";
 	}
+
+	@Transactional(readOnly = false)
+	public String cancleApplication(CancleApplicationCommand command) {
+		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
+			.orElseThrow(() -> new EntityNotFoundException("유효하지 않은 공고입니다."));
+		JobPostApply jobPostApply = jobPostApplyRepository.findApplyByJobPost(jobPost);
+		jobPostApplyRepository.delete(jobPostApply);
+		jobPost.minusApplicant();
+		return "지원취소";
+	}
+
 
 	@Transactional(readOnly = false)
 	public String BookMarkJobPost(BookMarkCommand command) {
 		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
-			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
+			.orElseThrow(() -> new EntityNotFoundException("유효하지 않은 공고입니다."));
 		User user = userRepository.findById(command.getUserId())
 			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
 		if (jobBookMarkRepository.findByJobPostAndUser(jobPost, user) == null) {
@@ -95,7 +103,7 @@ public class JobPostService {
 	@Transactional(readOnly = false)
 	public String deleteBookMarkJobPost(DeleteBookMarkCommand command) {
 		JobPost jobPost = jobPostRepository.findById(command.getJobPostId())
-			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 공고입니다."));
+			.orElseThrow(() -> new EntityNotFoundException("유효하지 않은 공고입니다."));
 		JobBookMark jobBookMark = jobBookMarkRepository.findBookMarkByJobPost(jobPost);
 		jobBookMarkRepository.delete(jobBookMark);
 		jobPost.minusBookMark();

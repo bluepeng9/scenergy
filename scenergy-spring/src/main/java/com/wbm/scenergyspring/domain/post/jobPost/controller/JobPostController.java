@@ -1,6 +1,5 @@
 package com.wbm.scenergyspring.domain.post.jobPost.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -15,25 +14,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.amazonaws.Response;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.ApplyJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.CreateJobPostRequest;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostBookMarkRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.DeleteJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.GetJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.JobPostBookMarkRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.SearchAllJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.ApplyJobPostReponse;
+import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CancleApplicationResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.CreateJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.DeleteJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostControllerResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.JobPostDeleteBookMarkResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
+import com.wbm.scenergyspring.domain.post.jobPost.service.Command.CancleApplicationCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.DeleteBookMarkCommand;
-import com.wbm.scenergyspring.domain.post.jobPost.service.Command.GetJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.SearchAllJobPostCommand;
 import com.wbm.scenergyspring.domain.post.jobPost.service.JobPostService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -100,6 +97,22 @@ public class JobPostController {
 			.isSuccess(true)
 			.build();
 		return ResponseEntity.ok(ApiResponse.createSuccess(applyJobPostReponse));
+	}
+
+	@DeleteMapping
+	public ResponseEntity<ApiResponse<CancleApplicationResponse>> cancleApplication(
+		@RequestParam Long jobPostId,
+		@RequestParam Long userId
+	) {
+		CancleApplicationCommand command = CancleApplicationCommand.builder()
+			.jobPostId(jobPostId)
+			.userId(userId)
+			.build();
+		jobPostService.cancleApplication(command);
+		CancleApplicationResponse cancleApplicationResponse = CancleApplicationResponse.builder()
+			.isSuccess(true)
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(cancleApplicationResponse));
 	}
 
 	@PostMapping("/bookmark")
