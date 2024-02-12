@@ -16,7 +16,7 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 
 import com.example.scenergynotification.domain.notification.controller.request.OnFollowEvent;
-import com.example.scenergynotification.domain.notification.controller.request.OnLikeEvent;
+import com.example.scenergynotification.domain.notification.controller.request.OnUnreadMessageEvent;
 
 @Configuration
 @EnableKafka
@@ -33,31 +33,18 @@ public class KafkaConsumerConfig {
 	}
 
 	@Bean
+	ConcurrentKafkaListenerContainerFactory<String, OnUnreadMessageEvent> unreadMessageEventKafkaListenerContainerFactory() {
+		ConcurrentKafkaListenerContainerFactory<String, OnUnreadMessageEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
+		factory.setConsumerFactory(consumerFactory(OnUnreadMessageEvent.class));
+		return factory;
+	}
+
 	public <V> ConsumerFactory<String, V> consumerFactory(
 		Class<V> valueType
 	) {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(),
 			new ErrorHandlingDeserializer<>(new StringDeserializer()),
 			new JsonDeserializer<V>(valueType, false));
-	}
-
-	@Bean
-	public ConsumerFactory<String, OnFollowEvent> followEventConsumerFactory() {
-		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), new StringDeserializer(),
-			new JsonDeserializer<>(OnFollowEvent.class, false));
-	}
-
-	@Bean
-	public ConsumerFactory<String, OnLikeEvent> likeEventConsumerFactory() {
-		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), new StringDeserializer(),
-			new JsonDeserializer<>(OnLikeEvent.class, false));
-	}
-
-	@Bean
-	public ConcurrentKafkaListenerContainerFactory<String, OnLikeEvent> likeEventKafkaListenerContainerFactory() {
-		ConcurrentKafkaListenerContainerFactory<String, OnLikeEvent> factory = new ConcurrentKafkaListenerContainerFactory<>();
-		factory.setConsumerFactory(likeEventConsumerFactory());
-		return factory;
 	}
 
 	@Bean

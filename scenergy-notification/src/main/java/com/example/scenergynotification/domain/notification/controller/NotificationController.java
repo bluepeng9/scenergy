@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import com.example.scenergynotification.domain.notification.controller.request.OnFollowEvent;
+import com.example.scenergynotification.domain.notification.controller.request.OnUnreadMessageEvent;
 import com.example.scenergynotification.domain.notification.controller.response.NotificationTypeResponse;
 import com.example.scenergynotification.domain.notification.controller.response.SseNotificationResponse;
 import com.example.scenergynotification.domain.notification.service.NotificationService;
@@ -18,9 +19,11 @@ import com.example.scenergynotification.domain.user.service.UserService;
 import com.example.scenergynotification.global.SseEmitters;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class NotificationController {
 
 	final NotificationService notificationService;
@@ -55,9 +58,9 @@ public class NotificationController {
 		return ResponseEntity.ok(emitter);
 	}
 
-	// @KafkaListener(topics = "like", groupId = "like-group")
-	// public void onLikeEvent(OnLikeEvent event) {
-	// 	System.out.println(event);
-	// }
+	@KafkaListener(topics = "unreadChat", groupId = "unread-group", containerFactory = "unreadMessageEventKafkaListenerContainerFactory")
+	public void onUnreadChatEvent(OnUnreadMessageEvent event) {
+		log.debug("onUnreadChatEvent: {}", event);
+	}
 
 }

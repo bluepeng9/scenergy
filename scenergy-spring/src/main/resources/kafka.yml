@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   kafka:
-    bootstrap-servers: localhost:10001
+    bootstrap-servers: localhost:10002
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

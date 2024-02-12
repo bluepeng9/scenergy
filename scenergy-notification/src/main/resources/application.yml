@@ -3,9 +3,12 @@ spring:
     activate:
       on-profile: dev, default
   kafka:
-    bootstrap-servers: localhost:10001
+    bootstrap-servers: localhost:10002
   user-service:
     url: http://localhost:8080
+logging:
+  level:
+    com.com.example: debug
 
 ---
 spring:
