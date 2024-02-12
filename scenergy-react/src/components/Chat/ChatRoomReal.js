@@ -13,6 +13,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
 import { useChatRooms } from "../../hooks/useChatRooms";
+import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +25,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
-  const usernickname = "사용자2";
   const users = [
     {
       id: 1,
@@ -132,41 +132,10 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
             </div>
             {/*현재 채팅방에 사용자 초대=>초대되는 사람 포함 3명 이상이면 roomstate 바꿔주고 새로 방 만들기*/}
             {isModalOpen && (
-              <div className={styles.dialogContainer}>
-                <form onSubmit={handleInvite}>
-                  <Dialog
-                    isModalOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    title="초대하기"
-                  >
-                    <div>
-                      <div className={styles.roomInviteContainer}>
-                        <span>받는 사람</span>
-                        <input type="text" />
-                      </div>
-                      <div className={styles.roomInviteGlobal}>
-                        <div className={styles.inviteListContainer}>
-                          {users.map((user) => (
-                            <div
-                              key={user.id}
-                              className={styles.inviteList}
-                              onClick={() => handleUserSelect(user)}
-                            >
-                              <div className={styles.inviteImg}>이미지</div>
-                              <div className={styles.inviteUserName}>
-                                <p>{user.nickname}</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                        <div className={styles.inviteBtn}>
-                          <button>초대하기</button>
-                        </div>
-                      </div>
-                    </div>
-                  </Dialog>
-                </form>
-              </div>
+              <ChatUserSearch
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+              />
             )}
           </div>
         </div>

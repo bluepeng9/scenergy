@@ -35,6 +35,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     }
   }, [loadedMessages, messagesLoading, messagesError]);
 
+  //구독 설정
   const subscribe = useCallback(() => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
@@ -47,32 +48,47 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     });
   }, [realRoomId, addChatMessage, updateRecentMessage]);
 
-  const connect = useCallback(() => {
-    if (client.current.connected) {
-      return;
-    }
+  useEffect(() => {
+    // 클라이언트 연결 및 구독 설정
+    const connectAndSubscribe = () => {
+      if (client.current.connected) {
+        // 이미 연결된 경우, 기존 구독을 해제
+        client.current.unsubscribe();
+      }
 
-    client.current = new StompJs.Client({
-      brokerURL: "ws://localhost:8080/ws",
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-      onConnect: () => {
-        console.log("yesyes");
-        subscribe();
-      },
-      onError: (error) => {
-        console.log(error);
-      },
+      client.current = new StompJs.Client({
+        brokerURL: "ws://localhost:8080/ws",
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+        onConnect: () => {
+          console.log("Connected");
+          // 새로운 방에 대한 구독 설정
+          subscribe();
+        },
+        onDisconnect: () => {
+          console.log("Disconnected");
+        },
+        connectHeaders: {
+          roomId: realRoomId.toString(),
+          userId: userId.toString(),
+        },
+      });
 
-      connectHeaders: {
-        roomId: realRoomId.toString(),
-        userId: userId.toString(),
-      },
-    });
-    client.current.activate();
+      client.current.activate();
+    };
+
+    // 방 ID가 변경될 때마다 새로운 연결 및 구독을 설정
+    connectAndSubscribe();
+
+    // 컴포넌트가 언마운트되거나 방 ID가 변경될 때 클라이언트 연결 해제
+    return () => {
+      if (client.current && client.current.connected) {
+        client.current.deactivate();
+      }
+    };
   }, [realRoomId]);
-
+  //메세지 전송
   const publish = (chat) => {
     //연결 끊어지면 끝
     if (!client.current.connected) return;
@@ -80,7 +96,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     //test용
     const message = {
       //TODO:나중에 header로 user정보 담아왔을때 user_id 받자받자
-      user_id: 2,
+      user_id: userId,
       room_id: realRoomId,
       message: chat,
       messageType: "TALK",
@@ -102,13 +118,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     });
     setChat("");
   };
-  useEffect(() => {
-    return () => {
-      if (client.current && client.current.connected) {
-        client.current.deactivate();
-      }
-    };
-  }, []);
+
   const handleChange = (event) => {
     //입력값 state로 변경해주기
     setChat(event.target.value);
@@ -118,15 +128,9 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     //보내기 누르면 publish되도록
     event.preventDefault();
     if (!chat.trim()) return;
-    console.log("보내기");
     publish(chat);
+    console.log("보내기");
   };
-
-  useEffect(() => {
-    connect();
-    console.log(realRoomId);
-    return () => client.current.deactivate();
-  }, [realRoomId, connect]);
 
   if (messagesLoading) return <div>로딩중...</div>;
   if (messagesError)
