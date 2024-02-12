@@ -33,6 +33,7 @@ class FollowingDto {
 	static FollowingDto from(Follow follow) {
 		return FollowingDto.builder()
 			.id(follow.getId())
+			.nickname(follow.getTo().getNickname())
 			.build();
 	}
 }
