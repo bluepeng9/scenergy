@@ -6,11 +6,11 @@ import notificationApi from "../../../apis/NotificationApi";
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  notificationApi.connectToNotificationServer(2, (data) => {
-    console.log(data);
-  }, (data) => {
-    console.log(data);
-  });
+  // notificationApi.connectToNotificationServer(2, (data) => {
+  //   console.log(data);
+  // }, (data) => {
+  //   console.log(data);
+  // });
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);

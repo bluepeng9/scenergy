@@ -135,6 +135,8 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
               <ChatUserSearch
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                fromUserId={userId}
+                onUserSelect={handleUserSelect}
               />
             )}
           </div>

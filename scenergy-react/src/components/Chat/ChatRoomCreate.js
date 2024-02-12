@@ -15,6 +15,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
 
     setIsCreating(true);
     console.log(roomName);
+    console.log(selectedUsers);
     try {
       const response = await axios.post(
         "http://localhost:8080/chatroom/create-room",

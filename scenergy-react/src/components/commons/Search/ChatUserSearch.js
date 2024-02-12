@@ -60,6 +60,8 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
       const response = await searchApi.searchFollowing(fromUserId, searchInput);
       if (response.data.data && response.data.data.length > 0) {
         setSearchResults(response.data.data); // 검색 결과를 searchResults 상태에 저장
+        console.log(searchResults);
+
         setSearchInput("");
       } else {
         setSearchResults(null);
@@ -69,6 +71,11 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
       // 오류 처리 로직
     }
   };
+
+  useEffect(() => {
+    console.log(searchResults);
+    console.log(selectedUsers);
+  }, [searchResults, selectedUsers]);
 
   const handleUserSelect = (user) => {
     if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id)) {
@@ -111,11 +118,14 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
         <div className={styles.dialogUserListContainer}>
           {searchInput === "" ? (
             <>
-              <ul>
-                {followingList.map((followingUser) => (
-                  <li key={followingUser.id}>{followingUser.name}</li>
-                ))}
-              </ul>
+              {followingList.map((followingUser) => (
+                <div
+                  key={followingUser.userId}
+                  onClick={() => handleUserSelect(followingUser)}
+                >
+                  {followingUser.nickname}
+                </div>
+              ))}
             </>
           ) : searchResults === null ? (
             <p>일치하는 뮤지션이 없습니다.</p>
@@ -127,7 +137,7 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
                 onClick={() => handleUserSelect(user)}
               >
                 <div className={styles.dialogUserImg}>
-                  <p>유저프로필</p>
+                  <p>{user.url}</p>
                 </div>
                 <div className={styles.dialogUserNick}>
                   <p>{user.nickname}</p>
