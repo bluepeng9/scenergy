@@ -14,13 +14,13 @@ public class FindAllFollowingResponse {
 	List<FollowingDto> findAllResponseList;
 
 	public static FindAllFollowingResponse fromList(List<Follow> followList) {
-		List<FollowingDto> followDtoList = new ArrayList<>();
+		List<FollowingDto> followingDtoList = new ArrayList<>();
 		for (Follow follow : followList) {
 			FollowingDto from = FollowingDto.from(follow);
-			followDtoList.add(from);
+			followingDtoList.add(from);
 		}
 		return FindAllFollowingResponse.builder()
-			.findAllResponseList(followDtoList)
+			.findAllResponseList(followingDtoList)
 			.build();
 	}
 }
