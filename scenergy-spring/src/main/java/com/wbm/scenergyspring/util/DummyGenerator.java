@@ -4,10 +4,13 @@ import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
 import com.wbm.scenergyspring.domain.chat.service.command.CreateChatRoomCommand;
+import com.wbm.scenergyspring.domain.follow.service.FollowService;
+import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
 import com.wbm.scenergyspring.domain.user.entity.Gender;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -16,11 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DummyGenerator {
     final UserRepository userRepository;
     final ChatService chatService;
+    final FollowService followService;
     private static int userCount = 1;
     private static int chatRoomCount = 1;
 
@@ -31,6 +36,13 @@ public class DummyGenerator {
         List<User> dummyUsers = createDummyUsers(3);
         createDummyChatRoom(dummyUsers.get(0), dummyUsers.get(1));
         createDummyChatRoom(dummyUsers.get(0), dummyUsers.get(2));
+        createFollowing(dummyUsers.get(0), dummyUsers.get(1));
+        createFollowing(dummyUsers.get(0), dummyUsers.get(2));
+        createFollowing(dummyUsers.get(1), dummyUsers.get(0));
+        createFollowing(dummyUsers.get(1), dummyUsers.get(2));
+        createFollowing(dummyUsers.get(2), dummyUsers.get(0));
+        createFollowing(dummyUsers.get(2), dummyUsers.get(1));
+        log.info("DummyGenerating success");
     }
 
     private void createAdminUser() {
@@ -74,5 +86,13 @@ public class DummyGenerator {
         ChatRoomDto chatRoom = chatService.createChatRoom(command);
         chatRoomCount += 1;
         return chatService.findChatRoom(chatRoom.getId());
+    }
+
+    public void createFollowing(User toUser, User fromUser) {
+        FollowUserCommand followUserCommand = FollowUserCommand.builder()
+                .toUserId(toUser.getId())
+                .fromUserId(fromUser.getId())
+                .build();
+        followService.followUser(followUserCommand);
     }
 }
