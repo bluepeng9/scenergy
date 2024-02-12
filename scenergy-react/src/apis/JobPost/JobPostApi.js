@@ -15,7 +15,6 @@ class JobPostApi {
       bookmark: postData.bookmark,
       title: postData.title,
       content: postData.content,
-      bookmark: postData.bookmark,
       expirationDate: postData.expirationDate,
       isActive: postData.isActive,
       peopleRecruited: postData.peopleRecruited,
@@ -48,7 +47,6 @@ class JobPostApi {
   };
 
   bookMarkJobPost = async (data) => {
-    console.log(data);
     return await ApiUtil.post(`/jobPost/bookmark`, {
       jobPostId: data.jobPostId,
       userId: data.userId,

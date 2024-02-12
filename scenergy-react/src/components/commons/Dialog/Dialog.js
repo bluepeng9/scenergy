@@ -22,28 +22,32 @@ const Dialog = ({
 }) => {
   const [isSolid, setIsSolid] = useState(false);
   const { bookmarkedPosts, addBookmark, removeBookmark } = useScenergyPost();
-  // const isModalOpen = useSelector((state) => state.isModalOpen);
   const userId = ApiUtil.getUserIdFromToken();
 
+  const checkBookmarkStatus = async () => {
+    try {
+      const response = await jobPostApi.getAllBookMark(userId);
+      setIsSolid(
+        response.data.data.some((post) => post.jobPostId === jobPostId),
+      );
+      console.log(response.data.data);
+    } catch (error) {
+      console.error("북마크 상태 몰루", error);
+    }
+  };
+
   useEffect(() => {
-    // 컴포넌트가 마운트되면 bookmarkedPosts 확인하여 isSolid 상태 업데이트
-    setIsSolid(bookmarkedPosts.has(jobPostId));
-  }, [bookmarkedPosts, jobPostId]);
+    checkBookmarkStatus();
+  }, [jobPostId, userId]);
+
   const handleMarkChange = async () => {
     try {
-      const data = {
-        jobPostId: jobPostId,
-        userId: userId,
-      };
-      console.log(data);
-      await jobPostApi.bookMarkJobPost(data);
-      console.log("북마크 성공", data);
-      if (bookmarkedPosts.has(jobPostId)) {
+      if (isSolid) {
+        await jobPostApi.deleteBookMarkJobPost({ jobPostId, userId });
         removeBookmark(jobPostId);
-        setIsSolid(false);
       } else {
+        await jobPostApi.bookMarkJobPost({ jobPostId, userId });
         addBookmark(jobPostId);
-        setIsSolid(true);
       }
       setIsSolid(!isSolid);
     } catch (error) {

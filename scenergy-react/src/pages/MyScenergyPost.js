@@ -19,7 +19,7 @@ const MyScenergyPost = () => {
               <h3>내가 쓴 글</h3>
             </div>
           </div>
-          <ScenergyList userId={userId} />
+          <ScenergyList userId={userId} mode="myPosts" />
         </div>
       </div>
     </>

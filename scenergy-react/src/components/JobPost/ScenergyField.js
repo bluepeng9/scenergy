@@ -336,7 +336,11 @@ const ScenergyField = ({ onOpenModal }) => {
         </div>
       </div>
       <div className={styles.FieldList}>
-        <ScenergyList onOpenModal={onOpenModal} refresh={refreshList} />
+        <ScenergyList
+          onOpenModal={onOpenModal}
+          refresh={refreshList}
+          mode="allPosts"
+        />
       </div>
     </div>
   );

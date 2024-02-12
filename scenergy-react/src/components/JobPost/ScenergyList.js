@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
 import ReactPaginate from "react-paginate";
 
-const ScenergyList = ({ onOpenModal, refresh, userId }) => {
+const ScenergyList = ({ onOpenModal, refresh, userId, mode }) => {
   const [jobPosts, setJobPosts] = useState([]);
   const [pageNumber, setPageNumber] = useState(0);
 
@@ -12,27 +12,33 @@ const ScenergyList = ({ onOpenModal, refresh, userId }) => {
   const pagesVisited = pageNumber * postsPerPage;
 
   useEffect(() => {
-    if (!userId) {
-      jobPostApi
-        .getAllJobPost()
-        .then((response) => {
-          console.log("게시글 목록", response.data);
-          setJobPosts(response.data); // API 호출 결과로 상태 업데이트
-        })
-        .catch((error) => {
-          console.error("API 에러 호출 에러", error);
-        });
-    } else {
-      jobPostApi
-        .getAllMyJobPost(userId)
-        .then((response) => {
-          setJobPosts(response.data.data);
-          console.log("내 글 받아옴", response.data);
-        })
-        .catch((error) => {
-          console.error("내 글 못읽어옴", error);
-        });
-    }
+    const findMode = async () => {
+      try {
+        let response;
+        switch (mode) {
+          case "allPosts":
+            response = await jobPostApi.getAllJobPost();
+            break;
+          case "myPosts":
+            response = await jobPostApi.getAllMyJobPost(userId);
+            break;
+          case "bookmarks":
+            response = await jobPostApi.getAllBookMark(userId);
+            break;
+          case "myApplies":
+            response = await jobPostApi.getAllMyApply(userId);
+            break;
+          default:
+            response = await jobPostApi.getAllJobPost();
+        }
+        // API 호출 결과로 상태 업데이트
+        setJobPosts(response.data.data || response.data); // response 구조에 따라 적절히 접근
+      } catch (error) {
+        console.error("API 에러", error);
+      }
+    };
+
+    findMode();
   }, [refresh, userId]);
 
   const displayPosts = jobPosts

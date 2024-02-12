@@ -1,6 +1,6 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
-import {useState} from "react";
+import { useState } from "react";
 import notificationApi from "../../../apis/NotificationApi";
 
 const Navbar = () => {
