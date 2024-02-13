@@ -1,28 +1,12 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
 
 class ApiUtil {
-  static BASE_URL = process.env.REACT_APP_API_URL;
+  static BASE_URL = "http://localhost:8080";
 
   static getToken = () => {
     let token =
       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzEwMDU5MDU0fQ.9DvhTbdKprZKQCTpWdCPLTPpba-f9T10SFtNjDgROovcpHoOB-V9EKixBFjpuVej4ulZvixuNTyfKvqIr4JHKA";
     return token;
-  };
-
-  //토큰에서 userId 가져오기
-  static getUserIdFromToken = () => {
-    const token = this.getToken().split(" ")[1]; //Bearer 제거
-    if (!token) return null;
-
-    try {
-      const decode = jwtDecode(token);
-      console.log(decode);
-      return decode.sub; //id
-    } catch (error) {
-      console.error("토큰 티코드 안댐", error);
-      return null;
-    }
   };
 
   static #getHeader = () => {
@@ -55,12 +39,12 @@ class ApiUtil {
   };
 
   static post = async (url, data) => {
-    return await axios.post(ApiUtil.BASE_URL + url, data, {
+    return await axios.post(ApiUtil.BASE_URL + "/video-post" + url, data, {
       headers: this.#getHeader(),
     });
   };
   static formDataPost = async (url, data) => {
-    return await axios.post(ApiUtil.BASE_URL + url, data, {
+    return await axios.post(ApiUtil.BASE_URL + "/video-post" + url, data, {
       headers: this.#getFormDataHeader(),
     });
   };
