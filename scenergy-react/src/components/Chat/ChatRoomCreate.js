@@ -11,7 +11,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
     event.preventDefault();
     //나중에 user 상태 받아와서 room member에 한명 자동을 넣어주고 수식 바꿔주기
     const roomStatus = selectedUsers.length > 2 ? 1 : 0; //1대1채팅, 단체채팅 상태 변경해주기
-    const roomName = selectedUsers.map((user) => user.name).join(",");
+    const roomName = selectedUsers.map((user) => user.nickname).join(",");
 
     setIsCreating(true);
     console.log(roomName);
