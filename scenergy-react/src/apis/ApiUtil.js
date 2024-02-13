@@ -4,9 +4,7 @@ class ApiUtil {
   static BASE_URL = "http://localhost:8080";
 
   static getToken = () => {
-    let token =
-      "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiZXhwIjoxNzEwMDU5MDU0fQ.9DvhTbdKprZKQCTpWdCPLTPpba-f9T10SFtNjDgROovcpHoOB-V9EKixBFjpuVej4ulZvixuNTyfKvqIr4JHKA";
-    return token;
+      return "Bearer " + localStorage.getItem("token") || "";
   };
 
   static #getHeader = () => {
