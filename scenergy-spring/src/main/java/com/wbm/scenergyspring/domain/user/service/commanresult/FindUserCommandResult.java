@@ -12,5 +12,6 @@ public class FindUserCommandResult {
 	private String userPassword;
 	private String userName;
 	private String userNickname;
+	private String url;
 	private Gender userGender;
 }

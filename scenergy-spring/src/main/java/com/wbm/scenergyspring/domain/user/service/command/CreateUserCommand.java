@@ -14,5 +14,6 @@ public class CreateUserCommand {
     String password;
     String nickname;
     String username;
+    String url;
     Gender gender;
 }
