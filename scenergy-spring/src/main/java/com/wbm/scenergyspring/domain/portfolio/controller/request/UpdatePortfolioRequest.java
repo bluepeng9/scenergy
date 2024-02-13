@@ -5,13 +5,15 @@ import com.wbm.scenergyspring.domain.portfolio.entity.Experience;
 import com.wbm.scenergyspring.domain.portfolio.entity.Honor;
 import com.wbm.scenergyspring.domain.portfolio.entity.PortfolioEtc;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdatePortfolioRequest {
     Long portfolioId;
     Long userId;

@@ -1,11 +1,13 @@
 package com.wbm.scenergyspring.domain.portfolio.controller.request;
 
 import com.wbm.scenergyspring.domain.portfolio.service.command.GetPortfolioCommand;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class GetPortfolioRequest {
     Long portfolioId;
 

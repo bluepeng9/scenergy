@@ -53,24 +53,38 @@ public class Portfolio extends BaseEntity {
         this.description = description;
 
         this.educations.clear();
+        if (educations != null) {
+
         for (Education edu: educations){
             this.educations.add(edu);
             edu.setPortfolio(this);
         }
-        this.experiences.clear();
-        for (Experience exp:experiences){
-            this.experiences.add(exp);
-            exp.setPortfolio(this);
         }
+
+        this.experiences.clear();
+        if (experiences != null) {
+
+            for (Experience exp : experiences) {
+                this.experiences.add(exp);
+                exp.setPortfolio(this);
+            }
+        }
+
         this.honors.clear();
+        if (honors != null) {
         for (Honor honor: honors){
             this.honors.add(honor);
             honor.setPortfolio(this);
         }
+        }
+
         this.etcs.clear();
+        if (etcs != null) {
         for (PortfolioEtc etc: etcs){
             this.etcs.add(etc);
             etc.setPortfolio(this);
         }
+        }
+
     }
 }
