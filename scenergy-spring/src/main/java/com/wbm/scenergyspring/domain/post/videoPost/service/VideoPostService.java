@@ -252,13 +252,13 @@ public class VideoPostService {
 
     @Transactional(readOnly = true)
     public List<SearchVideoPostResponseCommand> searchVideoPostsByCondition(SearchVideoPostCommand command) {
-        if (command.getWord().isEmpty())
+        if (command.getWord() != null && command.getWord().isEmpty())
             command.setWord(null);
-        if (command.getGt().isEmpty())
+        if (command.getGt() != null && command.getGt().isEmpty())
             command.setGt(null);
-        if (command.getIt().isEmpty())
+        if (command.getIt() != null && command.getIt().isEmpty())
             command.setIt(null);
-        if (command.getLt().isEmpty())
+        if (command.getLt() != null && command.getLt().isEmpty())
             command.setLt(null);
         List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition(command.getWord(), command.getGt(), command.getIt(), command.getLt());
         List<SearchVideoPostResponseCommand> result = new ArrayList<>();
