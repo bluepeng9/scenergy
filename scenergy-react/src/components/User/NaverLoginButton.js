@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import naverLoginIcon from "./naverlogin4.png";
 
@@ -23,7 +23,8 @@ const NaverLoginButton = () => {
 
     console.log("토큰 받아지나");
 
-    window.location.href = `http://localhost:8080/oauth2/authorization/naver?redirect_uri=${redirectUri}`;
+
+    window.location.href = `${process.env.REACT_APP_API_URL}/oauth2/authorization/naver?redirect_uri=${redirectUri}`;
   };
 
   return (
