@@ -1,6 +1,5 @@
 import axios from "axios";
-import { useQuery } from "react-query";
-import { useChatRoom } from "../contexts/ChatRoomContext";
+import {useQuery} from "react-query";
 
 export const useChatRooms = (userId) => {
   return useQuery(
@@ -8,7 +7,7 @@ export const useChatRooms = (userId) => {
     async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/chatroom/list-mychatroom",
+            process.env.REACT_APP_API_URL + "/chatroom/list-mychatroom",
           {
             params: { user_id: userId },
           },

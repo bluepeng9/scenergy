@@ -1,7 +1,7 @@
 import axios from "axios";
-import { useChatRoom } from "../../contexts/ChatRoomContext";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {useChatRoom} from "../../contexts/ChatRoomContext";
+import {useState} from "react";
+import {useNavigate} from "react-router-dom";
 
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
   const { addChatRoom } = useChatRoom();
@@ -18,7 +18,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
     console.log(selectedUsers);
     try {
       const response = await axios.post(
-        "http://localhost:8080/chatroom/create-room",
+          process.env.REACT_APP_API_URL + "/chatroom/create-room",
         {
           chatroom_name: roomName,
           status: roomStatus,

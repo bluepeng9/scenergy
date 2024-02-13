@@ -1,17 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
-import { useLocation, useParams } from "react-router-dom";
+import {useLocation, useParams} from "react-router-dom";
 import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import {
-  faCircleInfo,
-  faPlus,
-  faVideo,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
-import { useChatRooms } from "../../hooks/useChatRooms";
+import {useChatRooms} from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
@@ -40,7 +36,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:8080/chatroom/list-chat-users`, // 수정된 부분
+          process.env.REACT_APP_API_URL + `/chatroom/list-chat-users`, // 수정된 부분
         {
           params: {
             chatRoomId: realRoomId,
@@ -68,7 +64,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     try {
       //room_id useParam으로 받아온거 고쳐주기
       const response = await axios.post(
-        "http://localhost:8080/chatroom/invite-room",
+          process.env.REACT_APP_API_URL + "/chatroom/invite-room",
         {
           room_id: roomId,
           users: selectedUsers,

@@ -1,11 +1,11 @@
 import styles from "./ChatInfo.module.css";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useChatRoom } from "../../contexts/ChatRoomContext";
-import { useNavigate, useParams } from "react-router-dom";
+import {faTimes} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useChatRoom} from "../../contexts/ChatRoomContext";
+import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
-import { useEffect } from "react";
-import { useQueryClient } from "react-query";
+import {useEffect} from "react";
+import {useQueryClient} from "react-query";
 import ApiUtil from "../../apis/ApiUtil";
 
 const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
@@ -25,7 +25,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
   const handleExit = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/chatroom/exit-room",
+          process.env.REACT_APP_API_URL + "/chatroom/exit-room",
         {
           params: {
             room_id: realRoomId,

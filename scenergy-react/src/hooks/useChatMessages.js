@@ -1,4 +1,4 @@
-import { useQuery } from "react-query";
+import {useQuery} from "react-query";
 import axios from "axios";
 
 export const useChatMessages = (lastMessageId, lastMessage) => {
@@ -7,7 +7,7 @@ export const useChatMessages = (lastMessageId, lastMessage) => {
     async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:8080/chatroom/load-message-room`,
+            process.env.REACT_APP_API_URL + `/chatroom/load-message-room`,
           {
             params: { chatMessage_id: lastMessageId },
           },
