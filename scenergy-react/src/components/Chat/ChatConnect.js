@@ -63,7 +63,8 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
       console.log("메세지 받음:", messageBody);
       console.log(recentChatMessage);
     });
-  }, [realRoomId, addChatMessage, updateRecentMessage]);
+    // }, [realRoomId, addChatMessage, updateRecentMessage]);
+  }, [realRoomId]);
 
   useEffect(() => {
     // 클라이언트 연결 및 구독 설정
