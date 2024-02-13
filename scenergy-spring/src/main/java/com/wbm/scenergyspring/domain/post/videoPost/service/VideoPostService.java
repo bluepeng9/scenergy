@@ -252,6 +252,8 @@ public class VideoPostService {
 
     @Transactional(readOnly = true)
     public List<SearchVideoPostResponseCommand> searchVideoPostsByCondition(SearchVideoPostCommand command) {
+        if (command.getWord().isEmpty())
+            command.setWord(null);
         if (command.getGt().isEmpty())
             command.setGt(null);
         if (command.getIt().isEmpty())

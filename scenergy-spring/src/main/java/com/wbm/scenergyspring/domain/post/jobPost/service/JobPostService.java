@@ -3,7 +3,6 @@ package com.wbm.scenergyspring.domain.post.jobPost.service;
 
 import com.wbm.scenergyspring.domain.post.jobPost.controller.request.UpdateJobPostRequest;
 import com.wbm.scenergyspring.domain.post.jobPost.controller.response.GetJobPostCommandResponse;
-import com.wbm.scenergyspring.domain.post.jobPost.controller.response.SearchAllJobPostResponse;
 import com.wbm.scenergyspring.domain.post.jobPost.entity.*;
 import com.wbm.scenergyspring.domain.post.jobPost.repository.*;
 import com.wbm.scenergyspring.domain.post.jobPost.service.Command.*;
@@ -237,34 +236,22 @@ public class JobPostService {
 		jobPost.updateJobPostLocationTags(jobPostLocationTags);
 	}
 
-	public List<SearchAllJobPostResponse> searchAllJobPost(SearchAllJobPostCommand command) {
+	public List<GetJobPostCommandResponse> searchAllJobPost(SearchAllJobPostCommand command) {
+		if (command.getName().isEmpty())
+			command.setName(null);
 		if (command.getGt().isEmpty())
 			command.setGt(null);
 		if (command.getIt().isEmpty())
 			command.setIt(null);
 		if (command.getLt().isEmpty())
 			command.setLt(null);
-		List<JobPost> jobPosts = jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt());
-		List<SearchAllJobPostResponse> result = new ArrayList<>();
-		for (JobPost post : jobPosts) {
-			SearchAllJobPostResponse response = SearchAllJobPostResponse.builder()
-					.jobPostId(post.getId())
-					.userId(post.getUserId().getId())
-					.title(post.getTitle())
-					.nickname(post.getWriter())
-					.content(post.getContent())
-					.expirationDate(post.getExpirationDate())
-					.peopleRecruited(post.getPeopleRecruited())
-					.bookMark(post.getBookMark())
-					.totalApplicant(post.getTotalApplicant())
-					.isActive(post.getIsActive())
-					.genreTags(JobPostGenreTagCommand.createJobPostGenreTagCommand(post.getJobPostGenreTags()))
-					.instrumentTags(JobPostInstrumentCommand.createJobPostInstrumentTagCommand(post.getJobPostInstrumentTags()))
-					.locationTags(JobPostLocationCommand.createJobPostLocationTagCommand(post.getJobPostLocationTags()))
-					.build();
-			result.add(response);
+		List<GetJobPostCommandResponse> list = new ArrayList<>();
+		for (JobPost jobPost : jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt())) {
+			User user = jobPost.getUserId();
+			GetJobPostCommandResponse getJobPostCommandResponse = GetJobPostCommandResponse.from(jobPost);
+			list.add(getJobPostCommandResponse);
 		}
-		return result;
+		return list;
 	}
 
 }
