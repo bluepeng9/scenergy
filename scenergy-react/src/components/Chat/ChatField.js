@@ -21,12 +21,6 @@ const ChatField = ({ userId }) => {
   const { addChatRoom, chatRooms } = useChatRoom();
   const navigate = useNavigate();
 
-  const users = [
-    { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
-    { id: 2, email: "김준표", password: "이태경", name: "사용자2" },
-    { id: 3, email: "홍준표", password: "이태경", name: "사용자3" },
-  ];
-
   const handleUserSelect = (user) => {
     if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id)) {
       setSelectedUsers([...selectedUsers, user]);

@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useEffect } from "react";
 import { useQueryClient } from "react-query";
+import ApiUtil from "../../apis/ApiUtil";
 
 const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
   const { chatRooms, setSelectedRoomId, removeChatRoom } = useChatRoom();
@@ -14,7 +15,7 @@ const ChatInfo = ({ toggleInfoMenu, isOpenInfo }) => {
 
   const realRoomId = parseInt(roomId, 10);
   const selectedChatRoom = chatRooms.find((room) => room.id === realRoomId);
-  const userId = 2;
+  const userId = ApiUtil.getUserIdFromToken();
   const navigate = useNavigate();
 
   useEffect(() => {
