@@ -258,9 +258,9 @@ public class JobPostService {
 					.bookMark(post.getBookMark())
 					.totalApplicant(post.getTotalApplicant())
 					.isActive(post.getIsActive())
-					.jgt(JobPostGenreTagCommand.createJobPostGenreTagCommand(post.getJobPostGenreTags()))
-					.jit(JobPostInstrumentCommand.createJobPostInstrumentTagCommand(post.getJobPostInstrumentTags()))
-					.jlt(JobPostLocationCommand.createJobPostLocationTagCommand(post.getJobPostLocationTags()))
+					.genreTags(JobPostGenreTagCommand.createJobPostGenreTagCommand(post.getJobPostGenreTags()))
+					.instrumentTags(JobPostInstrumentCommand.createJobPostInstrumentTagCommand(post.getJobPostInstrumentTags()))
+					.locationTags(JobPostLocationCommand.createJobPostLocationTagCommand(post.getJobPostLocationTags()))
 					.build();
 			result.add(response);
 		}
