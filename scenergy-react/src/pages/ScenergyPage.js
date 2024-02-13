@@ -42,7 +42,7 @@ const ScenergyPage = () => {
           showBookmarkButton={true}
           onClose={handleCloseModal}
           jobPostId={modalState.data.jobPostId}
-          nickname={modalState.data.writer}
+          nickname={modalState.data.userDto.nickname}
         >
           <div className={styles.ScenergyModalHeader}>
             <p>작성자</p>
