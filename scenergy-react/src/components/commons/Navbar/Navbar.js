@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import styles from "./Navbar.module.css";
-import { useState } from "react";
-import notificationApi from "../../../apis/NotificationApi";
+import {useState} from "react";
+import ApiUtil from "../../../apis/ApiUtil";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -60,7 +60,7 @@ const Navbar = () => {
           <Link to="/chat">메세지</Link>
         </li>
         <li>
-          <Link to="/profile">프로필</Link>
+          <Link to={`/profile/${ApiUtil.getUserIdFromToken()}`}>프로필</Link>
         </li>
       </ul>
     </nav>
