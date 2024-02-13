@@ -9,7 +9,7 @@ import { useChatMessageContext } from "../../contexts/ChatMessageContext";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import axios from "axios";
 
-const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
+const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const client = useRef({});
@@ -22,18 +22,33 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms }) => {
     setRecentChatMessage: setRecentChatMessage,
     recentChatMessage: recentChatMessage,
   } = useChatMessageContext();
-
   const {
     data: loadedMessages,
     isLoading: messagesLoading,
     isError: messagesError,
-  } = useChatMessages(lastMessageId);
+  } = useChatMessages(lastMessageId, lastMessage);
 
   useEffect(() => {
     if (!messagesLoading && loadedMessages && !messagesError) {
-      setChatMessages(loadedMessages);
+      const updatedMessages = loadedMessages.filter(
+        (loadedMessage) =>
+          !recentChatMessage || loadedMessage.id !== recentChatMessage.id,
+      );
+      if (
+        recentChatMessage &&
+        !updatedMessages.find(({ id }) => id === recentChatMessage.id)
+      ) {
+        updatedMessages.push(recentChatMessage);
+      }
+
+      setChatMessages(updatedMessages);
     }
-  }, [loadedMessages, messagesLoading, messagesError]);
+    console.log(chatMessages);
+  }, [loadedMessages, messagesLoading, messagesError, recentChatMessage]);
+
+  useEffect(() => {
+    console.log(chatMessages);
+  }, [chatMessages, recentChatMessage]);
 
   //구독 설정
   const subscribe = useCallback(() => {

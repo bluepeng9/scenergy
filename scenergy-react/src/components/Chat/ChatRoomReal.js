@@ -19,6 +19,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   // 나중에 user까지 다 받아오면
   const location = useLocation();
   const lastMessageId = location.state?.lastMessageId;
+  const lastMessage = location.state?.lastMessage;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
@@ -48,6 +49,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
       nickname: "nickname4",
     },
   ];
+
   const handleModalOpen = () => setIsModalOpen(!isModalOpen);
 
   const handleUserSelect = (user) => {
@@ -112,7 +114,8 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
 
   useEffect(() => {
     console.log(lastMessageId);
-  }, [lastMessageId]);
+    console.log(lastMessage);
+  }, [lastMessageId, lastMessage]);
 
   return (
     <>
@@ -167,6 +170,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
           <ChatConnect
             lastMessageId={lastMessageId}
             refetchChatRooms={refetch}
+            lastMessage={lastMessage}
           />
         </div>
       </div>

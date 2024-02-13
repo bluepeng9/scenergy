@@ -11,7 +11,9 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [followingList, setFollowingList] = useState([]);
-  const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([
+    { id: parseInt(fromUserId, 10), nickname: null },
+  ]);
   const [isCreated, setIsCreated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addChatRoom, chatRooms } = useChatRoom();
@@ -78,9 +80,11 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
   }, [searchResults, selectedUsers]);
 
   const handleUserSelect = (user) => {
+    console.log(user);
     if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id)) {
       setSelectedUsers([...selectedUsers, user]);
     }
+    console.log(selectedUsers);
   };
 
   const handleRoomCreate = async (realRoomId) => {

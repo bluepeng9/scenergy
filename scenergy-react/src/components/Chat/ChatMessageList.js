@@ -4,6 +4,7 @@ import styles from "./ChatConnect.module.css";
 const ChatList = ({ chatList, userId }) => {
   const chatMsgFieldRef = useRef(null);
   useEffect(() => {
+    console.log(chatList);
     const chatMsgElement = chatMsgFieldRef.current;
 
     if (chatMsgElement) {

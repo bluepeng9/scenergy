@@ -3,9 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
-import Dialog from "../commons/Dialog/Dialog";
-import ChatRoomCreate from "./ChatRoomCreate";
-import axios from "axios";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
@@ -15,9 +12,7 @@ const ChatRoomList = () => {
   const userId = 2;
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchInput, setSearchInput] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
   const [isCreated, setIsCreated] = useState(false);
   const {
     addChatRoom,
@@ -34,19 +29,6 @@ const ChatRoomList = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleInputChange = (event) => {
-    setSearchInput(event.target.value);
-  };
-
-  const handleSearch = async () => {
-    try {
-      const response = await axios.get(`/api/search?query=${searchInput}`);
-      setSearchResults(response.data);
-    } catch (error) {
-      console.error("에러", error);
-    }
   };
 
   const handleUserSelect = (user) => {
@@ -115,6 +97,7 @@ const ChatRoomList = () => {
                 lastMessageId: room.recentChatMessage
                   ? room.recentChatMessage.id
                   : null,
+                lastMessage: room.recentChatMessage,
               }}
               to={`/chat/${room.id}`}
               className={styles.listItemContainer}
