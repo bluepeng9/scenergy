@@ -1,10 +1,10 @@
 // ProfileHeaderApi.js
 import styles from "./ProfileHeader.module.css";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 // import { getUser } from "../../apis/User/UserApi";
-import { Link } from "react-router-dom";
-import UserUpdateModal from "../User/UserUpdateModal";
-import UserApi from "../../apis/User/UserApi";
+import {useParams} from "react-router-dom";
+import FollowApi from "../../apis/FollowApi";
+import ApiUtil from "../../apis/ApiUtil";
 
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
@@ -18,6 +18,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 여부
   const [isUserUpdateModalOpen, setIsUserUpdateModalOpen] = useState(false); // 회원수정
+  const {userId} = useParams();
 
   useEffect(() => {
     getUser2();
@@ -59,6 +60,12 @@ const ProfileHeader = ({ onUpdateUser }) => {
     // 모달 열기
     setIsUserUpdateModalOpen(true);
   };
+
+  const follow = () => {
+    const fromUserId = ApiUtil.getUserIdFromToken();
+    FollowApi.followUser(parseInt(userId));
+    console.log(parseInt(userId) + " " + fromUserId)
+  }
 
   const handleCloseUserUpdateModal = () => {
     // 모달 닫기
@@ -120,17 +127,18 @@ const ProfileHeader = ({ onUpdateUser }) => {
         {/* 프로필편집 버튼, 회원탈퇴버튼, 포트폴리오 링크 */}
         <div className={styles.actionButtons}>
           {isEditing ? (
-            <>
-              <button onClick={handleSaveProfile}>저장</button>
-              <button onClick={handleCancelEdit}>취소</button>
-            </>
+              <>
+                <button onClick={handleSaveProfile}>저장</button>
+                <button onClick={handleCancelEdit}>취소</button>
+              </>
           ) : (
-            <button onClick={handleEditProfile}>프로필편집</button>
+              <button onClick={handleEditProfile}>프로필편집</button>
           )}
           <button onClick={handleUpdateUser}>회원수정</button>
           <a href="/profile/portfolio" className={styles["portfolio-link"]}>
             <button>포트폴리오</button>
           </a>
+          <button onClick={follow}>팔로우</button>
         </div>
       </div>
       {/*/!* 회원수정 모달 *!/*/}
