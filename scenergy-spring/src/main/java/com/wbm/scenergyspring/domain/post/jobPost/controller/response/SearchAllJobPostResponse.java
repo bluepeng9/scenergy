@@ -18,13 +18,14 @@ public class SearchAllJobPostResponse {
     Long userId;
     String title;
     String content;
+    String nickname;
     LocalDateTime expirationDate;
     Long peopleRecruited;
     Long bookMark;
     Long totalApplicant;
     IsActive isActive;
-    List<JobPostGenreTagCommand> jgt;
-    List<JobPostInstrumentCommand> jit;
-    List<JobPostLocationCommand> jlt;
+    List<JobPostGenreTagCommand> genreTags;
+    List<JobPostInstrumentCommand> instrumentTags;
+    List<JobPostLocationCommand> locationTags;
 
 }

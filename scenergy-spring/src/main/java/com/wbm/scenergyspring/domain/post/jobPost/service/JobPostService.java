@@ -238,6 +238,12 @@ public class JobPostService {
 	}
 
 	public List<SearchAllJobPostResponse> searchAllJobPost(SearchAllJobPostCommand command) {
+		if (command.getGt().isEmpty())
+			command.setGt(null);
+		if (command.getIt().isEmpty())
+			command.setIt(null);
+		if (command.getLt().isEmpty())
+			command.setLt(null);
 		List<JobPost> jobPosts = jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt());
 		List<SearchAllJobPostResponse> result = new ArrayList<>();
 		for (JobPost post : jobPosts) {
@@ -245,6 +251,7 @@ public class JobPostService {
 					.jobPostId(post.getId())
 					.userId(post.getUserId().getId())
 					.title(post.getTitle())
+					.nickname(post.getWriter())
 					.content(post.getContent())
 					.expirationDate(post.getExpirationDate())
 					.peopleRecruited(post.getPeopleRecruited())
