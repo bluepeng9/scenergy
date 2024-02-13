@@ -1,5 +1,5 @@
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 class ApiUtil {
   static BASE_URL = process.env.REACT_APP_API_URL
@@ -54,9 +54,16 @@ class ApiUtil {
   };
 
   static post = async (url, data) => {
-    return await axios.post(ApiUtil.BASE_URL + url, data, {
-      headers: this.#getHeader(),
-    });
+
+    try {
+      return await axios.post(ApiUtil.BASE_URL + url, data, {
+        headers: this.#getHeader(),
+      });
+    } catch (error) {
+      console.log("error", error);
+      throw error;
+    }
+
   };
   static formDataPost = async (url, data) => {
     return await axios.post(ApiUtil.BASE_URL + url, data, {
