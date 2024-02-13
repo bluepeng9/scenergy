@@ -1,4 +1,5 @@
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 class ApiUtil {
   static BASE_URL = process.env.REACT_APP_API_URL
