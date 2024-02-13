@@ -9,7 +9,6 @@ import { faBookmark as regularBookmark } from "@fortawesome/free-regular-svg-ico
 import { useEffect, useState } from "react";
 import jobPostApi from "../../../apis/JobPost/JobPostApi";
 import { useScenergyPost } from "../../../contexts/ScenergyPostContext";
-import apiUtil from "../../../apis/ApiUtil";
 import ApiUtil from "../../../apis/ApiUtil";
 
 const Dialog = ({

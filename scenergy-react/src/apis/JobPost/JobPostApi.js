@@ -12,7 +12,7 @@ class JobPostApi {
     console.log(postData);
     return await ApiUtil.post("/jobPost/create", {
       userId: postData.userId,
-      bookmark: postData.bookmark,
+      bookmark: 0,
       title: postData.title,
       content: postData.content,
       expirationDate: postData.expirationDate,
