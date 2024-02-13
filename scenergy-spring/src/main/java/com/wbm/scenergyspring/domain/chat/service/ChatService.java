@@ -1,11 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
-import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.controller.response.ChatRoomUsersResponse;
-import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
-import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.RedisChatRoomDto;
-import com.wbm.scenergyspring.domain.chat.dto.UnreadMessageDto;
+import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
 import com.wbm.scenergyspring.domain.chat.entity.ChatUser;
@@ -23,6 +19,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
