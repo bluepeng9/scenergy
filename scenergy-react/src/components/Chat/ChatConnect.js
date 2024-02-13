@@ -29,6 +29,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
   } = useChatMessages(lastMessageId, lastMessage);
 
   useEffect(() => {
+    //첫번째 요청 100개
     if (!messagesLoading && loadedMessages && !messagesError) {
       const updatedMessages = loadedMessages.filter(
         (loadedMessage) =>

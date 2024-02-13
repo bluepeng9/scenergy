@@ -20,14 +20,14 @@ export const useChatMessages = (lastMessageId, lastMessage) => {
         if (lastMessage && !messages.find((m) => m.id === lastMessage.id)) {
           messages = [lastMessage, ...messages];
         }
-        console.log(messages.reverse());
-        return messages;
+        return messages.reverse();
       } catch (error) {
         throw error.response.data; //백에서 온 오류
       }
     },
     {
       enabled: !!lastMessageId,
+      keepPreviousData: true,
       onError: (error) => {
         console.error("에러났다:", error);
       },

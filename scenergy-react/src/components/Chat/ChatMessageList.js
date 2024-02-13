@@ -29,6 +29,7 @@ const ChatList = ({ chatList, userId }) => {
 
 const ChatMessage = ({ message, userId }) => {
   function formatMessage(message) {
+    console.log("length 뒤져라");
     const maxWord = 30;
     let formattedMessage = "";
     let currentLine = "";
