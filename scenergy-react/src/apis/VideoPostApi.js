@@ -1,4 +1,5 @@
 import ApiUtil from "./ApiUtil";
+import apiUtil from "./ApiUtil";
 
 class VideoPostApi {
   baseUrl = "";
