@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,7 +29,9 @@ public class SecurityConfig {
 
 	private final CorsFilter corsFilter;
 	private final UserRepository userRepository;
-	private final String oauthSuccessRedirectUrl = "http://localhost:3000/oauth2/redirect";
+
+	@Value("${spring.security.oauth2.redirect-to}")
+	private String oauthSuccessRedirectUrl;
 	private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
 	@Bean

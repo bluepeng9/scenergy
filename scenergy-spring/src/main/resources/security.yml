@@ -4,6 +4,7 @@ spring:
       on-profile: dev
   security:
     oauth2:
+      redirect-to: "http://localhost:3000/oauth2/redirect"
       client:
         registration:
           naver:
@@ -28,6 +29,7 @@ spring:
       on-profile: prod
   security:
     oauth2:
+      redirect-to: "https://i10b308.p.ssafy.io/oauth2/redirect"
       client:
         registration:
           naver:
