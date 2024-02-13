@@ -1,16 +1,5 @@
 package com.wbm.scenergyspring.domain.user.service;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.follow.service.FollowService;
 import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
@@ -23,6 +12,16 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -99,7 +98,7 @@ class UserServiceTest extends IntegrationTest {
 		FindUserCommandResult result = userService.findUser(userId);
 
 		// then
-		org.junit.jupiter.api.Assertions.assertEquals("test", result.getNickname());
+		org.junit.jupiter.api.Assertions.assertEquals("test", result.getUserNickname());
 	}
 
 	@Test
