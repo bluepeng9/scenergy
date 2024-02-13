@@ -11,17 +11,11 @@ import java.util.Optional;
 @Repository
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
-    @Query("select distinct p from Portfolio p " +
-            "left join p.educations  " +
-            "left join p.experiences  " +
-            "left join p.honors  " +
-            "left join p.etcs " +
-            "where p.id = :pid")
-    Optional<Portfolio> findByIdJoin(@Param("pid") Long pid);
-
     @Query("""
             select p from Portfolio p
             where p.userId = :userId
             """)
     Optional<Portfolio> findByUserId(@Param("userId") Long userId);
+
+    boolean existsByUserId(Long userId);
 }

@@ -6,6 +6,7 @@ import com.wbm.scenergyspring.domain.portfolio.service.command.CreatePortfolioCo
 import com.wbm.scenergyspring.domain.portfolio.service.command.DeletePortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.GetPortfolioCommand;
 import com.wbm.scenergyspring.domain.portfolio.service.command.UpdatePortfolioCommand;
+import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,9 +23,9 @@ public class PortfolioService {
 
     @Transactional(readOnly = false)
     public Long createPortfolio(CreatePortfolioCommand command) {
-        boolean alreadyCreated = portfolioRepository.existsById(command.getUserId());
+        boolean alreadyCreated = portfolioRepository.existsByUserId(command.getUserId());
         if (alreadyCreated) {
-            throw new IllegalStateException("이미 존재하는 포트폴리오");
+            throw new EntityAlreadyExistException("이미 포트폴리오가 존재합니다");
         }
         Portfolio newPortfolio = Portfolio.createNewPortfolio(command.getUserId());
         return portfolioRepository.save(newPortfolio).getId();
@@ -56,7 +57,7 @@ public class PortfolioService {
 
     @Transactional
     public Portfolio getPortfolio(GetPortfolioCommand command) {
-        return portfolioRepository.findByIdJoin(command.getPortfolioId())
+        return portfolioRepository.findByUserId(command.getUserId())
                 .orElseThrow(() -> new EntityNotFoundException("DB에 저장되지 않은 포트폴리오"));
     }
 }

@@ -77,7 +77,7 @@ class PortfolioServiceTest extends IntegrationTest {
         //when
         Long portfolioId = portfolioService.createPortfolio(command);
         //then
-        assertTrue(portfolioRepository.findByIdJoin(portfolioId).isPresent());
+        assertTrue(portfolioRepository.findByUserId(user1.getId()).isPresent());
     }
 
 
@@ -87,7 +87,7 @@ class PortfolioServiceTest extends IntegrationTest {
         List<User> saveUsers = createSaveUsers(1);
         User user1 = saveUsers.get(0);
         Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand(user1));
-        Portfolio createdPortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
+        Portfolio createdPortfolio = portfolioRepository.findByUserId(user1.getId()).get();
         UpdatePortfolioCommand updateCommand = updatePortfolioCommand(createdPortfolio);
         //when
         createdPortfolio.updatePortfolio(
@@ -109,7 +109,7 @@ class PortfolioServiceTest extends IntegrationTest {
         List<User> saveUsers = createSaveUsers(1);
         User user1 = saveUsers.get(0);
         Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand(user1));
-        Portfolio createdPortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
+        Portfolio createdPortfolio = portfolioRepository.findByUserId(user1.getId()).get();
         DeletePortfolioCommand deletePortfolioCommand = deletePortfolioCommand(createdPortfolio);
         //when
         Long deletedPortfolioId = portfolioService.deletePortfolio(deletePortfolioCommand);
@@ -125,10 +125,10 @@ class PortfolioServiceTest extends IntegrationTest {
         List<User> saveUsers = createSaveUsers(1);
         User user1 = saveUsers.get(0);
         Long portfolioId = portfolioService.createPortfolio(createPortfolioCommand(user1));
-        Portfolio createdPortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
+        Portfolio createdPortfolio = portfolioRepository.findByUserId(user1.getId()).get();
         UpdatePortfolioCommand updateCommand = updatePortfolioCommand(createdPortfolio);
 
-        Portfolio beforePortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
+        Portfolio beforePortfolio = portfolioRepository.findByUserId(user1.getId()).get();
         beforePortfolio.updatePortfolio(
                 updateCommand.getDescription(),
                 updateCommand.getExperiences(),
@@ -138,7 +138,7 @@ class PortfolioServiceTest extends IntegrationTest {
         );
 
         //when
-        Portfolio afterPortfolio = portfolioRepository.findByIdJoin(portfolioId).get();
+        Portfolio afterPortfolio = portfolioRepository.findByUserId(user1.getId()).get();
 
         //then
         assertEquals(updateCommand.getEducations(), afterPortfolio.getEducations());

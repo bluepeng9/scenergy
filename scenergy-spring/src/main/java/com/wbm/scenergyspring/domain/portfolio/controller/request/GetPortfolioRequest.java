@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetPortfolioRequest {
-    Long portfolioId;
+    Long userId;
 
     public GetPortfolioCommand toGetPortfolioCommand() {
         GetPortfolioCommand command = GetPortfolioCommand.builder()
-                .portfolioId(portfolioId)
+                .userId(userId)
                 .build();
         return command;
     }

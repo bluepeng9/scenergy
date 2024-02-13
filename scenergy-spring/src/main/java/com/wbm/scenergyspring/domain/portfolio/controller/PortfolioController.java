@@ -12,9 +12,11 @@ import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.service.PortfolioService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/portfolio")
@@ -26,6 +28,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<CreatePortfolioResponse>> createPortfolio(
             @RequestBody CreatePortfolioRequest request
     ) {
+        log.info("CreatePortfolioRequest: " + request);
         Long portfolioId = portfolioService.createPortfolio(request.toCreatePortfolioCommand());
 
         CreatePortfolioResponse createPortfolioResponse = CreatePortfolioResponse.builder()
@@ -38,6 +41,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<UpdatePortfolioResponse>> updatePortfolio(
             @RequestBody UpdatePortfolioRequest request
     ) {
+        log.info("UpdatePortfolioRequest: " + request);
         Long portfolioId = portfolioService.updatePortfolio(request.toUpdatePortfolioCommand());
         UpdatePortfolioResponse updatePortfolioResponse = UpdatePortfolioResponse.builder()
                 .portfolioId(portfolioId)
@@ -46,10 +50,11 @@ public class PortfolioController {
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
     }
 
-    @DeleteMapping("/delete-all")
+    @PostMapping("/delete-all")
     public ResponseEntity<ApiResponse<DeletePortfolioResponse>> deletePortfolio(
             @RequestBody DeletePortfolioRequest request
             ){
+        log.info("DeletePortfolioRequest: " + request);
         Long portfolioId = portfolioService.deletePortfolio(request.toDeletePortfolioCommand());
         DeletePortfolioResponse deletePortfolioResponse = DeletePortfolioResponse.builder()
                 .portfolioId(portfolioId)
@@ -61,6 +66,7 @@ public class PortfolioController {
     public ResponseEntity<ApiResponse<GetPortfolioResponse>> getPortfolio(
             GetPortfolioRequest request
     ) {
+        log.info("GetPortfolioRequest: " + request);
         Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
         GetPortfolioResponse getPortfolioResponse = GetPortfolioResponse.builder()
                 .portfolio(portfolio)
