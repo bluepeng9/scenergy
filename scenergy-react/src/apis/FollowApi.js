@@ -14,6 +14,10 @@ class FollowApi {
   getAllFollowing = async (fromUserId) => {
     return await ApiUtil.get(`/follow/followings/${fromUserId}`);
   };
+
+  getAllFollowers = async (toUserId) => {
+    return await ApiUtil.get(`/follow/followers/${toUserId}`);
+  };
 }
 
 let followApi = new FollowApi();
