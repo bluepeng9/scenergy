@@ -78,7 +78,7 @@ class VideoPostApi {
 
   getMyVideoPosts = async (data) => {
     return await ApiUtil.get(`${this.baseUrl}/video-post/my-video-posts`, {
-      userId: data.userId,
+      userId: data,
     });
   };
 }

@@ -1,9 +1,10 @@
-import React, { useState, useRef } from "react";
+import React, {useRef, useState} from "react";
 import styles from "./VideoUploadModal.module.css";
 import videoUploadImage from "../../assets/VideoUpload/VideoUpload.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
 import videoPostApi from "../../apis/VideoPostApi";
+import ApiUtil from "../../apis/ApiUtil";
 
 const VideoUpload = () => {
   // 장르와 악기 카테고리 목록
@@ -142,7 +143,7 @@ const VideoUpload = () => {
       formData.append("thumbnailUrlPath", postThumbNailRes.data.data);
 
       // 나머지 필요한 데이터 추가
-      formData.append("userId", 2);
+        formData.append("userId", ApiUtil.getUserIdFromToken());
       formData.append("postTitle", videoDetails.title);
       formData.append("postContent", videoDetails.description);
       selectedGenres.forEach((genre) => formData.append("genreTags", genre.id));

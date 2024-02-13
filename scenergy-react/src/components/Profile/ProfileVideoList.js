@@ -1,7 +1,8 @@
 // ProfileVideoList.js
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./ProfileVideoList.module.css";
 import videoPostApi from "../../apis/VideoPostApi"; // VideoPostApi 파일의 경로에 따라 수정
+import ApiUtil from "../../apis/ApiUtil";
 
 const ProfileVideoList = () => {
   const [videoList, setVideoList] = useState([]);
@@ -10,11 +11,12 @@ const ProfileVideoList = () => {
     // 서버에서 사용자의 영상 목록을 가져오는 함수
     const fetchVideoList = async () => {
       try {
-        const userId = "eodms4334@naver.com"; // 사용자 ID에 맞게 수정
-        const response = await videoPostApi.getVideoListByUserId(userId);
+          const userId = ApiUtil.getUserIdFromToken(); // 사용자 ID에 맞게 수정
+          const response = await videoPostApi.getMyVideoPosts(parseInt(userId));
 
         // 가져온 영상 목록을 상태에 설정
-        setVideoList(response.data);
+          setVideoList(response.data.data.list);
+          console.log(response.data.data.list)
       } catch (error) {
         console.error("Error fetching video list:", error);
       }
