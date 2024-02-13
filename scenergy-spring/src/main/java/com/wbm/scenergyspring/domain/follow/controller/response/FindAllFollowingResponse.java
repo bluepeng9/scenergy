@@ -28,11 +28,13 @@ public class FindAllFollowingResponse {
 @Builder
 class FollowingDto {
 	Long id;
+	Long userId;
 	String nickname;
 
 	static FollowingDto from(Follow follow) {
 		return FollowingDto.builder()
 			.id(follow.getId())
+			.userId(follow.getTo().getId())
 			.nickname(follow.getTo().getNickname())
 			.build();
 	}
