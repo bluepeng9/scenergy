@@ -1,6 +1,5 @@
 // connect to User
 import ApiUtil from "../ApiUtil";
-import api from "../ChatUserApi";
 
 // data
 // {
@@ -13,7 +12,6 @@ import api from "../ChatUserApi";
 // };
 // data
 
-// const getPost = function () {};
 class UserApi {
   createUser = async (data) => {
     return await ApiUtil.post(`/users`, {
@@ -31,20 +29,21 @@ class UserApi {
     );
   };
 
-  getUser = async (userId) => {
-    return await ApiUtil.get(`/users/${userId}`);
-  };
   //토큰 사용
-  // getUser = () => {
-  //   return {
-  //     userId: "danny1234@naver.com", // 아이디
-  //     userPassword: "abcdefg1234!", //비밀번호
-  //     userName: "강대니", //이름
-  //     userNickname: "대니", //닉네임
-  //     userBirth: "19980711" /*생년월일, 숫자 8자리*/,
-  //     userGender: "female" /*남:1, 여:2*/,
-  //   };
-  //   // return api.post("user/getUser", data);
+  getUser = () => {
+    return {
+      userId: "danny1234@naver.com", // 아이디
+      userPassword: "abcdefg1234!", //비밀번호
+      userName: "강대니", //이름
+      userNickname: "대니", //닉네임
+      userBirth: "19980711" /*생년월일, 숫자 8자리*/,
+      userGender: "female" /*남:1, 여:2*/,
+    };
+    // return api.post("user/getUser", data);
+  };
+
+  // getUser = async (userId) => {
+  //   return await ApiUtil.get(`/users/${userId}`);
   // };
 }
 

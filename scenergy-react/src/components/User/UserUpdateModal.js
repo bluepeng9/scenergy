@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./UserUpdateModal.module.css";
 import api from "../../apis/ChatUserApi";
-import { getUser } from "../../apis/User/UserApi";
+import UserApi from "../../apis/User/UserApi";
 
 const UserUpdateModal = ({ onClose, onUpdateUser }) => {
   const [newPassword, setNewPassword] = useState("");
@@ -27,17 +27,17 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
   };
 
   const getUser2 = async () => {
-    const user_id = getUser().userId;
+    const user_id = getUser2().userId;
     setUser_id(user_id);
 
-    const user_name = getUser().userName;
+    const user_name = getUser2().userName;
     setUser_name(user_name);
 
-    const user_nickname = getUser().userNickname;
+    const user_nickname = getUser2().userNickname;
     console.log(user_nickname);
     setUser_nickname(user_nickname);
 
-    const user_birth = getUser().userBirth;
+    const user_birth = getUser2().userBirth;
     console.log(user_birth);
     setUser_birth(user_birth);
     // const nickname = getUser().nickname;
