@@ -19,21 +19,28 @@ export const User = {
   // },
 
   user: async (data) => {
-    console.log(data);
     console.log("유저아이디", ApiUtil.getUserIdFromToken());
     let userIdFromToken = ApiUtil.getUserIdFromToken();
     const followings = await FollowApi.getAllFollowing(userIdFromToken);
     const followingCount = followings.data.data.findAllResponseList.length;
-    // console.log("팔로잉 수", followings.data.data.findAllResponseList.length);
+    console.log("팔로잉 수", followings.data.data.findAllResponseList.length);
     const followers = await FollowApi.getAllFollowers(userIdFromToken);
     const followerCount = followers.data.data.findAllResponseList.length;
-    // console.log("팔로워 수", followers.data.data.findAllResponseList.length);
+    console.log("팔로워 수", followers.data.data.findAllResponseList.length);
     const videos = await VideoPostApi.getMyVideoPosts(userIdFromToken);
     const videoCount = videos.data.data.list.length;
-
-    // console.log("영상 수", videos.data.data.list.length);
-    // followingsCount: followings.data.length,
-    // followersCount: followers.data.length,
-    // videoCount: videos.data.length,
+    console.log("비디오 수", videoCount);
+    const user = await UserApi.getUser();
+    const nickname = user.userName;
+    const url = user.url;
+    console.log(nickname);
+    console.log("유저", user.url);
+    return {
+      followingCount: followingCount,
+      followerCount: followerCount,
+      videoCount: videoCount,
+      nickname: nickname,
+      url: url,
+    };
   },
 };
