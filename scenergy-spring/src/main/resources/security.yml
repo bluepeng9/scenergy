@@ -38,7 +38,7 @@ spring:
               - email
             client-name: Naver
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            redirect-uri: https://i10b308.p.ssafy.io/login/oauth2/code/naver
 
         #네이버가 provider로 등록되어있지 않기 때문에 내가 직접 등록
         provider:
