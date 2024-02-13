@@ -1,6 +1,9 @@
 // connect to User
 import { api } from "../ChatUserApi";
 import ApiUtil from "../ApiUtil";
+import FollowApi from "../FollowApi";
+import VideoPostApi from "../VideoPostApi";
+import UserApi from "../User/UserApi";
 
 export const User = {
   // user: (data) => {
@@ -15,10 +18,22 @@ export const User = {
   //   return api.post("/profile", data);
   // },
 
-  user: (data) => {
-    return ApiUtil.formDataPost("/users/profile", {
-      profile: data.profile,
-      userId: data.userId,
-    });
+  user: async (data) => {
+    console.log(data);
+    console.log("유저아이디", ApiUtil.getUserIdFromToken());
+    let userIdFromToken = ApiUtil.getUserIdFromToken();
+    const followings = await FollowApi.getAllFollowing(userIdFromToken);
+    const followingCount = followings.data.data.findAllResponseList.length;
+    // console.log("팔로잉 수", followings.data.data.findAllResponseList.length);
+    const followers = await FollowApi.getAllFollowers(userIdFromToken);
+    const followerCount = followers.data.data.findAllResponseList.length;
+    // console.log("팔로워 수", followers.data.data.findAllResponseList.length);
+    const videos = await VideoPostApi.getMyVideoPosts(userIdFromToken);
+    const videoCount = videos.data.data.list.length;
+
+    // console.log("영상 수", videos.data.data.list.length);
+    // followingsCount: followings.data.length,
+    // followersCount: followers.data.length,
+    // videoCount: videos.data.length,
   },
 };
