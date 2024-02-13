@@ -83,8 +83,9 @@ public class ChatRoomController {
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
 
-    @GetMapping("/list-char-users")
-    public ResponseEntity<ApiResponse<ChatRoomUsersResponse>> getChatRoomUsers(@RequestParam Long chatRoomId) {
+    @GetMapping("/list-chat-users")
+    public ResponseEntity<ApiResponse<ChatRoomUsersResponse>> getChatRoomUsers(@RequestParam("chatRoomId") Long chatRoomId) {
+
         ChatRoomUsersResponse response = chatService.getChatRoomUsers(chatRoomId);
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
