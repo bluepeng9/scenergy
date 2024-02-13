@@ -13,21 +13,21 @@ import ApiUtil from "../ApiUtil";
 // data
 
 class UserApi {
-    createUser = async (data) => {
-        return await ApiUtil.post(`/users`, {
-            email: data.email,
-            password: data.password,
-            gender: data.gender,
-            username: data.username,
-            nickname: data.nickname,
-        });
-    };
+  createUser = async (data) => {
+    return await ApiUtil.post(`/users`, {
+      email: data.email,
+      password: data.password,
+      gender: data.gender,
+      username: data.username,
+      nickname: data.nickname,
+    });
+  };
 
-    deleteUser = async (data) => {
-        return await ApiUtil.delete(
-            `/users?password=${data.password}&username=${data.username}`,
-        );
-    };
+  deleteUser = async (data) => {
+    return await ApiUtil.delete(
+      `/users?password=${data.password}&username=${data.username}`,
+    );
+  };
 
     //토큰 사용
     getUser = async () => {
