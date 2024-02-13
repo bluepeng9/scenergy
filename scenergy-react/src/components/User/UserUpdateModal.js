@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./UserUpdateModal.module.css";
-import api from "../../apis/ChatUserApi";
 import UserApi from "../../apis/User/UserApi";
 
 const UserUpdateModal = ({ onClose, onUpdateUser }) => {
@@ -27,17 +26,19 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
   };
 
   const getUser2 = async () => {
-    const user_id = getUser2().userId;
+    let user = await UserApi.getUser();
+    console.log(user)
+    const user_id = user.userId;
     setUser_id(user_id);
 
-    const user_name = getUser2().userName;
+    const user_name = user.userName;
     setUser_name(user_name);
 
-    const user_nickname = getUser2().userNickname;
+    const user_nickname = user.userNickname;
     console.log(user_nickname);
     setUser_nickname(user_nickname);
 
-    const user_birth = getUser2().userBirth;
+    const user_birth = user.userBirth;
     console.log(user_birth);
     setUser_birth(user_birth);
     // const nickname = getUser().nickname;

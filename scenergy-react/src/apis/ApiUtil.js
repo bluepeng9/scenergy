@@ -7,7 +7,7 @@ class ApiUtil {
 
     //토큰에서 userId 가져오기
     static getUserIdFromToken = () => {
-        const token = this.getToken().split(" ")[1]; //Bearer 제거
+      const token = this.getToken(); //Bearer 제거
         if (!token) return null;
 
         try {
