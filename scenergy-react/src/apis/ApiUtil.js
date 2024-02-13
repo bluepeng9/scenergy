@@ -1,5 +1,5 @@
 import axios from "axios";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 
 class ApiUtil {
   static BASE_URL = process.env.REACT_APP_API_URL
@@ -10,15 +10,15 @@ class ApiUtil {
       const token = this.getToken(); //Bearer 제거
         if (!token) return null;
 
-        try {
-            const decode = jwtDecode(token);
-            console.log(decode);
-            return decode.sub; //id
-        } catch (error) {
-            console.error("토큰 티코드 안댐", error);
-            return null;
-        }
-    };
+    try {
+      const decode = jwtDecode(token);
+      console.log(decode);
+      return decode.sub; //id
+    } catch (error) {
+      console.error("토큰 티코드 안댐", error);
+      return null;
+    }
+  };
 
   static getToken = () => {
     return localStorage.getItem("token") || "";
