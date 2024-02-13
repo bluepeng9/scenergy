@@ -1,5 +1,20 @@
 package com.wbm.scenergyspring.domain.post.videoPost.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.SearchVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UploadVideoPostRequest;
@@ -8,16 +23,14 @@ import com.wbm.scenergyspring.domain.post.videoPost.controller.response.Followin
 import com.wbm.scenergyspring.domain.post.videoPost.controller.response.SearchVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.*;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.AllVideoPostsCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.FollowingVideoPostsCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.SearchVideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.SearchVideoPostResponseCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
 import com.wbm.scenergyspring.global.response.ApiResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,7 +66,7 @@ public class VideoController {
     }
 
     @PostMapping("/upload/video")
-    public ResponseEntity<ApiResponse<String>> uploadJustVideo(MultipartFile justVideo) {
+    public ResponseEntity<ApiResponse<String>> uploadJustVideo(@RequestParam("file") MultipartFile justVideo) {
         String videoUrlPath = videoPostService.uploadJustVideoS3(justVideo);
         if (videoUrlPath == null)
             return new ResponseEntity<>(ApiResponse.createError("video error"), HttpStatus.BAD_REQUEST);
@@ -61,7 +74,7 @@ public class VideoController {
     }
 
     @PostMapping("/upload/thumbnail")
-    public ResponseEntity<ApiResponse<String>> uploadThumbnail(MultipartFile thumbnail) {
+    public ResponseEntity<ApiResponse<String>> uploadThumbnail(@RequestParam("file") MultipartFile thumbnail) {
         String thumbnailUrlPath = videoPostService.uploadThumbnailS3(thumbnail);
         if (thumbnailUrlPath == null)
             return new ResponseEntity<>(ApiResponse.createError("video error"), HttpStatus.BAD_REQUEST);
