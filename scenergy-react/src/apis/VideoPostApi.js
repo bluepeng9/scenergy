@@ -1,5 +1,4 @@
 import ApiUtil from "./ApiUtil";
-import apiUtil from "./ApiUtil";
 
 class VideoPostApi {
   baseUrl = "";
@@ -9,7 +8,7 @@ class VideoPostApi {
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadVideoPost = async (data) => {
-    return await ApiUtil.post(`${this.baseUrl}/upload/video-post`, data);
+    return await ApiUtil.post(`${this.baseUrl}/video-post/upload/video-post`, data);
   };
   /**
    * 비디오 포스트 섬네일 업로드 TODO: multifile 업로드에서 오류가 발생할 가능성 있음. header의 type을             "Content-Type": "application/json", 을 사용 가능할지
@@ -18,17 +17,17 @@ class VideoPostApi {
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadThumnail = async (data) => {
-    return await ApiUtil.formDataPost(`${this.baseUrl}/upload/thumbnail`, data);
+    return await ApiUtil.formDataPost(`${this.baseUrl}/video-post/upload/thumbnail`, data);
   };
   uploadVideo = async (data) => {
     return await ApiUtil.formDataPost(
-      `${this.baseUrl}/upload/just-video`,
+        `${this.baseUrl}/video-post/upload/video`,
       data,
     );
   };
 
   searchVideoPost = async (data) => {
-    return await ApiUtil.post(`${this.baseUrl}/search`, {
+    return await ApiUtil.post(`${this.baseUrl}/video-post/search`, {
       word: data.word,
       gt: data.genreTags,
       it: data.instrumentTags,
@@ -41,24 +40,24 @@ class VideoPostApi {
     });
   };
 
-  listVideoPosts = async (data) => {
-    return await ApiUtil.get(`${this.baseUrl}/list`, {});
+  listVideoPosts = async () => {
+    return await ApiUtil.get(`${this.baseUrl}/video-post/list`, {});
   };
 
   listFollowingVideoPosts = async (data) => {
-    return await ApiUtil.get(`${this.baseUrl}/list/following`, {
+    return await ApiUtil.get(`${this.baseUrl}/video-post/list/following`, {
       id: data.userId,
     });
   };
 
   deleteVideoPost = async (data) => {
-    return await ApiUtil.delete(`${this.baseUrl}/delete`, {
+    return await ApiUtil.delete(`${this.baseUrl}/video-post/delete`, {
       id: data.postVideoId,
     });
   };
 
   updateVideoPost = async (data) => {
-    return await ApiUtil.put(`${this.baseUrl}/update`, {
+    return await ApiUtil.put(`${this.baseUrl}/video-post/update`, {
       postVideoId: data.postVideoId,
       postTitle: data.postTitle,
       postContent: data.postContent,

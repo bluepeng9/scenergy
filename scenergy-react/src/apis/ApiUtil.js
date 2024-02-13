@@ -54,12 +54,12 @@ class ApiUtil {
   };
 
   static post = async (url, data) => {
-    return await axios.post(ApiUtil.BASE_URL + "/video-post" + url, data, {
+    return await axios.post(ApiUtil.BASE_URL + url, data, {
       headers: this.#getHeader(),
     });
   };
   static formDataPost = async (url, data) => {
-    return await axios.post(ApiUtil.BASE_URL + "/video-post" + url, data, {
+    return await axios.post(ApiUtil.BASE_URL + url, data, {
       headers: this.#getFormDataHeader(),
     });
   };

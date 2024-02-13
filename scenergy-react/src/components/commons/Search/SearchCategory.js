@@ -1,9 +1,9 @@
 import styles from "./SearchCategory.module.css";
 import arrowUp from "../../../assets/arrow_up.png";
 import arrowDown from "../../../assets/arrow_down.png";
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 
 const SearchCategory = ({ onSearch }) => {
   const [expanded, setExpanded] = useState(false);

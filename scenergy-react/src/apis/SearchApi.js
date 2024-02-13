@@ -57,6 +57,8 @@ class SearchApi {
       userId: userId,
     });
   };
+
+
 }
 
 const searchApi = new SearchApi();

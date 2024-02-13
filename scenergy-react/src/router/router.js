@@ -1,6 +1,4 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-
-import App from "../App";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ChatPage from "../pages/ChatPage";
 import HomePage from "../pages/HomePage";
 import NoticePage from "../pages/NoticePage";
@@ -13,9 +11,9 @@ import MyApplyPage from "../pages/MyApplyPage";
 import BookMark from "../pages/BookMark";
 import EnterPage from "../pages/EnterPage";
 import Portfolio from "../components/Portfolio/Portfolio";
-import ChatRoomReal from "../components/Chat/ChatRoomReal";
 import RedirectPage from "../components/User/RedirectPage";
 import Home2Page from "../pages/Home2Page"
+
 export const routes = [
   // { path: "*", element: <App /> },
   { path: "/", element: <EnterPage /> },
@@ -23,7 +21,7 @@ export const routes = [
   { path: "/chat/:roomId", element: <ChatPage /> },
   { path: "/home", element: <HomePage /> },
   { path: "/notice", element: <NoticePage /> },
-  { path: "/profile", element: <ProfilePage /> },
+    {path: "/profile/:userId", element: <ProfilePage/>},
   { path: "/profile/portfolio", element: <Portfolio /> },
   { path: "/scenergy", element: <ScenergyPage /> },
   { path: "/scenergy/mypost", element: <MyScenergyPost /> },

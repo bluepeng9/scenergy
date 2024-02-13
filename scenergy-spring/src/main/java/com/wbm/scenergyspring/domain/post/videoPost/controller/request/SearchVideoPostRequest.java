@@ -10,5 +10,6 @@ public class SearchVideoPostRequest {
     String word;
     List<Long> gt;
     List<Long> it;
+    List<Long> lt;
 
 }

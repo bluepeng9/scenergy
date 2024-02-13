@@ -2,10 +2,7 @@ package com.wbm.scenergyspring.domain.post.videoPost.entity;
 
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
 import com.wbm.scenergyspring.domain.post.videoPost.service.command.UpdateVideoCommand;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
@@ -15,9 +12,9 @@ public class Video {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-
+    @Column(length = 3000)
     String videoUrlPath;
-
+    @Column(length = 3000)
     String thumbnailUrlPath;
 
     String musicTitle;
