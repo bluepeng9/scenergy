@@ -9,10 +9,10 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
 import { useScenergyPost } from "../../contexts/ScenergyPostContext";
-import searchApi from "../../apis/SearchApi";
 import ApiUtil from "../../apis/ApiUtil";
 
 const ScenergyField = ({ onOpenModal }) => {
+  const userId = ApiUtil.getUserIdFromToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [endDate, setEndDate] = useState(new Date());
   const [title, setTitle] = useState("");
@@ -22,9 +22,12 @@ const ScenergyField = ({ onOpenModal }) => {
   const [selectedInstrument, setSelectedInstrument] = useState([]);
   const [selectedLocation, setSelectedLocation] = useState([]);
   const [refreshList, setRefreshList] = useState(false);
-  const [selectedExp, setSelectedExp] = useState("전체");
+  const [searchParams, setSearchParams] = useState({
+    searchInput: "", // 검색어
+    searchSelect: { gt: [], lt: [], it: [] }, // 선택된 카테고리
+  });
+  const [mode, setMode] = useState("allPosts");
   const { addScenergyPost } = useScenergyPost();
-  const userId = ApiUtil.getUserIdFromToken();
 
   const handleOpenChange = () => {
     setIsModalOpen(true);
@@ -41,14 +44,9 @@ const ScenergyField = ({ onOpenModal }) => {
     setEndDate(new Date());
   };
 
-  const handleSearch = async (searchTerm) => {
-    try {
-      const data = { name: searchTerm, gt: [], it: [], lt: [] };
-      const response = await searchApi.searchJobPost(data);
-      console.log("시너지 검색 완", response);
-    } catch (error) {
-      console.error("시너지 검색 실패", error);
-    }
+  const handleSearch = (searchInput, searchSelect) => {
+    setSearchParams({ searchInput, searchSelect });
+    setMode("search");
   };
 
   const genres = [
@@ -115,7 +113,7 @@ const ScenergyField = ({ onOpenModal }) => {
 
   const handleSubmit = () => {
     const postData = {
-      userId: 2,
+      userId: userId,
       title,
       content,
       expirationDate: endDate,
@@ -339,7 +337,8 @@ const ScenergyField = ({ onOpenModal }) => {
         <ScenergyList
           onOpenModal={onOpenModal}
           refresh={refreshList}
-          mode="allPosts"
+          searchParams={searchParams}
+          mode={mode}
         />
       </div>
     </div>

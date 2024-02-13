@@ -6,26 +6,16 @@ import { useEffect, useState } from "react";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
+import ApiUtil from "../../apis/ApiUtil";
 
 //userId나중에 {userId}로 넣어줘야됨
 const ChatRoomList = () => {
-  const userId = 2;
+  const userId = ApiUtil.getUserIdFromToken();
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [isCreated, setIsCreated] = useState(false);
-  const {
-    addChatRoom,
-    chatRooms: contextChatRooms,
-    setChatRooms,
-  } = useChatRoom();
-  const navigate = useNavigate();
+  const { chatRooms: contextChatRooms, setChatRooms } = useChatRoom();
   const userNickname = "uniquenickname2";
-  const users = [
-    { id: 1, email: "이태경", password: "이태경", name: "사용자1" },
-    { id: 2, email: "김준표", password: "이태경", name: "사용자2" },
-    { id: 3, email: "홍준표", password: "이태경", name: "사용자3" },
-  ];
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -37,22 +27,8 @@ const ChatRoomList = () => {
     }
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-  };
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
-  };
-
-  const handleRoomCreate = async (realRoomId) => {
-    setIsCreated(true);
-    setIsModalOpen(false);
-    const newRoom = chatRooms.find((room) => room.id === realRoomId);
-    if (newRoom) {
-      addChatRoom(newRoom);
-    }
-    navigate(`/chat/${realRoomId}`);
   };
 
   useEffect(() => {

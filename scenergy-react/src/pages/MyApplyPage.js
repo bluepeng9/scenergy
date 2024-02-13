@@ -4,6 +4,7 @@ import ScenergyList from "../components/JobPost/ScenergyList";
 import ApiUtil from "../apis/ApiUtil";
 const MyApplyPage = () => {
   const userId = ApiUtil.getUserIdFromToken();
+  console.log(userId);
   return (
     <>
       <div className={styles.myapplyGlobal}>

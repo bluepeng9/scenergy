@@ -3,7 +3,9 @@ import styles from "./ScenergyPage.module.css";
 import ScenergyField from "../components/JobPost/ScenergyField";
 import Dialog from "../components/commons/Dialog/Dialog";
 import { useState } from "react";
+import ApiUtil from "../apis/ApiUtil";
 const ScenergyPage = () => {
+  const userId = ApiUtil.getUserIdFromToken();
   const [modalState, setModalState] = useState({
     isOpen: false,
     type: null, // create, view
@@ -40,7 +42,7 @@ const ScenergyPage = () => {
           showBookmarkButton={true}
           onClose={handleCloseModal}
           jobPostId={modalState.data.jobPostId}
-          nickname={modalState.data.userDto.nickname}
+          nickname={modalState.data.writer}
         >
           <div className={styles.ScenergyModalHeader}>
             <p>작성자</p>

@@ -8,12 +8,13 @@ import { ChatList } from "./ChatMessageList";
 import { useChatMessageContext } from "../../contexts/ChatMessageContext";
 import { useChatRoom } from "../../contexts/ChatRoomContext";
 import axios from "axios";
+import ApiUtil from "../../apis/ApiUtil";
 
 const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
   const [chat, setChat] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const client = useRef({});
-  const userId = 2;
+  const userId = ApiUtil.getUserIdFromToken();
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { updateRecentMessage } = useChatRoom();

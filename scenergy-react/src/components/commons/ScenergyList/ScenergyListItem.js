@@ -15,6 +15,7 @@ const ScenergyListItem = ({
   totalCount,
   onOpenModal,
   expirationDate,
+  writerId,
 }) => {
   const handleItemClick = () => {
     onOpenModal();

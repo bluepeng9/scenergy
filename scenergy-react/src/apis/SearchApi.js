@@ -10,6 +10,7 @@ class SearchApi {
   };
 
   searchJobPost = async (data) => {
+    console.log(data);
     return await ApiUtil.post("/jobPost/search", {
       name: data.name,
       gt: data.gt,
@@ -57,8 +58,6 @@ class SearchApi {
       userId: userId,
     });
   };
-
-
 }
 
 const searchApi = new SearchApi();

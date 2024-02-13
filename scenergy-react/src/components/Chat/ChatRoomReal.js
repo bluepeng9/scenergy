@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useLocation, useParams} from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+  faCircleInfo,
+  faPlus,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
-import {useChatRooms} from "../../hooks/useChatRooms";
+import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
@@ -16,39 +20,12 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  // 나중에 user까지 다 받아오면
   const location = useLocation();
   const lastMessageId = location.state?.lastMessageId;
   const lastMessage = location.state?.lastMessage;
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
-  const users = [
-    {
-      id: 1,
-      email: "user1@test.com",
-      password: "password1",
-      nickname: "nickname1",
-    },
-    {
-      id: 2,
-      email: "user2@test.com",
-      password: "password2",
-      nickname: "nickname2",
-    },
-    {
-      id: 3,
-      email: "user3@test.com",
-      password: "password3",
-      nickname: "nickname3",
-    },
-    {
-      id: 4,
-      email: "user4@test.com",
-      password: "password4",
-      nickname: "nickname4",
-    },
-  ];
 
   const handleModalOpen = () => setIsModalOpen(!isModalOpen);
 
@@ -63,23 +40,23 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
 
     try {
       const response = await axios.get(
-          `http://localhost:8080/chatroom/list-chat-users`, // 수정된 부분
-          {
-            params: {
-              chatRoomId: realRoomId
-            }
-          }
+        `http://localhost:8080/chatroom/list-chat-users`, // 수정된 부분
+        {
+          params: {
+            chatRoomId: realRoomId,
+          },
+        },
       );
-      console.log("charRoom에 포함된 유저", response.data.data)
+      console.log("charRoom에 포함된 유저", response.data.data);
       if (response.data) {
-        console.log("charRoom에 포함된 유저", response.data.data.users)
-        setChatRoomUsers([...chatRoomUsers, ...response.data.data.users])
-        setChatRoomUsersSeq([...chatRoomUsersSeq, ...response.data.data.seq])
+        console.log("charRoom에 포함된 유저", response.data.data.users);
+        setChatRoomUsers([...chatRoomUsers, ...response.data.data.users]);
+        setChatRoomUsersSeq([...chatRoomUsersSeq, ...response.data.data.seq]);
       }
     } catch (error) {
-      console.error("chatRoomUsers 오류", error)
+      console.error("chatRoomUsers 오류", error);
     }
-  }
+  };
 
   const handleInvite = async (event) => {
     event.preventDefault();
@@ -134,8 +111,12 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
               </div>
             </div>
             <div onClick={getChatUsers}>
-              <VideoConference chatRoomId={realRoomId} chatRoomUsers={chatRoomUsers} chatRoomUsersSeq={chatRoomUsersSeq}
-                               userId={Math.floor(Math.random() * 100) + 1}/>
+              <VideoConference
+                chatRoomId={realRoomId}
+                chatRoomUsers={chatRoomUsers}
+                chatRoomUsersSeq={chatRoomUsersSeq}
+                userId={Math.floor(Math.random() * 100) + 1}
+              />
             </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
@@ -144,12 +125,8 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
               </div>
 
               <div className={styles.doRtc} onClick={handleConnectRtc}>
-                <FontAwesomeIcon icon={faVideo}/>
-                {isRtcConnect && (
-                    <div>
-
-                    </div>
-                )}
+                <FontAwesomeIcon icon={faVideo} />
+                {isRtcConnect && <div></div>}
               </div>
               <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
                 <FontAwesomeIcon icon={faCircleInfo} />

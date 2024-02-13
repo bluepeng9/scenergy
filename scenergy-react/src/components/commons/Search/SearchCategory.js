@@ -1,9 +1,9 @@
 import styles from "./SearchCategory.module.css";
 import arrowUp from "../../../assets/arrow_up.png";
 import arrowDown from "../../../assets/arrow_down.png";
-import {useState} from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
+import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 const SearchCategory = ({ onSearch }) => {
   const [expanded, setExpanded] = useState(false);
@@ -87,10 +87,16 @@ const SearchCategory = ({ onSearch }) => {
 
   const handleSearchOpen = () => {
     if (onSearch) {
-      onSearch(searchInput);
+      const mappedSearchParams = {
+        gt: searchSelect.genres.map((genre) => genre.id), // 장르 ID 배열
+        lt: searchSelect.locations.map((location) => location.id), // 위치 ID 배열
+        it: searchSelect.instruments.map((instrument) => instrument.id), // 악기 ID 배열
+      };
+      onSearch(searchInput, mappedSearchParams);
       setSearchInput("");
+      console.log(searchInput);
+      console.log(mappedSearchParams);
     }
-    setSearchInput("");
   };
 
   const isSelectedStyle = (categoryType, itemId) => {
