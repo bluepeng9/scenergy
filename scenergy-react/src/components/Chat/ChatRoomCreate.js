@@ -22,7 +22,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
         {
           chatroom_name: roomName,
           status: roomStatus,
-          users: selectedUsers,
+          users: selectedUsers.userId,
         },
         {
           headers: {
@@ -31,6 +31,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
         },
       );
       console.log(response.data.data);
+      console.log(selectedUsers);
 
       const newRoom = response.data.data;
       addChatRoom(newRoom);

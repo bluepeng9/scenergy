@@ -85,7 +85,6 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
     if (!selectedUsers.some((selectedUser) => selectedUser === user.userId)) {
       setSelectedUsers([...selectedUsers, {id: user.userId}]);
     }
-    console.log(selectedUsers);
   };
 
   const handleRoomCreate = async (realRoomId) => {
@@ -138,7 +137,7 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
             searchResults.map((user) => (
               <div
                 className={styles.dialogUserList}
-                key={user.id}
+                key={user.userId}
                 onClick={() => handleUserSelect(user)}
               >
                 <div className={styles.dialogUserImg}>
