@@ -21,7 +21,7 @@ class ApiUtil {
     };
 
   static getToken = () => {
-      return "Bearer " + localStorage.getItem("token") || "";
+    return localStorage.getItem("token") || "";
   };
 
   static #getHeader = () => {
