@@ -13,17 +13,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin("*")
+@RequestMapping("/chatMessage")
 public class ChatMessageController {
 
     private final ChatService chatService;
 
-    @GetMapping("/tmp")
+    @GetMapping("/get-message-info")
     public ResponseEntity<ApiResponse<GetMessageInfoResponse>> getMessageInfo(GetMessageInfoRequest request) {
         log.info("GetMessageInfoRequest: " + request);
         ChatMessageDto chatMessageDto = chatService.getMessageInfo(request.toGetMessageInfoCommand());
@@ -33,7 +35,7 @@ public class ChatMessageController {
         return ResponseEntity.ok(ApiResponse.createSuccess(getMessageInfoResponse));
     }
 
-    @GetMapping("/tmp1")
+    @GetMapping("/get-room-info")
     public ResponseEntity<ApiResponse<GetRoomInfoResponse>> getRoomInfo(GetRoomInfoRequest request) {
         log.info("GetRoomInfoRequest: " + request);
         ChatRoomDto chatRoomDto = chatService.getRoomInfo(request.toGetRoomInfoCommand());
