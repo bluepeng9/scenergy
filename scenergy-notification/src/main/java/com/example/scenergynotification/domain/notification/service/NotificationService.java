@@ -3,10 +3,12 @@ package com.example.scenergynotification.domain.notification.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.scenergynotification.domain.notification.entity.ChatNotification;
 import com.example.scenergynotification.domain.notification.entity.FollowNotification;
 import com.example.scenergynotification.domain.notification.entity.Notification;
 import com.example.scenergynotification.domain.notification.repository.NotificationRepository;
 import com.example.scenergynotification.domain.notification.service.command.SendFollowNotificationCommand;
+import com.example.scenergynotification.domain.notification.service.command.SendUnreadChatNotificationCommand;
 import com.example.scenergynotification.domain.notification.service.commandresult.SendFollowNotificationCommandResult;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -41,4 +43,11 @@ public class NotificationService {
 		notification.readNotification();
 	}
 
+	public void sendUnreadChatNotification(SendUnreadChatNotificationCommand command) {
+		ChatNotification.createChatNotification(
+			command.getReceiver(),
+			command.getSender(),
+			command.getChatMessage()
+		);
+	}
 }

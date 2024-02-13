@@ -8,8 +8,9 @@ spring:
     url: http://localhost:8080
 logging:
   level:
-    com.com.example: debug
-
+    com.example: debug
+server:
+  port: 9005
 ---
 spring:
   config:

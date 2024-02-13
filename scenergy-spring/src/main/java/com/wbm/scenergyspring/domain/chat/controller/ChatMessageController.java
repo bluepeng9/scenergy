@@ -1,20 +1,23 @@
 package com.wbm.scenergyspring.domain.chat.controller;
 
-import com.wbm.scenergyspring.domain.chat.controller.request.GetMessageInfoRequest;
-import com.wbm.scenergyspring.domain.chat.controller.request.GetRoomInfoRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.wbm.scenergyspring.domain.chat.controller.response.GetMessageInfoResponse;
 import com.wbm.scenergyspring.domain.chat.controller.response.GetRoomInfoResponse;
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
+import com.wbm.scenergyspring.domain.chat.service.command.GetMessageInfoCommand;
+import com.wbm.scenergyspring.domain.chat.service.command.GetRoomInfoCommand;
 import com.wbm.scenergyspring.global.response.ApiResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -23,25 +26,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/chatMessage")
 public class ChatMessageController {
 
-    private final ChatService chatService;
+	private final ChatService chatService;
 
-    @GetMapping("/get-message-info")
-    public ResponseEntity<ApiResponse<GetMessageInfoResponse>> getMessageInfo(GetMessageInfoRequest request) {
-        log.info("GetMessageInfoRequest: " + request);
-        ChatMessageDto chatMessageDto = chatService.getMessageInfo(request.toGetMessageInfoCommand());
-        GetMessageInfoResponse getMessageInfoResponse = GetMessageInfoResponse.builder()
-                .chatMessageDto(chatMessageDto)
-                .build();
-        return ResponseEntity.ok(ApiResponse.createSuccess(getMessageInfoResponse));
-    }
+	@GetMapping("/{chatMessageId}")
+	public ResponseEntity<ApiResponse<GetMessageInfoResponse>> getMessageInfo(
+		@PathVariable("chatMessageId") Long chatMessageId
+	) {
+		log.info("GetMessageInfoRequest: " + chatMessageId);
+		ChatMessageDto chatMessageDto = chatService.getMessageInfo(
+			GetMessageInfoCommand.builder()
+				.MessageId(chatMessageId)
+				.build()
+		);
+		GetMessageInfoResponse getMessageInfoResponse = GetMessageInfoResponse.builder()
+			.senderId(chatMessageDto.getSenderId())
+			.chatMessage(chatMessageDto.getMessageText())
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(getMessageInfoResponse));
+	}
 
-    @GetMapping("/get-room-info")
-    public ResponseEntity<ApiResponse<GetRoomInfoResponse>> getRoomInfo(GetRoomInfoRequest request) {
-        log.info("GetRoomInfoRequest: " + request);
-        ChatRoomDto chatRoomDto = chatService.getRoomInfo(request.toGetRoomInfoCommand());
-        GetRoomInfoResponse getRoomInfoResponse = GetRoomInfoResponse.builder()
-                .roomInfo(chatRoomDto)
-                .build();
-        return ResponseEntity.ok(ApiResponse.createSuccess(getRoomInfoResponse));
-    }
+	@GetMapping("/room/{roomId}")
+	public ResponseEntity<ApiResponse<GetRoomInfoResponse>> getRoomInfo(
+		@PathVariable("roomId") Long roomId
+	) {
+		log.info("GetRoomInfoRequest: " + roomId);
+		ChatRoomDto chatRoomDto = chatService.getRoomInfo(GetRoomInfoCommand.builder()
+			.RoomId(roomId)
+			.build());
+		GetRoomInfoResponse getRoomInfoResponse = GetRoomInfoResponse.builder()
+			.roomInfo(chatRoomDto)
+			.build();
+		return ResponseEntity.ok(ApiResponse.createSuccess(getRoomInfoResponse));
+	}
 }

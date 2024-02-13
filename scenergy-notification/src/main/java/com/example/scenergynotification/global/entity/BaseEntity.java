@@ -19,7 +19,6 @@ import lombok.Getter;
 @MappedSuperclass
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-
 public abstract class BaseEntity {
 
 	@JsonSerialize(using = LocalDateTimeSerializer.class)

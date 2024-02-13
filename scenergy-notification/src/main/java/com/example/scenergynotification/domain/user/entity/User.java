@@ -1,8 +1,8 @@
 package com.example.scenergynotification.domain.user.entity;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class User {
 
 	private Long id;

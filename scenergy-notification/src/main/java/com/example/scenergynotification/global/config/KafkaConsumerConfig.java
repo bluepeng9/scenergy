@@ -44,7 +44,8 @@ public class KafkaConsumerConfig {
 	) {
 		return new DefaultKafkaConsumerFactory<>(consumerConfigurations(),
 			new ErrorHandlingDeserializer<>(new StringDeserializer()),
-			new JsonDeserializer<V>(valueType, false));
+			new ErrorHandlingDeserializer<>(new JsonDeserializer<V>(valueType, false))
+		);
 	}
 
 	@Bean
