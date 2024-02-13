@@ -72,9 +72,8 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
         // 이미 연결된 경우, 기존 구독을 해제
         client.current.unsubscribe();
       }
-
       client.current = new StompJs.Client({
-        brokerURL: "ws://" + process.env.REACT_APP_API_URL + "/ws",
+        brokerURL: process.env.REACT_APP_API_URL_WEB,
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
