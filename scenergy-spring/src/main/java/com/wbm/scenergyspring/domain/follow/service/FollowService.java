@@ -38,6 +38,10 @@ public class FollowService {
 		User fromUser = userRepository.getReferenceById(command.getFromUserId());
 		User toUser = userRepository.getReferenceById(command.getToUserId());
 
+		if (fromUser.getId() == toUser.getId()) {
+			throw new EntityAlreadyExistException("자기 자신을 팔로우 할 수 없습니다.");
+		}
+
 		boolean alreadyFollow = followRepository.existsByFromAndTo(fromUser, toUser);
 
 		if (alreadyFollow) {
