@@ -12,6 +12,7 @@ import ChatUserSearch from "../commons/Search/ChatUserSearch";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [chatRoomUsers, setChatRoomUsers] = useState([]);
+  const [chatRoomUsersSeq, setChatRoomUsersSeq] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -60,14 +61,18 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
 
     try {
       const response = await axios.get(
-          "http://localhost:8080/charoom/list-char-users",
+          `http://localhost:8080/chatroom/list-chat-users`, // 수정된 부분
           {
-            chatRoomId: realRoomId
+            params: {
+              chatRoomId: realRoomId
+            }
           }
       );
+      console.log("charRoom에 포함된 유저", response.data.data)
       if (response.data) {
-        console.log("charRoom에 포함된 유저", response.data.data)
-        setChatRoomUsers([...chatRoomUsers, ...response.data.data])
+        console.log("charRoom에 포함된 유저", response.data.data.users)
+        setChatRoomUsers([...chatRoomUsers, ...response.data.data.users])
+        setChatRoomUsersSeq([...chatRoomUsersSeq, ...response.data.data.seq])
       }
     } catch (error) {
       console.error("chatRoomUsers 오류", error)
@@ -125,8 +130,9 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 <p>상대방 닉네임</p>
               </div>
             </div>
-            <div>
-              <VideoConference chatRoomId={realRoomId} chatRoomUsers={getChatUsers} userId={userId}/>
+            <div onClick={getChatUsers}>
+              <VideoConference chatRoomId={realRoomId} chatRoomUsers={chatRoomUsers} chatRoomUsersSeq={chatRoomUsersSeq}
+                               userId={Math.floor(Math.random() * 100) + 1}/>
             </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
