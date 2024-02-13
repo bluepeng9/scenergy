@@ -22,7 +22,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
         {
           chatroom_name: roomName,
           status: roomStatus,
-          users: selectedUsers.userId,
+          users: selectedUsers,
         },
         {
           headers: {

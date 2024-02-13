@@ -82,7 +82,7 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
 
   const handleUserSelect = (user) => {
     console.log(user);
-    if (!selectedUsers.some((selectedUser) => selectedUser === user.userId)) {
+      if (!selectedUsers.some(selectedUser => selectedUser.id === user.userId)) {
       setSelectedUsers([...selectedUsers, {id: user.userId}]);
     }
   };
