@@ -8,6 +8,7 @@ import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.service.TagService;
 import com.wbm.scenergyspring.global.response.ApiResponse;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,43 @@ import java.util.List;
 public class TagController {
 
     private final TagService tagService;
+
+    @PostConstruct
+    public void init(){
+        createGenreTag("팝");
+        createGenreTag("발라드");
+        createGenreTag("인디");
+        createGenreTag("힙합");
+        createGenreTag("락");
+        createGenreTag("R&B");
+        createGenreTag("재즈");
+        createGenreTag("클래식");
+        createGenreTag("그 외");
+        createInstrumentTag("기타");
+        createInstrumentTag("드럼");
+        createInstrumentTag("베이스");
+        createInstrumentTag("키보드");
+        createInstrumentTag("보컬");
+        createInstrumentTag("클래식");
+        createInstrumentTag("그 외");
+        createLocationTag("서울");
+        createLocationTag("인천");
+        createLocationTag("대전");
+        createLocationTag("부산");
+        createLocationTag("울산");
+        createLocationTag("대구");
+        createLocationTag("광주");
+        createLocationTag("경기");
+        createLocationTag("강원");
+        createLocationTag("충북");
+        createLocationTag("충남");
+        createLocationTag("전북");
+        createLocationTag("전남");
+        createLocationTag("경북");
+        createLocationTag("경남");
+        createLocationTag("세종");
+        createLocationTag("제주");
+    }
 
     @PostMapping("/tag/genre/create")
     public ResponseEntity<ApiResponse<String>> createGenreTag(String genreName) {

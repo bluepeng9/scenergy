@@ -18,7 +18,7 @@ public class CreateJobPostRequest {
 	String content;
 	LocalDateTime expirationDate;
 	Long peopleRecruited;
-	Long bookMark;
+	Long bookMark = 0L;
 	IsActive isActive;
 	List<Long> genreTags;
 	List<Long> instrumentTags;
