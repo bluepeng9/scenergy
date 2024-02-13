@@ -2,24 +2,18 @@ package com.wbm.scenergyspring.domain.user.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import java.util.List;
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
 import com.wbm.scenergyspring.domain.tag.repository.LocationTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.UserLocationTagRepository;
 import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingAllResponse;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchFollowingResponse;
 import com.wbm.scenergyspring.domain.user.controller.response.SearchUserResponse;
-import com.wbm.scenergyspring.domain.tag.repository.UserLocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
-import com.wbm.scenergyspring.domain.user.repository.UserLocationRepository;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
+import com.wbm.scenergyspring.domain.user.service.command.UpdateUserInfoCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
@@ -165,5 +159,14 @@ public class UserService {
 				userLocationRepository.save(userLocationTag);
 			}
 		}
+	}
+
+	@Transactional(readOnly = false)
+	public void updateUserInfo(UpdateUserInfoCommand command) {
+		User user = userRepository.findById(command.getUserId()).orElseThrow(() -> new EntityNotFoundException("없는 유저 입니다."));
+		if (command.getUserName() != null)
+			user.updateUserName(command.getUserName());
+		if (command.getNickname() != null)
+			user.updateNickname(command.getNickname());
 	}
 }

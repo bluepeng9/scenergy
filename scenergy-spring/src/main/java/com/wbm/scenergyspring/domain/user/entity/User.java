@@ -58,4 +58,12 @@ public class User extends BaseEntity {
 		this.url = url;
 	}
 
+	public void updateUserName(String name) {
+		this.username = name;
+	}
+
+	public void updateNickname(String name) {
+		this.nickname = name;
+	}
+
 }

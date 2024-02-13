@@ -2,9 +2,11 @@ package com.wbm.scenergyspring.domain.user.controller;
 
 import com.wbm.scenergyspring.domain.user.controller.request.CreateUserRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
+import com.wbm.scenergyspring.domain.user.controller.request.UpdateUserInfoRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.UploadProfileRequest;
 import com.wbm.scenergyspring.domain.user.controller.response.*;
 import com.wbm.scenergyspring.domain.user.service.UserService;
+import com.wbm.scenergyspring.domain.user.service.command.UpdateUserInfoCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.response.ApiResponse;
@@ -85,5 +87,16 @@ public class UserController {
 	public ResponseEntity<ApiResponse<List<SearchFollowingAllResponse>>> searchFollowingAll(Long userId) {
 		List<SearchFollowingAllResponse> list = userService.searchFollowingAll(userId);
 		return new ResponseEntity<>(ApiResponse.createSuccess(list), HttpStatus.OK);
+	}
+
+	@PutMapping("/update-info")
+	public ResponseEntity<ApiResponse<String>> updateUserInfo(@RequestBody UpdateUserInfoRequest request) {
+		UpdateUserInfoCommand command = UpdateUserInfoCommand.builder()
+				.userId(request.getUserId())
+				.userName(request.getUserName())
+				.nickname(request.getNickname())
+				.build();
+		userService.updateUserInfo(command);
+		return ResponseEntity.ok(ApiResponse.createSuccess("success"));
 	}
 }

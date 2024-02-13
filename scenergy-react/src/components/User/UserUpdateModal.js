@@ -6,10 +6,9 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isPasswordMatched, setIsPasswordMatched] = useState(false);
-  const [user_id, setUser_id] = useState("");
-  const [user_name, setUser_name] = useState("");
-  const [user_nickname, setUser_nickname] = useState("");
-  const [user_birth, setUser_birth] = useState("");
+  const [user_id, setUser_id] = useState(UserApi.getUser.userId);
+  const [user_name, setUser_name] = useState(UserApi.getUser.userName);
+  const [user_nickname, setUser_nickname] = useState(UserApi.getUser.userNickname);
 
   useEffect(() => {
     getUser2();
@@ -17,6 +16,12 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
 
   const handleUpdateClick = () => {
     onUpdateUser(newPassword, confirmPassword);
+    var data = {
+      userId: user_id,
+      userName: user_name,
+      nickname: user_nickname
+    }
+    UserApi.updateUserInfo(data)
     onClose();
   };
 
@@ -38,9 +43,6 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
     console.log(user_nickname);
     setUser_nickname(user_nickname);
 
-    const user_birth = user.userBirth;
-    console.log(user_birth);
-    setUser_birth(user_birth);
     // const nickname = getUser().nickname;
     // const birthday = getUser().birthday;
     // 각각의 label에도 적용
@@ -71,13 +73,10 @@ const UserUpdateModal = ({ onClose, onUpdateUser }) => {
         </label>
         {/* 나머지 정보도 여기에 적용 */}
         <label>
-          이름: <span>{user_name}</span>
+          이름: <input value={user_name} onChange={(e) => setUser_name(e.target.value)}/>
         </label>
         <label>
-          닉네임: <span>{user_nickname}</span>
-        </label>
-        <label>
-          생년월일: <span>{user_birth}</span>
+          닉네임: <input value={user_nickname} onChange={(e) => setUser_nickname(e.target.value)}/>
         </label>
         <label className={styles["passwordInput"]}>
           비밀번호
