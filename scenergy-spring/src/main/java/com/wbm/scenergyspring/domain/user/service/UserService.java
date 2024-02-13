@@ -137,13 +137,18 @@ public class UserService {
 		return result;
 	}
 
+
 	public FindUserCommandResult findUser(Long userId) {
 		User user = userRepository.findById(userId).orElseThrow(
 			() -> new EntityNotFoundException("해당 사용자를 찾을 수 없습니다.")
 		);
 
 		return FindUserCommandResult.builder()
-			.nickname(user.getNickname())
+			.userId(user.getId())
+			.userPassword(user.getPassword())
+			.userName(user.getUsername())
+			.userNickname(user.getNickname())
+			.userGender(user.getGender())
 			.build();
 	}
 
