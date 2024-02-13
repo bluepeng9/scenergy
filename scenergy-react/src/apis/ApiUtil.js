@@ -47,20 +47,29 @@ class ApiUtil {
   };
 
   static get = async (url, params) => {
-    return await axios.get(ApiUtil.BASE_URL + url, {
-      params: params,
-      headers: this.#getHeader(),
-    });
+      try {
+          let axiosResponse = await axios.get(ApiUtil.BASE_URL + url, {
+              params: params,
+              headers: this.#getHeader(),
+          });
+          console.log("axiosResponse", axiosResponse);
+          return axiosResponse;
+      } catch (error) {
+          console.error("error", error);
+          throw error;
+      }
   };
 
   static post = async (url, data) => {
 
     try {
-      return await axios.post(ApiUtil.BASE_URL + url, data, {
+        let axiosResponse = await axios.post(ApiUtil.BASE_URL + url, data, {
         headers: this.#getHeader(),
       });
+        console.log("axiosResponse", axiosResponse);
+        return axiosResponse;
     } catch (error) {
-      console.log("error", error);
+        console.error("error", error);
       throw error;
     }
 
