@@ -3,16 +3,17 @@ import styles from "../../Chat/ChatField.module.css";
 import ChatRoomCreate from "../../Chat/ChatRoomCreate";
 import followApi from "../../../apis/FollowApi";
 import searchApi from "../../../apis/SearchApi";
-import { useEffect, useState } from "react";
-import { useChatRoom } from "../../../contexts/ChatRoomContext";
-import { useNavigate } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useChatRoom} from "../../../contexts/ChatRoomContext";
+import {useNavigate} from "react-router-dom";
+import ApiUtil from "../../../apis/ApiUtil";
 
 const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [followingList, setFollowingList] = useState([]);
   const [selectedUsers, setSelectedUsers] = useState([
-    { id: parseInt(fromUserId, 10), nickname: null },
+    {id: parseInt(ApiUtil.getUserIdFromToken())}
   ]);
   const [isCreated, setIsCreated] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -81,8 +82,8 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
 
   const handleUserSelect = (user) => {
     console.log(user);
-    if (!selectedUsers.some((selectedUser) => selectedUser.id === user.id)) {
-      setSelectedUsers([...selectedUsers, user]);
+    if (!selectedUsers.some((selectedUser) => selectedUser === user.userId)) {
+      setSelectedUsers([...selectedUsers, {id: user.userId}]);
     }
     console.log(selectedUsers);
   };
