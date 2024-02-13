@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VideoPostRepository extends JpaRepository<VideoPost, Long> {
@@ -24,9 +25,15 @@ public interface VideoPostRepository extends JpaRepository<VideoPost, Long> {
             """)
     List<VideoPost> searchVideoPostsByCondition(@Param("word") String word, @Param("gt") List<Long> gt, @Param("it") List<Long> it, @Param("lt") List<Long> lt);
 
-
     @Query("select vp from VideoPost vp " +
             "where vp.user.id in (select f.to.id from Follow f where f.from.id=:id)")
     List<VideoPost> findAllByFollowing(@Param("id") Long id);
+
+    @Query("""
+            select vp from VideoPost vp
+            join vp.user u
+            where u.id = :userId
+            """)
+    Optional<List<VideoPost>> getMyVideoPosts(@Param("userId") Long userId);
 
 }

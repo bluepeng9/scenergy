@@ -5,6 +5,7 @@ import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVid
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UploadVideoPostRequest;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.response.AllVideoPostsResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.response.FollowingVideoPostResponse;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.response.MyVideoPostsResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.response.SearchVideoPostResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
@@ -106,6 +107,13 @@ public class VideoController {
         List<SearchVideoPostResponseCommand> list = videoPostService.searchVideoPostsByCondition(command);
 
         SearchVideoPostResponse response = SearchVideoPostResponse.toCreateResponse(list);
+
+        return new ResponseEntity<>(ApiResponse.createSuccess(response), HttpStatus.OK);
+    }
+
+    @GetMapping("/my-video-posts")
+    public ResponseEntity<ApiResponse<MyVideoPostsResponse>> getMyVideoPosts(@RequestParam("userId") Long userId) {
+        MyVideoPostsResponse response = videoPostService.getMyVideoPosts(userId);
 
         return new ResponseEntity<>(ApiResponse.createSuccess(response), HttpStatus.OK);
     }

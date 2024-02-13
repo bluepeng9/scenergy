@@ -3,6 +3,7 @@ package com.wbm.scenergyspring.domain.post.videoPost.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.wbm.scenergyspring.domain.post.videoPost.controller.request.UpdateVideoPostRequest;
+import com.wbm.scenergyspring.domain.post.videoPost.controller.response.MyVideoPostsResponse;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.Video;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPost;
 import com.wbm.scenergyspring.domain.post.videoPost.entity.VideoPostGenreTag;
@@ -18,6 +19,7 @@ import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
+import com.wbm.scenergyspring.global.exception.BusinessException;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -269,6 +271,29 @@ public class VideoPostService {
             result.add(response);
         }
         return result;
+    }
+
+    @Transactional(readOnly = true)
+    public MyVideoPostsResponse getMyVideoPosts(Long userId) {
+        List<VideoPost> myVideoPosts = videoPostRepository.getMyVideoPosts(userId).orElseThrow(() -> new BusinessException("영상을 찾을 수 없습니다."));
+        List<MyVideoPostsResponseCommand> result = new ArrayList<>();
+        for (VideoPost vp : myVideoPosts) {
+            MyVideoPostsResponseCommand response = MyVideoPostsResponseCommand.builder()
+                    .title(vp.getTitle())
+                    .content(vp.getContent())
+                    .writer(vp.getWriter())
+                    .video(VideoCommand.builder()
+                            .musicTitle(vp.getVideo().getMusicTitle())
+                            .artist(vp.getVideo().getArtist())
+                            .videoUrlPath(vp.getVideo().getVideoUrlPath())
+                            .thumbnailUrlPath(vp.getVideo().getThumbnailUrlPath())
+                            .build())
+                    .genreTags(VideoPostGenreTagCommand.createVideoPostGenreTagCommand(vp.getVideoPostGenreTags()))
+                    .instrumentTags(VideoPostInstrumentTagCommand.createVideoPostInstrumentTagCommand(vp.getVideoPostInstrumentTags()))
+                    .build();
+            result.add(response);
+        }
+        return MyVideoPostsResponse.toCreateResponse(result);
     }
 
 }
