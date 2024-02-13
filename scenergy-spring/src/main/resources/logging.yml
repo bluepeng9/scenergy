@@ -14,8 +14,17 @@ decorator:
   datasource:
     p6spy:
       enable-logging: true
+server:
+  error:
+    include-message: always
+    include-stacktrace: always
 ---
 spring:
   config:
     activate:
       on-profile: prod
+
+server:
+  error:
+    include-message: always
+    include-stacktrace: always
