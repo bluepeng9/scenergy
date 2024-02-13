@@ -9,7 +9,9 @@ import com.wbm.scenergyspring.config.auth.PrincipalDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 	final String redirectUrl;
 	final Long tokenExpirationMillis = 1000L * 60 * 60 * 24 * 30;
@@ -23,6 +25,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 		Authentication authentication) throws IOException {
 		PrincipalDetails principal = (PrincipalDetails)authentication.getPrincipal();
 		String token = JwtUtil.generateJwtToken(principal.getUser().getId(), tokenExpirationMillis);
+		log.info("redirectUrl: " + redirectUrl);
 		response.sendRedirect(JwtUtil.addJwtTokenToUrl(redirectUrl, "token", token));
 		super.clearAuthenticationAttributes(request);
 	}
