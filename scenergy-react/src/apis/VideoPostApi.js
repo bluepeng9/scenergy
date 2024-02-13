@@ -8,7 +8,10 @@ class VideoPostApi {
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadVideoPost = async (data) => {
-    return await ApiUtil.post(`${this.baseUrl}/video-post/upload/video-post`, data);
+    return await ApiUtil.post(
+      `${this.baseUrl}/video-post/upload/video-post`,
+      data,
+    );
   };
   /**
    * 비디오 포스트 섬네일 업로드 TODO: multifile 업로드에서 오류가 발생할 가능성 있음. header의 type을             "Content-Type": "application/json", 을 사용 가능할지
@@ -17,11 +20,14 @@ class VideoPostApi {
    * @returns {Promise<AxiosResponse<any>>}
    */
   uploadThumnail = async (data) => {
-    return await ApiUtil.formDataPost(`${this.baseUrl}/video-post/upload/thumbnail`, data);
+    return await ApiUtil.formDataPost(
+      `${this.baseUrl}/video-post/upload/thumbnail`,
+      data,
+    );
   };
   uploadVideo = async (data) => {
     return await ApiUtil.formDataPost(
-        `${this.baseUrl}/video-post/upload/video`,
+      `${this.baseUrl}/video-post/upload/video`,
       data,
     );
   };
@@ -67,6 +73,12 @@ class VideoPostApi {
       thumbnailUrlPath: data.thumbnailUrlPath,
       videoTitle: data.videoTitle,
       videoArtist: data.videoArtist,
+    });
+  };
+
+  getMyVideoPosts = async (data) => {
+    return await ApiUtil.get(`${this.baseUrl}/video-post/my-video-posts`, {
+      userId: data.userId,
     });
   };
 }
