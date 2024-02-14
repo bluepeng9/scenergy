@@ -19,7 +19,8 @@ const FollowVideo = () => {
         const response = await videoPostApi.listFollowingVideoPosts({ userId });
 
         // 정확한 응답 데이터 구조에 따라 수정
-        const videos = response.data.data.list.map((item) => item.video);
+        const videos = response.data.data.list.map((item) => item);
+        console.log("videos : " + videos.title);
 
         // 상태 업데이트
         setFollowingVideos(videos);
@@ -35,24 +36,28 @@ const FollowVideo = () => {
   return (
     <div className={styles.followVideoContainer}>
       {/* 영상 데이터를 반복하여 화면에 렌더링 */}
-      {followingVideos.map((video) => (
-        <div key={video.id} className={styles.videoContain}>
-          <h2>{video.title}</h2>
+      {followingVideos.map((item) => (
+        <div key={item.id} className={styles.videoContain}>
+          <div className={styles.videoDiv}>
+            {/* 왼쪽에 동영상 */}
+            <div className={styles.videoContent}>
+              <video controls width="450">
+                <source src={item.video.videoUrlPath} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
 
-          {/* 동영상 재생을 위한 비디오 태그 */}
-          <video controls width="500">
-            <source src={video.videoUrlPath} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
-          {/*<video controls width="400">*/}
-          {/*  <source type={"video/mp4"} />*/}
-          {/*</video>*/}
-
-          {/* 동영상과 관련된 내용을 추가할 수 있습니다. */}
-          {/*<p>{video.description}</p>*/}
-          {/*<p>장르: {video.genreTags.join(", ")}</p>*/}
-          {/*<p>악기: {video.instrumentTags.join(", ")}</p>*/}
+            {/* 오른쪽에 영상 정보 */}
+            <div className={styles.videoInfo}>
+              <h2>{item.title}</h2> {/*제목*/}
+              <hr />
+              <p>{item.content}</p> {/*상세내용*/}
+              <h2 className={styles.videoHr}>곡 정보</h2>
+              <hr />
+              <p>{item.video.artist}</p>
+              <p>{item.video.musicTitle}</p>
+            </div>
+          </div>
         </div>
       ))}
     </div>
@@ -60,23 +65,3 @@ const FollowVideo = () => {
 };
 
 export default FollowVideo;
-
-// import styles from "./FollowVideo.module.css";
-// const FollowVideo = () => {
-//   const dummyPosts = Array.from({ length: 10 }, (_, index) => ({
-//     id: index,
-//     title: `팔로우한 사용자의 게시물 ${index + 1}`,
-//   }));
-//   return (
-//     <div className={styles.followVideoContainer}>
-//       {dummyPosts.map((post) => (
-//         <div key={post.id} className={styles.videoContain}>
-//           <h2>{post.title}</h2>
-//           {/* 게시물 내용이나 이미지 등을 여기에 추가 */}
-//         </div>
-//       ))}
-//     </div>
-//   );
-// };
-//
-// export default FollowVideo;

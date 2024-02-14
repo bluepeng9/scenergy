@@ -4,6 +4,8 @@
     height: 100vh; /* 뷰포트 높이와 동일 */
     overflow-y: scroll; /* 수직 스크롤 활성화 */
     scroll-snap-type: y mandatory; /* 수직 방향으로 스크롤 스냅 적용 */
+    justify-content: center;
+    align-items: center;
 }
 
 .videoContain {
@@ -12,6 +14,65 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #22232f;
+    /*background-color: #22232f;*/
     color: white; /* 텍스트 색상 변경 */
 }
+
+.videoContent {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 700px;
+    margin-left: 20px;
+    /*background-color: #22232f;*/
+}
+
+.videoContent video {
+    cursor:pointer;
+}
+
+.videoDiv {
+    display: flex;
+    width: 900px;
+    height: 700px;
+    background-color: #22232f;
+    border-radius: 10px;
+}
+
+.videoInfo {
+    /*display: flex;*/
+    margin-left: 0;
+
+}
+
+.videoInfo h2 {
+    margin-top: 60px; /* h2의 상단 margin 제거 */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.videoInfo p {
+    margin-left: 30px;
+    /*margin-bottom: 0.5rem; !* p 태그 사이의 간격 조절 *!*/
+}
+
+.videoInfo hr {
+    display: flex;
+    background-color: white;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    width: 380px;
+    margin-left: 20px;
+}
+
+.videoHr {
+    margin-top: 500px;
+}
+
+.videoInfo .videoHr {
+    margin-top: 300px;
+}
+
+
