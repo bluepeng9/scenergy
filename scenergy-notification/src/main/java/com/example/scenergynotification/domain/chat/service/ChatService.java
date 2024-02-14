@@ -16,7 +16,7 @@ public class ChatService {
 	public Chat getChatMessageInfo(GetChatMessageInfoCommand command) {
 
 		return new RestTemplate().getForObject(
-			userServiceUrl + "/chatMessage/chatMessage/" + command.getChatMessageId(),
+			userServiceUrl + "/chatMessage/" + command.getChatMessageId(),
 			Chat.class
 		);
 	}

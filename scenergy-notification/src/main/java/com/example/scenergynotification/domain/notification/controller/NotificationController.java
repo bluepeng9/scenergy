@@ -37,6 +37,7 @@ public class NotificationController {
 
 	@KafkaListener(topics = "follow", groupId = "follow-group", containerFactory = "followEventKafkaListenerContainerFactory")
 	public void onFollowEvent(OnFollowEvent event) {
+		log.debug("onFollowEvent: {}", event);
 		User fromUserInfo = userService.findUser(event.getFromUserId());
 
 		SendFollowNotificationCommandResult sendFollowNotificationCommandResult = notificationService.sendFollowNotification(
