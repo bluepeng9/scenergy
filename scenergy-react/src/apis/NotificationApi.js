@@ -1,3 +1,6 @@
+import ApiUtil from "./ApiUtil";
+import axios from "axios";
+
 class NotificationApi {
 
     #sse;
@@ -17,6 +20,14 @@ class NotificationApi {
         this.#sse.addEventListener("connect", (event) => {
             onConnected(event.data);
         })
+
+    }
+
+    getAllNotification = async () => {
+        let userIdFromToken = ApiUtil.getUserIdFromToken();
+
+        let notifications = (await axios.get(`${this.notificationUrl}/users/${userIdFromToken}/notification`)).data;
+        return notifications;
 
     }
 }

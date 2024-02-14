@@ -19,6 +19,7 @@ public class ChatService {
 			userServiceUrl + "/chatMessage/" + command.getChatMessageId(),
 			ChatDto.class
 		);
+		chatDto.getData().setId(command.getChatMessageId());
 		return chatDto.toChat();
 	}
 

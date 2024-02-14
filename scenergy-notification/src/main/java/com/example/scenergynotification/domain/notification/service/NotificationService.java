@@ -1,5 +1,7 @@
 package com.example.scenergynotification.domain.notification.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,7 +11,6 @@ import com.example.scenergynotification.domain.notification.entity.Notification;
 import com.example.scenergynotification.domain.notification.repository.NotificationRepository;
 import com.example.scenergynotification.domain.notification.service.command.SendFollowNotificationCommand;
 import com.example.scenergynotification.domain.notification.service.command.SendUnreadChatNotificationCommand;
-import com.example.scenergynotification.domain.notification.service.commandresult.SendFollowNotificationCommandResult;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -22,18 +23,14 @@ public class NotificationService {
 	private final NotificationRepository notificationRepository;
 
 	@Transactional(readOnly = false)
-	public SendFollowNotificationCommandResult sendFollowNotification(SendFollowNotificationCommand command) {
+	public FollowNotification sendFollowNotification(SendFollowNotificationCommand command) {
 		FollowNotification notification = FollowNotification.createFollowNotification(
 			command.getFromUserId(),
 			command.getToUserId(),
 			command.getFromUserNickname()
 		);
 		FollowNotification save = notificationRepository.save(notification);
-		return SendFollowNotificationCommandResult.builder()
-			.notificationId(save.getId())
-			.fromUserId(save.getSender())
-			.toUserId(save.getReceiver())
-			.build();
+		return save;
 	}
 
 	@Transactional(readOnly = false)
@@ -52,5 +49,9 @@ public class NotificationService {
 			command.getSenderNickname()
 		);
 		return notificationRepository.save(chatNotification);
+	}
+
+	public List<Notification> getAllNotifications(Long userId) {
+		return notificationRepository.findAllByReceiver(userId);
 	}
 }

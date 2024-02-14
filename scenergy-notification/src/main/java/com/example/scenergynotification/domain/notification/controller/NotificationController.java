@@ -1,5 +1,7 @@
 package com.example.scenergynotification.domain.notification.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
@@ -12,13 +14,14 @@ import com.example.scenergynotification.domain.chat.service.ChatService;
 import com.example.scenergynotification.domain.chat.service.command.GetChatMessageInfoCommand;
 import com.example.scenergynotification.domain.notification.controller.request.OnFollowEvent;
 import com.example.scenergynotification.domain.notification.controller.request.OnUnreadMessageEvent;
-import com.example.scenergynotification.domain.notification.controller.response.NotificationTypeResponse;
-import com.example.scenergynotification.domain.notification.controller.response.SseNotificationResponse;
+import com.example.scenergynotification.domain.notification.controller.response.ChatNotificationDTO;
+import com.example.scenergynotification.domain.notification.controller.response.GetNotificationResponse;
 import com.example.scenergynotification.domain.notification.entity.ChatNotification;
+import com.example.scenergynotification.domain.notification.entity.FollowNotification;
+import com.example.scenergynotification.domain.notification.entity.Notification;
 import com.example.scenergynotification.domain.notification.service.NotificationService;
 import com.example.scenergynotification.domain.notification.service.command.SendFollowNotificationCommand;
 import com.example.scenergynotification.domain.notification.service.command.SendUnreadChatNotificationCommand;
-import com.example.scenergynotification.domain.notification.service.commandresult.SendFollowNotificationCommandResult;
 import com.example.scenergynotification.domain.user.entity.User;
 import com.example.scenergynotification.domain.user.service.UserService;
 import com.example.scenergynotification.global.SseEmitters;
@@ -41,7 +44,7 @@ public class NotificationController {
 		log.debug("onFollowEvent: {}", event);
 		User fromUserInfo = userService.findUser(event.getFromUserId());
 
-		SendFollowNotificationCommandResult sendFollowNotificationCommandResult = notificationService.sendFollowNotification(
+		FollowNotification followNotification = notificationService.sendFollowNotification(
 			SendFollowNotificationCommand.builder()
 				.fromUserId(event.getFromUserId())
 				.toUserId(event.getToUserId())
@@ -51,11 +54,7 @@ public class NotificationController {
 
 		sseEmitters.emit(
 			event.getToUserId(),
-			SseNotificationResponse.builder()
-				.notificationId(sendFollowNotificationCommandResult.getNotificationId())
-				.senderNickname(fromUserInfo.getNickname())
-				.notificationTypeResponse(NotificationTypeResponse.FOLLOW)
-				.build(),
+			ChatNotificationDTO.from(followNotification),
 			"notification"
 		);
 	}
@@ -93,14 +92,20 @@ public class NotificationController {
 
 		sseEmitters.emit(
 			event.getUserId(),
-			SseNotificationResponse.builder()
-				.notificationId(chatNotification.getId())
-				.senderNickname(sender.getNickname())
-				.notificationTypeResponse(NotificationTypeResponse.UNREAD_CHAT)
-				.build(),
+			ChatNotificationDTO.from(chatNotification),
 			"notification"
 		);
 
+	}
+
+	@GetMapping(path = "/users/{userId}/notification")
+	public ResponseEntity<GetNotificationResponse> getNotifications(@PathVariable("userId") Long userId) {
+		List<Notification> allNotifications = notificationService.getAllNotifications(userId);
+		log.debug("allNotifications: {}", allNotifications);
+
+		GetNotificationResponse from = GetNotificationResponse.from(allNotifications);
+		log.debug("from: {}", from);
+		return ResponseEntity.ok(from);
 	}
 
 }

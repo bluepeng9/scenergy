@@ -1,8 +1,13 @@
 package com.example.scenergynotification.domain.notification.entity;
 
+
 import jakarta.persistence.Entity;
+import lombok.Getter;
+import lombok.ToString;
 
 @Entity
+@ToString
+@Getter
 public class ChatNotification extends Notification {
 
 	private String chatMessage;

@@ -12,11 +12,13 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.ToString;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Table(name = "notifications")
 @Getter
+@ToString
 public abstract class Notification extends BaseEntity {
 
 	@Id
