@@ -29,19 +29,19 @@ class UserApi {
     );
   };
 
-    //토큰 사용
-    getUser = async () => {
-        // return {
-        //   userId: "danny1234@naver.com", // 아이디
-        //   userPassword: "abcdefg1234!", //비밀번호
-        //   userName: "강대니", //이름
-        //   userNickname: "대니", //닉네임
-        //   userBirth: "19980711" /*생년월일, 숫자 8자리*/,
-        //   userGender: "female" /*남:1, 여:2*/,
-        // };
-        let userIdFromToken = ApiUtil.getUserIdFromToken();
-        return (await ApiUtil.get(`/users/${userIdFromToken}`)).data.data;
-    };
+  //토큰 사용
+  getUser = async () => {
+    // return {
+    //   userId: "danny1234@naver.com", // 아이디
+    //   userPassword: "abcdefg1234!", //비밀번호
+    //   userName: "강대니", //이름
+    //   userNickname: "대니", //닉네임
+    //   userBirth: "19980711" /*생년월일, 숫자 8자리*/,
+    //   userGender: "female" /*남:1, 여:2*/,
+    // };
+    let userIdFromToken = ApiUtil.getUserIdFromToken();
+    return (await ApiUtil.get(`/users/${userIdFromToken}`)).data.data;
+  };
 
   updateUserInfo = async (data) => {
     return await ApiUtil.put(`/users/update-info`, {
@@ -51,9 +51,23 @@ class UserApi {
     });
   };
 
-    // getUser = async (userId) => {
-    //   return await ApiUtil.get(`/users/${userId}`);
-    // };
+  // getUser = async (userId) => {
+  //   return await ApiUtil.get(`/users/${userId}`);
+  // };
+
+  uploadProfileS3 = async (userId, profileImage) => {
+    try {
+      const formData = new FormData();
+      formData.append(`userId`, userId);
+      formData.append(`profile`, profileImage);
+      console.log("=====formData====", formData);
+      const response = await ApiUtil.formDataPost("/users/profile", formData);
+      console.log("*******", response.data.data);
+      return response.data.data;
+    } catch (error) {
+      console.error("사진 업로드에 실패했습니다.");
+    }
+  };
 }
 
 const userApi = new UserApi();

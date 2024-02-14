@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import FollowApi from "../../apis/FollowApi";
 import ApiUtil from "../../apis/ApiUtil";
 import ProfileHeaderApi from "../../apis/Profile/ProfileHeaderApi";
+import UserApi from "../../apis/User/UserApi";
 
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
@@ -22,7 +23,6 @@ const ProfileHeader = ({ onUpdateUser }) => {
   const [isUserUpdateModalOpen, setIsUserUpdateModalOpen] = useState(false); // 회원수정
   const { userId } = useParams();
   useEffect(() => {
-    // console.log(userId);
     const getUserProfile = async () => {
       console.log(userId);
       try {
@@ -33,12 +33,36 @@ const ProfileHeader = ({ onUpdateUser }) => {
         setVideoCount(userData.videoCount);
         setNickname(userData.nickname);
         setUrl(userData.url);
+        // setProfileImage(userData.url);
+        console.log("=====UserData======", userData);
       } catch (error) {
         console.error("유저 프로필 조회 실패", error);
       }
     };
+
     getUserProfile();
   }, [userId]); // 빈 배열을 넣어 컴포넌트가 마운트될 때 한 번만 호출되도록 함
+
+  useEffect(() => {
+    const uploadProfileImage = async () => {
+      if (profileImage) {
+        try {
+          const uploadedImageUrl = await UserApi.uploadProfileS3(
+            userId,
+            profileImage,
+          );
+          console.log("프로필 이미지 업로드 성공:", uploadedImageUrl);
+          // 업로드된 이미지 URL을 상태에 반영하여 프로필 이미지 변경
+          setUrl(uploadedImageUrl);
+          console.log("업로드 된 이미지", url);
+        } catch (error) {
+          console.error("프로필 이미지 업로드 실패:", error);
+        }
+      }
+    };
+
+    uploadProfileImage();
+  }, [profileImage, userId]);
 
   const getUser2 = async () => {
     // const user_nickname = getUser().nickname;
@@ -102,11 +126,8 @@ const ProfileHeader = ({ onUpdateUser }) => {
         <div className={styles.profileImgUpload}>
           {/* 동그란 프로필 이미지 */}
           <label htmlFor="profileImageInput" className={styles.uploadContainer}>
-            {profileImage ? (
-              <img
-                src={URL.createObjectURL(profileImage)}
-                alt="프로필 이미지"
-              />
+            {url ? (
+              <img src={url} alt="프로필 이미지" />
             ) : (
               <div className={styles.clickUpload}>클릭하여 이미지 업로드</div>
             )}
