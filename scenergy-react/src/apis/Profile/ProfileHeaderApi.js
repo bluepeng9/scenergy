@@ -31,13 +31,14 @@ class ProfileHeaderApi {
     const user = await UserApi.getUser();
     const nickname = user.userName;
     const url = user.url;
-    console.log(nickname);
+    const bio = user.bio;
     console.log("유저", user.url);
     return {
       followingCount: followingCount,
       followerCount: followerCount,
       videoCount: videoCount,
       nickname: nickname,
+      bio: bio,
       url: url,
     };
   };

@@ -33,6 +33,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
         setVideoCount(userData.videoCount);
         setNickname(userData.nickname);
         setUrl(userData.url);
+        setBio(userData.bio);
         // setProfileImage(userData.url);
         console.log("=====UserData======", userData);
       } catch (error) {
@@ -63,6 +64,25 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
     uploadProfileImage();
   }, [profileImage, userId]);
+
+  useEffect(() => {
+    const updateUserBio = async () => {
+      try {
+        // userId와 변경된 bio 값을 uploadBio 메서드에 전달하여 호출합니다.
+        const response = await UserApi.uploadBio(userId, bio);
+        setBio(response.data.data.bio);
+        // setBio(response.bio);
+        console.log("bio 업로드 성공", bio);
+        console.log("setbio", response);
+      } catch (error) {
+        console.log(userId, bio);
+        console.error("bio 업로드 실패", error);
+      }
+    };
+
+    // bio 상태가 변경될 때마다 updateUserBio 함수가 호출되도록 설정합니다.
+    updateUserBio();
+  }, [userId, bio]);
 
   const getUser2 = async () => {
     // const user_nickname = getUser().nickname;

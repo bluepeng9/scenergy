@@ -68,6 +68,13 @@ class UserApi {
       console.error("사진 업로드에 실패했습니다.");
     }
   };
+
+  uploadBio = async (userId, bio) => {
+    return ApiUtil.post(`/users/bio`, {
+      userId: userId,
+      bio: bio,
+    });
+  };
 }
 
 const userApi = new UserApi();
