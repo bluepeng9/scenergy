@@ -20,16 +20,16 @@ public class Portfolio extends BaseEntity {
     private Long id;
     private Long userId;
     private String description;
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Education> educations = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Experience> experiences = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Honor> honors = new ArrayList<>();
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PortfolioEtc> etcs = new ArrayList<>();
 
     /**
@@ -51,40 +51,24 @@ public class Portfolio extends BaseEntity {
             List<Education> educations
     ){
         this.description = description;
-
         this.educations.clear();
         if (educations != null) {
-
-        for (Education edu: educations){
-            this.educations.add(edu);
-            edu.setPortfolio(this);
-        }
+            this.educations.addAll(educations);
         }
 
         this.experiences.clear();
         if (experiences != null) {
-
-            for (Experience exp : experiences) {
-                this.experiences.add(exp);
-                exp.setPortfolio(this);
-            }
+            this.experiences.addAll(experiences);
         }
 
         this.honors.clear();
         if (honors != null) {
-        for (Honor honor: honors){
-            this.honors.add(honor);
-            honor.setPortfolio(this);
-        }
+            this.honors.addAll(honors);
         }
 
         this.etcs.clear();
         if (etcs != null) {
-        for (PortfolioEtc etc: etcs){
-            this.etcs.add(etc);
-            etc.setPortfolio(this);
+            this.etcs.addAll(etcs);
         }
-        }
-
     }
 }

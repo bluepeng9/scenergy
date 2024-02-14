@@ -46,9 +46,9 @@ class PortfolioServiceTest extends IntegrationTest {
         List<Experience> experiences = new ArrayList<>();
         List<Honor> honors = new ArrayList<>();
         educations.add(Education.createNewEducation("inst", "degree", "major", LocalDateTime.now(), LocalDateTime.now()));
-        etcs.add(PortfolioEtc.createNewPortfolioEtc("title", "desc"));
-        experiences.add(Experience.createNewExperience("company", "position"));
-        honors.add(Honor.createNewHonor("title", "orgam"));
+        etcs.add(PortfolioEtc.createNewPortfolioEtc("title", "desc", LocalDateTime.now(), LocalDateTime.now()));
+        experiences.add(Experience.createNewExperience("company", "position", LocalDateTime.now(), LocalDateTime.now()));
+        honors.add(Honor.createNewHonor("title", "orgam", LocalDateTime.now()));
         //command 발행
         return UpdatePortfolioCommand.builder()
                 .portfolioId(portfolio.getId())

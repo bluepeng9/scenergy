@@ -10,6 +10,7 @@ import com.wbm.scenergyspring.domain.portfolio.controller.response.GetPortfolioR
 import com.wbm.scenergyspring.domain.portfolio.controller.response.UpdatePortfolioResponse;
 import com.wbm.scenergyspring.domain.portfolio.entity.Portfolio;
 import com.wbm.scenergyspring.domain.portfolio.service.PortfolioService;
+import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,6 @@ public class PortfolioController {
         UpdatePortfolioResponse updatePortfolioResponse = UpdatePortfolioResponse.builder()
                 .portfolioId(portfolioId)
                 .build();
-
         return ResponseEntity.ok(ApiResponse.createSuccess(updatePortfolioResponse));
     }
 
@@ -67,10 +67,14 @@ public class PortfolioController {
             GetPortfolioRequest request
     ) {
         log.info("GetPortfolioRequest: " + request);
-        Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
-        GetPortfolioResponse getPortfolioResponse = GetPortfolioResponse.builder()
-                .portfolio(portfolio)
-                .build();
-        return ResponseEntity.ok(ApiResponse.createSuccess(getPortfolioResponse));
+        try {
+            Portfolio portfolio = portfolioService.getPortfolio(request.toGetPortfolioCommand());
+            GetPortfolioResponse getPortfolioResponse = GetPortfolioResponse.builder()
+                    .portfolio(GetPortfolioResponse.PortfolioDto.from(portfolio))
+                    .build();
+            return ResponseEntity.ok(ApiResponse.createSuccess(getPortfolioResponse));
+        } catch (EntityNotFoundException ex) {
+            return ResponseEntity.badRequest().body(ApiResponse.createError("존재하지 않는 포트폴리오"));
+        }
     }
 }

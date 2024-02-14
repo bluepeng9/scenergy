@@ -18,9 +18,6 @@ public class Education extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "edu_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id")
-    private Portfolio portfolio;
     private String institution;
     private String degree;
     private String major;
@@ -40,8 +37,5 @@ public class Education extends BaseEntity {
         education.admissionDate = admissionDate;
         education.graduationDate = graduationDate;
         return education;
-    }
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 }

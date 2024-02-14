@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -21,24 +19,20 @@ public class Honor extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "honor_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id")
-    private Portfolio portfolio;
     private String honorTitle;
     private String organization;
     private LocalDateTime receicedDate;
 
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
-    }
 
     public static Honor createNewHonor(
             String honorTitle,
-            String organization
+            String organization,
+            LocalDateTime receicedDate
     ){
         Honor honor = new Honor();
         honor.honorTitle = honorTitle;
         honor.organization = organization;
+        honor.receicedDate = receicedDate;
         return honor;
     }
 }

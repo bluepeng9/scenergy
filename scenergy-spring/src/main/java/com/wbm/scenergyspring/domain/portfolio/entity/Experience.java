@@ -6,8 +6,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -20,9 +18,6 @@ public class Experience extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exp_id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id")
-    private Portfolio portfolio;
     private String company;
     private String position;
     private LocalDateTime expStartDate;
@@ -30,15 +25,15 @@ public class Experience extends BaseEntity {
 
     public static Experience createNewExperience(
             String company,
-            String position
+            String position,
+            LocalDateTime expStartDate,
+            LocalDateTime expEndDate
     ){
         Experience experience = new Experience();
         experience.company = company;
         experience.position = position;
+        experience.expStartDate = expStartDate;
+        experience.expEndDate = expEndDate;
         return experience;
-    }
-
-    public void setPortfolio(Portfolio portfolio) {
-        this.portfolio = portfolio;
     }
 }
