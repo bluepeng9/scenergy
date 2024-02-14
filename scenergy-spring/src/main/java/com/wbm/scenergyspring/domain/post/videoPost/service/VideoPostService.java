@@ -267,6 +267,7 @@ public class VideoPostService {
                     .title(vp.getTitle())
                     .content(vp.getContent())
                     .writer(vp.getWriter())
+                    .url(vp.getUser().getUrl())
                     .video(VideoCommand.builder()
                             .musicTitle(vp.getVideo().getMusicTitle())
                             .artist(vp.getVideo().getArtist())

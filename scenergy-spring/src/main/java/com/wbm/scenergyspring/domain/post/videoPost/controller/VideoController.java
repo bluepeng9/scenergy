@@ -71,13 +71,9 @@ public class VideoController {
 
     @PostMapping("/upload/video-post")
     public ResponseEntity<ApiResponse<String>> uploadVideoPost(@RequestBody UploadVideoPostRequest request) {
-        System.out.println("**************************1");
         Video video = videoPostService.createVideo(request.toCreateVideo());
-        System.out.println("**************************2");
         VideoPostCommand command = request.toCreateVideoPost(video);
-        System.out.println("**************************3");
         videoPostService.createVideoPost(command);
-        System.out.println("**************************4");
         return new ResponseEntity<>(ApiResponse.createSuccess("success"), HttpStatus.OK);
     }
 

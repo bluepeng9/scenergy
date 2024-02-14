@@ -13,6 +13,7 @@ public class SearchVideoPostResponseCommand {
     private String title;
     private String content;
     private String writer;
+    private String url;
     private List<VideoPostGenreTagCommand> genreTags;
     private List<VideoPostInstrumentTagCommand> instrumentTags;
 
