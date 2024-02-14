@@ -1,11 +1,19 @@
 package com.example.scenergynotification.domain.user.service;
 
-import com.example.scenergynotification.domain.user.entity.User;
-
 import lombok.Data;
 
 @Data
 public class FindUserDto {
 
-	User data;
+	UserDto data;
+}
+
+@Data
+class UserDto {
+	private Long userId;
+	private String userPassword;
+	private String userName;
+	private String userNickname;
+	private String url;
+	private String userGender;
 }
