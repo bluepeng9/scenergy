@@ -10,6 +10,7 @@ import java.util.List;
 public class SearchVideoPostResponseCommand {
 
     private Long videoPostId;
+    private Long userId;
     private VideoCommand video;
     private String title;
     private String content;

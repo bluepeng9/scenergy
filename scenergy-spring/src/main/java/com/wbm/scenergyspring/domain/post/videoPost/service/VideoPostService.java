@@ -264,6 +264,7 @@ public class VideoPostService {
         List<SearchVideoPostResponseCommand> result = new ArrayList<>();
         for (VideoPost vp : list) {
             SearchVideoPostResponseCommand response = SearchVideoPostResponseCommand.builder()
+                    .userId(vp.getUser().getId())
                     .videoPostId(vp.getId())
                     .title(vp.getTitle())
                     .content(vp.getContent())
