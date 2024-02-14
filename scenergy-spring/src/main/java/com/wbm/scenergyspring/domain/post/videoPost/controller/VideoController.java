@@ -93,6 +93,7 @@ public class VideoController {
 
     @PostMapping("/search")
     public ResponseEntity<ApiResponse<SearchVideoPostResponse>> searchVideoPost(@RequestBody SearchVideoPostRequest request) {
+
         SearchVideoPostCommand command = SearchVideoPostCommand.builder()
                 .word(request.getWord())
                 .gt(request.getGt())

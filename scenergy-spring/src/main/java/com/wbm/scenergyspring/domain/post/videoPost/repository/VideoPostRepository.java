@@ -18,7 +18,7 @@ public interface VideoPostRepository extends JpaRepository<VideoPost, Long> {
             left join vp.user u
             left join UserLocationTag ut
             on u = ut.user
-            where (vp.title like %:word% or vp.writer like %:word% or vp.content like %:word% or vp.video.musicTitle like %:word% or vp.video.artist like %:word%)
+            where (vp.title like %:word% or vp.writer like %:word% or vp.content like %:word% or vp.video.musicTitle like %:word% or vp.video.artist like %:word% or :word is null)
             and (genre.genreTag.id in :gt or :gt is null)
             and (instru.instrumentTag.id in :it or :it is null)
             and (ut.id in :lt or :lt is null)
