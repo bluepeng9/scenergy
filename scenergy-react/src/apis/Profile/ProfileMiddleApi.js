@@ -1,27 +1,40 @@
-// connect to User
-import { api } from "../ChatUserApi";
-import { useState } from "react";
+import ApiUtil from "../ApiUtil";
 
-export const User = {
-  user: (data) => {
-    return {
-      // 학력
-      school: "",
-      degree: "",
-      admissionDate: "",
-      graduationDate: "",
+class ProfileMiddleApi {
+  baseUrl = "/portfolio";
 
-      //경력
-      company: "",
-      position: "",
-      startDate: "",
-      endDate: "",
+  updateAllPortfolios = async (data) => {
+    console.log("updateAllPortfolios data")
+    console.log(data)
+    return await ApiUtil.put(`${this.baseUrl}/update-all`, {
+      userId: data.userId,
+      portfolioId: data.portfolioId,
+      description: data.description,
+      educations: data.educations,
+      etcs: data.etcs,
+      experiences: data.experiences,
+      honors: data.honors
+    });
+  };
+  createPortfolio = async (data) => {
+    return await ApiUtil.post(`${this.baseUrl}/create-port`, {
+      userId: data.userId,
+    });
+  };
+  readPortfolios = async (data) => {
+    return await ApiUtil.get(`${this.baseUrl}/read`, {
+      userId: data.userId,
+    });
+  };
 
-      //수상이력
-      competition: "",
-      organizer: "",
-      awardDate: "",
-    };
-    return api.post("/profile", data);
-  },
-};
+  deleteAllPortfolios = async (data) => {
+    return await ApiUtil.post(`${this.baseUrl}/delete-all`, {
+      userId: data.userId,
+      portfolioId: data.portfolioId,
+    });
+  };
+}
+
+let profileMiddleApi = new ProfileMiddleApi();
+
+export default profileMiddleApi;
