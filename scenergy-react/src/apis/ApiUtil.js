@@ -85,9 +85,10 @@ class ApiUtil {
     });
   };
 
-  static delete = async (url) => {
+  static delete = async (url, params) => {
     return await axios.delete(ApiUtil.BASE_URL + url, {
       headers: this.#getHeader(),
+      params: params,
     });
   };
 }

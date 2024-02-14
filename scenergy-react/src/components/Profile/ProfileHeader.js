@@ -21,6 +21,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 여부
   const [url, setUrl] = useState("");
   const [isUserUpdateModalOpen, setIsUserUpdateModalOpen] = useState(false); // 회원수정
+  const [isFollowingThisUser, setIsFollowingThisUser] = useState(false); // 회원수정
   const { userId } = useParams();
   useEffect(() => {
     const getUserProfile = async () => {
@@ -39,6 +40,10 @@ const ProfileHeader = ({ onUpdateUser }) => {
       } catch (error) {
         console.error(" 조회 실패", error);
       }
+
+      let followResponse = await FollowApi.getFollow(ApiUtil.getUserIdFromToken(), userId)
+      setIsFollowingThisUser(followResponse)
+
     };
 
     getUserProfile();
@@ -117,9 +122,17 @@ const ProfileHeader = ({ onUpdateUser }) => {
   };
 
   const follow = async () => {
+    if (isFollowingThisUser) {
+      let response = await FollowApi.unFollowUser(userId);
+      setFollowersCount(response.data.data.countFollowUser)
+      setIsFollowingThisUser(false);
+      return;
+    }
+
     const fromUserId = ApiUtil.getUserIdFromToken();
     let response = await FollowApi.followUser(parseInt(userId));
     setFollowersCount(response.data.data.userFollowerCount)
+    setIsFollowingThisUser(true);
     console.log(parseInt(userId) + " " + fromUserId);
   };
 
@@ -191,7 +204,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
           <a href="/profile/portfolio" className={styles["portfolio-link"]}>
             <button>포트폴리오</button>
           </a>
-          <button onClick={follow}>팔로우</button>
+          <button onClick={follow}>{isFollowingThisUser ? '언팔로우' : '팔로우'}</button>
         </div>
       </div>
       {/*/!* 회원수정 모달 *!/*/}

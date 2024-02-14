@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.follow.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -32,4 +33,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
 		where f.from = :user
 		""")
 	List<Follow> findAllByFrom(@Param("user") User user);
+
+	Optional<Follow> findByFromAndTo(User from, User to);
 }

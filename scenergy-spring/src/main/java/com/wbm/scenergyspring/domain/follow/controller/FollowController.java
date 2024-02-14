@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.follow.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.wbm.scenergyspring.config.auth.PrincipalDetails;
@@ -48,21 +50,21 @@ public class FollowController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(commandResult));
 	}
 
-	@DeleteMapping("/{followId}")
+	@DeleteMapping
 	public ResponseEntity<ApiResponse<DeleteFollowResponse>> unFollow(
-		@PathVariable("followId") Long followId,
+		@RequestParam("toUserId") Long toUserId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails
 	) {
 
 		UnFollowUserCommand unFollowUserCommand = UnFollowUserCommand.builder()
-			.followId(followId)
+			.toUserId(toUserId)
 			.fromUserId(principalDetails.getUser().getId())
 			.build();
 
-		followService.unFollowUser(unFollowUserCommand);
+		Long countFollowUser = followService.unFollowUser(unFollowUserCommand);
 
 		DeleteFollowResponse deleteFollowResponse = DeleteFollowResponse.builder()
-			.isSuccess(true)
+			.countFollowUser(countFollowUser)
 			.build();
 
 		return ResponseEntity.ok(ApiResponse.createSuccess(deleteFollowResponse));
@@ -92,4 +94,12 @@ public class FollowController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(followingResponse));
 	}
 
+	@GetMapping
+	public ResponseEntity<ApiResponse<Boolean>> isFollow(
+		@RequestParam("fromUserId") Long fromUserId,
+		@RequestParam("toUserId") Long toUserId
+	) {
+		Optional<Follow> follow = followService.getFollow(fromUserId, toUserId);
+		return ResponseEntity.ok(ApiResponse.createSuccess(follow.isPresent()));
+	}
 }

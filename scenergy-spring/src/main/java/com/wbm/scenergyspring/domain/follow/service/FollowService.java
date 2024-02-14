@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.follow.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,11 +68,15 @@ public class FollowService {
 
 	/**
 	 * 언팔로우
+	 *
 	 * @param command
+	 * @return
 	 */
 	@Transactional
-	public void unFollowUser(UnFollowUserCommand command) {
-		Follow follow = followRepository.findById(command.getFollowId())
+	public Long unFollowUser(UnFollowUserCommand command) {
+		User fromUserId = userRepository.getReferenceById(command.getFromUserId());
+		User toUserId = userRepository.getReferenceById(command.getToUserId());
+		Follow follow = followRepository.findByFromAndTo(fromUserId, toUserId)
 			.orElseThrow(() -> new EntityNotFoundException("팔로우 정보가 없습니다."));
 
 		if (!follow.getFrom().getId().equals(command.getFromUserId())) {
@@ -79,6 +84,7 @@ public class FollowService {
 		}
 
 		followRepository.delete(follow);
+		return followRepository.countByTo(follow.getTo());
 	}
 
 	/**
@@ -99,5 +105,11 @@ public class FollowService {
 	public List<Follow> findAllFollowing(FindAllFollowingCommand command) {
 		User userId = userRepository.getReferenceById(command.getUserId());
 		return followRepository.findAllByFrom(userId);
+	}
+
+	public Optional<Follow> getFollow(Long fromUserId, Long toUserId) {
+		User toUser = userRepository.getReferenceById(toUserId);
+		User fromUser = userRepository.getReferenceById(fromUserId);
+		return followRepository.findByFromAndTo(fromUser, toUser);
 	}
 }

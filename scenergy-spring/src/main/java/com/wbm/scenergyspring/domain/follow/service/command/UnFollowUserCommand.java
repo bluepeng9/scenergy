@@ -6,6 +6,6 @@ import lombok.Data;
 @Builder
 @Data
 public class UnFollowUserCommand {
-	Long followId;
+	Long toUserId;
 	Long fromUserId;
 }
