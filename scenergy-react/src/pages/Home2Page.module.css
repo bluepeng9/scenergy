@@ -1,15 +1,16 @@
+
 .content {
     display: flex;
+    position: relative;
 }
 
-.home2-div {
-    display: flex;
-    justify-content: space-between; /* 자식 요소를 양쪽 끝으로 배치 */
+.logout-div {
+    position: absolute;
+    top: 10px;
+    right: 30px;
 }
 
-.logout-div button{
+.logout-div button {
     border: none;
-    margin-right: 10px;
-    margin-top: 10px;
-    cursor:pointer;
+    cursor: pointer;
 }
