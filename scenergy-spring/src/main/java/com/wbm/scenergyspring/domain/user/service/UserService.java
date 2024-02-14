@@ -14,6 +14,7 @@ import com.wbm.scenergyspring.domain.user.entity.UserLocationTag;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.command.CreateUserCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UpdateUserInfoCommand;
+import com.wbm.scenergyspring.domain.user.service.command.UploadBioCommand;
 import com.wbm.scenergyspring.domain.user.service.command.UploadProfileCommand;
 import com.wbm.scenergyspring.domain.user.service.commanresult.FindUserCommandResult;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
@@ -77,6 +78,13 @@ public class UserService {
 		return result.getId();
 	}
 
+	@Transactional(readOnly = false)
+	public String uploadBio(UploadBioCommand command) {
+		User user = userRepository.findById(command.getUserId())
+			.orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+		user.updateBio(command.getBio());
+		return user.getBio();
+	}
 
 	@Transactional(readOnly = false)
 	public Long deleteUser(String password, String username) {
@@ -143,6 +151,7 @@ public class UserService {
 			.userName(user.getUsername())
 			.userNickname(user.getNickname())
 			.userGender(user.getGender())
+			.url(user.getUrl())
 			.build();
 	}
 

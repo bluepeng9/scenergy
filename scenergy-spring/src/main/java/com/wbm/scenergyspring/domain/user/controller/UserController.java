@@ -1,5 +1,6 @@
 package com.wbm.scenergyspring.domain.user.controller;
 
+import com.wbm.scenergyspring.domain.user.controller.request.CreateUserBioRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.CreateUserRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.SearchFollowingRequest;
 import com.wbm.scenergyspring.domain.user.controller.request.UpdateUserInfoRequest;
@@ -52,13 +53,24 @@ public class UserController {
 		return ResponseEntity.ok(ApiResponse.createSuccess(createUserResponse));
 	}
 
+	@PostMapping("/bio")
+	public ResponseEntity<ApiResponse<CreateUserBioResponse>> createUserBio (
+		@RequestBody CreateUserBioRequest request
+	) {
+		String bio =  userService.uploadBio(request.toCreateUserBioCommand());
+
+		CreateUserBioResponse createUserBioResponse = new CreateUserBioResponse();
+		createUserBioResponse.setBio(bio);
+
+		return ResponseEntity.ok(ApiResponse.createSuccess(createUserBioResponse));
+	}
+
 	//get User info
 	@GetMapping("/{userId}")
 	public ResponseEntity<ApiResponse<FindUserCommandResult>> getUser(@PathVariable("userId") Long userId) {
 		FindUserCommandResult findUser = userService.findUser(userId);
 		return ResponseEntity.ok(ApiResponse.createSuccess(findUser));
 	}
-
 
 	@DeleteMapping
 	public ResponseEntity<ApiResponse<DeleteUserResponse>> deleteUser(
