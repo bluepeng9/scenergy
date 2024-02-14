@@ -1,11 +1,10 @@
 // connect to User
-import { api } from "../ChatUserApi";
 import ApiUtil from "../ApiUtil";
 import FollowApi from "../FollowApi";
 import VideoPostApi from "../VideoPostApi";
 import UserApi from "../User/UserApi";
 
-export const User = {
+class ProfileHeaderApi {
   // user: (data) => {
   //   return {
   //     profileImage: "", //이미지 url
@@ -18,16 +17,15 @@ export const User = {
   //   return api.post("/profile", data);
   // },
 
-  user: async (data) => {
+  user = async (userId) => {
     console.log("유저아이디", ApiUtil.getUserIdFromToken());
-    let userIdFromToken = ApiUtil.getUserIdFromToken();
-    const followings = await FollowApi.getAllFollowing(userIdFromToken);
+    const followings = await FollowApi.getAllFollowing(userId);
     const followingCount = followings.data.data.findAllResponseList.length;
     console.log("팔로잉 수", followings.data.data.findAllResponseList.length);
-    const followers = await FollowApi.getAllFollowers(userIdFromToken);
+    const followers = await FollowApi.getAllFollowers(userId);
     const followerCount = followers.data.data.findAllResponseList.length;
     console.log("팔로워 수", followers.data.data.findAllResponseList.length);
-    const videos = await VideoPostApi.getMyVideoPosts(userIdFromToken);
+    const videos = await VideoPostApi.getMyVideoPosts(userId);
     const videoCount = videos.data.data.list.length;
     console.log("비디오 수", videoCount);
     const user = await UserApi.getUser();
@@ -42,5 +40,9 @@ export const User = {
       nickname: nickname,
       url: url,
     };
-  },
-};
+  };
+}
+
+const profileHeaderApi = new ProfileHeaderApi();
+
+export default profileHeaderApi;

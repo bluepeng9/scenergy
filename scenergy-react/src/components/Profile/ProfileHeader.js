@@ -1,10 +1,11 @@
 // ProfileHeaderApi.js
 import styles from "./ProfileHeader.module.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 // import { getUser } from "../../apis/User/UserApi";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FollowApi from "../../apis/FollowApi";
 import ApiUtil from "../../apis/ApiUtil";
+import ProfileHeaderApi from "../../apis/Profile/ProfileHeaderApi";
 
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
@@ -15,14 +16,29 @@ const ProfileHeader = ({ onUpdateUser }) => {
   const [videoCount, setVideoCount] = useState(0); // 영상 총 개수
   const [followersCount, setFollowersCount] = useState(0); // 팔로워 수
   const [followingCount, setFollowingCount] = useState(0); // 팔로우 수
-
+  const [nickname, setNickname] = useState("");
   const [isEditing, setIsEditing] = useState(false); // 편집 모드 여부
+  const [url, setUrl] = useState("");
   const [isUserUpdateModalOpen, setIsUserUpdateModalOpen] = useState(false); // 회원수정
-  const {userId} = useParams();
-
+  const { userId } = useParams();
   useEffect(() => {
-    getUser2();
-  }, []); // 빈 배열을 넣어 컴포넌트가 마운트될 때 한 번만 호출되도록 함
+    // console.log(userId);
+    const getUserProfile = async () => {
+      console.log(userId);
+      try {
+        const userData = await ProfileHeaderApi.user(userId);
+        console.log("=======", userData);
+        setFollowingCount(userData.followingCount);
+        setFollowersCount(userData.followerCount);
+        setVideoCount(userData.videoCount);
+        setNickname(userData.nickname);
+        setUrl(userData.url);
+      } catch (error) {
+        console.error("유저 프로필 조회 실패", error);
+      }
+    };
+    getUserProfile();
+  }, [userId]); // 빈 배열을 넣어 컴포넌트가 마운트될 때 한 번만 호출되도록 함
 
   const getUser2 = async () => {
     // const user_nickname = getUser().nickname;
@@ -64,8 +80,8 @@ const ProfileHeader = ({ onUpdateUser }) => {
   const follow = () => {
     const fromUserId = ApiUtil.getUserIdFromToken();
     FollowApi.followUser(parseInt(userId));
-    console.log(parseInt(userId) + " " + fromUserId)
-  }
+    console.log(parseInt(userId) + " " + fromUserId);
+  };
 
   const handleCloseUserUpdateModal = () => {
     // 모달 닫기
@@ -105,7 +121,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
         <div className={styles.profileNickname}>
           {/* 닉네임, 한줄소개 */}
-          {/*<h2>{user_nickname}</h2>*/}
+          <h2>{nickname}</h2>
           <p>
             {isEditing ? (
               <input value={bio} onChange={(e) => setBio(e.target.value)} />
@@ -127,12 +143,12 @@ const ProfileHeader = ({ onUpdateUser }) => {
         {/* 프로필편집 버튼, 회원탈퇴버튼, 포트폴리오 링크 */}
         <div className={styles.actionButtons}>
           {isEditing ? (
-              <>
-                <button onClick={handleSaveProfile}>저장</button>
-                <button onClick={handleCancelEdit}>취소</button>
-              </>
+            <>
+              <button onClick={handleSaveProfile}>저장</button>
+              <button onClick={handleCancelEdit}>취소</button>
+            </>
           ) : (
-              <button onClick={handleEditProfile}>프로필편집</button>
+            <button onClick={handleEditProfile}>프로필편집</button>
           )}
           <button onClick={handleUpdateUser}>회원수정</button>
           <a href="/profile/portfolio" className={styles["portfolio-link"]}>
