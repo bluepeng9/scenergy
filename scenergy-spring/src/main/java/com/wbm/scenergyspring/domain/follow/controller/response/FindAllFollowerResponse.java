@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
-import com.wbm.scenergyspring.domain.user.entity.User;
 
 import lombok.Builder;
 import lombok.Data;
@@ -25,19 +24,19 @@ public class FindAllFollowerResponse {
 			.build();
 	}
 }
-	@Data
-	@Builder
-	class FollowDto {
-		Long id;
-		User from;
-		User to;
 
-		static FollowDto from(Follow follow) {
-			return FollowDto.builder()
-				.id(follow.getId())
-				.from(follow.getFrom())
-				.to(follow.getTo())
-				.build();
-		}
+@Data
+@Builder
+class FollowDto {
+	Long id;
+	UserDto from;
+	UserDto to;
+
+	static FollowDto from(Follow follow) {
+		return FollowDto.builder()
+			.id(follow.getId())
+			.from(UserDto.fromUser(follow.getFrom()))
+			.to(UserDto.fromUser(follow.getTo()))
+			.build();
 	}
-
+}

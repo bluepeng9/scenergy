@@ -43,6 +43,10 @@ class UserApi {
     return (await ApiUtil.get(`/users/${userIdFromToken}`)).data.data;
   };
 
+  getUserById = async (userId) => {
+    return (await ApiUtil.get(`/users/${userId}`)).data.data;
+  }
+
   updateUserInfo = async (data) => {
     return await ApiUtil.put(`/users/update-info`, {
       userId: data.userId,
