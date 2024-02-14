@@ -2,58 +2,80 @@ import styles from "./SearchPage.module.css";
 import NavBar from "../components/commons/Navbar/Navbar";
 import SearchCategory from "../components/commons/Search/SearchCategory";
 import { useEffect, useState } from "react";
+import SearchDefaultResult from "../components/Search/SearchDefaultResult";
 import videoPostApi from "../apis/VideoPostApi";
 import searchApi from "../apis/SearchApi";
+import SearchUserResult from "../components/Search/SearchUserVideoResult";
+import SearchUserVideoResult from "../components/Search/SearchUserVideoResult";
 
 const SearchPage = () => {
+  const [searchInput, setSearchInput] = useState("");
   const [searchUsers, setSearchUsers] = useState([]);
   const [searchVideoPosts, setSearchVideoPost] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSearched, setIsSearched] = useState(false);
   useEffect(() => {
-    const test = async () => {
-      //검색 유저 리스트 출력
-      console.log((await searchApi.searchUser("name")).data.data);
-      const responseUsers = await searchApi.searchUser("name");
-      setSearchUsers(responseUsers.data.data);
-      //검색 비디오 포스트 출력, default 조회값 없음 -> 모든 영상 출력
-      console.log(
-        (await videoPostApi.searchVideoPost({ word: "" })).data.data.list,
-      );
+    const fetchData = async () => {
+      setIsLoading(true); // 데이터 요청 전에 로딩 상태를 true로 설정
+      try {
+        const responseVideoPosts = await videoPostApi.searchVideoPost({
+          word: "",
+        });
+        setSearchVideoPost(responseVideoPosts.data.data.list);
+      } catch (error) {
+        console.error("데이터 로딩 중 에러 발생:", error);
+      } finally {
+        setIsLoading(false); // 데이터 요청 후에 로딩 상태를 false로 설정
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleSearch = async (input, { genres, locations, instruments }) => {
+    setIsLoading(true);
+    setIsSearched(true);
+    try {
       const responseVideoPosts = await videoPostApi.searchVideoPost({
-        word: "",
+        word: input,
+        genreTags: genres.map((g) => g.id),
+        locationTags: locations.map((l) => l.id),
+        instrumentTags: instruments.map((i) => i.id),
       });
       setSearchVideoPost(responseVideoPosts.data.data.list);
-    };
-    console.log(searchUsers);
+    } catch (error) {
+      console.error("검색 에러 데이터 로드 에러", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    test();
-  }, []);
   return (
     <>
-      <div className={styles.searchGlobal}>
-        <div className={styles.searchNav}>
+      <div className={styles.searchPageGlobal}>
+        <div className={styles.searchPageNav}>
           <NavBar />
         </div>
-        <SearchCategory />
-        <div>
-          <h3>유저</h3>
-          <div>
-            {searchUsers.map((result, index) => (
-              <a key={index} href={`/profile/${result.userId}`}>
-                <span>
-                  {result.url} {result.nickName}
-                </span>
-              </a>
-            ))}
+        <div className={styles.searchPageBodyContainer}>
+          <SearchCategory onSearch={handleSearch} />
+          <div className={styles.searchPageResult}>
+            {isSearched ? (
+              // 검색 결과 렌더링
+              <>
+                <SearchUserVideoResult searchUsers={searchUsers} />
+                <SearchDefaultResult
+                  searchVideoPosts={searchVideoPosts}
+                  isLoading={isLoading}
+                />
+              </>
+            ) : (
+              // 초기 전체 영상 목록 렌더링
+              <SearchDefaultResult
+                searchVideoPosts={searchVideoPosts}
+                isLoading={isLoading}
+              />
+            )}
           </div>
-        </div>
-        <div>
-          <h3>비디오</h3>
-          <ul>
-            {searchVideoPosts.map((result, index) => (
-              <li key={index}>{result.title}</li>
-            ))}
-          </ul>
         </div>
       </div>
     </>
