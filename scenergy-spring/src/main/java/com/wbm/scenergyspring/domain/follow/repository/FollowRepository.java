@@ -13,6 +13,8 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 @Repository
 public interface FollowRepository extends JpaRepository<Follow, Long> {
 
+	Long countByTo(User to);
+
 	boolean existsByFromAndTo(User from, User to);
 
 	long deleteByFromAndTo(User from, User to);

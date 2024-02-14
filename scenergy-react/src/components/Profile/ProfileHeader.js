@@ -116,9 +116,10 @@ const ProfileHeader = ({ onUpdateUser }) => {
     setIsUserUpdateModalOpen(true);
   };
 
-  const follow = () => {
+  const follow = async () => {
     const fromUserId = ApiUtil.getUserIdFromToken();
-    FollowApi.followUser(parseInt(userId));
+    let response = await FollowApi.followUser(parseInt(userId));
+    setFollowersCount(response.data.data.userFollowerCount)
     console.log(parseInt(userId) + " " + fromUserId);
   };
 

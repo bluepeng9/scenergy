@@ -54,10 +54,14 @@ public class FollowService {
 		);
 
 		Follow save = followRepository.save(follow);
+
+		Long countFollow = followRepository.countByTo(toUser);
+
 		return FollowCommandResult.builder()
 			.followId(save.getId())
 			.fromUserId(save.getFrom().getId())
 			.toUserId(save.getTo().getId())
+			.userFollowerCount(countFollow)
 			.build();
 	}
 

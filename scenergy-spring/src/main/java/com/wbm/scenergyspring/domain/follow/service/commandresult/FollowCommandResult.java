@@ -9,4 +9,5 @@ public class FollowCommandResult {
 	Long followId;
 	Long fromUserId;
 	Long toUserId;
+	Long userFollowerCount;
 }
