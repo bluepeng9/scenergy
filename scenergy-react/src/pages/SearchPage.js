@@ -74,10 +74,17 @@ const SearchPage = () => {
               </>
             ) : (
               // 초기 전체 영상 목록 렌더링
-              <SearchDefaultResult
-                searchVideoPosts={searchVideoPosts}
-                isLoading={isLoading}
-              />
+              <>
+                <div className={styles.searchPageDefault}>
+                  <div>
+                    <h2>전체 영상</h2>
+                  </div>
+                  <SearchDefaultResult
+                    searchVideoPosts={searchVideoPosts}
+                    isLoading={isLoading}
+                  />
+                </div>
+              </>
             )}
           </div>
         </div>

@@ -1,7 +1,14 @@
 import styles from "./SearchDefaultResult.module.css";
 import basic_profile from "../../assets/basic_profile.png";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -21,7 +28,6 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
               <div className={styles.searchPageVideoInfoContainer}>
                 <div
                   className={`${styles.searchPageVideoInfoSkeleton} ${styles.skeleton}`}
-                  // style={{ width: "90%" }}
                 ></div>
                 <div
                   className={`${styles.searchPageVideoInfoSkeleton} ${styles.skeleton}`}
@@ -49,6 +55,7 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
                   <img
                     src={result.video.thumbnailUrlPath}
                     className={styles.searchPageVideo}
+                    onClick={handleModalOpen}
                   />
                 </div>
                 <div className={styles.searchPageVideoInfoContainer}>
