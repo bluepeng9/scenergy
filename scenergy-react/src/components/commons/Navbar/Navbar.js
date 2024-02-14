@@ -1,10 +1,14 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import styles from "./Navbar.module.css";
-import {useState} from "react";
+import { useState } from "react";
 import ApiUtil from "../../../apis/ApiUtil";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const isLoggedIn = !!ApiUtil.getUserIdFromToken(); // 토큰을 가지고 있는지 여부로 로그인 상태 판단
+
+  const homePath = isLoggedIn ? "/home2" : "/home"; // 로그인 상태에 따라 다른 홈 경로 선택
 
   // notificationApi.connectToNotificationServer(2, (data) => {
   //   console.log(data);
@@ -22,7 +26,7 @@ const Navbar = () => {
           <Link to="/">scenergy</Link>
         </li>
         <li>
-          <Link to="/home">홈</Link>
+          <Link to={homePath}>홈</Link>
         </li>
         <li>
           <Link to="/search">검색</Link>
