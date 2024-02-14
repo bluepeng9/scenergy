@@ -1,8 +1,11 @@
-import {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Peer from 'peerjs';
+import styles from "./ChatRoomReal.module.css";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faVideo} from "@fortawesome/free-solid-svg-icons";
 
 
-const VideoConference = ({chatRoomId, chatRoomUsers, chatRoomUsersSeq, userId}) => {
+const VideoConference = ({chatRoomId, chatRoomUsers, chatRoomUsersSeq, userId, connectUserId}) => {
     const [peerId, setPeerId] = useState('');
     const [remotePeerIdValue, setRemotePeerIdValue] = useState('');
     const remoteVideoRef = useRef(null);
@@ -10,7 +13,8 @@ const VideoConference = ({chatRoomId, chatRoomUsers, chatRoomUsersSeq, userId}) 
     const peerInstance = useRef(null);
 
     useEffect(() => {
-        const peer = new Peer(chatRoomId + userId);
+        console.log(connectUserId)
+        const peer = new Peer("" + chatRoomId + userId + "");
 
         peer.on('open', (peerId) => {
             setPeerId(peerId)
@@ -38,7 +42,7 @@ const VideoConference = ({chatRoomId, chatRoomUsers, chatRoomUsersSeq, userId}) 
         })
 
         peerInstance.current = peer;
-    }, [])
+    }, [connectUserId])
 
     const call = (remotePeerId) => {
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -67,9 +71,9 @@ const VideoConference = ({chatRoomId, chatRoomUsers, chatRoomUsersSeq, userId}) 
 
     return (
         <div>
-            <h1>Current user id is {peerId}</h1>
-            <input type="text" value={remotePeerIdValue} onChange={e => setRemotePeerIdValue(e.target.value)}/>
-            <button onClick={() => call(remotePeerIdValue)}>Call</button>
+            <div className={styles.doRtc} onClick={() => call("" + chatRoomId + connectUserId + "")}>
+                <FontAwesomeIcon icon={faVideo}/>
+            </div>
             <div>
                 <video ref={currentUserVideoRef}/>
             </div>

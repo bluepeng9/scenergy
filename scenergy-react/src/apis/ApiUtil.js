@@ -12,7 +12,7 @@ class ApiUtil {
 
     try {
       const decode = jwtDecode(token);
-      console.log(decode);
+      // console.log(decode);
       return decode.sub; //id
     } catch (error) {
       console.error("토큰 티코드 안댐", error);

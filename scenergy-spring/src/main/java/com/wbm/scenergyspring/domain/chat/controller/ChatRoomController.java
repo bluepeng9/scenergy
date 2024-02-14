@@ -5,6 +5,7 @@ import com.wbm.scenergyspring.domain.chat.controller.response.*;
 import com.wbm.scenergyspring.domain.chat.dto.ChatMessageDto;
 import com.wbm.scenergyspring.domain.chat.dto.ChatRoomDto;
 import com.wbm.scenergyspring.domain.chat.service.ChatService;
+import com.wbm.scenergyspring.domain.chat.service.command.GetToConnectUserCommand;
 import com.wbm.scenergyspring.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -87,6 +88,14 @@ public class ChatRoomController {
     public ResponseEntity<ApiResponse<ChatRoomUsersResponse>> getChatRoomUsers(@RequestParam("chatRoomId") Long chatRoomId) {
 
         ChatRoomUsersResponse response = chatService.getChatRoomUsers(chatRoomId);
+        return ResponseEntity.ok(ApiResponse.createSuccess(response));
+    }
+
+    @PostMapping("/connect-user")
+    public ResponseEntity<ApiResponse<GetToConnectUserResponse>> getToConnectUser(@RequestBody GetToConnectUserRequest request) {
+        System.out.println(request.getChatRoomId() + " " + request.getUserId());
+        GetToConnectUserCommand command = GetToConnectUserCommand.builder().userId(request.getUserId()).chatRoomId(request.getChatRoomId()).build();
+        GetToConnectUserResponse response = chatService.getToConnectUser(command);
         return ResponseEntity.ok(ApiResponse.createSuccess(response));
     }
 }

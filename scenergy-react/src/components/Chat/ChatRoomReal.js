@@ -9,6 +9,8 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
 import {useChatRooms} from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
+import ApiUtil from "../../apis/ApiUtil";
+import ChatRoomApi from "../../apis/ChatRoomApi";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [chatRoomUsers, setChatRoomUsers] = useState([]);
@@ -22,6 +24,21 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const { roomId } = useParams();
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
+  const [connectUserId, setConnectUserId] = useState(0);
+
+
+  useEffect(() => {
+    const getConnectUserId = async () => {
+      try {
+        const response = await ChatRoomApi.getUserInfo(realRoomId, userId);
+        setConnectUserId(response.data.data.userId);
+      } catch (error) {
+        console.error("Connect user info fetching error:", error);
+      }
+    };
+
+    getConnectUserId();
+  }, [realRoomId, userId]);
 
   const handleModalOpen = () => setIsModalOpen(!isModalOpen);
 
@@ -34,24 +51,28 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const getChatUsers = async (event) => {
     event.preventDefault();
 
+    if (!selectedUsers.length === 0) {
+      console.log("사용자 없는디?");
+      return;
+    }
     try {
-      const response = await axios.get(
-          process.env.REACT_APP_API_URL + `/chatroom/list-chat-users`, // 수정된 부분
-        {
-          params: {
-            chatRoomId: realRoomId,
+      //room_id useParam으로 받아온거 고쳐주기
+      const response = await axios.post(
+          process.env.REACT_APP_API_URL + "/chatroom/invite-room",
+          {
+            room_id: roomId,
+            users: selectedUsers,
           },
-        },
       );
-      console.log("charRoom에 포함된 유저", response.data.data);
       if (response.data) {
-        console.log("charRoom에 포함된 유저", response.data.data.users);
-        setChatRoomUsers([...chatRoomUsers, ...response.data.data.users]);
-        setChatRoomUsersSeq([...chatRoomUsersSeq, ...response.data.data.seq]);
+        console.log("초대 완", response.data);
+        setIsModalOpen(false);
+        setSelectedUsers([]);
       }
     } catch (error) {
-      console.error("chatRoomUsers 오류", error);
+      console.error("에러남", error);
     }
+
   };
 
   const handleInvite = async (event) => {
@@ -86,9 +107,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   console.log(lastMessageId);
 
   useEffect(() => {
-    console.log(lastMessageId);
-    console.log(lastMessage);
-  }, [lastMessageId, lastMessage]);
+  }, []);
 
   return (
     <>
@@ -106,14 +125,13 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 <p>상대방 닉네임</p>
               </div>
             </div>
-            <div onClick={getChatUsers}>
-              <VideoConference
+            <VideoConference
                 chatRoomId={realRoomId}
                 chatRoomUsers={chatRoomUsers}
                 chatRoomUsersSeq={chatRoomUsersSeq}
-                userId={Math.floor(Math.random() * 100) + 1}
-              />
-            </div>
+                userId={ApiUtil.getUserIdFromToken()}
+                connectUserId={connectUserId}
+            />
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
               <div className={styles.userInvite} onClick={handleModalOpen}>

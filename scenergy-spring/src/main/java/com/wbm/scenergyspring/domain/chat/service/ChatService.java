@@ -1,6 +1,7 @@
 package com.wbm.scenergyspring.domain.chat.service;
 
 import com.wbm.scenergyspring.domain.chat.controller.response.ChatRoomUsersResponse;
+import com.wbm.scenergyspring.domain.chat.controller.response.GetToConnectUserResponse;
 import com.wbm.scenergyspring.domain.chat.dto.*;
 import com.wbm.scenergyspring.domain.chat.entity.ChatMessage;
 import com.wbm.scenergyspring.domain.chat.entity.ChatRoom;
@@ -19,7 +20,6 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -340,7 +340,7 @@ public class ChatService {
         return command.getRoomId();
     }
 
-    public ChatRoomUsersResponse getChatRoomUsers(@RequestParam Long chatRoomId) {
+    public ChatRoomUsersResponse getChatRoomUsers(Long chatRoomId) {
         List<ChatUser> list = chatRoomRepository.findChatRoomUsers(chatRoomId).orElseThrow(() -> new EntityNotFoundException("존재하는 채팅 참여 유저가 없습니다."));
         List<Long> users = new ArrayList<>();
         List<Long> seq = new ArrayList<>();
@@ -353,5 +353,11 @@ public class ChatService {
         response.setUsers(users);
         response.setSeq(seq);
         return response;
+    }
+
+    public GetToConnectUserResponse getToConnectUser(GetToConnectUserCommand command) {
+        Long userId = chatRoomRepository.findToConnectUser(command.getChatRoomId(), command.getUserId()).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 유저입니다."));
+        System.out.println("*********************" + userId);
+        return GetToConnectUserResponse.builder().userId(userId).build();
     }
 }
