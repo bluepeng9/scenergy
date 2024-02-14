@@ -28,7 +28,7 @@ class ProfileHeaderApi {
     const videos = await VideoPostApi.getMyVideoPosts(userId);
     const videoCount = videos.data.data.list.length;
     console.log("비디오 수", videoCount);
-    const user = await UserApi.getUser();
+    const user = await UserApi.getUserById(userId);
     const nickname = user.userName;
     const url = user.url;
     const bio = user.bio;
