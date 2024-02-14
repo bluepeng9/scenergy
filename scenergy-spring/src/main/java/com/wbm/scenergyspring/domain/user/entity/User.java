@@ -35,6 +35,7 @@ public class User extends BaseEntity {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	List<UnreadMessage> unreadMessages;
 	String url;
+	String bio;
 
 	public static User createNewUser(
 		String email,
@@ -57,6 +58,7 @@ public class User extends BaseEntity {
 	public void updateUrl(String url) {
 		this.url = url;
 	}
+	public void updateBio(String bio) {this.bio = bio;}
 
 	public void updateUserName(String name) {
 		this.username = name;
