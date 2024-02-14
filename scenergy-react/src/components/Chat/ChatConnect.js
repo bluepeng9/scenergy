@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import {useCallback, useEffect, useRef, useState} from "react";
+import {useParams} from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import styles from "./ChatConnect.module.css";
 import ChatInput from "./ChatInput";
-import { useChatMessages } from "../../hooks/useChatMessages";
-import { ChatList } from "./ChatMessageList";
-import { useChatMessageContext } from "../../contexts/ChatMessageContext";
-import { useChatRoom } from "../../contexts/ChatRoomContext";
+import {useChatMessages} from "../../hooks/useChatMessages";
+import {ChatList} from "./ChatMessageList";
+import {useChatMessageContext} from "../../contexts/ChatMessageContext";
+import {useChatRoom} from "../../contexts/ChatRoomContext";
 import ApiUtil from "../../apis/ApiUtil";
 
 const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
@@ -74,7 +74,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
       }
 
       client.current = new StompJs.Client({
-        brokerURL: "ws://" + process.env.REACT_APP_API_WS_URL + "/ws",
+        brokerURL: process.env.REACT_APP_API_WS_URL,
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
