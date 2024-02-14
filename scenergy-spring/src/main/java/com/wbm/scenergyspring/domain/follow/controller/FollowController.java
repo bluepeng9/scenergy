@@ -70,7 +70,7 @@ public class FollowController {
 
 	@GetMapping("/followers/{toUserId}")
 	public ResponseEntity<ApiResponse<FindAllFollowerResponse>> getAllFollowers(
-		@PathVariable Long toUserId
+		@PathVariable("toUserId") Long toUserId
 	) {
 		FindAllFollowersRequest request = FindAllFollowersRequest.builder()
 			.toUserId(toUserId)
@@ -82,7 +82,7 @@ public class FollowController {
 
 	@GetMapping("/followings/{fromUserId}")
 	public ResponseEntity<ApiResponse<FindAllFollowingResponse>> getAllFollowing(
-		@PathVariable Long fromUserId
+		@PathVariable("fromUserId") Long fromUserId
 	) {
 		FindAllFollowingRequest request = FindAllFollowingRequest.builder()
 			.fromUserId(fromUserId)
