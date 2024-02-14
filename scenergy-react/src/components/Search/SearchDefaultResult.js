@@ -1,5 +1,5 @@
 import styles from "./SearchDefaultResult.module.css";
-
+import basic_profile from "../../assets/basic_profile.png";
 const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
   return (
     <>
@@ -31,44 +31,25 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
             </div>
           ))
         : searchVideoPosts.map((result) => (
-            <div>
+            <div key={result.video.id}>
               <div className={styles.searchPageVideoResult}>
                 <div className={styles.searchPageVideoHeader}>
-                  <div>이미지</div>
-                  <div>유저 닉네임</div>
+                  {!result.url ? (
+                    <img src={basic_profile} className={styles.userImg} />
+                  ) : (
+                    <img src={result.url} className={styles.userImg} />
+                  )}
+                  <div>{result.writer}</div>
                 </div>
                 <div className={styles.searchPageVideoItem}>
-                  <div className={styles.searchPageVideo}></div>
+                  <img
+                    src={result.video.thumbnailUrlPath}
+                    className={styles.searchPageVideo}
+                  />
                 </div>
                 <div className={styles.searchPageVideoInfoContainer}>
-                  <h3>영상 제목</h3>
-                  <p>곡 정보</p>
-                </div>
-              </div>
-              <div className={styles.searchPageVideoResult}>
-                <div className={styles.searchPageVideoHeader}>
-                  <div>이미지</div>
-                  <div>유저 닉네임</div>
-                </div>
-                <div className={styles.searchPageVideoItem}>
-                  <div className={styles.searchPageVideo}></div>
-                </div>
-                <div className={styles.searchPageVideoInfoContainer}>
-                  <h3>영상 제목</h3>
-                  <p>곡 정보</p>
-                </div>
-              </div>
-              <div className={styles.searchPageVideoResult}>
-                <div className={styles.searchPageVideoHeader}>
-                  <div>이미지</div>
-                  <div>유저 닉네임</div>
-                </div>
-                <div className={styles.searchPageVideoItem}>
-                  <div className={styles.searchPageVideo}></div>
-                </div>
-                <div className={styles.searchPageVideoInfoContainer}>
-                  <h3>영상 제목</h3>
-                  <p>곡 정보</p>
+                  <h3>{result.content}</h3>
+                  <p>{result.video.musicTitle}</p>
                 </div>
               </div>
             </div>

@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import SearchDefaultResult from "../components/Search/SearchDefaultResult";
 import videoPostApi from "../apis/VideoPostApi";
 import searchApi from "../apis/SearchApi";
-import SearchUserResult from "../components/Search/SearchUserVideoResult";
 import SearchUserVideoResult from "../components/Search/SearchUserVideoResult";
 
 const SearchPage = () => {
@@ -21,6 +20,7 @@ const SearchPage = () => {
         const responseVideoPosts = await videoPostApi.searchVideoPost({
           word: "",
         });
+        console.log(responseVideoPosts.data);
         setSearchVideoPost(responseVideoPosts.data.data.list);
       } catch (error) {
         console.error("데이터 로딩 중 에러 발생:", error);
@@ -32,16 +32,19 @@ const SearchPage = () => {
     fetchData();
   }, []);
 
-  const handleSearch = async (input, { genres, locations, instruments }) => {
+  const handleSearch = async (input, { genres, instruments }) => {
     setIsLoading(true);
     setIsSearched(true);
+    console.log(input);
     try {
+      const responseUsers = await searchApi.searchUser(input);
       const responseVideoPosts = await videoPostApi.searchVideoPost({
         word: input,
-        genreTags: genres.map((g) => g.id),
-        locationTags: locations.map((l) => l.id),
-        instrumentTags: instruments.map((i) => i.id),
+        gt: genres?.map((g) => g.id) || [],
+        it: instruments?.map((i) => i.id) || [],
       });
+      console.log(responseUsers.data.data.list);
+      setSearchUsers(responseUsers.data.data);
       setSearchVideoPost(responseVideoPosts.data.data.list);
     } catch (error) {
       console.error("검색 에러 데이터 로드 에러", error);
