@@ -8,7 +8,6 @@ import searchApi from "../apis/SearchApi";
 import SearchUserVideoResult from "../components/Search/SearchUserVideoResult";
 
 const SearchPage = () => {
-  const [searchInput, setSearchInput] = useState("");
   const [searchUsers, setSearchUsers] = useState([]);
   const [searchVideoPosts, setSearchVideoPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -65,11 +64,13 @@ const SearchPage = () => {
             {isSearched ? (
               // 검색 결과 렌더링
               <>
-                <SearchUserVideoResult searchUsers={searchUsers} />
-                <SearchDefaultResult
-                  searchVideoPosts={searchVideoPosts}
-                  isLoading={isLoading}
-                />
+                <div>
+                  <SearchUserVideoResult searchUsers={searchUsers} />
+                  <SearchDefaultResult
+                    searchVideoPosts={searchVideoPosts}
+                    isLoading={isLoading}
+                  />
+                </div>
               </>
             ) : (
               // 초기 전체 영상 목록 렌더링

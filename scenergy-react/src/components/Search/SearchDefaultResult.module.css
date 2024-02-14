@@ -1,5 +1,4 @@
 .searchPageVideoResultContainer {
-
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 40px;
@@ -29,7 +28,7 @@
         background-color: #ddd;
     }
     50% {
-        background-color: #ccc;
+        background-color: #b5b5b5;
     }
     100% {
         background-color: #ddd;
@@ -60,11 +59,11 @@
     justify-content: space-evenly;
     gap: 20px;
     padding: 25px;
-    background-color: black;
+    background-color: #2F3148;
     width: 320px;
     height: 370px;
     border-radius: 20px;
-    box-shadow: 4px 4px 10px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.27);
 }
 
 .searchPageVideoResult p {
@@ -78,6 +77,7 @@
     font-size: 1.2rem;
     justify-content: flex-start;
     gap: 20px;
+    align-items: center;
 }
 .searchPageVideo img{
     width: 200px;
@@ -88,5 +88,6 @@
 }
 
 .userImg{
-    width: 50px;
+    width: 40px;
 }
+

@@ -1,46 +1,50 @@
 import styles from "./SearchDefaultResult.module.css";
 import basic_profile from "../../assets/basic_profile.png";
+import { Link } from "react-router-dom";
 const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
   return (
     <>
-      {isLoading
-        ? Array.from({ length: 6 }).map((_, index) => (
+      {isLoading ? (
+        <div className={styles.searchPageVideoResultContainer}>
+          {Array.from({ length: 6 }).map((_, index) => (
             <div key={index} className={styles.searchPageVideoResult}>
               <div
                 className={`${styles.searchPageVideoHeader} ${styles.skeleton}`}
+              ></div>
+              <div
+                className={`${styles.searchPageVideoItem}  ${styles.skeleton}`}
               >
-                <div className={styles.searchPageVideoSkeleton}></div>
                 <div
-                  className={styles.searchPageVideoInfoSkeleton}
-                  style={{ width: "70%" }}
+                  className={`${styles.searchPageVideoSkeleton} ${styles.skeleton}`}
                 ></div>
-              </div>
-              <div className={styles.searchPageVideoItem}>
-                <div className={styles.searchPageVideoSkeleton}></div>
               </div>
               <div className={styles.searchPageVideoInfoContainer}>
                 <div
-                  className={styles.searchPageVideoInfoSkeleton}
-                  style={{ width: "90%" }}
+                  className={`${styles.searchPageVideoInfoSkeleton} ${styles.skeleton}`}
+                  // style={{ width: "90%" }}
                 ></div>
                 <div
-                  className={styles.searchPageVideoInfoSkeleton}
-                  style={{ width: "80%" }}
+                  className={`${styles.searchPageVideoInfoSkeleton} ${styles.skeleton}`}
                 ></div>
               </div>
             </div>
-          ))
-        : searchVideoPosts.map((result) => (
+          ))}
+        </div>
+      ) : (
+        <div className={styles.searchPageVideoResultContainer}>
+          {searchVideoPosts.map((result) => (
             <div key={result.video.id}>
               <div className={styles.searchPageVideoResult}>
-                <div className={styles.searchPageVideoHeader}>
-                  {!result.url ? (
-                    <img src={basic_profile} className={styles.userImg} />
-                  ) : (
-                    <img src={result.url} className={styles.userImg} />
-                  )}
-                  <div>{result.writer}</div>
-                </div>
+                <Link to={`/profile/${result.userId}`}>
+                  <div className={styles.searchPageVideoHeader}>
+                    {!result.url ? (
+                      <img src={basic_profile} className={styles.userImg} />
+                    ) : (
+                      <img src={result.url} className={styles.userImg} />
+                    )}
+                    <div>{result.writer}</div>
+                  </div>
+                </Link>
                 <div className={styles.searchPageVideoItem}>
                   <img
                     src={result.video.thumbnailUrlPath}
@@ -54,6 +58,8 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
               </div>
             </div>
           ))}
+        </div>
+      )}
     </>
   );
 };

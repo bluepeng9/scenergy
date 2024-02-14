@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useLocation, useParams} from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+  faCircleInfo,
+  faPlus,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
-import {useChatRooms} from "../../hooks/useChatRooms";
+import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 import ApiUtil from "../../apis/ApiUtil";
 import ChatRoomApi from "../../apis/ChatRoomApi";
@@ -25,7 +29,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
   const [connectUserId, setConnectUserId] = useState(0);
-
 
   useEffect(() => {
     const getConnectUserId = async () => {
@@ -58,11 +61,11 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     try {
       //room_id useParam으로 받아온거 고쳐주기
       const response = await axios.post(
-          process.env.REACT_APP_API_URL + "/chatroom/invite-room",
-          {
-            room_id: roomId,
-            users: selectedUsers,
-          },
+        process.env.REACT_APP_API_URL + "/chatroom/invite-room",
+        {
+          room_id: roomId,
+          users: selectedUsers,
+        },
       );
       if (response.data) {
         console.log("초대 완", response.data);
@@ -72,7 +75,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     } catch (error) {
       console.error("에러남", error);
     }
-
   };
 
   const handleInvite = async (event) => {
@@ -85,7 +87,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     try {
       //room_id useParam으로 받아온거 고쳐주기
       const response = await axios.post(
-          process.env.REACT_APP_API_URL + "/chatroom/invite-room",
+        process.env.REACT_APP_API_URL + "/chatroom/invite-room",
         {
           room_id: roomId,
           users: selectedUsers,
@@ -105,8 +107,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     setIsRtcConnect(!isRtcConnect);
   };
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -125,11 +126,11 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
               </div>
             </div>
             <VideoConference
-                chatRoomId={realRoomId}
-                chatRoomUsers={chatRoomUsers}
-                chatRoomUsersSeq={chatRoomUsersSeq}
-                userId={ApiUtil.getUserIdFromToken()}
-                connectUserId={connectUserId}
+              chatRoomId={realRoomId}
+              chatRoomUsers={chatRoomUsers}
+              chatRoomUsersSeq={chatRoomUsersSeq}
+              userId={ApiUtil.getUserIdFromToken()}
+              connectUserId={connectUserId}
             />
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
