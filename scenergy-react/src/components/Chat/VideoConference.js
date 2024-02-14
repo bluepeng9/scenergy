@@ -3,6 +3,7 @@ import Peer from 'peerjs';
 import styles from "./ChatRoomReal.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faVideo} from "@fortawesome/free-solid-svg-icons";
+import VideoConferenceApi from "../../apis/VideoConferenceApi";
 
 const VideoConference = ({chatRoomId, userId, connectUserId}) => {
     const [peerId, setPeerId] = useState('');
@@ -10,12 +11,14 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
     const currentUserVideoRef = useRef(null);
     const peerInstance = useRef(null);
     const callRef = useRef(null);
+    const [connectToPeerId, setConnectToPeerId] = useState("");
 
     useEffect(() => {
-        const peer = new Peer("" + chatRoomId + userId + "");
+        const peer = new Peer();
 
         peer.on('open', (peerId) => {
-            setPeerId(peerId)
+            setPeerId(peerId);
+            VideoConferenceApi.savePeerId(chatRoomId, parseInt(userId), peerId);
         });
 
         peer.on('call', (call) => {
@@ -37,7 +40,6 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
                     }
                 });
             });
-            callRef.current = call; // call 객체 저장
         })
 
         peerInstance.current = peer;
@@ -45,24 +47,19 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
         return () => {
             hangUp()
         };
+    }, [chatRoomId, userId]);
 
-    }, [chatRoomId, userId, connectUserId]);
-
-    const call = async (remotePeerId) => {
+    const call = (remotePeerId) => {
         var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-        try {
-            const mediaStream = await new Promise((resolve, reject) => {
-                getUserMedia({video: true, audio: true}, resolve, reject);
-            });
+        getUserMedia({video: true, audio: true}, (mediaStream) => {
 
             currentUserVideoRef.current.srcObject = mediaStream;
             currentUserVideoRef.current.play();
 
-            const call = peerInstance.current.call(remotePeerId, mediaStream);
-
+            const call = peerInstance.current.call(remotePeerId, mediaStream)
             call.on('stream', (remoteStream) => {
-                remoteVideoRef.current.srcObject = remoteStream;
+                remoteVideoRef.current.srcObject = remoteStream
                 var playPromise = remoteVideoRef.current.play();
 
                 if (playPromise !== undefined) {
@@ -71,25 +68,51 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
                         .catch(error => {
                         });
                 }
-            });
-            callRef.current = call; // call 객체 저장
-        } catch (error) {
-            console.error('Error accessing media devices:', error);
-        }
-    };
 
+            });
+        });
+    }
+
+    const handleCall = async () => {
+        try {
+            const connectToPeerId = await getConnectToPeerId();
+            setConnectToPeerId(connectToPeerId);
+            if (connectToPeerId !== null) {
+                call(connectToPeerId);
+            } else {
+                console.error("Failed to get connectToPeerId.");
+            }
+        } catch (error) {
+            console.error("Error while handling call after getConnectToPeerId:", error);
+        }
+    }
+    const getConnectToPeerId = async () => {
+        try {
+            const response = await VideoConferenceApi.getPeerId(chatRoomId, connectUserId);
+            return response.data.data;
+        } catch (error) {
+            console.error("Error while fetching connectToPeerId:", error);
+            return null;
+        }
+    }
     const hangUp = () => {
         if (callRef.current) {
             callRef.current.close(); // 연결된 비디오 중지
         }
-        // 비디오 스트림 초기화
-        currentUserVideoRef.current.srcObject = null;
-        remoteVideoRef.current.srcObject = null;
+        // 비디오 스트림 해제
+        if (currentUserVideoRef.current && currentUserVideoRef.current.srcObject) {
+            currentUserVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            currentUserVideoRef.current.srcObject = null;
+        }
+        if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+            remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            remoteVideoRef.current.srcObject = null;
+        }
     };
 
     return (
         <div>
-            <div className={styles.doRtc} onClick={() => call("" + chatRoomId + connectUserId + "")}>
+            <div className={styles.doRtc} onClick={handleCall}>
                 <FontAwesomeIcon icon={faVideo}/>
             </div>
             <div className={styles.doRtc} onClick={hangUp}>

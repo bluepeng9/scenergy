@@ -11,6 +11,7 @@ import {useChatRooms} from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 import ApiUtil from "../../apis/ApiUtil";
 import ChatRoomApi from "../../apis/ChatRoomApi";
+import ChatMessageApi from "../../apis/ChatMessageApi";
 
 const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [chatRoomUsers, setChatRoomUsers] = useState([]);
@@ -25,18 +26,28 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const realRoomId = parseInt(roomId, 10);
   const { refetch } = useChatRooms(userId);
   const [connectUserId, setConnectUserId] = useState(0);
+  const [status, setStatus] = useState(0);
 
   useEffect(() => {
-    const getConnectUserId = async () => {
-      try {
-        const response = await ChatRoomApi.getUserInfo(realRoomId, userId);
-        setConnectUserId(response.data.data.userId);
-      } catch (error) {
-        console.error("Connect user info fetching error:", error);
-      }
-    };
 
-    getConnectUserId();
+    const getStatus = async () => {
+      const sta = await ChatMessageApi.getRoomInfo(realRoomId);
+      console.log(sta.data.data.roomInfo.status)
+      if (sta.data.data.roomInfo.status === 0) {
+        const getConnectUserId = async () => {
+          try {
+            const response = await ChatRoomApi.getUserInfo(realRoomId, userId);
+            setConnectUserId(response.data.data.userId);
+          } catch (error) {
+            console.error("Connect user info fetching error:", error);
+          }
+        };
+        getConnectUserId();
+      }
+      setStatus(sta.data.data.roomInfo.status)
+    }
+    getStatus();
+
   }, [realRoomId, userId]);
 
   const handleModalOpen = () => setIsModalOpen(!isModalOpen);
@@ -119,13 +130,15 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 <p>상대방 닉네임</p>
               </div>
             </div>
-            <VideoConference
-              chatRoomId={realRoomId}
-              chatRoomUsers={chatRoomUsers}
-              chatRoomUsersSeq={chatRoomUsersSeq}
-              userId={ApiUtil.getUserIdFromToken()}
-              connectUserId={connectUserId}
-            />
+            <div style={{display: status !== 0 ? 'none' : 'block'}}>
+              <VideoConference
+                  chatRoomId={realRoomId}
+                  chatRoomUsers={chatRoomUsers}
+                  chatRoomUsersSeq={chatRoomUsersSeq}
+                  userId={ApiUtil.getUserIdFromToken()}
+                  connectUserId={connectUserId}
+              />
+            </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
               <div className={styles.userInvite} onClick={handleModalOpen}>

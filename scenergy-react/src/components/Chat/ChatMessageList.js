@@ -31,14 +31,14 @@ const ChatMessage = ({ message, userId }) => {
     const maxWord = 30;
     let formattedMessage = "";
     let currentLine = "";
-
-    for (let i = 0; i < message.length; i++) {
-      currentLine += message[i];
-      if (currentLine.length >= maxWord || message[i] === " ") {
-        formattedMessage += currentLine + "\n";
-        currentLine = "";
-      }
-    }
+      if (message != null)
+          for (let i = 0; i < message.length; i++) {
+              currentLine += message[i];
+              if (currentLine.length >= maxWord || message[i] === " ") {
+                  formattedMessage += currentLine + "\n";
+                  currentLine = "";
+              }
+          }
     if (currentLine !== "") {
       formattedMessage += currentLine + "\n";
     }
