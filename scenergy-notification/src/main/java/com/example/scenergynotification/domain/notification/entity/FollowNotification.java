@@ -7,13 +7,15 @@ public class FollowNotification extends Notification {
 
 	public static FollowNotification createFollowNotification(
 		Long receiver,
-		Long sender
+		Long sender,
+		String senderNickname
 	) {
 		FollowNotification followNotification = new FollowNotification();
 		followNotification.updateNotificationInfo(
 			receiver,
 			sender,
-			NotificationStatus.UNREAD
+			NotificationStatus.UNREAD,
+			senderNickname
 		);
 
 		return followNotification;

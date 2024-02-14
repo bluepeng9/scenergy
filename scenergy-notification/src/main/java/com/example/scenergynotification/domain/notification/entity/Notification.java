@@ -27,17 +27,21 @@ public abstract class Notification extends BaseEntity {
 
 	private Long sender;
 
+	private String senderNickname;
+
 	@Enumerated(EnumType.STRING)
 	private NotificationStatus status;
 
 	void updateNotificationInfo(
 		Long receiver,
 		Long sender,
-			NotificationStatus status
+		NotificationStatus status,
+		String senderNickname
 	) {
 		this.receiver = receiver;
 		this.sender = sender;
 		this.status = status;
+		this.senderNickname = senderNickname;
 	}
 
 	public void readNotification() {

@@ -8,4 +8,5 @@ import lombok.Data;
 public class SendFollowNotificationCommand {
 	private Long toUserId;
 	private Long fromUserId;
+	private String fromUserNickname;
 }

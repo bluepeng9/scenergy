@@ -45,6 +45,7 @@ public class NotificationController {
 			SendFollowNotificationCommand.builder()
 				.fromUserId(event.getFromUserId())
 				.toUserId(event.getToUserId())
+				.fromUserNickname(fromUserInfo.getNickname())
 				.build()
 		);
 
@@ -84,6 +85,7 @@ public class NotificationController {
 			.receiver(receiveUser.getId())
 			.sender(chat.getSenderId())
 			.chatMessage(chat.getChatMessage())
+			.senderNickname(sender.getNickname())
 			.build();
 		log.debug("command: {}", command);
 

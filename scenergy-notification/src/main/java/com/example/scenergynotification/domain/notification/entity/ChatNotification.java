@@ -10,11 +10,17 @@ public class ChatNotification extends Notification {
 	public static ChatNotification createChatNotification(
 		Long receiver,
 		Long sender,
-		String chatMessage
+		String chatMessage,
+		String senderNickname
 	) {
 		ChatNotification notification = new ChatNotification();
 		notification.chatMessage = chatMessage;
-		notification.updateNotificationInfo(receiver, sender, NotificationStatus.UNREAD);
+		notification.updateNotificationInfo(
+			receiver,
+			sender,
+			NotificationStatus.UNREAD,
+			senderNickname
+		);
 		return notification;
 	}
 }

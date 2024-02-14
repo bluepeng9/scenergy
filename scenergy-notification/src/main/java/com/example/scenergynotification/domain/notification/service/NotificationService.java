@@ -25,7 +25,8 @@ public class NotificationService {
 	public SendFollowNotificationCommandResult sendFollowNotification(SendFollowNotificationCommand command) {
 		FollowNotification notification = FollowNotification.createFollowNotification(
 			command.getFromUserId(),
-			command.getToUserId()
+			command.getToUserId(),
+			command.getFromUserNickname()
 		);
 		FollowNotification save = notificationRepository.save(notification);
 		return SendFollowNotificationCommandResult.builder()
@@ -47,7 +48,8 @@ public class NotificationService {
 		ChatNotification chatNotification = ChatNotification.createChatNotification(
 			command.getReceiver(),
 			command.getSender(),
-			command.getChatMessage()
+			command.getChatMessage(),
+			command.getSenderNickname()
 		);
 		return notificationRepository.save(chatNotification);
 	}

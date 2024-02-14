@@ -10,4 +10,5 @@ public class SendUnreadChatNotificationCommand {
 	private Long receiver;
 	private Long sender;
 	private String chatMessage;
+	private String senderNickname;
 }
