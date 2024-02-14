@@ -15,10 +15,11 @@ public class ChatService {
 
 	public Chat getChatMessageInfo(GetChatMessageInfoCommand command) {
 
-		return new RestTemplate().getForObject(
+		ChatDto chatDto = new RestTemplate().getForObject(
 			userServiceUrl + "/chatMessage/" + command.getChatMessageId(),
-			Chat.class
+			ChatDto.class
 		);
+		return chatDto.toChat();
 	}
 
 }

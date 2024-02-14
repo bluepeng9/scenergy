@@ -43,11 +43,12 @@ public class NotificationService {
 		notification.readNotification();
 	}
 
-	public void sendUnreadChatNotification(SendUnreadChatNotificationCommand command) {
-		ChatNotification.createChatNotification(
+	public ChatNotification sendUnreadChatNotification(SendUnreadChatNotificationCommand command) {
+		ChatNotification chatNotification = ChatNotification.createChatNotification(
 			command.getReceiver(),
 			command.getSender(),
 			command.getChatMessage()
 		);
+		return notificationRepository.save(chatNotification);
 	}
 }

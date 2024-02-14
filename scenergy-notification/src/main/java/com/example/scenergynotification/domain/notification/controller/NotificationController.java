@@ -14,6 +14,7 @@ import com.example.scenergynotification.domain.notification.controller.request.O
 import com.example.scenergynotification.domain.notification.controller.request.OnUnreadMessageEvent;
 import com.example.scenergynotification.domain.notification.controller.response.NotificationTypeResponse;
 import com.example.scenergynotification.domain.notification.controller.response.SseNotificationResponse;
+import com.example.scenergynotification.domain.notification.entity.ChatNotification;
 import com.example.scenergynotification.domain.notification.service.NotificationService;
 import com.example.scenergynotification.domain.notification.service.command.SendFollowNotificationCommand;
 import com.example.scenergynotification.domain.notification.service.command.SendUnreadChatNotificationCommand;
@@ -86,7 +87,17 @@ public class NotificationController {
 			.build();
 		log.debug("command: {}", command);
 
-		notificationService.sendUnreadChatNotification(command);
+		ChatNotification chatNotification = notificationService.sendUnreadChatNotification(command);
+
+		sseEmitters.emit(
+			event.getUserId(),
+			SseNotificationResponse.builder()
+				.notificationId(chatNotification.getId())
+				.senderNickname(sender.getNickname())
+				.notificationTypeResponse(NotificationTypeResponse.UNREAD_CHAT)
+				.build(),
+			"notification"
+		);
 
 	}
 
