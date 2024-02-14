@@ -13,5 +13,6 @@ public class FindUserCommandResult {
 	private String userName;
 	private String userNickname;
 	private String url;
+	private String bio;
 	private Gender userGender;
 }
