@@ -1,10 +1,11 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Peer from 'peerjs';
 import styles from "./ChatRoomReal.module.css";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faVideo} from "@fortawesome/free-solid-svg-icons";
 
 const VideoConference = ({chatRoomId, userId, connectUserId}) => {
+    const [peerId, setPeerId] = useState('');
     const remoteVideoRef = useRef(null);
     const currentUserVideoRef = useRef(null);
     const peerInstance = useRef(null);
@@ -12,6 +13,10 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
 
     useEffect(() => {
         const peer = new Peer("" + chatRoomId + userId + "");
+
+        peer.on('open', (peerId) => {
+            setPeerId(peerId)
+        });
 
         peer.on('call', (call) => {
             var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
