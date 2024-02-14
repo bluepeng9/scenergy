@@ -1,9 +1,11 @@
 import ApiUtil from "./ApiUtil";
-import axios from "axios";
+import baseAxios from "axios";
 
 class NotificationApi {
 
     #sse;
+
+    axios = baseAxios.create({});
 
     notificationUrl = process.env.REACT_APP_NOTIFICATION_API_URL
 
@@ -26,8 +28,7 @@ class NotificationApi {
     getAllNotification = async () => {
         let userIdFromToken = ApiUtil.getUserIdFromToken();
 
-        let notifications = (await axios.get(`${this.notificationUrl}/users/${userIdFromToken}/notification`)).data;
-        return notifications;
+        return (await this.axios.get(`${this.notificationUrl}/users/${userIdFromToken}/notification`)).data.notifications;
 
     }
 }

@@ -1,0 +1,12 @@
+.notificationMain {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    height: 100vh;
+}
+
+.rightMainBox {
+    padding-left: 20px;
+    padding-top: 20px;
+
+}

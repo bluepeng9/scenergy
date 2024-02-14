@@ -25,8 +25,8 @@ public class NotificationService {
 	@Transactional(readOnly = false)
 	public FollowNotification sendFollowNotification(SendFollowNotificationCommand command) {
 		FollowNotification notification = FollowNotification.createFollowNotification(
-			command.getFromUserId(),
-			command.getToUserId(),
+			command.getReceiver(),
+			command.getSender(),
 			command.getFromUserNickname()
 		);
 		FollowNotification save = notificationRepository.save(notification);
@@ -46,7 +46,8 @@ public class NotificationService {
 			command.getReceiver(),
 			command.getSender(),
 			command.getChatMessage(),
-			command.getSenderNickname()
+			command.getSenderNickname(),
+			command.getChatRoomId()
 		);
 		return notificationRepository.save(chatNotification);
 	}

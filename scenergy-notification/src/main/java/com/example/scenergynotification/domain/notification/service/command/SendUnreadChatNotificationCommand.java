@@ -11,4 +11,6 @@ public class SendUnreadChatNotificationCommand {
 	private Long sender;
 	private String chatMessage;
 	private String senderNickname;
+	private Long chatRoomId;
+
 }

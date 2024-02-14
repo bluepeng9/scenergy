@@ -54,7 +54,7 @@ const Navbar = () => {
           <Link to="/videoupload">업로드</Link>
         </li>
         <li className={styles.NavBarNotice}>
-          <p>알림</p>
+          <Link to="/notification">알림</Link>
         </li>
         <li>
           <Link to="/chat">메세지</Link>

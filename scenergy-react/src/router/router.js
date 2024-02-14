@@ -13,6 +13,7 @@ import EnterPage from "../pages/EnterPage";
 import Portfolio from "../components/Portfolio/Portfolio";
 import RedirectPage from "../components/User/RedirectPage";
 import Home2Page from "../pages/Home2Page"
+import NotificationPage from "../pages/NotificationPage";
 
 export const routes = [
   // { path: "*", element: <App /> },
@@ -31,6 +32,7 @@ export const routes = [
   { path: "/videoupload", element: <VideoUploadPage /> },
   {path: "/oauth2/redirect", element: <RedirectPage/>},
   {path: "/home2", element: <Home2Page/>},
+  {path: "/notification", element: <NotificationPage/>},
 ];
 
 const router = createBrowserRouter(routes);

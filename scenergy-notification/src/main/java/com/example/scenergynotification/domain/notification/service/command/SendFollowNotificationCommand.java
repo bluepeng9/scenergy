@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class SendFollowNotificationCommand {
-	private Long toUserId;
-	private Long fromUserId;
+	private Long receiver;
+	private Long sender;
 	private String fromUserNickname;
 }

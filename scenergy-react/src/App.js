@@ -1,9 +1,18 @@
 import Navbar from "./components/commons/Navbar/Navbar";
 import router from "./router/router";
 import EnterPage from "./pages/EnterPage";
-import { RouterProvider } from "react-router-dom";
-import { UserTokenContextProvider } from "./contexts/UserToken2";
-import RedirectPage from "./components/User/RedirectPage";
+import {RouterProvider} from "react-router-dom";
+
+
+// NotificationApi.connectToNotificationServer(
+//     ApiUtil.getUserIdFromToken(),
+//     (data) => {
+//         console.log(data);
+//     },
+//     (data) => {
+//         console.log(data);
+//     }
+// )
 
 function App() {
   return (
