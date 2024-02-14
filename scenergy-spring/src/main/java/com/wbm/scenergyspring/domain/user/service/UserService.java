@@ -152,6 +152,7 @@ public class UserService {
 			.userNickname(user.getNickname())
 			.userGender(user.getGender())
 			.url(user.getUrl())
+			.bio(user.getBio())
 			.build();
 	}
 
