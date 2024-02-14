@@ -1,13 +1,14 @@
 import axios from "axios";
-import {useChatRoom} from "../../contexts/ChatRoomContext";
-import {useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useChatRoom } from "../../contexts/ChatRoomContext";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
   const { addChatRoom } = useChatRoom();
   const [isCreating, setIsCreating] = useState(false);
   const navigate = useNavigate();
   const handleSubmit = async (event) => {
+    console.log(selectedUsers);
     event.preventDefault();
     //나중에 user 상태 받아와서 room member에 한명 자동을 넣어주고 수식 바꿔주기
     const roomStatus = selectedUsers.length > 2 ? 1 : 0; //1대1채팅, 단체채팅 상태 변경해주기
@@ -18,7 +19,7 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
     console.log(selectedUsers);
     try {
       const response = await axios.post(
-          process.env.REACT_APP_API_URL + "/chatroom/create-room",
+        process.env.REACT_APP_API_URL + "/chatroom/create-room",
         {
           chatroom_name: roomName,
           status: roomStatus,

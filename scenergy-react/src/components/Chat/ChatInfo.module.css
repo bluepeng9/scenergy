@@ -1,6 +1,6 @@
 .infoMenuContainer {
-  width: 35vb;
-  height: 40vb;
+  width: 37vb;
+  height: 42vb;
   position: absolute;
   top: 5vb;
   background-color: rgba(255, 255, 255, 0.92);
@@ -9,15 +9,73 @@
   transition: all 0.5s ease-in-out;
   z-index: 100;
 }
-.show{
+.show {
   right: 3vb;
   transition: all 0.5s ease-in-out;
 }
 
 .infoMenuHeader {
-  width: 200px;
+  width: 100%;
   display: flex;
-  justify-content: center;
+  padding: 5px;
+  justify-content: space-between;
   align-items: center;
   transition: all 0.5s ease-in-out;
+}
+.chatUserListGlobal {
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chatUsersListContainer {
+  padding: 5px;
+  margin: 10px;
+}
+
+.chatUsersList {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.chatUsersList ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.chatUsersList li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eaeaea;
+  color: #333;
+  font-weight: bold;
+  text-align: left;
+}
+
+.chatUsersList li:last-child {
+  border-bottom: none;
+}
+
+.chatRoomOutBtn {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.chatRoomOutBtn button {
+  color: black;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: auto;
+  transition: background-color 0.3s;
+  font-weight: bold;
+}
+
+.chatRoomOutBtn button:hover {
+  background-color: black; /* 마우스 오버 시 배경색 */
+  color: white;
 }

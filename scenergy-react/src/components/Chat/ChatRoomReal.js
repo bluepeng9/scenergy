@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {useLocation, useParams} from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import VideoConference from "./VideoConference";
 import styles from "./ChatRoomReal.module.css";
 import ChatConnect from "./ChatConnect";
-import {faCircleInfo, faPlus, faVideo,} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+  faCircleInfo,
+  faPlus,
+  faVideo,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ChatRoomList from "./ChatRoomList";
-import {useChatRooms} from "../../hooks/useChatRooms";
+import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 import ApiUtil from "../../apis/ApiUtil";
 import ChatRoomApi from "../../apis/ChatRoomApi";
@@ -122,11 +126,9 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
           <div className={styles.chatRoomInfo}>
             <div className={styles.chatRoomProfileContainer}>
               <div className={styles.chatRoomProfile}>
-                {/*상대방 프로필 사진*/}
                 <p>프로필</p>
               </div>
               <div className={styles.chatRoomUserName}>
-                {/*상대방 닉네임*/}
                 <p>상대방 닉네임</p>
               </div>
             </div>

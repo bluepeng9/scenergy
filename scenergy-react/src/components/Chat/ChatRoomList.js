@@ -50,6 +50,7 @@ const ChatRoomList = () => {
       setChatRooms(chatRooms);
     }
   }, [chatRooms, setChatRooms]);
+  console.log(contextChatRooms);
 
   if (isLoading) return <div>로딩중..</div>;
   if (isError) return <div>Error:{error?.message}</div>;
