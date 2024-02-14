@@ -1,4 +1,4 @@
-import {createContext, useContext, useState} from "react";
+import { createContext, useContext, useState } from "react";
 
 const ChatRoomContext = createContext();
 
@@ -52,6 +52,7 @@ export const ChatRoomProvider = ({ children }) => {
     updateRecentMessage,
     updateLastMessageId,
   };
+  console.log(chatRooms);
   return (
     <ChatRoomContext.Provider value={value}>
       {children}

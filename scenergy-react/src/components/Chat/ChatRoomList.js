@@ -7,16 +7,15 @@ import { useChatRoom } from "../../contexts/ChatRoomContext";
 import { useChatRooms } from "../../hooks/useChatRooms";
 import ChatUserSearch from "../commons/Search/ChatUserSearch";
 import ApiUtil from "../../apis/ApiUtil";
+import UserApi from "../../apis/User/UserApi";
 
-//userId나중에 {userId}로 넣어줘야됨
 const ChatRoomList = () => {
   const userId = ApiUtil.getUserIdFromToken();
   const { data: chatRooms, isLoading, isError, error } = useChatRooms(userId);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const { chatRooms: contextChatRooms, setChatRooms } = useChatRoom();
-  const userNickname = "uniquenickname2";
-
+  const [userNickname, setUserNickname] = useState("");
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -30,6 +29,21 @@ const ChatRoomList = () => {
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
+
+  //user정보 받아오기 => nickname필요함
+  useEffect(() => {
+    const getUserData = async () => {
+      try {
+        const userData = await UserApi.getUser();
+        userData.userNickname
+          ? setUserNickname(userData.userNickname)
+          : setUserNickname("닉네임을 설정해주세요");
+      } catch (error) {
+        console.error("유저 정보 불러오기 실패", error);
+      }
+    };
+    getUserData();
+  }, [userId]);
 
   useEffect(() => {
     if (chatRooms) {

@@ -1,12 +1,12 @@
-import {useCallback, useEffect, useRef, useState} from "react";
-import {useParams} from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import * as StompJs from "@stomp/stompjs";
 import styles from "./ChatConnect.module.css";
 import ChatInput from "./ChatInput";
-import {useChatMessages} from "../../hooks/useChatMessages";
-import {ChatList} from "./ChatMessageList";
-import {useChatMessageContext} from "../../contexts/ChatMessageContext";
-import {useChatRoom} from "../../contexts/ChatRoomContext";
+import { useChatMessages } from "../../hooks/useChatMessages";
+import { ChatList } from "./ChatMessageList";
+import { useChatMessageContext } from "../../contexts/ChatMessageContext";
+import { useChatRoom } from "../../contexts/ChatRoomContext";
 import ApiUtil from "../../apis/ApiUtil";
 
 const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
@@ -44,9 +44,11 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
 
       setChatMessages(updatedMessages);
     }
+    console.log(chatMessages);
   }, [loadedMessages, messagesLoading, messagesError, recentChatMessage]);
 
   useEffect(() => {
+    console.log(chatMessages);
   }, [chatMessages, recentChatMessage]);
 
   //구독 설정
@@ -54,7 +56,11 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
       setChatMessages((prevMessages) => [...prevMessages, messageBody]);
+      console.log("subsub하네요");
       updateRecentMessage(realRoomId, messageBody);
+      console.log(messageBody.id);
+      console.log("메세지 받음:", messageBody);
+      console.log(recentChatMessage);
     });
     // }, [realRoomId, addChatMessage, updateRecentMessage]);
   }, [realRoomId]);
@@ -66,16 +72,19 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
         // 이미 연결된 경우, 기존 구독을 해제
         client.current.unsubscribe();
       }
+
       client.current = new StompJs.Client({
-        brokerURL: process.env.REACT_APP_API_URL_WEB,
+        brokerURL: "ws://" + process.env.REACT_APP_API_WS_URL + "/ws",
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
         onConnect: () => {
+          console.log("Connected");
           // 새로운 방에 대한 구독 설정
           subscribe();
         },
         onDisconnect: () => {
+          console.log("Disconnected");
         },
         connectHeaders: {
           roomId: realRoomId.toString(),
