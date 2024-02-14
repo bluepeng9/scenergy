@@ -14,7 +14,6 @@ export const useChatRooms = (userId) => {
         );
 
         const myChatRoomList = response.data.data.myChatRoomList;
-        console.log(myChatRoomList);
         return myChatRoomList;
       } catch (error) {
         console.error(error);

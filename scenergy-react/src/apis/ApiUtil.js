@@ -66,7 +66,6 @@ class ApiUtil {
         let axiosResponse = await axios.post(ApiUtil.BASE_URL + url, data, {
         headers: this.#getHeader(),
       });
-        console.log("axiosResponse", axiosResponse);
         return axiosResponse;
     } catch (error) {
         console.error("error", error);

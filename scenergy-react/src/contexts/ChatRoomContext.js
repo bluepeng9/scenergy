@@ -1,5 +1,4 @@
-import { createContext, useContext, useState } from "react";
-import ChatInfo from "../components/Chat/ChatInfo";
+import {createContext, useContext, useState} from "react";
 
 const ChatRoomContext = createContext();
 
@@ -30,10 +29,6 @@ export const ChatRoomProvider = ({ children }) => {
         room.id === roomId ? { ...room, recentChatMessage: newMessage } : room,
       ),
     );
-
-    console.log(newMessage);
-    console.log(newMessage.id);
-    console.log(chatRooms);
   };
 
   const updateLastMessageId = (roomId, newLastMessageId) => {
@@ -57,7 +52,6 @@ export const ChatRoomProvider = ({ children }) => {
     updateRecentMessage,
     updateLastMessageId,
   };
-  console.log(chatRooms);
   return (
     <ChatRoomContext.Provider value={value}>
       {children}

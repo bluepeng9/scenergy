@@ -44,11 +44,9 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
 
       setChatMessages(updatedMessages);
     }
-    console.log(chatMessages);
   }, [loadedMessages, messagesLoading, messagesError, recentChatMessage]);
 
   useEffect(() => {
-    console.log(chatMessages);
   }, [chatMessages, recentChatMessage]);
 
   //구독 설정
@@ -56,11 +54,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
       setChatMessages((prevMessages) => [...prevMessages, messageBody]);
-      console.log("subsub하네요");
       updateRecentMessage(realRoomId, messageBody);
-      console.log(messageBody.id);
-      console.log("메세지 받음:", messageBody);
-      console.log(recentChatMessage);
     });
     // }, [realRoomId, addChatMessage, updateRecentMessage]);
   }, [realRoomId]);
@@ -78,12 +72,10 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
         onConnect: () => {
-          console.log("Connected");
           // 새로운 방에 대한 구독 설정
           subscribe();
         },
         onDisconnect: () => {
-          console.log("Disconnected");
         },
         connectHeaders: {
           roomId: realRoomId.toString(),

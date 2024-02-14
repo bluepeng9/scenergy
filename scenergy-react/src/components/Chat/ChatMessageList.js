@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef} from "react";
 import styles from "./ChatConnect.module.css";
 
 const ChatList = ({ chatList, userId }) => {
   const chatMsgFieldRef = useRef(null);
   useEffect(() => {
-    console.log(chatList);
     const chatMsgElement = chatMsgFieldRef.current;
 
     if (chatMsgElement) {
@@ -29,7 +28,6 @@ const ChatList = ({ chatList, userId }) => {
 
 const ChatMessage = ({ message, userId }) => {
   function formatMessage(message) {
-    console.log("length 뒤져라");
     const maxWord = 30;
     let formattedMessage = "";
     let currentLine = "";

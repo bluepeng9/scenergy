@@ -12,9 +12,6 @@ export const useChatMessages = (lastMessageId, lastMessage) => {
             params: { chatMessage_id: lastMessageId },
           },
         );
-        console.log("성공");
-        console.log("받아 온 메세지", data.data.messageList);
-
         let messages = data.data.messageList;
 
         if (lastMessage && !messages.find((m) => m.id === lastMessage.id)) {

@@ -104,7 +104,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const handleConnectRtc = () => {
     setIsRtcConnect(!isRtcConnect);
   };
-  console.log(lastMessageId);
 
   useEffect(() => {
   }, []);

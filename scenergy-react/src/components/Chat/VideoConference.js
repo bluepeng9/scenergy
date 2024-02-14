@@ -11,7 +11,6 @@ const VideoConference = ({chatRoomId, userId, connectUserId}) => {
     const callRef = useRef(null);
 
     useEffect(() => {
-        console.log(connectUserId)
         const peer = new Peer("" + chatRoomId + userId + "");
 
         peer.on('call', (call) => {
