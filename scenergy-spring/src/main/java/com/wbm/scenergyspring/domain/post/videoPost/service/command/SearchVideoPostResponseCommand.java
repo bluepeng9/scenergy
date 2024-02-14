@@ -9,6 +9,7 @@ import java.util.List;
 @Builder
 public class SearchVideoPostResponseCommand {
 
+    private Long videoPostId;
     private VideoCommand video;
     private String title;
     private String content;
