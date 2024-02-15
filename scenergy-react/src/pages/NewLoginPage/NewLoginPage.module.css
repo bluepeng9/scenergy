@@ -13,12 +13,16 @@
     background-color: rgba(255, 255, 255, 0.6);
     /*    set border */
     /*border 두께 설정*/
+    height: 207px;
+    width: 100vw;
     padding: 40px;
     border-radius: 6px;
+    text-align: center;
 }
 
 .logo {
     width: 500px;
+    height: 124px;
 }
 
 .firstBack {
