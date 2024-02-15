@@ -17,6 +17,7 @@ import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.repository.GenreTagRepository;
 import com.wbm.scenergyspring.domain.tag.repository.InstrumentTagRepository;
+import com.wbm.scenergyspring.domain.tag.repository.UserLocationTagRepository;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.BusinessException;
@@ -47,6 +48,8 @@ public class VideoPostService {
 
     private final VideoPostGenreTagRepository videoPostGenreTagRepository;
     private final VideoPostInstrumentTagRepository videoPostInstrumentTagRepository;
+
+    private final UserLocationTagRepository userLocationTagRepository;
 
     private final AmazonS3Client amazonS3Client;
 
@@ -261,6 +264,7 @@ public class VideoPostService {
         if (command.getLt() != null && command.getLt().isEmpty())
             command.setLt(null);
         List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition(command.getWord(), command.getGt(), command.getIt(), command.getLt());
+        System.out.println("***********" + list.size());
         List<SearchVideoPostResponseCommand> result = new ArrayList<>();
         for (VideoPost vp : list) {
             SearchVideoPostResponseCommand response = SearchVideoPostResponseCommand.builder()

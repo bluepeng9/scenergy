@@ -11,6 +11,6 @@ public interface InstrumentTagRepository extends JpaRepository<InstrumentTag,Lon
 
     Boolean existsByInstrumentName(String instrumentName);
 
-    Optional<InstrumentTag> findByInstrumentName(String genreName);
+    Optional<InstrumentTag> findByInstrumentName(String instrumentName);
 
 }

@@ -237,13 +237,13 @@ public class JobPostService {
 	}
 
 	public List<GetJobPostCommandResponse> searchAllJobPost(SearchAllJobPostCommand command) {
-		if (command.getName().isEmpty())
+        if (command.getName() != null && command.getName().isEmpty())
 			command.setName(null);
-		if (command.getGt().isEmpty())
+        if (command.getGt() != null && command.getGt().isEmpty())
 			command.setGt(null);
-		if (command.getIt().isEmpty())
+        if (command.getIt() != null && command.getIt().isEmpty())
 			command.setIt(null);
-		if (command.getLt().isEmpty())
+        if (command.getLt() != null && command.getLt().isEmpty())
 			command.setLt(null);
 		List<GetJobPostCommandResponse> list = new ArrayList<>();
 		for (JobPost jobPost : jobPostRepository.searchAllJobPost(command.getName(), command.getGt(), command.getIt(), command.getLt())) {

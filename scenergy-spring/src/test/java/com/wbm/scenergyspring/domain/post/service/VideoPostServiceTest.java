@@ -1,16 +1,5 @@
 package com.wbm.scenergyspring.domain.post.service;
 
-import static org.assertj.core.api.Assertions.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.wbm.scenergyspring.IntegrationTest;
 import com.wbm.scenergyspring.domain.follow.entity.Follow;
 import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
@@ -22,10 +11,7 @@ import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostInstrume
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoPostRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.repository.VideoRepository;
 import com.wbm.scenergyspring.domain.post.videoPost.service.VideoPostService;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.AllVideoPostsCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.CreateVideoCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.FollowingVideoPostsCommand;
-import com.wbm.scenergyspring.domain.post.videoPost.service.command.VideoPostCommand;
+import com.wbm.scenergyspring.domain.post.videoPost.service.command.*;
 import com.wbm.scenergyspring.domain.tag.entity.GenreTag;
 import com.wbm.scenergyspring.domain.tag.entity.InstrumentTag;
 import com.wbm.scenergyspring.domain.tag.entity.LocationTag;
@@ -38,6 +24,16 @@ import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.domain.user.service.UserService;
 import com.wbm.scenergyspring.global.exception.EntityNotFoundException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class VideoPostServiceTest extends IntegrationTest {
@@ -461,15 +457,26 @@ class VideoPostServiceTest extends IntegrationTest {
         it.add(instrumentsTagIds.get(0));
         it.add(instrumentsTagIds.get(1));
         List<Long> lt = new ArrayList<>();
-        List<Long> lt2 = new ArrayList<>();
         lt.add(locationTagId1);
         lt.add(locationTagId2);
         lt.add(locationTagId3);
-        userService.createUserLocationTags(lt, user1);
+        userService.createUserLocationTags(lt, user2);
+        System.out.println("***********");
+        System.out.println(userLocationTagRepository.count());
 
+        SearchVideoPostCommand commandCondition1 = SearchVideoPostCommand.builder()
+                .word("nickname2")
+                .gt(gt)
+                .it(it)
+                .lt(lt).build();
+        SearchVideoPostCommand commandCondition2 = SearchVideoPostCommand.builder()
+                .word(null)
+                .gt(gt)
+                .it(it)
+                .lt(lt).build();
         //when
-        List<VideoPost> list = videoPostRepository.searchVideoPostsByCondition("nickname2", gt, it, lt);
-        List<VideoPost> list2 = videoPostRepository.searchVideoPostsByCondition(null, gt, it, lt);
+        List<SearchVideoPostResponseCommand> list = videoPostService.searchVideoPostsByCondition(commandCondition1);
+        List<SearchVideoPostResponseCommand> list2 = videoPostService.searchVideoPostsByCondition(commandCondition2);
         //then
         assertThat(list.size()).isEqualTo(2);
         assertThat(list2.size()).isEqualTo(2);
