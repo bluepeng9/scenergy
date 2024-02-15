@@ -72,7 +72,6 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
     uploadProfileImage();
   }, [profileImage, userId]);
-
   const updateUserBio = async () => {
     try {
       // userId와 변경된 bio 값을 uploadBio 메서드에 전달하여 호출합니다.
@@ -178,14 +177,14 @@ const ProfileHeader = ({ onUpdateUser }) => {
 
           <div className={styles.profileNickname}>
             {/* 닉네임, 한줄소개 */}
-            <h2>{nickname}</h2>
-            <p>
+            <h1>{nickname}</h1>
+            <h3>
               {isEditing ? (
                 <input value={bio} onChange={(e) => setBio(e.target.value)} />
               ) : (
                 bio || "한줄소개를 입력해주세요."
               )}
-            </p>
+            </h3>
           </div>
         </div>
 
@@ -208,9 +207,9 @@ const ProfileHeader = ({ onUpdateUser }) => {
               <button onClick={handleEditProfile}>프로필편집</button>
             )}
             <button onClick={handleUpdateUser}>회원수정</button>
-            <a href="/profile/portfolio" className={styles["portfolio-link"]}>
-              <button>포트폴리오</button>
-            </a>
+            {/*<a href="/profile/portfolio" className={styles["portfolio-link"]}>*/}
+            {/*  /!*<button>포트폴리오</button>*!/*/}
+            {/*</a>*/}
             <button onClick={follow}>
               {isFollowingThisUser ? "언팔로우" : "팔로우"}
             </button>

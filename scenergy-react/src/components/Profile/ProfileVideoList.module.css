@@ -2,3 +2,47 @@
     border: 1px solid #d0d0d0;
     margin: 30px 0px;
 }
+
+.videoGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 가로로 3개씩 나오도록 설정 */
+    gap: 30px; /* 각각의 요소 사이의 간격 조절 */
+}
+
+.videoGrid img {
+    width: 300px;
+}
+
+.videoListTitle {
+    margin-bottom: 30px;
+}
+
+.videoListItem {
+    position: relative;
+    overflow: hidden;
+}
+
+.videoListItem .videoThumbnail {
+    cursor: pointer;
+}
+
+.videoThumbnail {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    transition: filter 0.3s; /* 마우스 호버 효과를 위한 트랜지션 추가 */
+}
+
+/* 마우스 호버 시 어두운 효과 적용 */
+.videoListItem:hover .videoThumbnail {
+    filter: brightness(0.5); /* 어두워지게 만드는 필터 효과 */
+}
+
+.videoListItem .videoTitle {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.videoListItem .videoThumbnail {
+    border-radius: 10px;
+}
