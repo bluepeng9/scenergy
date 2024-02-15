@@ -4,3 +4,8 @@ cloud:
       bucket: wbm
     stack.auto: false
     region.static: ap-northeast-2
+spring:
+  servlet:
+    multipart:
+      max-file-size: 300MB
+      max-request-size: 300MB
