@@ -104,7 +104,7 @@ class FollowCommandResultServiceTest extends IntegrationTest {
 		//when
 		followService.unFollowUser(UnFollowUserCommand.builder()
 			.fromUserId(fromUserId)
-			.followId(followCommandResult.getFollowId())
+			.toUserId(followCommandResult.getFollowId())
 			.build()
 		);
 
