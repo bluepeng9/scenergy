@@ -127,6 +127,9 @@ public class ChatService {
      */
     @Transactional(readOnly = false)
     public ChatRoomDto createChatRoom(CreateChatRoomCommand command) {
+        if (command.getUsers().size() < 2) {
+            throw new IllegalStateException("채팅방 인원수 부족");
+        }
         if (command.getStatus() == 0) {
             Optional<ChatRoom> commonChatRoom = chatRoomRepository.findCommonChatRoom(
                     command.getUsers().get(0).getId(),
