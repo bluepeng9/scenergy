@@ -1,12 +1,15 @@
 /* ProfileHeader.module.css */
 .profileHeader {
     display: flex;
-    align-items: center; /* 가운데 정렬 */
     margin: 100px auto 80px auto;
-    color: white;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    color: #262626;
+    background-color: rgba(245, 245, 245, 0.71);
 }
 
 .profileHeaders {
+    width: 100%;
     background-image: url("../../assets/profileBackground.jpeg");
     background-size: cover; /* 이미지를 컨테이너에 맞게 조절합니다. */
     background-position: center; /* 이미지를 가운데 정렬합니다. */
@@ -53,42 +56,40 @@
 
 .profileHeader .actionButtons {
     display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    margin-right: 30px;
 }
 
 .actionButtons button{
-    background-color: white;
+    background: none;
     color: #22232f;
+    margin-right: 10px;
     padding: 7px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-right: 10px;
     font-weight: bolder;
 }
 
 .actionButtons button:hover {
-    background-color: #cf9eab;
+    background-color: #000000;
     color: #ffffff;
 }
 
 .profileInfo {
+    width: 80%;
     display: flex;
-    margin-right: 200px;
+    margin-right: 10px;
 }
 
 .profileImgUpload {
-    margin-right: 80px;
+    margin-right: 30px;
     margin-left: 40px;
 }
 
 /*프로필 영상 팔로워 팔로수*/
 .profileInfoCount {
-    /*margin-bottom: 50px;*/
-    /*padding-top: 50px;*/
-    margin: 50px 30px;
+    color: #818181;
+    margin-top: 2%;
+    margin-bottom: 5%;
 }
 
 .profileInfoCount span {
@@ -96,9 +97,14 @@
 }
 
 .profileNickname {
-    padding-top: 45px;
+    width: 400px;
+    font-size: 14px;
+    color: #444444;
 }
 
 .profileNickname h1 {
-    margin-bottom: 20px;
+    font-size: 30px;
+    margin-top: 7pt;
+    margin-bottom: 10pt;
+    color: black;
 }

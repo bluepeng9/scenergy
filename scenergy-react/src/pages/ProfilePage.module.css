@@ -1,5 +1,6 @@
 .ProfilePage-global {
     display: flex;
+    width: 100%;
     height: 100vh; /* 화면 전체 높이를 차지하도록 설정 */
     /*justify-content: center; !* 가로 중앙 정렬 추가 *!*/
 }
@@ -9,12 +10,34 @@
 }
 
 .ProfilePageContent {
+    width: 70%;
     display: flex;
     flex-direction: column; /* 컨텐츠를 세로로 정렬하기 위해 추가 */
     margin: 0 auto; /* 좌우 마진을 auto로 주어 가로 가운데 정렬 */
     /*overflow-y: auto; !* 프로필 섹션이 넘칠 경우 스크롤바를 표시 *!*/
     /*align-items: center; !* 세로 중앙 정렬 추가 *!*/
-    overflow-y: scroll; /* 세로 스크롤바를 항상 표시합니다. */
+    overflow-y: scroll;
+
+}
+
+.ProfilePageContent::-webkit-scrollbar {
+    width: 5px;
+    display: none;
+}
+
+.ProfilePageContent::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.ProfilePageContent::-webkit-scrollbar-thumb {
+    margin: 3px 3px 3px 3px;
+    padding: 3px;
+    background: #888;
+    border-radius: 10px;
+}
+
+.ProfilePageContent::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 /* 네브바 때문에 임시로 한 코드. 네브바 고정하면 바뀔 곳 */

@@ -1,14 +1,13 @@
 // ProfileHeaderApi.js
 import styles from "./ProfileHeader.module.css";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 // import { getUser } from "../../apis/User/UserApi";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 import FollowApi from "../../apis/FollowApi";
 import ApiUtil from "../../apis/ApiUtil";
 import ProfileHeaderApi from "../../apis/Profile/ProfileHeaderApi";
 import UserApi from "../../apis/User/UserApi";
 
-import ProfileHeaderImg from "../../assets/profileBackground.jpeg";
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
   const [profileImage, setProfileImage] = useState(null); // 동그란 프로필 이미지
@@ -48,7 +47,6 @@ const ProfileHeader = ({ onUpdateUser }) => {
       );
       setIsFollowingThisUser(followResponse);
     };
-
     getUserProfile();
   }, [userId]); // 빈 배열을 넣어 컴포넌트가 마운트될 때 한 번만 호출되도록 함
 
@@ -164,7 +162,7 @@ const ProfileHeader = ({ onUpdateUser }) => {
               {url ? (
                 <img src={url} alt="프로필 이미지" />
               ) : (
-                <div className={styles.clickUpload}>클릭하여 이미지 업로드</div>
+                  <div className={styles.clickUpload}>Click to upload</div>
               )}
               <input
                 type="file"
@@ -178,23 +176,23 @@ const ProfileHeader = ({ onUpdateUser }) => {
           <div className={styles.profileNickname}>
             {/* 닉네임, 한줄소개 */}
             <h1>{nickname}</h1>
-            <h3>
+            {/* 영상 총 개수, 팔로워 수, 팔로우 수 */}
+            <div className={styles.profileInfoCount}>
+              <span>영상: {videoCount}</span>
+              <span>팔로워: {followersCount}</span>
+              <span>팔로우: {followingCount}</span>
+            </div>
+            <div>
               {isEditing ? (
                 <input value={bio} onChange={(e) => setBio(e.target.value)} />
               ) : (
-                bio || "한줄소개를 입력해주세요."
+                  bio || "자유롭게 자기소개를 입력해주세요."
               )}
-            </h3>
+            </div>
           </div>
         </div>
 
-        <div>
-          {/* 영상 총 개수, 팔로워 수, 팔로우 수 */}
-          <div className={styles.profileInfoCount}>
-            <span>영상: {videoCount}</span>
-            <span>팔로워: {followersCount}</span>
-            <span>팔로우: {followingCount}</span>
-          </div>
+        <div style={{width: `20%`, display: `flex`, justifyContent: `flex-end`, alignItems: `start`}}>
 
           {/* 프로필편집 버튼, 회원탈퇴버튼, 포트폴리오 링크 */}
           <div className={styles.actionButtons}>
@@ -204,24 +202,16 @@ const ProfileHeader = ({ onUpdateUser }) => {
                 <button onClick={handleCancelEdit}>취소</button>
               </>
             ) : (
-              <button onClick={handleEditProfile}>프로필편집</button>
+                <>
+                  {userId === ApiUtil.getUserIdFromToken() ? (
+                      <button onClick={handleEditProfile}>편집</button>) : (<></>)}
+                </>
             )}
-            <button onClick={handleUpdateUser}>회원수정</button>
-            {/*<a href="/profile/portfolio" className={styles["portfolio-link"]}>*/}
-            {/*  /!*<button>포트폴리오</button>*!/*/}
-            {/*</a>*/}
-            <button onClick={follow}>
-              {isFollowingThisUser ? "언팔로우" : "팔로우"}
-            </button>
+            {userId === ApiUtil.getUserIdFromToken() ? (<button onClick={handleUpdateUser}>회원수정</button>) : (<></>)}
+            {userId !== ApiUtil.getUserIdFromToken() ? (
+                <button onClick={follow}>{isFollowingThisUser ? "언팔로우" : "팔로우"}</button>) : (<></>)}
           </div>
         </div>
-        {/*/!* 회원수정 모달 *!/*/}
-        {/*{isUserUpdateModalOpen && (*/}
-        {/*    <UserUpdateModal*/}
-        {/*        onClose={handleCloseUserUpdateModal}*/}
-        {/*        onUpdateUser={handleConfirmUserUpdate}*/}
-        {/*    />*/}
-        {/*)}*/}
       </div>
     </div>
   );

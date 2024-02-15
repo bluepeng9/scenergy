@@ -34,6 +34,7 @@ public class User extends BaseEntity {
 	@JsonManagedReference(value = "user-unread_messages")
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	List<UnreadMessage> unreadMessages;
+	@Column(length = 3000)
 	String url;
 	String bio;
 
