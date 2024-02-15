@@ -12,7 +12,3 @@ spring:
       - classpath:/application-secret.yml
       - classpath:/db.yml
       - classpath:/kafka.yml
-  servlet:
-    multipart:
-      max-file-size: 300MB
-      max-request-size: 300MB
