@@ -76,14 +76,14 @@ const SearchVideoDetail = ({ onClick, searchVideoPosts }) => {
               <FontAwesomeIcon icon={faTimes} />
             </button>
           </div>
-          <div className={styles.videoDetailvideo}>
-            <video controls width="350">
-              <source
-                src={searchVideoPosts?.video?.videoUrlPath}
-                type="video/mp4"
-              />
-            </video>
-          </div>
+          {/*<div className={styles.videoDetailvideo}>*/}
+          <video controls width="750">
+            <source
+              src={searchVideoPosts?.video?.videoUrlPath}
+              type="video/mp4"
+            />
+          </video>
+          {/*</div>*/}
           <div className={styles.videoDetailFooter}>
             <div className={styles.videoDetailBtn}>
               <FontAwesomeIcon icon={faThumbsUp} />
