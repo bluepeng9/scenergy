@@ -4,12 +4,10 @@ import Login from "../components/User/Login";
 
 function HomePage() {
   return (
-    <>
       <div className={styles.homeContainer}>
         <Navbar className={styles.homeNavbar} />
         <Login></Login>
       </div>
-    </>
   );
 }
 

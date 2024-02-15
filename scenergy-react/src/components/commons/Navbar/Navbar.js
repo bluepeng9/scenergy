@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import styles from "./Navbar.module.css";
-import { useState } from "react";
+import {useState} from "react";
 import ApiUtil from "../../../apis/ApiUtil";
 
 const Navbar = () => {
@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className={styles.NavBarContainer}>
       <ul>
         <li className={styles.ScenergyTab}>
-          <Link to="/">scenergy</Link>
+          <Link to="/" style={{fontWeight: 'bold', fontSize: '25px'}}>scenergy</Link>
         </li>
         <li>
           <Link to={homePath}>홈</Link>
