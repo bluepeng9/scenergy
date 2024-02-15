@@ -5,7 +5,7 @@
 }
 
 .followVideoContainer {
-    width: 100vw;
+    width: 100%;
     height: 100vh; /* 뷰포트 높이와 동일 */
     overflow-y: scroll; /* 수직 스크롤 활성화 */
     scroll-snap-type: y mandatory; /* 수직 방향으로 스크롤 스냅 적용 */

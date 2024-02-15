@@ -1,13 +1,12 @@
 .content {
     display: flex;
-    position: relative;
     height: 100vh;
 }
 
 .navbar {
-    width: 17.1%;
+    width: 17%;
 }
 
 .video {
-    width: 82.9%;
+    width: 83%;
 }
