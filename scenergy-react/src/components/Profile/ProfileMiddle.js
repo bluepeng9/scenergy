@@ -1,8 +1,10 @@
 import styles from "./ProfileMiddle.module.css";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import profileMiddleApi from "../../apis/Profile/ProfileMiddleApi";
 import ApiUtil from "../../apis/ApiUtil";
+import plus from "../../assets/plus-sign.png"
+import minus from "../../assets/minus-sign.png"
 
 const ProfileMiddle = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -44,6 +46,9 @@ const ProfileMiddle = () => {
   const { userId: portfolioUserId } = useParams();
   const [portfolioId, setPortfolioId] = useState(0); // 포트폴리오가 존재하는지 여부를 추적
   const [userIdFromToken, setUserIdFromToken] = useState(null); // 포트폴리오가 존재하는지 여부를 추적
+
+  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date());
 
   useEffect(() => {
     const TmpUserIdFromToken = ApiUtil.getUserIdFromToken();
@@ -280,32 +285,30 @@ const ProfileMiddle = () => {
 
   return (
     <>
-      <div className={styles["editButton"]}>
-        <h1 className={styles.infoTitle}>기본 정보</h1>
+      <div style={{marginLeft: `83%`, marginTop: `2%`}} className={styles["editButton"]}>
         {portfolioUserId === userIdFromToken && (
           <>
             {portfolioId ? (
               // portfolioId가 있을 때
               <>
                 {isEditing ? (
-                  <button onClick={handleSaveChanges}>편집 완료</button>
+                    <button onClick={handleSaveChanges}>완료</button>
                 ) : (
-                  <button onClick={handleEditToggle}>기본정보수정</button>
+                    <button onClick={handleEditToggle}>수정</button>
                 )}
-                <button onClick={testDeletePort}>Delete Test</button>
+                <button onClick={testDeletePort}>삭제</button>
               </>
             ) : (
               // portfolioId가 없을 때
-              <button onClick={handleCreatePortfolio}>기본정보 생성</button>
+                <button onClick={handleCreatePortfolio}>작성</button>
             )}
           </>
         )}
       </div>
-      <div className={styles["division-line"]}></div>
 
       {portfolioId ? (
         <>
-          <h2>학력</h2>
+          <h2>학 력</h2>
           <table>
             <thead>
               <tr>
@@ -349,42 +352,40 @@ const ProfileMiddle = () => {
                       </td>
                       <td>
                         <input
-                          type="text"
-                          value={education.admissionDate}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "admissionDate",
-                              e.target.value,
-                              "education",
-                              index,
-                            )
-                          }
+                            type="text"
+                            value={education.admissionDate}
+                            onChange={(e) =>
+                                handleInputChange(
+                                    "admissionDate",
+                                    e.target.value,
+                                    "education",
+                                    index,
+                                )
+                            }
                         />
                       </td>
                       <td>
                         <input
-                          type="text"
-                          value={education.graduationDate}
-                          onChange={(e) =>
-                            handleInputChange(
-                              "graduationDate",
-                              e.target.value,
-                              "education",
-                              index,
-                            )
-                          }
+                            type="text"
+                            value={education.graduationDate}
+                            onChange={(e) =>
+                                handleInputChange(
+                                    "graduationDate",
+                                    e.target.value,
+                                    "education",
+                                    index,
+                                )
+                            }
                         />
                       </td>
-                      <td>
-                        <button onClick={() => handleAddItem("education")}>
-                          학력 추가
+                      {index === 0 ? (<td style={{borderTop: `none`, borderRight: `none`, borderBottom: `none`}}>
+                        <button className={styles.plusButton} onClick={() => handleAddItem("education")}>
+                          <img className={styles.plusMinus} src={plus}/>
                         </button>
-                        <button
-                          onClick={() => handleRemoveItem("education", index)}
-                        >
-                          학력 삭제
+                        <button className={styles.plusButton} onClick={() => handleRemoveItem("education", index)}>
+                          <img className={styles.plusMinus} src={minus}/>
                         </button>
-                      </td>
+                      </td>) : null}
                     </tr>
                   ))
                 : educations.map((education, index) => (
@@ -398,8 +399,7 @@ const ProfileMiddle = () => {
             </tbody>
           </table>
 
-          <div className={styles["division-line"]}></div>
-          <h2>경력</h2>
+          <h2>경 력</h2>
           <table>
             <thead>
               <tr>
@@ -469,16 +469,14 @@ const ProfileMiddle = () => {
                           }
                         />
                       </td>
-                      <td>
-                        <button onClick={() => handleAddItem("career")}>
-                          경력 추가
+                      {index === 0 ? (<td style={{borderTop: `none`, borderRight: `none`, borderBottom: `none`}}>
+                        <button className={styles.plusButton} onClick={() => handleAddItem("education")}>
+                          <img className={styles.plusMinus} src={plus}/>
                         </button>
-                        <button
-                          onClick={() => handleRemoveItem("career", index)}
-                        >
-                          경력 삭제
+                        <button className={styles.plusButton} onClick={() => handleRemoveItem("education", index)}>
+                          <img className={styles.plusMinus} src={minus}/>
                         </button>
-                      </td>
+                      </td>) : null}
                     </tr>
                   ))
                 : careers.map((career, index) => (
@@ -492,14 +490,14 @@ const ProfileMiddle = () => {
             </tbody>
           </table>
 
-          <div className={styles["division-line"]}></div>
-          <h2>수상이력</h2>
+          <h2>수 상</h2>
           <table>
             <thead>
               <tr>
                 <th>대회명</th>
                 <th>주최기관</th>
-                <th>수상날짜</th>
+                <th>수상일</th>
+                <th style={{borderTop: `none`, borderRight: `none`, borderBottom: `none`}}></th>
               </tr>
             </thead>
             <tbody>
@@ -548,16 +546,20 @@ const ProfileMiddle = () => {
                           }
                         />
                       </td>
-                      <td>
-                        <button onClick={() => handleAddItem("awards")}>
-                          수상 추가
+                      <td style={{borderTop: `none`, borderRight: `none`, borderBottom: `none`}}></td>
+                      {index === 0 ? (<td style={{
+                        borderTop: `none`,
+                        borderRight: `none`,
+                        borderBottom: `none`,
+                        borderLeft: 'none'
+                      }}>
+                        <button className={styles.plusButton} onClick={() => handleAddItem("education")}>
+                          <img className={styles.plusMinus} src={plus}/>
                         </button>
-                        <button
-                          onClick={() => handleRemoveItem("awards", index)}
-                        >
-                          수상 삭제
+                        <button className={styles.plusButton} onClick={() => handleRemoveItem("education", index)}>
+                          <img className={styles.plusMinus} src={minus}/>
                         </button>
-                      </td>
+                      </td>) : null}
                     </tr>
                   ))
                 : awards.map((award, index) => (
@@ -569,8 +571,8 @@ const ProfileMiddle = () => {
                   ))}
             </tbody>
           </table>
-          <div className={styles["division-line"]}></div>
-          <h2>기타사항</h2>
+
+          <h2>기 타</h2>
           <table>
             <thead>
               <tr>
@@ -640,14 +642,14 @@ const ProfileMiddle = () => {
                           }
                         />
                       </td>
-                      <td>
-                        <button onClick={() => handleAddItem("etcs")}>
-                          기타 추가
+                      {index === 0 ? (<td style={{borderTop: `none`, borderRight: `none`, borderBottom: `none`}}>
+                        <button className={styles.plusButton} onClick={() => handleAddItem("education")}>
+                          <img className={styles.plusMinus} src={plus}/>
                         </button>
-                        <button onClick={() => handleRemoveItem("etcs", index)}>
-                          기타 삭제
+                        <button className={styles.plusButton} onClick={() => handleRemoveItem("education", index)}>
+                          <img className={styles.plusMinus} src={minus}/>
                         </button>
-                      </td>
+                      </td>) : null}
                     </tr>
                   ))
                 : etcs.map((etc, index) => (

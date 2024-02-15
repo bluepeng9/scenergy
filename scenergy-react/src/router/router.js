@@ -10,7 +10,6 @@ import RedirectPage from "../components/User/RedirectPage";
 import Home2Page from "../pages/Home2Page"
 import NotificationPage from "../pages/NotificationPage";
 import NewLoginPage from "../pages/NewLoginPage/NewLoginPage";
-import ScenergyPage from "../pages/ScenergyPage";
 
 export const routes = [
   // { path: "*", element: <App /> },
@@ -21,7 +20,7 @@ export const routes = [
   { path: "/notice", element: <NoticePage /> },
   {path: "/profile/:userId", element: <ProfilePage/>},
   { path: "/profile/portfolio", element: <Portfolio /> },
-  {path: "/scenergy", element: <ScenergyPage/>},
+  // { path: "/scenergy", element: <ScenergyPage /> },
   // { path: "/scenergy/mypost", element: <MyScenergyPost /> },
   // { path: "/scenergy/myapply", element: <MyApplyPage /> },
   // { path: "/scenergy/bookmark", element: <BookMark /> },

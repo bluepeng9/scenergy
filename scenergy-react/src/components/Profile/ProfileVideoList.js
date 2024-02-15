@@ -1,10 +1,9 @@
 // ProfileVideoList.js
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./ProfileVideoList.module.css";
 import videoPostApi from "../../apis/VideoPostApi"; // VideoPostApi 파일의 경로에 따라 수정
-import ApiUtil from "../../apis/ApiUtil";
 import SearchVideoDetail from "../Search/SearchVideoDetail";
-import { useParams } from "react-router-dom";
+import {useParams} from "react-router-dom";
 
 const ProfileVideoList = () => {
   const [videoList, setVideoList] = useState([]);
@@ -46,8 +45,7 @@ const ProfileVideoList = () => {
 
       {/* 대표 영상 컴포넌트 또는 대표 영상 목록을 보여주는 UI 추가하기 */}
 
-      <div className={styles["division-line"]}></div>
-      <h1 className={styles.videoListTitle}>영상 목록</h1>
+      <h2 className={styles.videoListTitle}>영상 목록</h2>
 
       {/* 영상 목록을 보여주는 UI 추가 */}
       <div className={styles.videoGrid}>
