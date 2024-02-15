@@ -3,6 +3,7 @@
     position: absolute;
     width: 17%;
     height: 100%;
+    /*background-color: black;*/
     background-color: #f1f1f1; /* 밝은 회색 배경색상 */
     padding: 1.5rem;
     border-top-right-radius: 10px;
@@ -15,6 +16,7 @@
 .NavBarContainer p {
     border-radius: 5px;
     text-decoration: none;
+    /*color: whitesmoke;*/
     color: #1F2937; /* 짙은 회색 텍스트 색상 */
     font-size: 1rem;
     font-weight: 600;
