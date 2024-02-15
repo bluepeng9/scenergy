@@ -20,6 +20,7 @@ export const NotificationProvider = ({children}) => {
                     console.log(data);
                 },
                 (data) => {
+                    console.log(data)
                     setIsFecthingMoreData(true);
                 }
             )
