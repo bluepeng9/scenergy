@@ -5,15 +5,15 @@ import NoticePage from "../pages/NoticePage";
 import ProfilePage from "../pages/ProfilePage";
 import SearchPage from "../pages/SearchPage";
 import VideoUploadPage from "../pages/VideoUploadPage";
-import EnterPage from "../pages/EnterPage";
 import Portfolio from "../components/Portfolio/Portfolio";
 import RedirectPage from "../components/User/RedirectPage";
 import Home2Page from "../pages/Home2Page"
 import NotificationPage from "../pages/NotificationPage";
+import NewLoginPage from "../pages/NewLoginPage/NewLoginPage";
 
 export const routes = [
   // { path: "*", element: <App /> },
-  {path: "/", element: <EnterPage/>},
+  {path: "/", element: <NewLoginPage/>},
   { path: "/chat", element: <ChatPage /> },
   { path: "/chat/:roomId", element: <ChatPage /> },
   { path: "/home", element: <HomePage /> },
