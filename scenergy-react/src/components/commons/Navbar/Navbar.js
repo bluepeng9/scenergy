@@ -56,9 +56,9 @@ const Navbar = () => {
             {/*  시너지*/}
             {/*</Link>*/}
             {/*<ul className={styles.NavBarDropMenu}>*/}
-            {/*  <li>*/}
-            {/*    <Link to="/scenergy">시너지</Link>*/}
-            {/*  </li>*/}
+            <li>
+              <Link to="/scenergy">시너지</Link>
+            </li>
             {/*  <li>*/}
             {/*    <Link to="/scenergy/mypost">내가 쓴 글</Link>*/}
             {/*  </li>*/}
