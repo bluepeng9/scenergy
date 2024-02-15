@@ -59,7 +59,7 @@ const FollowVideo = () => {
                 <img src={profileLink} alt="Profile Link" width="50" />
               </div>
               <p>{`user ${item.userId}`}</p>
-              <video controls width="450">
+              <video controls width="750">
                 <source src={item.video.videoUrlPath} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>

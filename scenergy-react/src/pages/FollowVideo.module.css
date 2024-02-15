@@ -27,23 +27,24 @@
 .videoContent img {
     position: absolute;
     top: 0; /* 이미지를 컨테이너의 상단에 위치시킴 */
-    margin-left: 15px;
-    margin-top: 12px;
+    margin-left: 20px;
+    margin-top: 20px;
+
     /*transform: translateX(-50%); !* 이미지를 수평으로 가운데 정렬 *!*/
 }
 
 .videoContent p {
     position: absolute;
     top: 0; /* 이미지를 컨테이너의 상단에 위치시킴 */
-    margin-left: 75px;
-    margin-top: 27px;
+    margin-left: 85px;
+    margin-top: 33px;
 }
 
 .videoContent {
     display: flex;
     height: 600px;
+    width: 70%;
     align-items: center;
-    /*justify-content: center;*/
     background-color: black;
     position: relative; /* 자식 요소에게 상대적인 위치를 부여하기 위해 필요 */
     /*background-color: rgba(255, 255, 255, 0.5);*/
@@ -51,22 +52,26 @@
 
 .videoContent video {
     cursor:pointer;
+    width: 100%; /* Set the width to 100% to take the full width of the container */
 }
 
 .videoDiv {
     display: flex;
-    width: 930px;
-    height: 700px;
-    background-color: #22232f;
+    width: 990px;
+    height: 600px;
+    background-color: #ffffff;
+    color: #4e4e4e;
     /*background-color: rgba(155, 54, 124, 0.5);*/
     border-radius: 10px;
     align-items: center; /* 추가: 세로 중앙 정렬 */
     justify-content: center; /* 추가: 가로 중앙 정렬 */
+    box-shadow: 1px 1px 7px 4px rgba(66, 66, 66, 0.2);
 }
 
 .videoInfo {
     /*display: flex;*/
-    margin-left: 0;
+    width: 30%;
+    height: 100%;
     display: flex;
     flex-direction: column; /* 추가: 세로 방향으로 배치 */
     align-items: center; /* 추가: 가로 중앙 정렬 */
@@ -74,34 +79,41 @@
 }
 
 .videoInfo h2 {
-    margin-top: 60px; /* h2의 상단 margin 제거 */
+    margin-top: 7%; /* h2의 상단 margin 제거 */
+    padding-left:3%;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
 }
 
 .videoInfo .content {
-    margin-left: 20px;
+    padding-left: 3%;
 }
 
 .videoInfo hr {
     display: flex;
     background-color: white;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 20px;
-    width: 380px;
-    margin-left: 20px;
+    /*width: 300px;*/
+    width: 100%;
+    /*margin-left: 20px;*/
 }
 
 .titleContent {
-margin-bottom: 150px;
-    margin-top: -80px;
+    height: 63%;
+    width: 100%;
+
+}
+
+.musicTieleArtist{
+    height: 37%;
+    width: 100%;
 }
 
 .musicTitle {
     display: flex;
-    margin-left: 20px;
+    padding-left: 3%;
     margin-bottom: 20px;
 }
 
@@ -111,7 +123,7 @@ margin-bottom: 150px;
 
 .artist {
     display: flex;
-    margin-left: 20px;
+    padding-left: 3%;
 }
 
 .artist p {
