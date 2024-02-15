@@ -1,14 +1,16 @@
 * {
   transition: all 0.3s ease-in-out;
 }
+
+
 .searchPageGlobal {
   display: flex;
   height: 100vh;
-
 }
 
 .searchPageNav {
   height: 100%;
+  width: 17.1%;
 }
 
 .searchPageBodyContainer {
@@ -17,6 +19,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 82.9%;
 }
 
 .searchPageResult {

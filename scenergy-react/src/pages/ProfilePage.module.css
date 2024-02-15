@@ -4,6 +4,10 @@
     /*justify-content: center; !* 가로 중앙 정렬 추가 *!*/
 }
 
+.navbarBox {
+    width: 17%;
+}
+
 .ProfilePageContent {
     display: flex;
     flex-direction: column; /* 컨텐츠를 세로로 정렬하기 위해 추가 */

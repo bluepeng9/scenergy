@@ -53,7 +53,9 @@ const NotificationPage = () => {
     return (
         <>
             <div className={styles.notificationMain}>
-                <Navbar/>
+                <div className={styles.navbarBox}>
+                    <Navbar/>
+                </div>
                 <div className={styles.rightMainBox}>
                     <h2>알림</h2>
                     <h3>내가 받은 알림</h3>

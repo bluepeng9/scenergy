@@ -1,16 +1,13 @@
-
 .content {
     display: flex;
     position: relative;
+    height: 100vh;
 }
 
-.logout-div {
-    position: absolute;
-    top: 10px;
-    right: 30px;
+.navbar {
+    width: 17.1%;
 }
 
-.logout-div button {
-    border: none;
-    cursor: pointer;
+.video {
+    width: 82.9%;
 }

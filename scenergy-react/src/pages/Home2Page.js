@@ -1,7 +1,7 @@
 // Home.js (로그인 됐을때 화면)
 import React from "react";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
+import {useCookies} from "react-cookie";
+import {useNavigate} from "react-router-dom";
 import Navbar from "../components/commons/Navbar/Navbar";
 import styles from "./Home2Page.module.css";
 import FollowVideo from "./FollowVideo";
@@ -21,14 +21,16 @@ const Home2Page = () => {
   return (
     <>
       <div className={styles["content"]}>
-        <div className={styles["home2-div"]}>
-          <Navbar />
+        <div className={styles["navbar"]}>
+          <Navbar/>
           <div className={styles["logout-div"]}>
-            <button onClick={handleLogout}>로그아웃</button>{" "}
+            <button onClick={handleLogout}>로그아웃</button>
             {/* 로그아웃 버튼 */}
           </div>
         </div>
-        <FollowVideo></FollowVideo>
+        <div className={styles["video"]}>
+          <FollowVideo></FollowVideo>
+        </div>
       </div>
     </>
   );

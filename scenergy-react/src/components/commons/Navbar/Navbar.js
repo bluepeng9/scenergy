@@ -23,7 +23,7 @@ const Navbar = () => {
     <nav className={styles.NavBarContainer}>
       <ul>
         <li className={styles.ScenergyTab}>
-          <Link to="/" style={{fontWeight: 'bold', fontSize: '25px'}}>scenergy</Link>
+            <Link to="/" style={{fontWeight: 'bold', fontSize: '25px'}}>Scene:rgy</Link>
         </li>
         <li>
           <Link to={homePath}>홈</Link>
@@ -36,23 +36,23 @@ const Navbar = () => {
           onMouseEnter={toggleDropdown}
           onMouseLeave={toggleDropdown}
         >
-          <Link to="/scenergy" className={styles.NavScenergy}>
-            시너지
-          </Link>
-          <ul className={styles.NavBarDropMenu}>
-            <li>
-              <Link to="/scenergy">시너지</Link>
-            </li>
-            <li>
-              <Link to="/scenergy/mypost">내가 쓴 글</Link>
-            </li>
-            <li>
-              <Link to="/scenergy/myapply">내가 지원한 글</Link>
-            </li>
-            <li>
-              <Link to="/scenergy/bookmark">북마크</Link>
-            </li>
-          </ul>
+            {/*<Link to="/scenergy" className={styles.NavScenergy}>*/}
+            {/*  시너지*/}
+            {/*</Link>*/}
+            {/*<ul className={styles.NavBarDropMenu}>*/}
+            {/*  <li>*/}
+            {/*    <Link to="/scenergy">시너지</Link>*/}
+            {/*  </li>*/}
+            {/*  <li>*/}
+            {/*    <Link to="/scenergy/mypost">내가 쓴 글</Link>*/}
+            {/*  </li>*/}
+            {/*  <li>*/}
+            {/*    <Link to="/scenergy/myapply">내가 지원한 글</Link>*/}
+            {/*  </li>*/}
+            {/*  <li>*/}
+            {/*    <Link to="/scenergy/bookmark">북마크</Link>*/}
+            {/*  </li>*/}
+            {/*</ul>*/}
         </li>
         <li>
           <Link to="/videoupload">업로드</Link>

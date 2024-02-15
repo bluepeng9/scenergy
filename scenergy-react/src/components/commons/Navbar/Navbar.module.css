@@ -1,10 +1,8 @@
 .NavBarContainer {
-    z-index: 1000;
-    position: absolute;
-    width: 17%;
     height: 100%;
+    width: 100%;
     /*background-color: black;*/
-    background-color: #f1f1f1; /* 밝은 회색 배경색상 */
+    background-color: #565656;
     padding: 1.5rem;
     border-top-right-radius: 10px;
     display: flex;
@@ -17,7 +15,7 @@
     border-radius: 5px;
     text-decoration: none;
     /*color: whitesmoke;*/
-    color: #1F2937; /* 짙은 회색 텍스트 색상 */
+    color: #f1f1f1;
     font-size: 1rem;
     font-weight: 600;
     display: block;

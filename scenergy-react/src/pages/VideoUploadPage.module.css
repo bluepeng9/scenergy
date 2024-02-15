@@ -2,3 +2,11 @@
     height: 100vh;
     display: flex;
 }
+
+.VideoUpload-global-Navbar {
+    width: 17%;
+}
+
+.VideoUpload-global-VideoUpload {
+    width: 83%;
+}

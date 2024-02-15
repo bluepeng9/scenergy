@@ -1,12 +1,14 @@
 .notificationMain {
     display: flex;
-    flex-direction: row;
-    align-items: start;
     height: 100vh;
+}
+
+.navbarBox {
+    width: 17%;
 }
 
 .rightMainBox {
     padding-left: 20px;
     padding-top: 20px;
-
+    width: 83%;
 }

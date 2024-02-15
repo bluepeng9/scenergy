@@ -1,7 +1,5 @@
-.homeContainer{
+.homeContainer {
     height: 100vh;
-}
-
-.homeNavbar{
-    height: 100%;
+    width: 100%;
+    display: flex;
 }

@@ -15,8 +15,8 @@ const Login = () => {
   }
 
   return (
-      <div className="login-background-img">
-          <div className="login-background-filter">
+      <div>
+          <div>
               <div className="loginup-container">
                   <br/>
                   <h1 className="login-title">S C E N E : R G Y</h1>

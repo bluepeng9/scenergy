@@ -1,5 +1,5 @@
 // ProfilePage.js
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Navbar from "../components/commons/Navbar/Navbar";
 import styles from "./ProfilePage.module.css";
 import ProfileHeader from "../components/Profile/ProfileHeader";
@@ -29,7 +29,9 @@ function ProfilePage() {
     return (
         <>
             <div className={styles['ProfilePage-global']}>
-                <Navbar />
+                <div className={styles['navbarBox']}>
+                    <Navbar/>
+                </div>
 
                 <div className={styles['ProfilePageContent']}>
                     <ProfileHeader onUpdateUser={handleUpdateUser} />
