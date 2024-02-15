@@ -1,13 +1,14 @@
 // ProfileHeaderApi.js
 import styles from "./ProfileHeader.module.css";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 // import { getUser } from "../../apis/User/UserApi";
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import FollowApi from "../../apis/FollowApi";
 import ApiUtil from "../../apis/ApiUtil";
 import ProfileHeaderApi from "../../apis/Profile/ProfileHeaderApi";
 import UserApi from "../../apis/User/UserApi";
 
+import ProfileHeaderImg from "../../assets/profileBackground.jpeg";
 const ProfileHeader = ({ onUpdateUser }) => {
   // 각 요소에 해당하는 상태 정의
   const [profileImage, setProfileImage] = useState(null); // 동그란 프로필 이미지
@@ -41,9 +42,11 @@ const ProfileHeader = ({ onUpdateUser }) => {
         console.error(" 조회 실패", error);
       }
 
-      let followResponse = await FollowApi.getFollow(ApiUtil.getUserIdFromToken(), userId)
-      setIsFollowingThisUser(followResponse)
-
+      let followResponse = await FollowApi.getFollow(
+        ApiUtil.getUserIdFromToken(),
+        userId,
+      );
+      setIsFollowingThisUser(followResponse);
     };
 
     getUserProfile();
@@ -124,14 +127,14 @@ const ProfileHeader = ({ onUpdateUser }) => {
   const follow = async () => {
     if (isFollowingThisUser) {
       let response = await FollowApi.unFollowUser(userId);
-      setFollowersCount(response.data.data.countFollowUser)
+      setFollowersCount(response.data.data.countFollowUser);
       setIsFollowingThisUser(false);
       return;
     }
 
     const fromUserId = ApiUtil.getUserIdFromToken();
     let response = await FollowApi.followUser(parseInt(userId));
-    setFollowersCount(response.data.data.userFollowerCount)
+    setFollowersCount(response.data.data.userFollowerCount);
     setIsFollowingThisUser(true);
     console.log(parseInt(userId) + " " + fromUserId);
   };
@@ -150,70 +153,77 @@ const ProfileHeader = ({ onUpdateUser }) => {
   };
 
   return (
-    <div className={styles.profileHeader}>
-      <div className={styles.profileInfo}>
-        <div className={styles.profileImgUpload}>
-          {/* 동그란 프로필 이미지 */}
-          <label htmlFor="profileImageInput" className={styles.uploadContainer}>
-            {url ? (
-              <img src={url} alt="프로필 이미지" />
-            ) : (
-              <div className={styles.clickUpload}>클릭하여 이미지 업로드</div>
-            )}
-            <input
-              type="file"
-              id="profileImageInput"
-              onChange={handleImageUpload}
-              accept="image/*"
-            />
-          </label>
+    <div className={`${styles.profileHeaders} `}>
+      <div className={`${styles.profileHeader} `}>
+        <div className={styles.profileInfo}>
+          <div className={styles.profileImgUpload}>
+            {/* 동그란 프로필 이미지 */}
+            <label
+              htmlFor="profileImageInput"
+              className={styles.uploadContainer}
+            >
+              {url ? (
+                <img src={url} alt="프로필 이미지" />
+              ) : (
+                <div className={styles.clickUpload}>클릭하여 이미지 업로드</div>
+              )}
+              <input
+                type="file"
+                id="profileImageInput"
+                onChange={handleImageUpload}
+                accept="image/*"
+              />
+            </label>
+          </div>
+
+          <div className={styles.profileNickname}>
+            {/* 닉네임, 한줄소개 */}
+            <h2>{nickname}</h2>
+            <p>
+              {isEditing ? (
+                <input value={bio} onChange={(e) => setBio(e.target.value)} />
+              ) : (
+                bio || "한줄소개를 입력해주세요."
+              )}
+            </p>
+          </div>
         </div>
 
-        <div className={styles.profileNickname}>
-          {/* 닉네임, 한줄소개 */}
-          <h2>{nickname}</h2>
-          <p>
+        <div>
+          {/* 영상 총 개수, 팔로워 수, 팔로우 수 */}
+          <div className={styles.profileInfoCount}>
+            <span>영상: {videoCount}</span>
+            <span>팔로워: {followersCount}</span>
+            <span>팔로우: {followingCount}</span>
+          </div>
+
+          {/* 프로필편집 버튼, 회원탈퇴버튼, 포트폴리오 링크 */}
+          <div className={styles.actionButtons}>
             {isEditing ? (
-              <input value={bio} onChange={(e) => setBio(e.target.value)} />
+              <>
+                <button onClick={handleSaveProfile}>저장</button>
+                <button onClick={handleCancelEdit}>취소</button>
+              </>
             ) : (
-              bio || "한줄소개를 입력해주세요."
+              <button onClick={handleEditProfile}>프로필편집</button>
             )}
-          </p>
+            <button onClick={handleUpdateUser}>회원수정</button>
+            <a href="/profile/portfolio" className={styles["portfolio-link"]}>
+              <button>포트폴리오</button>
+            </a>
+            <button onClick={follow}>
+              {isFollowingThisUser ? "언팔로우" : "팔로우"}
+            </button>
+          </div>
         </div>
+        {/*/!* 회원수정 모달 *!/*/}
+        {/*{isUserUpdateModalOpen && (*/}
+        {/*    <UserUpdateModal*/}
+        {/*        onClose={handleCloseUserUpdateModal}*/}
+        {/*        onUpdateUser={handleConfirmUserUpdate}*/}
+        {/*    />*/}
+        {/*)}*/}
       </div>
-
-      <div>
-        {/* 영상 총 개수, 팔로워 수, 팔로우 수 */}
-        <div className={styles.profileInfoCount}>
-          <span>영상: {videoCount}</span>
-          <span>팔로워: {followersCount}</span>
-          <span>팔로우: {followingCount}</span>
-        </div>
-
-        {/* 프로필편집 버튼, 회원탈퇴버튼, 포트폴리오 링크 */}
-        <div className={styles.actionButtons}>
-          {isEditing ? (
-            <>
-              <button onClick={handleSaveProfile}>저장</button>
-              <button onClick={handleCancelEdit}>취소</button>
-            </>
-          ) : (
-            <button onClick={handleEditProfile}>프로필편집</button>
-          )}
-          <button onClick={handleUpdateUser}>회원수정</button>
-          <a href="/profile/portfolio" className={styles["portfolio-link"]}>
-            <button>포트폴리오</button>
-          </a>
-          <button onClick={follow}>{isFollowingThisUser ? '언팔로우' : '팔로우'}</button>
-        </div>
-      </div>
-      {/*/!* 회원수정 모달 *!/*/}
-      {/*{isUserUpdateModalOpen && (*/}
-      {/*    <UserUpdateModal*/}
-      {/*        onClose={handleCloseUserUpdateModal}*/}
-      {/*        onUpdateUser={handleConfirmUserUpdate}*/}
-      {/*    />*/}
-      {/*)}*/}
     </div>
   );
 };

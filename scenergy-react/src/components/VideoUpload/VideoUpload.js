@@ -1,10 +1,11 @@
-import React, {useRef, useState} from "react";
+import React, { useRef, useState } from "react";
 import styles from "./VideoUploadModal.module.css";
 import videoUploadImage from "../../assets/VideoUpload/VideoUpload.png";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faCircleInfo} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import videoPostApi from "../../apis/VideoPostApi";
 import ApiUtil from "../../apis/ApiUtil";
+import VideoUploadImg from "../../assets/VideoUpload/back8.gif";
 
 const VideoUpload = () => {
   // 장르와 악기 카테고리 목록
@@ -57,7 +58,7 @@ const VideoUpload = () => {
     let id = parseInt(event.target.value);
 
     if (willCheck) {
-      setSelectedGenres([...selectedGenres, id])
+      setSelectedGenres([...selectedGenres, id]);
       return;
     }
     let filter = selectedGenres.filter((genre) => genre !== id);
@@ -70,7 +71,7 @@ const VideoUpload = () => {
     let id = parseInt(event.target.value);
 
     if (willCheck) {
-      setSelectedInstruments([...selectedInstruments, id])
+      setSelectedInstruments([...selectedInstruments, id]);
       return;
     }
     let filter = selectedInstruments.filter((el) => el !== id);
@@ -155,7 +156,7 @@ const VideoUpload = () => {
       formData.append("thumbnailUrlPath", postThumbNailRes.data.data);
 
       // 나머지 필요한 데이터 추가
-        formData.append("userId", ApiUtil.getUserIdFromToken());
+      formData.append("userId", ApiUtil.getUserIdFromToken());
       formData.append("postTitle", videoDetails.title);
       formData.append("postContent", videoDetails.description);
       selectedGenres.forEach((genre) => formData.append("genreTags", genre.id));
@@ -334,11 +335,9 @@ const VideoUpload = () => {
                         type="checkbox"
                         value={genre.id}
                         // checked={selectedGenres.includes(genre)}
-                        checked={
-                          selectedGenres.some(
-                              (selectedGenre) => selectedGenre === genre.id,
-                          )
-                        }
+                        checked={selectedGenres.some(
+                          (selectedGenre) => selectedGenre === genre.id,
+                        )}
                         onChange={(event) => handleGenreSelect(event)}
                       />
                       {genre.name}
@@ -356,7 +355,7 @@ const VideoUpload = () => {
                         value={instrument.id}
                         checked={selectedInstruments.some(
                           (selectedInstrument) =>
-                              selectedInstrument === instrument.id,
+                            selectedInstrument === instrument.id,
                         )}
                         // checked={selectedInstruments.includes(instrument)}
                         onChange={(event) => handleInstrumentSelect(event)}

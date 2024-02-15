@@ -1,8 +1,15 @@
 /* ProfileHeader.module.css */
 .profileHeader {
     display: flex;
-    /*align-items: center; !* 가운데 정렬 *!*/
+    align-items: center; /* 가운데 정렬 */
     margin: 100px auto 80px auto;
+    color: white;
+}
+
+.profileHeaders {
+    background-image: url("../../assets/profileBackground.jpeg");
+    background-size: cover; /* 이미지를 컨테이너에 맞게 조절합니다. */
+    background-position: center; /* 이미지를 가운데 정렬합니다. */
 }
 
 .profileHeader img {
