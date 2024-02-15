@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./ChatConnect.module.css";
 
 const ChatList = ({ chatList, userId }) => {
@@ -44,7 +44,7 @@ const ChatMessage = ({ message, userId }) => {
     }
     return formattedMessage;
   }
-
+  console.log(message);
   return (
     <div
       className={
