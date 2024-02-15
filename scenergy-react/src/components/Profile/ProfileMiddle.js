@@ -26,6 +26,18 @@ const ProfileMiddle = () => {
         receicedDate: "",
     }]);
 
+    const [etcs, setEtcs] = useState([{
+        etcTitle: "",
+        etcDescription: "",
+        etcStartDate: "",
+        etcEndDate: "",
+    }]);
+
+
+
+
+
+
     const {userId:portfolioUserId } = useParams();
     const [portfolioId, setPortfolioId] = useState(0); // 포트폴리오가 존재하는지 여부를 추적
     const [userIdFromToken, setUserIdFromToken] = useState(null); // 포트폴리오가 존재하는지 여부를 추적
@@ -85,22 +97,17 @@ const ProfileMiddle = () => {
                     ? portfolio.honors
                     : [{}];
                 setAwards(awardsData);
+
+                // 수상이력 데이터 설정
+                const etcsData = portfolio.etcs.length > 0
+                    ? portfolio.etcs
+                    : [{}];
+                setEtcs(etcsData);
                 // portfolio 저장
                 setPortfolioId(portfolio.id);
-                console.log("포트폴리오 조회 완료")
-                console.log("portfolioId")
-                console.log(portfolioId)
             }
         } catch (error) {
             console.log("포트폴리오가 존재하지 않음")
-        }
-    }
-
-    const testUpdatePort = () => {
-        const data = {
-            portfolioId: portfolioId,
-            userId: userIdFromToken,
-            description: "update descr",
         }
     }
     const testDeletePort = async () => {
@@ -147,6 +154,16 @@ const ProfileMiddle = () => {
                     return newAwards;
                 });
                 break;
+            case "etcs":
+                setEtcs((prevEtcs) => {
+                    const newEtcs = [...prevEtcs];
+                    newEtcs[index] = {
+                        ...newEtcs[index],
+                        [field]: value,
+                    };
+                    return newEtcs;
+                });
+                break;
             default:
                 break;
         }
@@ -160,13 +177,10 @@ const ProfileMiddle = () => {
                 description: "update descr",
                 educations: educations,
                 experiences: careers,
-                honors: awards
+                honors: awards,
+                etcs: etcs,
             }
-            console.log("education")
-            console.log(educations)
             const response = await profileMiddleApi.updateAllPortfolios(data);
-            console.log("response")
-            console.log(response)
             if (response.status == 200) {
                 // 서버에서 응답이 성공적으로 온 경우, 화면에 반영
                 setIsEditing(false);
@@ -206,6 +220,14 @@ const ProfileMiddle = () => {
                     receicedDate: "",
                 }]);
                 break;
+            case "etcs":
+                setEtcs((prevEtcs) => [...prevEtcs, {
+                    etcTitle: "",
+                    etcDescription: "",
+                    etcStartDate: "",
+                    etcEndDate: "",
+                }]);
+                break;
             default:
                 break;
         }
@@ -232,6 +254,13 @@ const ProfileMiddle = () => {
                     const newAwards = [...prevAwards];
                     newAwards.splice(index, 1);
                     return newAwards;
+                });
+                break;
+            case "etcs":
+                setEtcs((prevEtcs) => {
+                    const newEtcs = [...prevEtcs];
+                    newEtcs.splice(index, 1);
+                    return newEtcs;
                 });
                 break;
             default:
@@ -402,10 +431,54 @@ const ProfileMiddle = () => {
                         </table>
                         <div className={styles['division-line']}></div>
                         <h2>기타사항</h2>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Detail</th>
+                                <th>시작일</th>
+                                <th>종료일</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {isEditing ? (
+                                etcs.map((etc, index) => (
+                                    <tr key={index}>
+                                        <td><input type="text" value={etc.etcTitle}
+                                                   onChange={(e) => handleInputChange("etcTitle", e.target.value, "etcs", index)}/>
+                                        </td>
+                                        <td><input type="text" value={etc.etcDescription}
+                                                   onChange={(e) => handleInputChange("etcDescription", e.target.value, "etcs", index)}/>
+                                        </td>
+                                        <td><input type="text" value={etc.etcStartDate}
+                                                   onChange={(e) => handleInputChange("etcStartDate", e.target.value, "etcs", index)}/>
+                                        </td>
+                                        <td><input type="text" value={etc.etcEndDate}
+                                                   onChange={(e) => handleInputChange("etcEndDate", e.target.value, "etcs", index)}/>
+                                        </td>
+                                        <td>
+                                            <button onClick={() => handleAddItem("etcs")}>기타 추가</button>
+                                            <button onClick={() => handleRemoveItem("etcs", index)}>기타 삭제</button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                etcs.map((etc, index) => (
+                                    <tr key={index}>
+                                        <td>{etc.etcTitle}</td>
+                                        <td>{etc.etcDescription}</td>
+                                        <td>{etc.etcStartDate}</td>
+                                        <td>{etc.etcEndDate}</td>
+                                    </tr>
+                                ))
+                            )}
+                            </tbody>
+                        </table>
                     </>
                 ) : null}
         </>
     );
-};
+}
+;
 
 export default ProfileMiddle;
