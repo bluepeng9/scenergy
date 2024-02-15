@@ -52,17 +52,29 @@ const VideoUpload = () => {
   };
 
   // 장르 선택을 위한 함수
-  const handleGenreSelect = (genre) => {
-    handleCategorySelect(genre, selectedGenres, setSelectedGenres);
+  const handleGenreSelect = (event) => {
+    let willCheck = event.target.checked;
+    let id = parseInt(event.target.value);
+
+    if (willCheck) {
+      setSelectedGenres([...selectedGenres, id])
+      return;
+    }
+    let filter = selectedGenres.filter((genre) => genre !== id);
+    setSelectedGenres(filter);
   };
 
   // 악기 선택을 위한 함수
-  const handleInstrumentSelect = (instrument) => {
-    handleCategorySelect(
-      instrument,
-      selectedInstruments,
-      setSelectedInstruments,
-    );
+  const handleInstrumentSelect = (event) => {
+    let willCheck = event.target.checked;
+    let id = parseInt(event.target.value);
+
+    if (willCheck) {
+      setSelectedInstruments([...selectedInstruments, id])
+      return;
+    }
+    let filter = selectedInstruments.filter((el) => el !== id);
+    setSelectedInstruments(filter);
   };
 
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -322,10 +334,12 @@ const VideoUpload = () => {
                         type="checkbox"
                         value={genre.id}
                         // checked={selectedGenres.includes(genre)}
-                        checked={selectedGenres.some(
-                          (selectedGenre) => selectedGenre.id === genre.id,
-                        )}
-                        onChange={() => handleGenreSelect(genre)}
+                        checked={
+                          selectedGenres.some(
+                              (selectedGenre) => selectedGenre === genre.id,
+                          )
+                        }
+                        onChange={(event) => handleGenreSelect(event)}
                       />
                       {genre.name}
                     </label>
@@ -342,10 +356,10 @@ const VideoUpload = () => {
                         value={instrument.id}
                         checked={selectedInstruments.some(
                           (selectedInstrument) =>
-                            selectedInstrument.id === instrument.id,
+                              selectedInstrument === instrument.id,
                         )}
                         // checked={selectedInstruments.includes(instrument)}
-                        onChange={() => handleInstrumentSelect(instrument)}
+                        onChange={(event) => handleInstrumentSelect(event)}
                       />
                       {instrument.name}
                     </label>
