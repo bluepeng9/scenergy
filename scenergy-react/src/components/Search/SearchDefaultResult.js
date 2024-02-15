@@ -2,11 +2,14 @@ import styles from "./SearchDefaultResult.module.css";
 import basic_profile from "../../assets/basic_profile.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import SearchVideoDetail from "./SearchVideoDetail";
 const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedVideoPost, setSelectedVideoPost] = useState(null);
 
-  const handleModalOpen = () => {
-    setIsModalOpen(!isModalOpen);
+  const handleModalOpen = (videoPost) => {
+    setSelectedVideoPost(videoPost);
+    setIsModalOpen(true);
   };
 
   return (
@@ -55,11 +58,17 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
                   <img
                     src={result.video.thumbnailUrlPath}
                     className={styles.searchPageVideo}
-                    onClick={handleModalOpen}
+                    onClick={() => handleModalOpen(result)}
                   />
                 </div>
+                {isModalOpen && (
+                  <SearchVideoDetail
+                    onClick={() => setIsModalOpen(false)}
+                    searchVideoPosts={selectedVideoPost}
+                  />
+                )}
                 <div className={styles.searchPageVideoInfoContainer}>
-                  <h3>{result.content}</h3>
+                  <h3>{result.title}</h3>
                   <p>{result.video.musicTitle}</p>
                 </div>
               </div>

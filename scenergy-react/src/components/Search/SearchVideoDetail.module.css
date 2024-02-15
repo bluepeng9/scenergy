@@ -1,0 +1,126 @@
+.videoDetailBack{
+    z-index: 1;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.videoDetailContainer{
+    display: flex;
+    width: 830px;
+    height: 600px;
+    border-radius: 10px;
+    background-color: #22232f;
+    padding: 20px;
+}
+.videoDetailLeft{
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.videoDetailHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.videoDetailHeader img{
+    width: 50px;
+}
+
+.videoDetailProfile{
+    display: flex;
+    gap: 10px;
+}
+
+.modalCloseButton{
+    background-color: transparent;
+    box-shadow: none;
+    border: none;
+    color: white;
+    font-size:1.5rem ;
+}
+
+.videoDetailvideo{
+    background-color: black;
+    height: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.videoDetailFooter{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.videoDetailBtn{
+    display: flex;
+    gap: 20px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.videoDetailLike{
+    display: flex;
+    gap: 10px;
+    font-weight: bold;
+}
+
+.videoDetailContent{
+    width: 100%;
+    display: flex;
+}
+
+.videoDetailTitle{
+    line-height: 50px;
+    text-align: center;
+}
+
+.videoDetailTitle p{
+    color: white;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+.genreTag{
+    color: white;
+margin-right: 8px;
+}
+
+.videoDetailMusicInfoContainer{
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.videoDetailInst,.videoDetailGenre{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.videoDetailContentContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.videoDetailTagsContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.videoDetailArtist, .videoDetailMusic{
+display: flex;
+    gap: 10px;
+}
