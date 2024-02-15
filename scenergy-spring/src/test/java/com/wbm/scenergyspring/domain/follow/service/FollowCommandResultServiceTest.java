@@ -15,6 +15,8 @@ import com.wbm.scenergyspring.domain.follow.repository.FollowRepository;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowersCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FindAllFollowingCommand;
 import com.wbm.scenergyspring.domain.follow.service.command.FollowUserCommand;
+import com.wbm.scenergyspring.domain.follow.service.command.UnFollowUserCommand;
+import com.wbm.scenergyspring.domain.follow.service.commandresult.FollowCommandResult;
 import com.wbm.scenergyspring.domain.user.entity.User;
 import com.wbm.scenergyspring.domain.user.repository.UserRepository;
 import com.wbm.scenergyspring.global.exception.EntityAlreadyExistException;
@@ -94,16 +96,20 @@ class FollowCommandResultServiceTest extends IntegrationTest {
 		Long toUserId = userRepository.save(toUser).getId();
 		Long fromUserId = userRepository.save(fromUser).getId();
 
-		followService.followUser(FollowUserCommand.builder()
+		FollowCommandResult followCommandResult = followService.followUser(FollowUserCommand.builder()
 			.fromUserId(fromUserId)
 			.toUserId(toUserId)
 			.build());
 
 		//when
-		followRepository.deleteByFromAndTo(fromUser, toUser);
+		followService.unFollowUser(UnFollowUserCommand.builder()
+			.fromUserId(fromUserId)
+			.followId(followCommandResult.getFollowId())
+			.build()
+		);
 
 		//then
-		long count = followRepository.count();
+		int count = followRepository.findAllByFrom(fromUser).size();
 		Assertions.assertThat(count).isEqualTo(0);
 	}
 
