@@ -1,4 +1,8 @@
-> 음악과 사람을 잇는 모든 연결의 시작, 시너지 
+> 음악과 사람을 잇는 모든 연결의 시작, 시너지
+---
+### 프로젝트 진행기간
+2024.01.08 ~ 2024.02.16
+
 --- 
 ### 기획 배경
 
@@ -7,47 +11,126 @@
 위와 같은 뮤지션들의 어려움을 해결하기 위해 저희는 자신의 연주 영상을 기록하며 공유하고, 프로필에서 이력서를 관리할 수 있는 기능을 제공하는 ‘Scenergy’ 웹 서비스를 기획하게 되었습니다. Scenergy에서 다른 사람들의 연주 영상을 손쉽게 접하며, 마음에 드는 영상의 연주자의 포트폴리오를 확인해 검증된 협업 파트너를 보다 쉽게 구할 수 있습니다.
 
 ___
-### 프로젝트 소개 
- + Scenergy는 `Springboot` `React`를 기반으로 만들어진 뮤지션을 위한 웹 큐레이팅 SNS 입니다. 
+### 프로젝트 소개
++ Scenergy는 `Springboot` `React`를 기반으로 만들어진 뮤지션을 위한 웹 큐레이팅 SNS 입니다.
 --- 
-### 프로젝트 목표 
+### 프로젝트 목표
 + 멤버를 구하는데 어려움을 겪는 뮤지션을 위해 플랫폼을 제공합니다.
 + 연주 영상 업로드에 특화된 게시글 작성 기능을 통해 자신을 어필하고 싶은 뮤지션에게 좀 더 나은 환경을 제공합니다.
 + 역할을 분담하여 서비스를 코드로  **구현**하고  **배포**합니다.
-    -   구현하는 과정에서 Front-end와 Back-end가  **협업**하는 과정을 이해합니다.
-        -   RESTful API를 직접 설계하고 API를 통한 HTTP 통신을 겪으며 협업 능력을 기릅니다.
-        -   자신이 맡은 부분을 남에게 설명할 수 있는 의사소통 능력을 기릅니다.
-    -   단순히 구현 후 끝나는 것이 아닌  **코드 리뷰**와  **피드백**을 통해 함께 성장합니다.
+  -   구현하는 과정에서 Front-end와 Back-end가  **협업**하는 과정을 이해합니다.
+    -   RESTful API를 직접 설계하고 API를 통한 HTTP 통신을 겪으며 협업 능력을 기릅니다.
+    -   자신이 맡은 부분을 남에게 설명할 수 있는 의사소통 능력을 기릅니다.
+  -   단순히 구현 후 끝나는 것이 아닌  **코드 리뷰**와  **피드백**을 통해 함께 성장합니다.
 --- 
-### 기술스택 
-#### 개발 환경 
- 
+### 기술스택
+#### 개발 환경
+
 <img src="https://img.shields.io/badge/Visual%20Studio%20Code-007ACC.svg?&style=for-the-badge&logo=Visual%20Studio%20Code&logoColor=white"> <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> 
- 
-#### 개발 
+
+#### 개발
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/html5-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"> <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
- 
-#### 커뮤니케이션 
-<img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white"> 
+
+#### 커뮤니케이션
+<img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
 ---
 ### 기능정의서 및 ERD
 
 #### 기능정의서
-##### 🔗[기능정의서](https://docs.google.com/spreadsheets/d/1eb2wqtTxqo4EBiJq_kRAA-wO56QQbC8ycn4FkqmRq-s/edit?pli=1#gid=2139742202)
+##### 🔗[기능정의서](https://docs.google.com/spreadsheets/d/1eb2wqtTxqo4EBiJq_kRAA-wO56QQbC8ycn4FkqmRq-s/edit#gid=2139742202)
 #### ERD
-<img src="/uploads/a130be76fd8f0d6470d962bc5adc4928/B308.png">
-
+![ERD.png](docs%2Fimages%2FERD.png)
 ---
 ### 페르소나
 #### 1️⃣ 드러머 구하는 김민석
-
-<img src="/uploads/84c0d3d84f06a25b32a03cc59e890732/image__7_.png" width="600">
+![페르소나_김민석.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%BC%EC%84%9D.png)
 
 #### 2️⃣ 버스킹 팀을 구하는 김미솔
-<img src="/uploads/058e9ffb8f3168f5136f0307891e5bc9/image__9_.png" width="600"> 
+![페르소나_김미솔.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%B8%EC%86%94.png)
 
 #### 3️⃣ 아티스트를 꿈꾸는 장성하
 ![페르소나_장성하.png](./docs/images/페르소나_장성하.png){: width="600"}
+
+### 시스템 아키텍처
+![시스템 아키텍처.png](docs%2Fimages%2F%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
+
+---
+### 백엔드 디렉토리 구조
+ ```sh
+domain
+  ├─ entityName
+  │ ├─ controller
+  │ │     ├─ request
+  │ │     └─response
+  │ ├─ entity
+  │ ├─ repository
+  │ └─ service
+  │      └─ command
+  │ 
+  ├─ test
+  │  ├─domain
+  │  └─ serviceTest
+  └─ ScenergySpringApplication.java
+```
+
+### 프론트 디렉토리 구조
+```sh
+├─actions
+├─apis
+│  ├─entity
+│  ├─Profile
+│  ├─User
+│  └─VideoUpload
+├─assets
+│  └─VideoUpload
+├─components
+│  ├─Chat
+│  ├─commons
+│  │  ├─Dialog
+│  │  ├─Drawer
+│  │  ├─Navbar
+│  │  ├─ScenergyList
+│  │  └─Search
+│  ├─JobPost
+│  ├─Portfolio
+│  ├─Profile
+│  ├─Search
+│  ├─User
+│  └─VideoUpload
+├─contexts
+├─hooks
+├─pages
+├─reducers
+├─router
+└─store
+```
+
+---
+## 주요 기능 및 화면
+**로그인 & 로그아웃 (네이버 OAuth)**
+- 중앙의 로그인 버튼을 누른 후 소셜 로그인을 진행할 수 있습니다
+- 로그인 한 사용자는 시너지 서비스를 이용할 수 있습니다.
+
+**영상 업로드**
+- 자신의 연주 영상을 업로드 할 수 있습니다.
+- 팔로우 한 유저의 영상을 조회할 수 있습니다.
+
+**채팅**
+- 원하는 뮤지션과 채팅을 통해 빠른 연락이 가능합니다.
+
+**화상 회의**
+- 화상회의를 통해 빠른 실력검증 및 합주가 가능합니다.
+
+**검색**
+- 지역, 장르, 악기태그로 영상을 검색 할 수 있습니다.
+- 검색어 입력을 통해 원하는 영상을 검색 할 수 있습니다.
+
+**알림**
+- 팔로우와 채팅 알림을 받을 수 있습니다.
+
+**프로필 조회**
+- 자신의 프로필을 조회하고, 정보를 갱신할 수 있습니다.
+- 프로필에서 자신의 대표영상과 영상 목록을 조회할 수 있습니다.
 
 ---
 ### 코드 컨벤션
@@ -252,7 +335,7 @@ const isJedi = getProp('jedi');
 ##### 16. 제곱 계산을 할 때는 Math.pow 대신 제곱 연산자 **을 사용하자
 ##### 17. 변수
 + 하나의 변수 선언/할당에는 하나의 const 또는 let을 사용하자
- + const를 그룹화한 다음에 let을 선언하자
++ const를 그룹화한 다음에 let을 선언하자
 ```javascript
 // good
 const goSportsTeam = true;
@@ -338,7 +421,7 @@ class Calculator extends Abacus {
 ##### 22. 공백
 + 탭은 공백문자 2개로 설정!
 + 주요 중괄호 앞에는 공백을 1개 넣자
-+ 제어문 (if, while 등)의 소괄호 앞에는 공백을 1개 넣자. 
++ 제어문 (if, while 등)의 소괄호 앞에는 공백을 1개 넣자.
 + 함수선언이나 함수호출시 인자 리스트 앞에는 공백을 넣지 말자.
 +  연산자 사이에 공백을 넣자
 + 구문의 앞과 블록의 뒤에는 빈 행을 두자
@@ -386,7 +469,7 @@ const good = new User({
 });
 ```
 + 파일 이름은 default export의 이름과 일치해야 한다
-+ 상수 이름을 대문자로 짓는 것은 해당 상수가 
++ 상수 이름을 대문자로 짓는 것은 해당 상수가
   - (1) 내보내기 될 때
   - (2) const 타입일 때 (값이 재할당되지 못할 때)
   - (3) 그 상수와 상수가 중첩된 속성이 절대 변하지 않는다는 것을 신뢰할 수 있을 때
@@ -402,26 +485,23 @@ export const MAPPING = {
 ### 각자 맡은 역할
 
 - 회원 관리
-    - 김혜지, 김은지
+  - 김혜지, 강대은
 - 검색
-    - 김혜지, 김은지
+  - 이민형, 김은지
 - 포트폴리오
-    - 이민형, 강대은
+  - 이태경, 강대은
 - 팔로우, 팔로잉
-    - 김준표, 김은지
+  - 김준표, 김은지
 - 채팅
-    - 김준표, 김은지 
+  - 이태경, 김은지
 - 좋아요
-    - 김준표, 김은지
+  - 김준표, 김은지
 - 게시글
-    - 김준표, 김은지
+  - 김혜지, 김은지
 - 영상
-    - 김준표, 김은지
+  - 이민형, 강대은
 - 알림
-    - 이태경, 강대은
-- SCENE
-    - 이태경, 강대은
-
+  - 김준표, 강대은
 ---
 
 ### 팀원 소개
@@ -429,13 +509,13 @@ export const MAPPING = {
 
 <table style="width: 100%; text-align: center;">
   <tr>
-    <td style="text-align: center;"><img src="/uploads/8c282182d74295e5f9974e98d513db55/김준표.jpg" width="110"><br><strong>김준표</strong><br>🍪Back-end<br>💎Team Leader<br>🤴Back-end Leader</td>
-    <td style="text-align: center;"><img src="/uploads/4f94ffce787f8c59b26d0bdb40aafd1a/김혜지.jpg" width="110"><br><strong>김혜지</strong><br>💟Back-end</td>
-    <td style="text-align: center;"><img src="/uploads/fc76178fc2ab76750f3ef76435a9fdc6/이민형.jpg" width="110"><br><strong>이민형</strong><br>🧗‍♂️Back-end<br>🧔Survey Leader</td>
+    <td style="text-align: center;"><img src="docs/images/김준표.jpg" width="110"><br><strong>김준표</strong><br>🍪Back-end<br>💎Team Leader<br>🤴Back-end Leader</td>
+    <td style="text-align: center;"><img src="docs/images/김혜지.jpg" width="110"><br><strong>김혜지</strong><br>💟Back-end</td>
+    <td style="text-align: center;"><img src="docs/images/이민형.jpg" width="110"><br><strong>이민형</strong><br>🧗‍♂️Back-end<br>🧔Survey Leader</td>
   </tr>
   <tr>
-    <td style="text-align: center;"><img src="/uploads/5547ddc370012032652eba43b8ccf115/이태경.jpg" width="110"><br><strong>이태경</strong><br>🍖Back-end</td>
-    <td style="text-align: center;"><img src="/uploads/51330ab2900e11d5a46f07d1e163fe42/김은지.jpg" width="110"><br><strong>김은지</strong><br>🌹Front-end<br>👸Front-end Leader</td>
-    <td style="text-align: center;"><img src="/uploads/277b2260b05e29e580d0d1af4dda106f/강대은.jpg" width="110"><br><strong>강대은</strong><br>🍞Front-end</td>
+    <td style="text-align: center;"><img src="docs/images/이태경.jpg" width="110"><br><strong>이태경</strong><br>🍖Back-end</td>
+    <td style="text-align: center;"><img src="docs/images/김은지.jpg" width="110"><br><strong>김은지</strong><br>🌹Front-end<br>👸Front-end Leader</td>
+    <td style="text-align: center;"><img src="docs/images/강대은.jpg" width="110"><br><strong>강대은</strong><br>🍞Front-end</td>
   </tr>
 </table>
