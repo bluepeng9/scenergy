@@ -19,6 +19,7 @@ const ChatList = ({ chatList, userId }) => {
             key={chatMessage.id}
             message={chatMessage}
             userId={userId}
+            senderId={chatMessage.senderId}
           />
         ))}
       </div>
@@ -26,32 +27,37 @@ const ChatList = ({ chatList, userId }) => {
   );
 };
 
-const ChatMessage = ({ message, userId }) => {
+const ChatMessage = ({ message, userId, senderId }) => {
   function formatMessage(message) {
     const maxWord = 30;
     let formattedMessage = "";
     let currentLine = "";
-      if (message != null)
-          for (let i = 0; i < message.length; i++) {
-              currentLine += message[i];
-              if (currentLine.length >= maxWord || message[i] === " ") {
-                  formattedMessage += currentLine + "\n";
-                  currentLine = "";
-              }
-          }
+    if (message != null)
+      for (let i = 0; i < message.length; i++) {
+        currentLine += message[i];
+        if (currentLine.length >= maxWord || message[i] === " ") {
+          formattedMessage += currentLine + "\n";
+          currentLine = "";
+        }
+      }
     if (currentLine !== "") {
       formattedMessage += currentLine + "\n";
     }
     return formattedMessage;
   }
-  console.log(message);
   return (
-    <div
-      className={
-        message.senderId === userId ? styles.myMessage : styles.otherMessage
-      }
-    >
-      <p>{formatMessage(message.messageText)}</p>
+    <div className={styles.chatMsgList}>
+      <div
+        className={
+          senderId === 1
+            ? styles.adminMessage
+            : senderId === +userId
+              ? styles.myMessage
+              : styles.otherMessage
+        }
+      >
+        <p>{formatMessage(message.messageText)}</p>
+      </div>
     </div>
   );
 };

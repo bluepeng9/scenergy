@@ -31,16 +31,14 @@ const ChatRoomCreate = ({ selectedUsers, isRoomCreated, setIsModalOpen }) => {
           },
         },
       );
-      console.log(response.data.data);
-      console.log(selectedUsers);
 
       const newRoom = response.data.data;
       addChatRoom(newRoom);
-      console.log(newRoom);
-      console.log(newRoom.chatRoomId);
       setIsCreating(false);
       setIsModalOpen(false);
-      navigate(`/chat/${newRoom.chatRoomId}`);
+      navigate(`/chat/${newRoom.chatRoomId}`, {
+        state: { roomName: roomName },
+      });
     } catch (error) {
       console.error("에러", error);
       setIsCreating(false);

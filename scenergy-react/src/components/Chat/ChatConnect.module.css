@@ -16,6 +16,11 @@
   gap: 7px;
 
 }
+.adminMessage{
+  text-align: center;
+  background-color: transparent;
+  margin-top: 3px;
+}
 .chatMsgList .myMessage{
   float: right;
 }

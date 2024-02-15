@@ -31,12 +31,12 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const { refetch } = useChatRooms(userId);
   const [connectUserId, setConnectUserId] = useState(0);
   const [status, setStatus] = useState(0);
+  const roomName = location.state?.roomName;
 
   useEffect(() => {
-
     const getStatus = async () => {
       const sta = await ChatMessageApi.getRoomInfo(realRoomId);
-      console.log(sta.data.data.roomInfo.status)
+      console.log(sta.data.data.roomInfo.status);
       if (sta.data.data.roomInfo.status === 0) {
         const getConnectUserId = async () => {
           try {
@@ -48,10 +48,9 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
         };
         getConnectUserId();
       }
-      setStatus(sta.data.data.roomInfo.status)
-    }
+      setStatus(sta.data.data.roomInfo.status);
+    };
     getStatus();
-
   }, [realRoomId, userId]);
 
   const handleModalOpen = () => setIsModalOpen(!isModalOpen);
@@ -117,7 +116,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const handleConnectRtc = () => {
     setIsRtcConnect(!isRtcConnect);
   };
-
+  console.log();
   return (
     <>
       <ChatRoomList />
@@ -129,27 +128,22 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 <p>프로필</p>
               </div>
               <div className={styles.chatRoomUserName}>
-                <p>상대방 닉네임</p>
+                <p>{roomName}</p>
               </div>
-            </div>
-            <div style={{display: status !== 0 ? 'none' : 'block'}}>
-              <VideoConference
-                  chatRoomId={realRoomId}
-                  chatRoomUsers={chatRoomUsers}
-                  chatRoomUsersSeq={chatRoomUsersSeq}
-                  userId={ApiUtil.getUserIdFromToken()}
-                  connectUserId={connectUserId}
-              />
             </div>
             <div className={styles.chatRoomIcon}>
               {/*누르면 회원 초대*/}
               <div className={styles.userInvite} onClick={handleModalOpen}>
                 <FontAwesomeIcon icon={faPlus} />
               </div>
-
-              <div className={styles.doRtc} onClick={handleConnectRtc}>
-                <FontAwesomeIcon icon={faVideo} />
-                {isRtcConnect && <div></div>}
+              <div style={{ display: status !== 0 ? "hidden" : "block" }}>
+                <VideoConference
+                  chatRoomId={realRoomId}
+                  chatRoomUsers={chatRoomUsers}
+                  chatRoomUsersSeq={chatRoomUsersSeq}
+                  userId={ApiUtil.getUserIdFromToken()}
+                  connectUserId={connectUserId}
+                />
               </div>
               <div className={styles.RoomInfo} onClick={toggleInfoMenu}>
                 <FontAwesomeIcon icon={faCircleInfo} />

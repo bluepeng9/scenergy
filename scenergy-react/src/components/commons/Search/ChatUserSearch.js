@@ -44,15 +44,6 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
     setSearchInput("");
   };
 
-  const handleCloseProp = (user) => {
-    handleUserSelect(user);
-    handleClose();
-  };
-
-  const handleRoomCreateProp = async (realRoomId) => {
-    handleClose();
-  };
-
   const handleSearch = async () => {
     if (!searchInput.trim()) {
       setSearchResults([]);

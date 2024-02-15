@@ -1,0 +1,60 @@
+.videoConferenceViewBack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.95); /* 반투명 배경 */
+  z-index: 100;
+}
+.videoConferenceView {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4rem;
+}
+.outRtc, .controlAudio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+}
+
+.outRtc{
+  background-color: #e51616;
+  color: white;
+}
+.controlAudio{
+  background-color: white;
+  color: black;
+}
+.videoConferenceItemContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+}
+.videoConferenceBtn{
+  display: flex;
+  gap: 30px;
+}
+
+
+video {
+  transition: all 0.3s ease-in-out;
+  width: 90%;
+  max-width: 640px;
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+}
