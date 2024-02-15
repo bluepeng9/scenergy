@@ -22,11 +22,12 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
     setRecentChatMessage: setRecentChatMessage,
     recentChatMessage: recentChatMessage,
   } = useChatMessageContext();
+
   const {
     data: loadedMessages,
     isLoading: messagesLoading,
     isError: messagesError,
-  } = useChatMessages(lastMessageId, lastMessage);
+  } = useChatMessages(lastMessageId, lastMessage, realRoomId);
 
   useEffect(() => {
     //첫번째 요청 100개
@@ -41,7 +42,6 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
       ) {
         updatedMessages.push(recentChatMessage);
       }
-
       setChatMessages(updatedMessages);
     }
   }, [loadedMessages, messagesLoading, messagesError, recentChatMessage]);
@@ -96,9 +96,7 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
     //연결 끊어지면 끝
     if (!client.current.connected) return;
 
-    //test용
     const message = {
-      //TODO:나중에 header로 user정보 담아왔을때 user_id 받자받자
       user_id: userId,
       room_id: realRoomId,
       message: chat,

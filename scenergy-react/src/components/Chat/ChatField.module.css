@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: white;
 }
 
 .fieldBody {
@@ -17,7 +18,7 @@
 
 .fieldBody button {
   border: none;
-  background-color: black;
+  background-color: rgba(16, 16, 79, 0.95);
   color: white;
   padding: 10px;
   width: 100px;
@@ -40,20 +41,49 @@
 }
 
 .dialogSearchGlobal span {
-  font-weight: bold;
+  font-size: 1.2rem;
 }
 
+.chatUserSearchBody{
+  height: 100%;
+display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dialogSearchInput::placeholder{
+  font-size: 1rem;
+  color: white;
+
+}
 .dialogSearchInput {
   padding: 5px;
-  width: 300px;
+  width: 270px;
   border: none;
   margin-left: 10px;
   background-color: transparent;
+  color: white;
 }
 
 .dialogSearchInput:focus {
-  border: none;
   outline: none;
+}
+
+.dialogSearchContainer button{
+  padding: 10px 15px;
+  border: none;
+  font-weight: bold;
+  background-color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.dialogUserListContainer{
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .dialogUserList {
@@ -79,8 +109,27 @@
 }
 
 .createBtn {
+  margin-bottom: 0;
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.createBtn button{
+  border: none;
+  padding: 10px 15px;
+  border-radius:10px;
   margin-top: auto;
+  font-weight: bold;
+}
+
+
+.selectedUser {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px 0;
+}{
+
 }

@@ -21,7 +21,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const [chatRoomUsers, setChatRoomUsers] = useState([]);
   const [chatRoomUsersSeq, setChatRoomUsersSeq] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isRtcConnect, setIsRtcConnect] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const location = useLocation();
   const lastMessageId = location.state?.lastMessageId;
@@ -31,7 +30,13 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
   const { refetch } = useChatRooms(userId);
   const [connectUserId, setConnectUserId] = useState(0);
   const [status, setStatus] = useState(0);
-  const roomName = location.state?.roomName;
+  const [roomName, setRoomName] = useState("");
+  const [isCreatingNewRoom, setIsCreatingNewRoom] = useState(false);
+  useEffect(() => {
+    if (location.state?.roomName) {
+      setRoomName(location.state.roomName);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     const getStatus = async () => {
@@ -113,10 +118,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
     }
   };
 
-  const handleConnectRtc = () => {
-    setIsRtcConnect(!isRtcConnect);
-  };
-  console.log();
   return (
     <>
       <ChatRoomList />
@@ -124,9 +125,6 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
         <div className={styles.chatRoomHeader}>
           <div className={styles.chatRoomInfo}>
             <div className={styles.chatRoomProfileContainer}>
-              <div className={styles.chatRoomProfile}>
-                <p>프로필</p>
-              </div>
               <div className={styles.chatRoomUserName}>
                 <p>{roomName}</p>
               </div>
@@ -156,6 +154,7 @@ const ChatRoomReal = ({ toggleInfoMenu, userId }) => {
                 onClose={() => setIsModalOpen(false)}
                 fromUserId={userId}
                 onUserSelect={handleUserSelect}
+                isCreatingNewRoom={isCreatingNewRoom}
               />
             )}
           </div>

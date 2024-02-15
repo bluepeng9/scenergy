@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./ChatConnect.module.css";
-
+import styles from "./ChatMessageList.module.css";
 const ChatList = ({ chatList, userId }) => {
   const chatMsgFieldRef = useRef(null);
   useEffect(() => {
@@ -28,6 +27,11 @@ const ChatList = ({ chatList, userId }) => {
 };
 
 const ChatMessage = ({ message, userId, senderId }) => {
+  const showUnreadCnt =
+    message.senderId !== 1 &&
+    message.senderId !== null &&
+    message.unreadCount > 0;
+
   function formatMessage(message) {
     const maxWord = 30;
     let formattedMessage = "";
@@ -45,6 +49,17 @@ const ChatMessage = ({ message, userId, senderId }) => {
     }
     return formattedMessage;
   }
+  const MessageContent = () => (
+    <div className={styles.messageContent}>
+      {showUnreadCnt && (
+        <span className={styles.unreadCount}>{message.unreadCount}</span>
+      )}
+      <span className={styles.messageText}>
+        {formatMessage(message.messageText)}
+      </span>
+    </div>
+  );
+
   return (
     <div className={styles.chatMsgList}>
       <div
@@ -56,7 +71,7 @@ const ChatMessage = ({ message, userId, senderId }) => {
               : styles.otherMessage
         }
       >
-        <p>{formatMessage(message.messageText)}</p>
+        <MessageContent />
       </div>
     </div>
   );

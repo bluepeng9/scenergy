@@ -78,7 +78,6 @@ const Dialog = ({
             </button>
           </div>
         </div>
-        <hr />
         <div className={styles.DialogBody}>{children}</div>
       </div>
     </div>

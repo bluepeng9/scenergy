@@ -1,0 +1,76 @@
+.chatMsgField {
+  max-height: calc(100vh - 150px);
+  overflow: auto;
+  transition: 0.3s ease;
+  padding: 10px;
+}
+
+.chatMsg {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.adminMessage {
+  text-align: center;
+  background-color: transparent;
+  margin-top: 3px;
+  width: 100%;
+    color: rgba(140, 140, 140, 0.8);
+}
+
+.myMessage .messageText,
+.otherMessage .messageText {
+  padding: 15px 20px;
+  border-radius: 15px;
+  max-width: 400px;
+  word-wrap: break-word;
+}
+
+.myMessage .messageText {
+  background-color: rgb(16, 16, 79);
+  color: white;
+}
+
+.otherMessage .messageText {
+  background-color: #ffffff;
+  color: black;
+}
+.chatMsgList .myMessage {
+  float: right;
+}
+.chatMsgList .otherMessage {
+  float: left;
+}
+.myMessage,
+.otherMessage {
+  white-space: normal !important;
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: fit-content;
+  min-height: 3rem;
+  height: fit-content;
+  max-width: 400px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  transition: 0.3s ease;
+  text-align: left;
+}
+
+.unreadCount {
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  height: fit-content;
+  align-self: center;
+}
+
+.myMessage .unreadCount {
+  align-self: flex-start;
+  margin-right: 10px;
+}
+
+.otherMessage .unreadCount {
+  align-self: flex-end;
+  margin-left: 10px;
+}

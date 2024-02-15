@@ -1,59 +1,6 @@
-
-.chatMsgFieldGlobal{
+.chatMsgFieldGlobal {
   display: flex;
   flex-direction: column;
-}
-.chatMsgField {
-  max-height: calc(100vh - 150px);
-  overflow: auto;
-  transition: 0.3s ease;
-  padding: 5px;
-}
-
-.chatMsg {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-
-}
-.adminMessage{
-  text-align: center;
-  background-color: transparent;
-  margin-top: 3px;
-}
-.chatMsgList .myMessage{
-  float: right;
-}
-.chatMsgList .otherMessage{
-  float: left;
-}
-.myMessage,
-.otherMessage {
-  white-space: normal !important;
-  font-size: 13px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 20px;
-  width: fit-content;
-  min-height:3rem;
-  height: fit-content;
-  max-width: 400px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  transition: 0.3s ease;
-  text-align: left;
-}
-
-.myMessage {
-  color: white;
-  background-color: black;
-}
-
-.otherMessage {
-  color: black;
-  background-color: #ffffff;
 }
 
 .chatInput {

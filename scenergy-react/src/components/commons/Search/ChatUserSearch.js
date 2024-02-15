@@ -5,10 +5,17 @@ import followApi from "../../../apis/FollowApi";
 import searchApi from "../../../apis/SearchApi";
 import { useEffect, useState } from "react";
 import { useChatRoom } from "../../../contexts/ChatRoomContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ApiUtil from "../../../apis/ApiUtil";
+import axios from "axios";
 
-const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
+const ChatUserSearch = ({
+  isOpen,
+  onClose,
+  onUserSelect,
+  fromUserId,
+  isCreatingNewRoom,
+}) => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [followingList, setFollowingList] = useState([]);
@@ -19,7 +26,7 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { addChatRoom, chatRooms } = useChatRoom();
   const navigate = useNavigate();
-
+  const { roomId } = useParams();
   useEffect(() => {
     const loadFollowingList = async () => {
       try {
@@ -48,7 +55,7 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
     if (!searchInput.trim()) {
       setSearchResults([]);
       return;
-    } // 검색어가 비어있는 경우 검색하지 않음
+    }
     try {
       // SearchApi를 사용하여 검색 실행
       const response = await searchApi.searchFollowing(fromUserId, searchInput);
@@ -72,10 +79,16 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
   }, [searchResults, selectedUsers]);
 
   const handleUserSelect = (user) => {
-    console.log(user);
-    if (
-      !selectedUsers.some((selectedUser) => selectedUser.id === user.userId)
-    ) {
+    const isSelected = selectedUsers.some(
+      (selectedUser) => selectedUser.id === user.userId,
+    );
+    if (isSelected) {
+      // 이미 선택된 사용자를 선택 해제
+      setSelectedUsers(
+        selectedUsers.filter((selectedUser) => selectedUser.id !== user.userId),
+      );
+    } else {
+      // 선택되지 않은 사용자를 선택
       setSelectedUsers([
         ...selectedUsers,
         { id: user.userId, nickname: user.nickname },
@@ -98,9 +111,32 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
     event.preventDefault();
   };
 
+  const handleInvite = async () => {
+    if (selectedUsers.length > 0) {
+      try {
+        const userIds = selectedUsers.map((user) => user.id); // 사용자 ID만 추출
+        const response = await axios.post(
+          `${process.env.REACT_APP_API_URL}/chatroom/invite-room`,
+          {
+            room_id: roomId,
+            users: userIds, // 수정: users 필드에 userIds 배열 전달
+          },
+        );
+        if (response.data) {
+          console.log("초대 완료", response.data);
+          setIsModalOpen(false); // 모달 닫기
+          setSelectedUsers([]); // 선택된 사용자 목록 초기화
+          onClose();
+        }
+      } catch (error) {
+        console.error("초대 중 에러 발생", error);
+      }
+    }
+  };
+
   return (
     <Dialog isOpen={isOpen} title="뮤지션 검색" onClose={handleClose}>
-      <form onSubmit={handleSubmit}>
+      <form className={styles.chatUserSearchBody} onSubmit={handleSubmit}>
         <div className={styles.dialogSearchGlobal}>
           <div className={styles.dialogSearchContainer}>
             <span>받는 사람 : </span>
@@ -116,16 +152,23 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
         </div>
         <hr className={styles.hrLine} />
         <div className={styles.dialogUserListContainer}>
-          {searchInput === "" ? (
+          {searchInput === "" || searchResults?.length === 0 ? (
             <>
-              {followingList.map((followingUser) => (
-                <div
-                  key={followingUser.userId}
-                  onClick={() => handleUserSelect(followingUser)}
-                >
-                  {followingUser.nickname}
-                </div>
-              ))}
+              {followingList.length > 0 ? (
+                followingList.map((followingUser) => (
+                  <div
+                    key={followingUser.userId}
+                    onClick={() => handleUserSelect(followingUser)}
+                    className={`${styles.dialogUserList} ${selectedUsers.some((user) => user.id === followingUser.userId) ? styles.selectedUser : ""}`} // 스타일 적용
+                  >
+                    <div className={styles.dialogUserNick}>
+                      {followingUser.nickname}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>팔로우하는 뮤지션이 없습니다.</p> // 팔로잉 목록이 비었을 때의 메시지
+              )}
             </>
           ) : searchResults === null ? (
             <p>일치하는 뮤지션이 없습니다.</p>
@@ -147,13 +190,15 @@ const ChatUserSearch = ({ isOpen, onClose, onUserSelect, fromUserId }) => {
           )}
         </div>
         <div className={styles.createBtn}>
-          {!isCreated ? (
+          {isCreatingNewRoom ? (
             <ChatRoomCreate
               selectedUsers={selectedUsers}
               isRoomCreated={handleRoomCreate}
               setIsModalOpen={setIsModalOpen}
             />
-          ) : null}
+          ) : (
+            <button onClick={handleInvite}>초대하기</button>
+          )}
         </div>
       </form>
     </Dialog>

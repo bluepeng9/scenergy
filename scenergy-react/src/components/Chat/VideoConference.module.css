@@ -51,7 +51,9 @@
 }
 
 
-video {
+.videoConferenceMe video,
+.videoConferenceYou video
+{
   transition: all 0.3s ease-in-out;
   width: 90%;
   /*max-width: 640px;*/

@@ -8,6 +8,7 @@
   box-shadow: -2px 0 4px rgba(0, 0, 0, 0.2);
   transition: all 0.5s ease-in-out;
   z-index: 100;
+  padding: 5px;
 }
 .show {
   right: 3vb;
@@ -17,7 +18,7 @@
 .infoMenuHeader {
   width: 100%;
   display: flex;
-  padding: 5px;
+  padding: 7px;
   justify-content: space-between;
   align-items: center;
   transition: all 0.5s ease-in-out;
@@ -76,6 +77,6 @@
 }
 
 .chatRoomOutBtn button:hover {
-  background-color: black; /* 마우스 오버 시 배경색 */
+  background-color: rgba(16, 16, 79, 0.95);
   color: white;
 }

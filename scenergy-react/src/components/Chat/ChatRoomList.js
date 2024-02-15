@@ -16,6 +16,8 @@ const ChatRoomList = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const { chatRooms: contextChatRooms, setChatRooms } = useChatRoom();
   const [userNickname, setUserNickname] = useState("");
+  const [clickedRoomId, setClickedRoomId] = useState(null); // 클릭된 방의 ID를 저장하는 상태 추가
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
@@ -26,11 +28,14 @@ const ChatRoomList = () => {
     }
   };
 
+  const handleRoomClick = (roomId) => {
+    setClickedRoomId(roomId); // 클릭된 방의 ID를 상태에 저장
+  };
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  //user정보 받아오기 => nickname필요함
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -91,13 +96,9 @@ const ChatRoomList = () => {
                 lastMessage: room.recentChatMessage,
               }}
               to={`/chat/${room.id}`}
-              className={styles.listItemContainer}
+              className={`${styles.listItemContainer} ${room.id === clickedRoomId ? styles.active : ""}`} // 클릭된 방에 active 클래스 추가
+              onClick={() => handleRoomClick(room.id)} // 클릭 이벤트 추가
             >
-              <div className={styles.listUserProfileImg}>
-                {/* user profile 사진 */}
-                {/* <img> */}
-                <p>이미지</p>
-              </div>
               <div className={styles.listContentContainer}>
                 <div className={styles.listRoomTitle}>
                   <p>{room.name}</p>
