@@ -1,0 +1,18 @@
+.mainNotiCon {
+    display: flex;
+    flex-direction: row;
+    align-items: start;
+    justify-content: start;
+    width: 100%;
+    padding: 8px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.unread {
+    border-left: 5px solid #007bff;
+}
+
+.topText {
+    font-weight: bold;
+    padding-bottom: 5px;
+}

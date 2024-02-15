@@ -11,6 +11,7 @@ import {ChatMessageProvider} from "./contexts/ChatMessageContext";
 import {QueryClient, QueryClientProvider} from "react-query";
 import axios from "axios";
 import {ScenergyPostProvider} from "./contexts/ScenergyPostContext";
+import {NotificationProvider} from "./contexts/NotificationContext";
 /*danny 추가 (네이버 유저정보 가져올떄)*/
 axios.defaults.baseURL = "http://localhost:3000/";
 axios.defaults.withCredentials = true;
@@ -24,9 +25,11 @@ root.render(
       <ChatRoomProvider>
         <ChatMessageProvider>
           <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router}>
-              <App />
-            </RouterProvider>
+            <NotificationProvider>
+              <RouterProvider router={router}>
+                <App/>
+              </RouterProvider>
+            </NotificationProvider>
           </QueryClientProvider>
         </ChatMessageProvider>
       </ChatRoomProvider>

@@ -3,6 +3,7 @@ import styles from "./Navbar.module.css";
 import React, {useState} from "react";
 import ApiUtil from "../../../apis/ApiUtil";
 import {useCookies} from "react-cookie";
+import NotificationModal from "./NotifiactionModal/NotificationModal";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -30,6 +31,9 @@ const Navbar = () => {
     localStorage.removeItem("token"); //토큰 제거
     navigate("/home");
   };
+
+    // 알림창
+    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
   return (
       <nav className={styles.NavBarContainer}>
@@ -70,7 +74,12 @@ const Navbar = () => {
             <Link to="/videoupload">업로드</Link>
           </li>
           <li className={styles.NavBarNotice}>
-            <Link to="/notification">알림</Link>
+              <Link onClick={() => {
+                  setIsNotificationOpen(true)
+              }}>알림</Link>
+              {
+                  isNotificationOpen && <NotificationModal onClose={() => setIsNotificationOpen(false)}/>
+              }
           </li>
           <li>
             <Link to="/chat">메세지</Link>

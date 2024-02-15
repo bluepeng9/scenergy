@@ -1,0 +1,31 @@
+.modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    width: 30vw;
+    height: 70vh;
+    animation: transparent 1s forwards;
+    border-radius: 6px;
+    overflow: scroll;
+}
+
+@keyframes transparent {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.modalBack {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    animation: transparent 1s forwards;
+}
