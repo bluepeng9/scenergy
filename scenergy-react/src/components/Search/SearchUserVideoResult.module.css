@@ -1,0 +1,38 @@
+.searchPageUserContainer {
+    overflow: auto; /* 컨테이너의 내용이 넘칠 경우 스크롤을 허용 */
+    white-space: nowrap; /* 내용을 한 줄로 표시 */
+    padding: 20px 0; /* 상하 패딩 설정 */
+}
+
+.searchPageUserResultContainer {
+    display: flex; /* 유저 목록을 가로로 나열 */
+    overflow-x: auto; /* 가로 스크롤만 허용 */
+    -webkit-overflow-scrolling: touch; /* 모바일 기기에서의 스크롤 성능 개선 */
+}
+
+.searchPageUserResult {
+
+    flex: none; /* flex 아이템의 크기 변경 방지 */
+    display: inline-block; /* 인라인 블록 요소로 표시 */
+    margin-right: 20px; /* 오른쪽 마진 설정 */
+    background-color: #f0f0f0; /* 배경색 설정 */
+    padding: 10px; /* 패딩 설정 */
+    border-radius: 10px; /* 둥근 모서리 설정 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 그림자 효과 추가 */
+}
+
+.searchPageUserResult span {
+    display: flex; /* flex 컨테이너 설정 */
+    align-items: center; /* 세로 중앙 정렬 */
+    gap: 10px; /* 아이템 간 간격 설정 */
+}
+
+.searchPageUserResult a{
+    text-decoration: none;
+}
+
+.searchPageUserResult img {
+    width: 40px; /* 이미지 너비 설정 */
+    height: 40px; /* 이미지 높이 설정 */
+    border-radius: 50%; /* 원형 이미지로 표시 */
+}

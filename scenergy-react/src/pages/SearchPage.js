@@ -33,9 +33,14 @@ const SearchPage = () => {
   }, []);
 
   const handleSearch = async (input, { genres, instruments }) => {
+    console.log("검색 전 초기화", searchUsers, searchVideoPosts);
     setIsLoading(true);
     setIsSearched(true);
     setSearchQuery(input);
+    setSearchUsers([]);
+    setSearchVideoPost([]);
+    console.log(searchUsers);
+    console.log(searchVideoPosts);
     console.log(input);
     try {
       const responseUsers = await searchApi.searchUser(input);

@@ -1,93 +1,98 @@
 .searchPageVideoResultContainer {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
 }
 
 @media screen and (max-width: 1000px) {
-    .searchPageVideoResultContainer {
-        grid-template-columns: repeat(2, 1fr); /* 2열로 변경 */
-    }
+  .searchPageVideoResultContainer {
+    grid-template-columns: repeat(2, 1fr); /* 2열로 변경 */
+  }
 }
 .searchPageVideo {
-    width: 300px;
-    height: 200px;
-    background-color: white;
+  width: 300px;
+  height: 200px;
+  background-color: #4d4d4d;
 }
 
-.searchPageVideoInfoContainer{
-    flex:1;
-    display: flex;
-    flex-direction: column;
-    gap:5px;
-    color: white;
+.searchPageVideoInfoContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
 @keyframes skeleton-loading {
-    0% {
-        background-color: #ddd;
-    }
-    50% {
-        background-color: #b5b5b5;
-    }
-    100% {
-        background-color: #ddd;
-    }
+  0% {
+    background-color: #ddd;
+  }
+  50% {
+    background-color: #b5b5b5;
+  }
+  100% {
+    background-color: #ddd;
+  }
 }
 
 .skeleton {
-    animation: skeleton-loading 1.5s infinite ease-in-out;
+  animation: skeleton-loading 1.5s infinite ease-in-out;
 }
 
 .searchPageVideoSkeleton {
-    width: 300px;
-    height: 200px;
-    background-color: #eee;
-    border-radius: 4px;
+  width: 300px;
+  height: 200px;
+  background-color: #eee;
+  border-radius: 4px;
 }
 
 .searchPageVideoInfoSkeleton {
-    height: 20px;
-    background-color: #eee;
-    margin-top: 10px;
-    border-radius: 4px;
+  height: 20px;
+  background-color: #eee;
+  margin-top: 10px;
+  border-radius: 4px;
 }
 
 .searchPageVideoResult {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    gap: 20px;
-    padding: 25px;
-    background-color: #2F3148;
-    width: 320px;
-    height: 370px;
-    border-radius: 20px;
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.27);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 20px;
+  padding: 25px;
+  background-color: white;
+  width: 320px;
+  height: 370px;
+  border-radius: 20px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.27);
 }
+
 
 .searchPageVideoResult p {
-    color: #2F3148;
+  color: #2f3148;
+}
+.searchPageVideoResult a {
+  text-decoration: none;
+}
+.searchPageVideoResult{
+    color: black;
 }
 
-.searchPageVideoHeader{
-    display: flex;
-    color: white;
-    font-weight: bold;
-    font-size: 1.2rem;
-    justify-content: flex-start;
-    gap: 20px;
-    align-items: center;
+.searchPageVideoHeader {
+  display: flex;
+  color: #8c8c8c;
+  font-weight: bold;
+  font-size: 1.2rem;
+  justify-content: flex-start;
+  gap: 20px;
+  align-items: center;
 }
-.searchPageVideo img{
-    width: 200px;
-}
-
-.searchPageVideoItem{
-    display: flex;
+.searchPageVideo img {
+  width: 200px;
 }
 
-.userImg{
-    width: 40px;
+.searchPageVideoItem {
+  display: flex;
 }
 
+.userImg {
+  width: 40px;
+}

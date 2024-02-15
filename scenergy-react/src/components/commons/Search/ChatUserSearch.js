@@ -190,7 +190,7 @@ const ChatUserSearch = ({
           )}
         </div>
         <div className={styles.createBtn}>
-          {isCreatingNewRoom ? (
+          {!isCreatingNewRoom ? (
             <ChatRoomCreate
               selectedUsers={selectedUsers}
               isRoomCreated={handleRoomCreate}

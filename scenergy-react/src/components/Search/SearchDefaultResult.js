@@ -41,7 +41,7 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading, searchQuery }) => {
         </div>
       ) : (
         <div className={styles.searchPageVideoResultContainer}>
-          <h3>{searchQuery && `'${searchQuery}'관련 영상`}</h3>
+          {/*<h3>{searchQuery && `'${searchQuery}'관련 영상`}</h3>*/}
           {searchVideoPosts.map((result) => (
             <div key={result.video.id}>
               <div className={styles.searchPageVideoResult}>
