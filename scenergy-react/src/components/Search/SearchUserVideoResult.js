@@ -1,9 +1,9 @@
 import styles from "./SearchUserVideoResult.module.css";
 
-const SearchUserVideoResult = ({ searchUsers }) => {
+const SearchUserVideoResult = ({ searchUsers, searchQuery }) => {
   return (
     <div className={styles.searchPageUserContainer}>
-      <h3>관련 사용자</h3>
+      <h3>{searchQuery && `'${searchQuery}'관련 뮤지션`}</h3>
       <div className={styles.searchPageUserResultContainer}>
         {searchUsers.map((result, index) => (
           <div className={styles.searchPageUserResult}>

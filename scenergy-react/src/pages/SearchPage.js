@@ -12,6 +12,7 @@ const SearchPage = () => {
   const [searchVideoPosts, setSearchVideoPost] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isSearched, setIsSearched] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true); // 데이터 요청 전에 로딩 상태를 true로 설정
@@ -34,6 +35,7 @@ const SearchPage = () => {
   const handleSearch = async (input, { genres, instruments }) => {
     setIsLoading(true);
     setIsSearched(true);
+    setSearchQuery(input);
     console.log(input);
     try {
       const responseUsers = await searchApi.searchUser(input);
@@ -65,10 +67,14 @@ const SearchPage = () => {
               // 검색 결과 렌더링
               <>
                 <div>
-                  <SearchUserVideoResult searchUsers={searchUsers} />
+                  <SearchUserVideoResult
+                    searchUsers={searchUsers}
+                    searchQuery={searchQuery}
+                  />
                   <SearchDefaultResult
                     searchVideoPosts={searchVideoPosts}
                     isLoading={isLoading}
+                    searchQuery={searchQuery}
                   />
                 </div>
               </>

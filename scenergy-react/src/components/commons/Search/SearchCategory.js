@@ -94,6 +94,12 @@ const SearchCategory = ({ onSearch }) => {
       };
       onSearch(searchInput, mappedSearchParams);
       setSearchInput("");
+      setExpanded(false);
+      setSearchSelect({
+        genres: [],
+        locations: [],
+        instruments: [],
+      });
       console.log(searchInput);
       console.log(mappedSearchParams);
     }

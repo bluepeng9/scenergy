@@ -2,6 +2,7 @@ import basic_profile from "../../assets/basic_profile.png";
 import styles from "./SearchVideoDetail.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
+  faCompactDisc,
   faHeadphones,
   faMicrophoneLines,
   faMusic,
@@ -103,47 +104,51 @@ const SearchVideoDetail = ({ onClick, searchVideoPosts }) => {
               <p>{searchVideoPosts?.content}</p>
             </div>
           </div>
-          <div className={styles.videoDetailTagsContainer}>
-            <div className={styles.videoDetailGenre}>
-              <p>장르</p>
-              <div className={styles.videoDetailTagItem}>
-                {searchVideoPosts?.genreTags.map((tag) => {
-                  const genre = genres.find((g) => g.id === tag.genreTagId);
-                  return (
-                    <span key={tag.genreTagId} className={styles.genreTag}>
-                      {genre ? genre.name : ""}
-                    </span>
-                  );
-                })}
+          <div className={styles.videoDetailRight}>
+            <div className={styles.videoDetailTagsContainer}>
+              <div className={styles.videoDetailGenre}>
+                <p>장르</p>
+                <div className={styles.videoDetailTagItem}>
+                  {searchVideoPosts?.genreTags.map((tag) => {
+                    const genre = genres.find((g) => g.id === tag.genreTagId);
+                    return (
+                      <span key={tag.genreTagId} className={styles.genreTag}>
+                        {genre ? genre.name : ""}
+                      </span>
+                    );
+                  })}
+                </div>
+              </div>
+              <div className={styles.videoDetailInst}>
+                <p>악기</p>
+                <div className={styles.videoDetailTagItem}>
+                  {searchVideoPosts?.instrumentTags.map((tag) => {
+                    const instrument = instruments.find(
+                      (i) => i.id === tag.instrumentTagId,
+                    );
+                    return (
+                      <span key={tag.genreTagId} className={styles.genreTag}>
+                        {instrument ? instrument.name : ""}
+                      </span>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-            <div className={styles.videoDetailInst}>
-              <p>악기</p>
-              <div className={styles.videoDetailTagItem}>
-                {searchVideoPosts?.instrumentTags.map((tag) => {
-                  const instrument = instruments.find(
-                    (i) => i.id === tag.instrumentTagId,
-                  );
-                  return (
-                    <span key={tag.genreTagId} className={styles.genreTag}>
-                      {instrument ? instrument.name : ""}
-                    </span>
-                  );
-                })}
+            <div className={styles.videoDetailMusicInfoContainer}>
+              <div className={styles.videoDetailMusicInfo}>
+                <p>곡 정보</p>
               </div>
-            </div>
-          </div>
-          <div className={styles.videoDetailMusicInfoContainer}>
-            <div className={styles.videoDetailMusicInfo}>
-              <p>곡 정보</p>
-            </div>
-            <div className={styles.videoDetailArtist}>
-              <FontAwesomeIcon icon={faHeadphones} />
-              <p>{searchVideoPosts?.video.artist}</p>
-            </div>
-            <div className={styles.videoDetailMusic}>
-              <FontAwesomeIcon icon={faHeadphones} />
-              <p>{searchVideoPosts?.video.musicTitle}</p>
+              <div className={styles.videoDetailInfoFooter}>
+                <div className={styles.videoDetailArtist}>
+                  <FontAwesomeIcon icon={faHeadphones} />
+                  <p>{searchVideoPosts?.video.artist}</p>
+                </div>
+                <div className={styles.videoDetailMusic}>
+                  <FontAwesomeIcon icon={faCompactDisc} />
+                  <p>{searchVideoPosts?.video.musicTitle}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

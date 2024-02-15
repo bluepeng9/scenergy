@@ -3,7 +3,7 @@ import basic_profile from "../../assets/basic_profile.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import SearchVideoDetail from "./SearchVideoDetail";
-const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
+const SearchDefaultResult = ({ searchVideoPosts, isLoading, searchQuery }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedVideoPost, setSelectedVideoPost] = useState(null);
 
@@ -41,6 +41,7 @@ const SearchDefaultResult = ({ searchVideoPosts, isLoading }) => {
         </div>
       ) : (
         <div className={styles.searchPageVideoResultContainer}>
+          <h3>{searchQuery && `'${searchQuery}'관련 영상`}</h3>
           {searchVideoPosts.map((result) => (
             <div key={result.video.id}>
               <div className={styles.searchPageVideoResult}>
