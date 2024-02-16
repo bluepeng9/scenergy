@@ -240,13 +240,6 @@
     height: 20px; /* 원하는 크기 설정 */
 }
 
-/* 마우스 호버 시 배경색 변경 */
-.categoryCheckboxContainer label:hover {
-    background-color: #ffffff; /* 원하는 배경색 설정 */
-    color: #22232f;
-    border-radius: 2px;
-}
-
 /*업로드 모달*/
 .modal {
     display: flex;

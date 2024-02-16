@@ -51,9 +51,9 @@ const ChatMessage = ({ message, userId, senderId }) => {
   }
   const MessageContent = () => (
     <div className={styles.messageContent}>
-      {showUnreadCnt && (
-        <span className={styles.unreadCount}>{message.unreadCount}</span>
-      )}
+      {/*{showUnreadCnt && (*/}
+      {/*  <span className={styles.unreadCount}>{message.unreadCount}</span>*/}
+      {/*)}*/}
       <span className={styles.messageText}>
         {formatMessage(message.messageText)}
       </span>

@@ -10,8 +10,9 @@
 .chatRoomInfo {
   height: 70px;
   margin: 0 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.34);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   display: flex;
+  font-weight: bold;
   justify-content: space-between;
   align-content: center;
   font-size: 1.1rem;
