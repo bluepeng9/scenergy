@@ -1,14 +1,9 @@
 import basic_profile from "../../assets/basic_profile.png";
 import styles from "./SearchVideoDetail.module.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faCompactDisc,
-  faHeadphones,
-  faMicrophoneLines,
-  faMusic,
-  faTimes,
-} from "@fortawesome/free-solid-svg-icons";
-import { faPaperPlane, faThumbsUp } from "@fortawesome/free-regular-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCompactDisc, faHeadphones, faTimes,} from "@fortawesome/free-solid-svg-icons";
+import {faPaperPlane, faThumbsUp} from "@fortawesome/free-regular-svg-icons";
+
 const SearchVideoDetail = ({ onClick, searchVideoPosts }) => {
   const genres = [
     { id: 1, name: "팝" },
@@ -66,11 +61,13 @@ const SearchVideoDetail = ({ onClick, searchVideoPosts }) => {
         <div className={styles.videoDetailLeft}>
           <div className={styles.videoDetailHeader}>
             <div className={styles.videoDetailProfile}>
-              <img src={basic_profile} />
-              <p>{searchVideoPosts?.writer}</p>
+              <img
+                  src={searchVideoPosts?.url ? searchVideoPosts?.url : basic_profile}
+              />
+              <p style={{color: `#ffffff`, paddingTop: `13pt`}}>{searchVideoPosts?.writer}</p>
             </div>
             <button
-              className={styles.modalCloseButton}
+                className={styles.modalCloseButton}
               onClick={handleModalChange}
             >
               <FontAwesomeIcon icon={faTimes} />

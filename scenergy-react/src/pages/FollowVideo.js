@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./FollowVideo.module.css";
 import videoPostApi from "../apis/VideoPostApi";
 import ApiUtil from "../apis/ApiUtil";
 import musicTitle from "../assets/musicTitle.png";
 import artist from "../assets/artist.png";
-import profileLink from "../assets/basic_profile.png";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
+import SearchApi from "../apis/SearchApi";
 
 const FollowVideo = () => {
   // API에서 받아온 영상 데이터를 저장할 상태
   console.log("홈화면 1");
   const [followingVideos, setFollowingVideos] = useState([]);
-
   const navigate = useNavigate();
 
   const handleProfileClick = (userId) => {
@@ -40,6 +39,10 @@ const FollowVideo = () => {
       }
     };
 
+    const getUser = async () => {
+      SearchApi.getUser()
+    }
+
     // 함수 호출
     fetchFollowingVideos();
   }, []); // 두 번째 매개변수로 빈 배열을 전달하여 컴포넌트가 마운트될 때 한 번만 실행
@@ -56,9 +59,9 @@ const FollowVideo = () => {
                 className={`${styles.profileLink}`}
                 onClick={() => handleProfileClick(item.userId)}
               >
-                <img src={profileLink} alt="Profile Link" width="50" />
+                <img src={item.url} alt="Profile Link" width="50"/>
               </div>
-              <p>{`user ${item.userId}`}</p>
+              <p style={{color: `#ffffff`}}>{`${item.nickname}`}</p>
               <video controls width="750">
                 <source src={item.video.videoUrlPath} type="video/mp4" />
                 Your browser does not support the video tag.

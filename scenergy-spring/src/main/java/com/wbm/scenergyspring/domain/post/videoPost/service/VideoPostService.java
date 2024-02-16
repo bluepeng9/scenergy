@@ -110,6 +110,8 @@ public class VideoPostService {
                     .userId(videoPost.getUser().getId())
                     .title(videoPost.getTitle())
                     .content(videoPost.getContent())
+                    .url(videoPost.getUser().getUrl())
+                    .nickname(videoPost.getWriter())
                     .video(VideoCommand.builder()
                             .id(videoPost.getVideo().getId())
                             .videoUrlPath(videoPost.getVideo().getVideoUrlPath())

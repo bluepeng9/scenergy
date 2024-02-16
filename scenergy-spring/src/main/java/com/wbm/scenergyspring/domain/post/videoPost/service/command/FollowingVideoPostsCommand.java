@@ -14,6 +14,8 @@ public class FollowingVideoPostsCommand {
     private String title;
     private String content;
     private String writer;
+    private String url;
+    private String nickname;
     private List<VideoPostGenreTagCommand> genreTags;
     private List<VideoPostInstrumentTagCommand> instrumentTags;
 

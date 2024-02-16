@@ -58,6 +58,13 @@ class SearchApi {
       userId: userId,
     });
   };
+
+    getUser = async (userId) => {
+        const response = await ApiUtil.get(`/users/${userId}`);
+        console.log(response.data.data.bio);
+        console.log(response.data.data.url);
+        return response.data.data;
+    }
 }
 
 const searchApi = new SearchApi();
