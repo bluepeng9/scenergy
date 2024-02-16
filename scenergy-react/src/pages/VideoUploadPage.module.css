@@ -9,4 +9,7 @@
 
 .VideoUpload-global-VideoUpload {
     width: 83%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

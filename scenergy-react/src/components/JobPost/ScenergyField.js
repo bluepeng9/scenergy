@@ -2,13 +2,13 @@ import styles from "./ScenergyField.module.css";
 import SearchCategory from "../commons/Search/SearchCategory";
 import ScenergyList from "./ScenergyList";
 import Dialog from "../commons/Dialog/Dialog";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFeather, faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faFeather, faTimes} from "@fortawesome/free-solid-svg-icons";
+import {useState} from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import jobPostApi from "../../apis/JobPost/JobPostApi";
-import { useScenergyPost } from "../../contexts/ScenergyPostContext";
+import {useScenergyPost} from "../../contexts/ScenergyPostContext";
 import ApiUtil from "../../apis/ApiUtil";
 
 const ScenergyField = ({ onOpenModal }) => {
@@ -143,7 +143,6 @@ const ScenergyField = ({ onOpenModal }) => {
     <div className={styles.FieldGlobal}>
       <div className={styles.FieldHeader}>
         <div className={styles.FieldTitle}>
-          <h2>시너지</h2>
         </div>
       </div>
       <div className={styles.FieldSearch}>
