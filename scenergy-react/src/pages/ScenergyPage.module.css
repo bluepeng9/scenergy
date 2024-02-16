@@ -1,6 +1,6 @@
 .ScenergyGlobal{
     display: flex;
-    width: 80vi;
+    width: 100%;
 }
 .ScenergyModalHeader{
     padding: 10px;
@@ -65,4 +65,8 @@
     cursor: pointer;
     color: white;
     font-weight: bold;
+}
+
+.ScenergyNav {
+    width: 17%;
 }

@@ -80,21 +80,21 @@
     height: 20px;
 }
 
-table {
-    width: 100%;
-    table-layout: fixed; /* 테이블의 너비를 고정합니다. */
-    border-collapse: collapse; /* 셀 사이의 경계를 합칩니다. */
+.portfolioH h2 {
+    margin-left: 3%;
+    margin-bottom: 40px;
+    margin-top: 120px;
+    border-bottom: #000000 solid 3px;
 }
 
-th, td {
+.portfolioH th, td {
     padding: 8px; /* 셀 내용의 상하좌우 패딩을 추가합니다. */
     text-align: center; /* 셀 내용을 가운데 정렬합니다. */
     border: 1px solid #ddd; /* 셀의 테두리를 지정합니다. */
 }
 
-h2 {
-    margin-left: 3%;
-    margin-bottom: 40px;
-    margin-top: 120px;
-    border-bottom: #000000 solid 3px;
+.portfolioH table {
+    width: 100%;
+    table-layout: fixed; /* 테이블의 너비를 고정합니다. */
+    border-collapse: collapse; /* 셀 사이의 경계를 합칩니다. */
 }

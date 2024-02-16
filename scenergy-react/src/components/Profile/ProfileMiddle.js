@@ -307,8 +307,8 @@ const ProfileMiddle = () => {
       </div>
 
       {portfolioId ? (
-        <>
-          <h2>학 력</h2>
+          <div className={styles.portfolioH}>
+            <h2>학 력</h2>
           <table>
             <thead>
               <tr>
@@ -662,7 +662,7 @@ const ProfileMiddle = () => {
                   ))}
             </tbody>
           </table>
-        </>
+          </div>
       ) : null}
     </>
   );
