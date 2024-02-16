@@ -81,6 +81,7 @@
     background-image: url("../../assets/VideoUpload/back8.gif");
     background-size: cover; /* 이미지를 컨테이너에 맞게 조절합니다. */
     background-position: center; /* 이미지를 가운데 정렬합니다. */
+    margin-top: 11%;
 
     /*color: white;*/
     /*color: #22232f;*/
