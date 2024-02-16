@@ -87,6 +87,7 @@ public class ChatService {
             }
         } else if (messageType.equals("ENTER")) {
             command.setMessageText(user.getNickname() + "님이 초대되셨습니다.");
+            command.setUserId(1L);
         }
         List<Long> offlineMembers = redisChatRepository.getOfflineMembers(RedisChatRoomDto.from(chatRoom));
         int unreadCount = offlineMembers.size();
