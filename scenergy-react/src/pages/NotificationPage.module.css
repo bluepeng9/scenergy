@@ -1,6 +1,7 @@
 .notificationMain {
     display: flex;
     height: 100vh;
+    z-index: 100;
 }
 
 .navbarBox {

@@ -31,7 +31,7 @@
 .Category p:nth-child(2){
     border-radius: 10px;
     padding: 2px;
-    color: black;
+    color: white;
     font-weight: bold;
     width: 60px;
     height: 25px;
@@ -57,13 +57,13 @@
     text-align: center;
 }
 .ScenergyApply button {
-    background: rgb(0, 0, 0);
+    background: white;
     border-radius: 5px;
     border: none;
     width: 80px;
-    padding: 5px;
+    padding: 10px 10px;
     cursor: pointer;
-    color: white;
+    color: black;
     font-weight: bold;
 }
 

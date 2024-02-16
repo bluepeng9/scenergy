@@ -41,6 +41,7 @@ const SearchPage = () => {
     setSearchVideoPost([]);
     console.log(searchUsers);
     console.log(searchVideoPosts);
+    setSearchVideoPost([]);
     console.log(input);
     try {
       const responseUsers = await searchApi.searchUser(input);
