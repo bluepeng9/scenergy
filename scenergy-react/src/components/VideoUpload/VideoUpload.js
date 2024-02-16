@@ -405,17 +405,6 @@ const VideoUpload = () => {
           <hr />
 
           <div className={styles.uploadSection}>
-            <h2>재생목록</h2>
-            <p>일반 영상목록에 업로드가 됩니다.</p>
-            <p>
-              대표영상으로 지정하고 싶다면, '프로필 > 대표영상편집'에서 설정할
-              수 있습니다.
-            </p>
-          </div>
-
-          <hr />
-
-          <div className={styles.uploadSection}>
             <p>
               불법촬영물 게재시 삭제 조치되고 관련 법에 따라 처벌 받을 수
               있습니다.

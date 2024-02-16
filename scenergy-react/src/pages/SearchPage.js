@@ -1,7 +1,7 @@
 import styles from "./SearchPage.module.css";
 import NavBar from "../components/commons/Navbar/Navbar";
 import SearchCategory from "../components/commons/Search/SearchCategory";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import SearchDefaultResult from "../components/Search/SearchDefaultResult";
 import videoPostApi from "../apis/VideoPostApi";
 import searchApi from "../apis/SearchApi";
@@ -87,9 +87,6 @@ const SearchPage = () => {
               // 초기 전체 영상 목록 렌더링
               <>
                 <div className={styles.searchPageDefault}>
-                  <div>
-                    <h2>전체 영상</h2>
-                  </div>
                   <SearchDefaultResult
                     searchVideoPosts={searchVideoPosts}
                     isLoading={isLoading}
