@@ -54,26 +54,6 @@ SCENE:RGY 서비스를 사용하면, 원하는 뮤지션과 더 쉽고 빠르게
 
 #### 커뮤니케이션
 <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
----
-### 기능정의서 및 ERD
-
-#### 기능정의서
-##### 🔗[기능정의서](https://docs.google.com/spreadsheets/d/1eb2wqtTxqo4EBiJq_kRAA-wO56QQbC8ycn4FkqmRq-s/edit#gid=2139742202)
-#### ERD
-![ERD.png](docs%2Fimages%2FERD.png)
----
-### 페르소나
-#### 1️⃣ 드러머 구하는 김민석
-![페르소나_김민석.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%BC%EC%84%9D.png)
-
-#### 2️⃣ 버스킹 팀을 구하는 김미솔
-![페르소나_김미솔.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%B8%EC%86%94.png)
-
-#### 3️⃣ 아티스트를 꿈꾸는 장성하
-![페르소나_장성하.png](./docs/images/페르소나_장성하.png)
-
-### 시스템 아키텍처
-![시스템 아키텍처.png](docs%2Fimages%2F%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
 
 ---
 ### 백엔드 디렉토리 구조
@@ -125,9 +105,8 @@ domain
 ├─router
 └─store
 ```
-
 ---
-## 주요 기능 및 화면
+## 주요 기능
 **로그인 & 로그아웃 (네이버 OAuth)**
 - 중앙의 로그인 버튼을 누른 후 소셜 로그인을 진행할 수 있습니다
 - 로그인 한 사용자는 시너지 서비스를 이용할 수 있습니다.
@@ -135,9 +114,12 @@ domain
 **영상 업로드**
 - 자신의 연주 영상을 업로드 할 수 있습니다.
 - 팔로우 한 유저의 영상을 조회할 수 있습니다.
-
+ 
 **채팅**
-- 원하는 뮤지션과 채팅을 통해 빠른 연락이 가능합니다.
+- 메시지 탭에 들어가면 자신이 참여한 채팅룸 리스트와 채팅룸 만들기가 있습니다.
+- 본인이 팔로잉 하고 있는 유저를 초대해 채팅룸을 만들 수 있습니다.
+- 채팅룸 리스트는 최근 메시지 순으로 정렬되어 있습니다.
+- 각각의 메시지를 읽지 않은 맴버의 수를 표시합니다.
 
 **화상 회의**
 - 화상회의를 통해 빠른 실력검증 및 합주가 가능합니다.
@@ -152,7 +134,7 @@ domain
 **프로필 조회**
 - 자신의 프로필을 조회하고, 정보를 갱신할 수 있습니다.
 - 프로필에서 자신의 대표영상과 영상 목록을 조회할 수 있습니다.
-
+- 자신의 포트폴리오를 작성하고 조회할 수 있습니다.
 ---
 
 ### 프로젝트 산출물
@@ -165,36 +147,15 @@ domain
 - [ERD](docs/ERD.md)
 - [Flow chat](docs/FlowChat.md)
 - [시퀀스 다이어그램](docs/시퀀스다이어그램.md)
-- [API 명세서](docs/프로젝트%20결과물/중간발표자료.md)
+- [API 명세서](docs/프로젝트%20결과물/기획발표자료.md)
 - [BE 코드 컨벤션](docs/BE코드컨벤션.md)
 - [FE 코드 컨벤션](docs/FE코드컨벤션.md)
 ---
 ### 프로젝트 결과물
 
-- [중간 발표자료](docs/프로젝트%20결과물/중간발표자료.md)
+- [중간 발표자료](docs/프로젝트%20결과물/기획발표자료.md)
 - [최종 발표자료](docs/프로젝트%20결과물/최종발표자료.md)
 
----
-### 각자 맡은 역할
-
-- 회원 관리
-  - 김혜지, 강대은
-- 검색
-  - 이민형, 김은지
-- 포트폴리오
-  - 이태경, 강대은
-- 팔로우, 팔로잉
-  - 김준표, 김은지
-- 채팅
-  - 이태경, 김은지
-- 좋아요
-  - 김준표, 김은지
-- 게시글
-  - 김혜지, 김은지
-- 영상
-  - 이민형, 강대은
-- 알림
-  - 김준표, 강대은
 ---
 
 ### 팀원 소개
@@ -207,8 +168,31 @@ domain
     <td style="text-align: center;"><img src="docs/images/이민형.jpg" width="110"><br><strong>이민형</strong><br>🧗‍♂️Back-end<br>🧔Survey Leader</td>
   </tr>
   <tr>
-    <td style="text-align: center;"><img src="docs/images/이태경.jpg" width="110"><br><strong>이태경</strong><br>🍖Back-end</td>
+    <td style="text-align: center;"><img src="docs/images/이태경.jpg" width="110"><br><strong>이태경</strong><br>🍖Back-end<br>🎥발표/UCC 제작</td>
     <td style="text-align: center;"><img src="docs/images/김은지.jpg" width="110"><br><strong>김은지</strong><br>🌹Front-end<br>👸Front-end Leader</td>
     <td style="text-align: center;"><img src="docs/images/강대은.jpg" width="110"><br><strong>강대은</strong><br>🍞Front-end</td>
   </tr>
 </table>
+
+---
+## SCENE:RGY 서비스 화면
+### 화상채팅
+<img src="docs/images/serviceGIF/peerjs.gif" width="100%">
+
+### 검색
+<img src="docs/images/serviceGIF/검색.gif" width="100%">
+
+### 알림
+<img src="docs/images/serviceGIF/알림.gif" width="100%">
+
+### 영상 업로드
+<img src="docs/images/serviceGIF/영상업로드.gif" width="100%">
+
+### 채팅
+<img src="docs/images/serviceGIF/채팅.gif" width="100%">
+
+### 프로필
+<img src="docs/images/serviceGIF/프로필.gif" width="100%">
+
+### 피드
+<img src="docs/images/serviceGIF/피드.gif" width="100%">
