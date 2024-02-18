@@ -54,6 +54,26 @@ SCENE:RGY 서비스를 사용하면, 원하는 뮤지션과 더 쉽고 빠르게
 
 #### 커뮤니케이션
 <img src="https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white"> <img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=Figma&logoColor=white">
+---
+### 기능정의서 및 ERD
+
+#### 기능정의서
+##### 🔗[기능정의서](https://docs.google.com/spreadsheets/d/1eb2wqtTxqo4EBiJq_kRAA-wO56QQbC8ycn4FkqmRq-s/edit#gid=2139742202)
+#### ERD
+![ERD.png](docs%2Fimages%2FERD.png)
+---
+### 페르소나
+#### 1️⃣ 드러머 구하는 김민석
+![페르소나_김민석.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%BC%EC%84%9D.png)
+
+#### 2️⃣ 버스킹 팀을 구하는 김미솔
+![페르소나_김미솔.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%B8%EC%86%94.png)
+
+#### 3️⃣ 아티스트를 꿈꾸는 장성하
+![페르소나_장성하.png](./docs/images/페르소나_장성하.png){: width="600"}
+
+### 시스템 아키텍처
+![시스템 아키텍처.png](docs%2Fimages%2F%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
 
 ---
 ### 백엔드 디렉토리 구조
@@ -105,7 +125,6 @@ domain
 ├─router
 └─store
 ```
-
 ---
 ## 주요 기능
 **로그인 & 로그아웃 (네이버 OAuth)**
@@ -140,15 +159,15 @@ domain
 
 ### 프로젝트 산출물
 
-- [페르소나](docs/페르소나.md)
-- [기능명세서](docs/기능명세서.md)
-- [시스템 아키텍처](docs/시스템%20아키텍처.md)
-- [와이어프레임](docs/와이어프레임.md)
-- [화면정의서](docs/화면정의서.md)
-- [ERD](docs/ERD.md)
-- [Flow chat](docs/FlowChat.md)
-- [시퀀스 다이어그램](docs/시퀀스다이어그램.md)
-- [API 명세서](docs/API명세서.md)
+- [페르소나](docs/프로젝트%20산출물/페르소나.md)
+- [기능명세서](docs/프로젝트%20산출물/기능명세서.md)
+- [시스템 아키텍처](docs/프로젝트%20산출물/시스템아키텍처.md)
+- [와이어프레임](docs/프로젝트%20산출물/와이어프레임.md)
+- [화면정의서](docs/프로젝트%20산출물/화면정의서.md)
+- [ERD](docs/프로젝트%20산출물/ERD.md)
+- [Flow chat](docs/프로젝트%20산출물/FlowChat.md)
+- [시퀀스 다이어그램](docs/프로젝트%20산출물/시퀀스다이어그램.md)
+- [API 명세서](docs/프로젝트%20산출물/API명세서.md)
 - [BE 코드 컨벤션](docs/프로젝트%20산출물/BE코드컨벤션.md)
 - [FE 코드 컨벤션](docs/프로젝트%20산출물/FE코드컨벤션.md)
 ---
