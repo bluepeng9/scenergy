@@ -1,5 +1,8 @@
 > 음악과 사람을 잇는 모든 연결의 시작, 시너지
 ---
+![scenergy_logo](https://github.com/Kang-dan/TripWebProject/assets/98147703/2086684e-ba55-4518-b5a5-44aceab87aef)
+
+---
 ###  💎프로젝트 진행기간
 2024.01.08(월) ~ 2024.02.16(금) (40일간 진행)  
 SSAFY 10기 2학기 공통 프로젝트 - SCENE:RGY
@@ -67,7 +70,7 @@ SCENE:RGY 서비스를 사용하면, 원하는 뮤지션과 더 쉽고 빠르게
 ![페르소나_김미솔.png](docs%2Fimages%2F%ED%8E%98%EB%A5%B4%EC%86%8C%EB%82%98_%EA%B9%80%EB%AF%B8%EC%86%94.png)
 
 #### 3️⃣ 아티스트를 꿈꾸는 장성하
-![페르소나_장성하.png](./docs/images/페르소나_장성하.png){: width="600"}
+![페르소나_장성하.png](./docs/images/페르소나_장성하.png)
 
 ### 시스템 아키텍처
 ![시스템 아키텍처.png](docs%2Fimages%2F%EC%8B%9C%EC%8A%A4%ED%85%9C%20%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98.png)
