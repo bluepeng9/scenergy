@@ -1,6 +1,6 @@
 > 음악과 사람을 잇는 모든 연결의 시작, 시너지
 ---
-![시너지로고](docs/images/SCENERGY_logo.png)
+![시너지로고](https://github.com/Kang-dan/TripWebProject/assets/98147703/210efa02-aa3c-4b02-9965-bc3af8f5c5f2)
 
 ---
 ###  💎프로젝트 진행기간
