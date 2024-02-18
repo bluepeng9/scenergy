@@ -1,6 +1,6 @@
 > 음악과 사람을 잇는 모든 연결의 시작, 시너지
 ---
-![시너지로고](https://github.com/Kang-dan/TripWebProject/assets/98147703/210efa02-aa3c-4b02-9965-bc3af8f5c5f2)
+![시너지로고](docs/images/SCENERGY_logo.png)
 
 ---
 ###  💎프로젝트 진행기간
@@ -139,17 +139,17 @@ domain
 
 ### 프로젝트 산출물
 
-- [페르소나](docs/페르소나.md)
-- [기능명세서](docs/기능명세서.md)
-- [시스템 아키텍처](docs/시스템%20아키텍처.md)
-- [와이어프레임](docs/와이어프레임.md)
-- [화면정의서](docs/화면정의서.md)
-- [ERD](docs/ERD.md)
-- [Flow chat](docs/FlowChat.md)
-- [시퀀스 다이어그램](docs/시퀀스다이어그램.md)
+- [페르소나](docs/프로젝트%20산출물/페르소나.md)
+- [기능명세서](docs/프로젝트%20산출물/기능명세서.md)
+- [시스템 아키텍처](docs/프로젝트%20산출물/시스템아키텍처.md)
+- [와이어프레임](docs/프로젝트%20산출물/와이어프레임.md)
+- [화면정의서](docs/프로젝트%20산출물/화면정의서.md)
+- [ERD](docs/프로젝트%20산출물/ERD.md)
+- [Flow chat](docs/프로젝트%20산출물/FlowChat.md)
+- [시퀀스 다이어그램](docs/프로젝트%20산출물/시퀀스다이어그램.md)
 - [API 명세서](docs/프로젝트%20결과물/기획발표자료.md)
-- [BE 코드 컨벤션](docs/BE코드컨벤션.md)
-- [FE 코드 컨벤션](docs/FE코드컨벤션.md)
+- [BE 코드 컨벤션](docs/프로젝트%20산출물/BE코드컨벤션.md)
+- [FE 코드 컨벤션](docs/프로젝트%20산출물/FE코드컨벤션.md)
 ---
 ### 프로젝트 결과물
 
