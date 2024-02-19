@@ -154,7 +154,7 @@ domain
 - [와이어프레임](docs/프로젝트%20산출물/와이어프레임.md)
 - [화면정의서](docs/프로젝트%20산출물/화면정의서.md)
 - [ERD](docs/프로젝트%20산출물/ERD.md)
-- [Flow chat](docs/프로젝트%20산출물/FlowChat.md)
+- [Flow chart](docs/프로젝트%20산출물/FlowChart.md)
 - [시퀀스 다이어그램](docs/프로젝트%20산출물/시퀀스다이어그램.md)
 - [API 명세서](docs/프로젝트%20산출물/API명세서.md)
 - [BE 코드 컨벤션](docs/프로젝트%20산출물/BE코드컨벤션.md)
