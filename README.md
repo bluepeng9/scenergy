@@ -141,6 +141,7 @@ domain
 
 **구인 구직**
 - 원하는 구인정보를 확인할 수 있습니다.
+  <img src="docs/images/serviceGIF/Scene_rgy-Chrome2024-02-2417-42-02-Trim-ezgif.com-video-to-gif-converter.gif">
 
 ---
 ### 코드 컨벤션
