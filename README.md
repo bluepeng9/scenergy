@@ -109,7 +109,8 @@ domain
 ## 주요 기능 및 화면
 **로그인 & 로그아웃 (네이버 OAuth)**
 - 중앙의 로그인 버튼을 누른 후 소셜 로그인을 진행할 수 있습니다
-- 로그인 한 사용자는 시너지 서비스를 이용할 수 있습니다.
+  - 로그인 한 사용자는 시너지 서비스를 이용할 수 있습니다.
+  <img src="docs/images/serviceGIF/로그인.gif">
 
 **영상 업로드**
 - 자신의 연주 영상을 업로드 할 수 있습니다.
@@ -140,8 +141,8 @@ domain
   <img src="docs/images/serviceGIF/프로필.gif">
 
 **구인 구직**
-- 원하는 구인정보를 확인할 수 있습니다.
-  <img src="docs/images/serviceGIF/Scene_rgy-Chrome2024-02-2417-42-02-Trim-ezgif.com-video-to-gif-converter.gif">
+- 원하는 구인정보를 확인할 수 있습니다.  
+  <img src="docs/images/serviceGIF/시너지.gif">
 
 ---
 ### 코드 컨벤션
