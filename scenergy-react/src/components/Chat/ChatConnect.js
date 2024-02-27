@@ -49,10 +49,23 @@ const ChatConnect = ({ lastMessageId, refetchChatRooms, lastMessage }) => {
   const subscribe = useCallback(() => {
     client.current.subscribe("/sub/chat/room/" + realRoomId, (message) => {
       const messageBody = JSON.parse(message.body);
-      setChatMessages((prevMessages) => [...prevMessages, messageBody]);
-      updateRecentMessage(realRoomId, messageBody);
+      if (messageBody.operationCode === 0) {
+        setChatMessages((prevMessages) => [...prevMessages, messageBody]);
+        updateRecentMessage(realRoomId, messageBody);
+      } else if (messageBody.operationCode === 1) {
+        setChatMessages((prevMessages) => {
+          return prevMessages.map((msg) => {
+            if (msg.createdAt >= messageBody.createdAt) {
+              return { // 찾은 메시지의 unreadCount를 1 줄임
+                ...msg,
+                unreadCount: Math.max(0, msg.unreadCount - 1), // 최소값이 0이 되도록 함
+              };
+            }
+            return msg;
+          });
+        });
+      }
     });
-    // }, [realRoomId, addChatMessage, updateRecentMessage]);
   }, [realRoomId]);
 
   useEffect(() => {
